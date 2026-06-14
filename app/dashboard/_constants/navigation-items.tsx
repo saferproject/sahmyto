@@ -1,35 +1,35 @@
-import { Bus, HandMoney, Home, Mailbox, WalletMoney } from "@solar-icons/react";
+import { Bus, MoneyRecive, Home, Sms, WalletMoney } from "iconsax-reactjs";
 import NavigationItem from "../_interfaces/navigation-item";
 
 export const NAVIGATION_ITEMS: NavigationItem[] = [
   {
     id: 1,
     title: "درآمد ها",
-    icon: <WalletMoney weight="Bold" size={24} />,
+    icon: <WalletMoney variant="Bold" size={24} />,
     path: "/dashboard/expenses",
   },
   {
     id: 2,
     title: "هزینه ها",
-    icon: <HandMoney weight="Bold" size={24} />,
+    icon: <MoneyRecive variant="Bold" size={24} />,
     path: "/dashboard/incomes",
   },
   {
     id: 3,
     title: "داشبورد",
-    icon: <Home weight="Bold" size={32} />,
+    icon: <Home variant="Bold" size={32} />,
     path: "/dashboard",
   },
   {
     id: 4,
     title: "پیام ها",
-    icon: <Mailbox weight="Bold" size={24} />,
+    icon: <Sms variant="Bold" size={24} />,
     path: "/dashboard/inbox",
   },
   {
     id: 5,
     title: "کاربوم ها",
-    icon: <Bus weight="Bold" size={24} />,
+    icon: <Bus variant="Bold" size={24} />,
     path: "/dashboard/karbooms",
   },
 ];

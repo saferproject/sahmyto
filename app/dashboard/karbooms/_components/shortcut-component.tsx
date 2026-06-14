@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { AltArrowDown } from "@solar-icons/react/ssr";
+import { ArrowDown2 } from "iconsax-reactjs";
 
 import ShortcutProps from "../_interfaces/shortcut-props";
 
@@ -14,7 +14,8 @@ export default function ShortcutComponent({ title, icon, path }: ShortcutProps) 
   };
 
   return (
-    <div
+    <button
+      type="button"
       className="flex flex-col items-center gap-2"
       onClick={handleClick}
     >
@@ -22,9 +23,9 @@ export default function ShortcutComponent({ title, icon, path }: ShortcutProps) 
         <div className="bg-primary flex items-center justify-center rounded-full p-2 text-white shadow-lg">
           {icon}
         </div>
-        <AltArrowDown className="text-body" />
+        <ArrowDown2 className="text-body" />
       </div>
       <p className="text-body text-sm font-semibold">{title}</p>
-    </div>
+    </button>
   );
 }

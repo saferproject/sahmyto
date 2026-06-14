@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { IconButton } from "@mui/material";
-import { Pen2 } from "@solar-icons/react";
+import { Edit2 } from "iconsax-reactjs";
 import { useUserInfoStore } from "../../../_providers/user-info-provider";
 import { useEffect } from "react";
 
@@ -29,7 +29,7 @@ export default function VerifyPhone() {
       >
         {phone}
         <IconButton>
-          <Pen2 weight="Broken" size={16} className="text-primary" />
+          <Edit2 variant="Broken" size={16} className="text-primary" />
         </IconButton>
       </span>{" "}
       ارسال شده است

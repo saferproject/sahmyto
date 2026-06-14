@@ -43,11 +43,17 @@ export default function KarboomActionsDrawerComponent({
             عملیات های کاربوم
           </h4>
           <menu className="mb-4 flex w-full flex-col overflow-y-auto">
-            {KARBOOM_ACTIONS.map(({ label, icon, path }, index) => (
+            {KARBOOM_ACTIONS.map(({ label, icon, path }) => (
               <li
-                key={index}
+                key={label}
+                role="button"
+                tabIndex={0}
                 className="text-body border-secondary-light flex w-full items-center justify-between border-b py-2 last:border-0"
                 onClick={() => handleNavigation(path)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ")
+                    handleNavigation(path);
+                }}
               >
                 <p>{label}</p>
                 {icon}

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Button, SwipeableDrawer } from "@mui/material";
-import { AltArrowLeft, Logout } from "@solar-icons/react";
 import { motion } from "motion/react";
 
 import DashboardHeaderDrawerProps from "../_interfaces/dashboard-header-drawer-props";
@@ -12,9 +11,8 @@ import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 import { DRAWER_MENU_ITEMS } from "../_constants/drawer-menu-items";
 import useUserLogout from "../_hooks/use-user-logout-endpoint";
-import { useEffect } from "react";
 import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-provider";
-import { User } from "iconsax-reactjs";
+import { User, ArrowLeft2, Logout } from "iconsax-reactjs";
 
 export default function DashboardHeaderDrawerComponent({
   isOpen,
@@ -29,7 +27,7 @@ export default function DashboardHeaderDrawerComponent({
     closeDialog: closeConfirmationDialog,
   } = useConfirmationDialogStore((state) => state);
 
-  const { mutate, isSuccess } = useUserLogout();
+  const { mutate } = useUserLogout();
 
   const handleNavigation = (link: string) => {
     router.push(link);
@@ -44,7 +42,13 @@ export default function DashboardHeaderDrawerComponent({
   // TODO refactor entire component using SOLID
 
   const logout = () => {
-    mutate();
+    mutate(undefined, {
+      onSuccess: () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        router.push("/login");
+      },
+    });
   };
 
   const handleConfirmLogout = () => {
@@ -57,14 +61,6 @@ export default function DashboardHeaderDrawerComponent({
       onClose: closeConfirmationDialog,
     });
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      router.push("/login");
-    }
-  }, [isSuccess]);
 
   return (
     <SwipeableDrawer
@@ -100,19 +96,27 @@ export default function DashboardHeaderDrawerComponent({
           />
           <p className="text-body text-sm font-semibold">یه سهم من یه سهم تو</p>
         </div>
-        <div
+        <button
+          type="button"
+          aria-label="پروفایل"
           className="mt-4 flex w-full flex-col items-center gap-2"
           onClick={handleNavigationToProfile}
         >
-          <div className="border-secondary flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border object-cover">
+          <div className="border-secondary relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border object-cover">
             {avatar ? (
-              <img src={avatar} alt="عکس پروفایل" className="h-auto w-full" />
+              <Image
+                src={avatar}
+                alt="عکس پروفایل"
+                fill
+                className="object-cover"
+                sizes="96px"
+              />
             ) : (
               <User size={48} className="text-secondary" />
             )}
           </div>
           <h3 className="text-body font-semibold">{full_name}</h3>
-        </div>
+        </button>
         <nav className="mt-8 h-[calc(100%-150px)] overflow-y-auto pl-2">
           <ul>
             {isOpen &&
@@ -130,13 +134,19 @@ export default function DashboardHeaderDrawerComponent({
                     ease: "easeOut",
                   }}
                   key={id}
+                  role="button"
+                  tabIndex={0}
                   className="text-body flex items-center justify-between py-4"
                   onClick={() => handleNavigation(link)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ")
+                      handleNavigation(link);
+                  }}
                 >
                   <div className="flex items-center gap-4">
                     {icon} <h4 className="font-semibold">{title}</h4>
                   </div>
-                  <AltArrowLeft size={24} />
+                  <ArrowLeft2 size={24} />
                 </motion.li>
               ))}
           </ul>

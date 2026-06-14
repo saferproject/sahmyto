@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowLeft } from "@solar-icons/react";
+import Image from "next/image";
+
 import { Badge, Button } from "@mui/material";
 import { motion } from "motion/react";
-import { NotificationBing, Truck } from "iconsax-reactjs";
+import { NotificationBing, Truck, ArrowLeft } from "iconsax-reactjs";
 
 import KarboomListItemProps from "../_types/karboom-list-item-props";
 
@@ -54,11 +55,13 @@ export default function KarboomListItemComponent(
       className="bg-secondary relative flex w-full flex-col rounded-3xl shadow-lg"
     >
       <div className="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-t-3xl object-cover">
-        {image ? (
-          <img src={image} alt="عکس کاربوم" />
-        ) : (
-          <img src="/images/truck.webp" alt="عکس کاربوم" />
-        )}
+        <Image
+          src={image ?? "/images/truck.webp"}
+          alt="عکس کاربوم"
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
         {plate.first_number &&
           plate.second_character &&
           plate.third_number &&

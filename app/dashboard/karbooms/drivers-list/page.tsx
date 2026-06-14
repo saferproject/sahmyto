@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 import { useState } from "react";
-import { User } from "@solar-icons/react";
+import { User } from "iconsax-reactjs";
 
 import { useSnackbar } from "notistack";
 
@@ -44,7 +44,7 @@ export default function DriverListPage() {
     <div className="flex h-full w-full flex-col justify-between">
       <div className="flex w-full flex-col">
         <div className="mb-4 flex w-full items-center gap-2">
-          <User className="text-heading" size={24} weight="Broken" />
+          <User className="text-heading" size={24} variant="Broken" />
           <h2 className="text-body text-xl font-bold">رانندگان</h2>
         </div>
         <DriversListHeaderComponent driversCount={data?.data.length ?? 0} />
