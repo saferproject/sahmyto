@@ -14,11 +14,29 @@ export default function VerifyForm() {
 
   const { phone, setUser } = useUserInfoStore((state) => state);
 
-  const { mutate, isSuccess, data } = useVerify();
+  const { mutate } = useVerify();
 
   const autoSubmit = async () => {
     if (await trigger())
-      mutate({ code: Object.values(getValues()).join(""), phone });
+      mutate(
+        { code: Object.values(getValues()).join(""), phone },
+        {
+          onSuccess: (response) => {
+            if (!response.data.token) return;
+
+            window.localStorage.setItem("token", response.data.token);
+            window.localStorage.setItem(
+              "user",
+              JSON.stringify(response.data.user),
+            );
+            setUser(response.data.user);
+
+            if (response.data.user.is_complete_profile)
+              router.push("/dashboard");
+            else router.push("/dashboard/profile");
+          },
+        },
+      );
   };
 
   const {
@@ -56,17 +74,6 @@ export default function VerifyForm() {
   useEffect(() => {
     if (fourthDigit) autoSubmit();
   }, [fourthDigit]);
-
-  useEffect(() => {
-    if (isSuccess && data.data.token) {
-      window.localStorage.setItem("token", data.data.token);
-      window.localStorage.setItem("user", JSON.stringify(data.data.user));
-      setUser(data.data.user);
-
-      if (data.data.user.is_complete_profile) router.push("/dashboard");
-      else router.push("/dashboard/profile");
-    }
-  }, [isSuccess]);
 
   return (
     <form dir="ltr" className="mt-4 flex w-full flex-col gap-4">

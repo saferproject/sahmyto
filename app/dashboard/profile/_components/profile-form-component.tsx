@@ -14,7 +14,7 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import { AltArrowDown } from "@solar-icons/react";
+import { ArrowDown2 } from "iconsax-reactjs";
 import { Controller } from "react-hook-form";
 
 import useProfileForm from "../_hooks/profile-form";
@@ -44,22 +44,20 @@ export default function ProfileFormComponent() {
     formState: { errors },
   } = useProfileForm();
 
-  const { mutate, isSuccess, data } = useCompleteProfile();
+  const { mutate } = useCompleteProfile();
 
   const submit = (data: ProfileFormType) => {
-    mutate(data);
+    mutate(data, {
+      onSuccess: (response) => {
+        setUser(response.data);
+        router.push("/dashboard");
+      },
+    });
   };
 
   const HandleToggleOptionalFieldsVisibility = () => {
     setOptionalFieldsVisibility((curValue) => !curValue);
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      setUser(data.data);
-      router.push("/dashboard");
-    }
-  }, [isSuccess]);
 
   useEffect(() => {
     if (user) reset(user);
@@ -101,7 +99,7 @@ export default function ProfileFormComponent() {
         expanded={isOptionalFieldsVisible}
         onChange={HandleToggleOptionalFieldsVisibility}
       >
-        <AccordionSummary expandIcon={<AltArrowDown />}>
+        <AccordionSummary expandIcon={<ArrowDown2 />}>
           <h2>اطلاعات اختیاری</h2>
         </AccordionSummary>
         <AccordionDetails>

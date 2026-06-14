@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 import { useWatch } from "react-hook-form";
 
@@ -34,35 +33,31 @@ export default function KarboomFormComponent({
 
   const { setActiveKarboom } = useKarboomsStore((state) => state);
 
-  const { mutate, isSuccess, isError, data, error } = useCreateKarboom();
+  const { mutate } = useCreateKarboom();
 
   const submit = (data: KarboomFormType) => {
-    mutate(data);
+    mutate(data, {
+      onSuccess: (response) => {
+        setActiveKarboom(response.data);
+        reset();
+        onSuccess();
+      },
+      onError: (error) => {
+        Object.entries(error).forEach(([field, errors]) =>
+          // @ts-expect-error server returns a field-keyed error map
+          setError(field, {
+            message: errors[0],
+            type: "validate",
+          }),
+        );
+      },
+    });
   };
 
   const handleCancel = () => {
     reset();
     onCancel();
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      setActiveKarboom(data.data);
-      reset();
-      onSuccess();
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (isError)
-      Object.entries(error).forEach(([field, errors]) =>
-        //@ts-ignore
-        setError(field, {
-          message: errors[0],
-          type: "validate",
-        }),
-      );
-  }, [isError, error]);
 
   return (
     <form

@@ -2,10 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { useEffect } from "react";
-
 import { Button, TextField } from "@mui/material";
-import { KeyMinimalistic2 } from "@solar-icons/react";
 
 import useLoginForm from "./_hooks/use-login-form";
 import { LoginFormType } from "./_schemas/login-schema";
@@ -15,21 +12,19 @@ import { useUserInfoStore } from "../_providers/user-info-provider";
 export default function LoginPage() {
   const router = useRouter();
   const { register, handleSubmit } = useLoginForm();
-  const { mutate, isPending, isSuccess, data } = useLoginUser();
+  const { mutate, isPending } = useLoginUser();
   const { setPhone } = useUserInfoStore((state) => state);
 
   const submit = (data: LoginFormType) => {
     setPhone(data.phone);
-    mutate(data);
+    mutate(data, {
+      onSuccess: (response) => {
+        if (response.data.type === "code") router.push("/login/verify");
+        else if (response.data.type === "password") {
+        }
+      },
+    });
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      if (data.data.type === "code") router.push("/login/verify");
-      else if (data.data.type === "password") {
-      }
-    }
-  }, [isSuccess, data]);
 
   return (
     <>

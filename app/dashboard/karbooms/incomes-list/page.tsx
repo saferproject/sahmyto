@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import IncomesListLayout from "./_layouts/incomes-list-layout";
 import IncomesListHeaderLayout from "./_layouts/incomes-list-header-layout";
@@ -18,7 +18,7 @@ export default function IncomesListPage() {
   const [isRejectDrawerOpen, setRejectDrawerOpen] = useState<boolean>(false);
   const [selectedIncome, setSelectedIncome] = useState<number | null>(null);
 
-  const { mutate, isSuccess } = useRejectIncome();
+  const { mutate } = useRejectIncome();
 
   const handleOpenIncomeDtailsDrawer = () => {
     setIncomeDetailsDrawerOpen(true);
@@ -42,16 +42,18 @@ export default function IncomesListPage() {
   };
 
   const handleSubmitReject = (data: RejectFormType) => {
-    if (selectedIncome) mutate({ ...data, incomeId: selectedIncome });
+    if (selectedIncome)
+      mutate(
+        { ...data, incomeId: selectedIncome },
+        {
+          onSuccess: () => {
+            setSelectedIncome(null);
+            handleCloseRejectDrawer();
+          },
+        },
+      );
     // TODO show a warning alert
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      setSelectedIncome(null);
-      handleCloseRejectDrawer();
-    }
-  }, [isSuccess]);
 
   return (
     <div className="h-full w-full">
