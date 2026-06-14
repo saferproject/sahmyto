@@ -20,10 +20,10 @@ export default function ExpenseListHeaderLayout({
     <>
       <SearchInputComponent />
       <div className="flex items-center gap-4">
-        {EXPENSE_FILTER_TAGS.map((filter, index) => (
+        {EXPENSE_FILTER_TAGS.map((filter) => (
           <FilterTagComponent
             tag={filter}
-            key={index}
+            key={filter.id}
             selectedTagId={selectedTagId}
             onSelectTag={handleSelectTag}
           />
