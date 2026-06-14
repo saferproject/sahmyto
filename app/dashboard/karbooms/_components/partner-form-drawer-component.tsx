@@ -4,7 +4,7 @@ import { SwipeableDrawer } from "@mui/material";
 import { useSnackbar } from "notistack";
 
 import PartnerFormComponent from "./partner-form-component";
-import { UsersGroupTwoRounded } from "@solar-icons/react";
+import { Profile2User } from "iconsax-reactjs";
 import { PartnerFormDrawerProps } from "../_types/partner-form-drawer-props";
 
 export default function PartnerFormDrawerComponent({
@@ -38,10 +38,10 @@ export default function PartnerFormDrawerComponent({
         <div className="flex h-full w-full flex-col items-center justify-between">
           <div className="flex w-full flex-col overflow-y-auto">
             <div className="mb-4 flex w-full items-center gap-2">
-              <UsersGroupTwoRounded
+              <Profile2User
                 className="text-heading"
                 size={24}
-                weight="Broken"
+                variant="Broken"
               />
               <h2 className="text-body text-xl font-bold">افزودن شریک</h2>
             </div>

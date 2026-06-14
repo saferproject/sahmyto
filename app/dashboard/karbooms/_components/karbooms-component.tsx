@@ -3,7 +3,7 @@
 import useGetKarbooms from "../_hooks/get-karbooms-endpoint";
 
 import KarboomListSkeleton from "./karboom-list-skeleton";
-import KarboomListComponent from "./karboon-list-component";
+import KarboomListComponent from "./karboom-list-component";
 import NoKarboomsComponent from "./no-karbooms-component";
 
 export default function KarboomsComponent() {

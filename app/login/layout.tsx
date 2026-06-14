@@ -4,7 +4,7 @@ import LoginFooter from "./_components/sign-in-footer";
 import LoginLayoutProps from "./_interfaces/login-layout-props";
 import { ReactQueryProvider } from "../query-client";
 import { UserInfoStoreProvider } from "../_providers/user-info-provider";
-import ThemeRegistry from "../theme-registery";
+import ThemeRegistry from "../theme-registry";
 
 export default function SignInPage({ children }: LoginLayoutProps) {
   return (
