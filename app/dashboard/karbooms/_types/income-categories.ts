@@ -1,0 +1,1 @@
+export type IncomeTypes = "monthly" | "daily" | "hourly" | "services" | "travel";

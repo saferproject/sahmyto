@@ -1,0 +1,62 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import { useState } from "react";
+import { User } from "@solar-icons/react";
+
+import { useSnackbar } from "notistack";
+
+import DriversListComponent from "./_components/drivers-list-component";
+import DriversListHeaderComponent from "./_components/drivers-list-header-component";
+import DriversListButtonsComponent from "./_components/drivers-list-buttons-component";
+import DriverFormDrawerComponent from "../_components/driver-form-drawer-component";
+
+import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+
+import useGetDriversEndpoint from "./_hooks/use-get-karboom-drivers-endpoint";
+
+export default function DriverListPage() {
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { id: karboom_id } = useKarboomsStore((state) => state);
+
+  if (!karboom_id) {
+    enqueueSnackbar({ variant: "warning", message: "کاربومی انتخاب نشده است" });
+    router.replace("/dashboard/karbooms");
+  }
+
+  const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
+    useState<boolean>(false);
+
+  const { data } = useGetDriversEndpoint(karboom_id);
+
+  const handleOpenDriverForm = () => {
+    setDriverFormDrawerOpen(true);
+  };
+
+  const handleCloseDriverForm = () => {
+    setDriverFormDrawerOpen(false);
+  };
+
+  return (
+    <div className="flex h-full w-full flex-col justify-between">
+      <div className="flex w-full flex-col">
+        <div className="mb-4 flex w-full items-center gap-2">
+          <User className="text-heading" size={24} weight="Broken" />
+          <h2 className="text-body text-xl font-bold">رانندگان</h2>
+        </div>
+        <DriversListHeaderComponent driversCount={data?.data.length ?? 0} />
+        <DriversListComponent drivers={data?.data ?? []} />
+        <DriverFormDrawerComponent
+          isOpen={isDriverFormDrawerOpen}
+          onOpen={handleOpenDriverForm}
+          onClose={handleCloseDriverForm}
+          onSuccess={handleCloseDriverForm}
+        />
+      </div>
+      <DriversListButtonsComponent onAddDriver={handleOpenDriverForm} />
+    </div>
+  );
+}

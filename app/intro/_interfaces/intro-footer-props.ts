@@ -1,0 +1,4 @@
+export default interface IntroFooterProps {
+  length: number;
+  currentPageIndex: number;
+}

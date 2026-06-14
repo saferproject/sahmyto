@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-light: oklch(89.667% 0.06522 57.765);
+  --color-primary: oklch(73.951% 0.18279 55.117);
+  --color-primary-dark: oklch(65.261% 0.18336 45.726);
+
+  --color-secondary-lightest: oklch(96% 0.01066 248.164);
+  --color-secondary-lighter: oklch(92% 0.01066 248.164);
+  --color-secondary-light: oklch(86.708% 0.01066 248.164);
+  --color-secondary: oklch(83.064% 0.03287 239.54);
+
+  --color-heading-light: oklch(89.667% 0.06522 57.765);
+  --color-heading: oklch(65.261% 0.18336 45.726);
+
+  --color-body-light: oklch(83.064% 0.03287 239.54);
+  --color-body: oklch(30.262% 0.10854 266.981);
+
+  --color-info: oklch(86.708% 0.01066 248.164);
+
+  --font-yekan-bakh: "Yekan Bakh", system-ui, sans-serif;
+}
+
+@source inline("text-red-500 text-yellow-500 text-green-500");
+
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+* {
+  font-family: var(--font-yekan-bakh) !important;
+  word-spacing: -0.1em !important;
+}
+
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-track {
+  display: none;
+}
+
+.animate-progress {
+  animation: progress 4s linear forwards;
+}
+
+.karboom-background {
+  background-image: url("/images/karboom-background.svg");
+}

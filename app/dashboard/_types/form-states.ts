@@ -1,0 +1,1 @@
+export type FormStates = 'ADD' | 'EDIT';

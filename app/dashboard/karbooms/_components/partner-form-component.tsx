@@ -1,0 +1,249 @@
+"use client";
+
+import { Button, IconButton, TextField } from "@mui/material";
+import { InfoCircle, Notebook } from "@solar-icons/react";
+import { Controller, useWatch } from "react-hook-form";
+import { DatePicker } from "@mui/x-date-pickers";
+import { useEffect } from "react";
+
+import usePartnerForm from "../_hooks/use-partner-form";
+import useAddPartner from "../_hooks/use-add-partner-endpoint";
+
+import DescriptionInput from "@/app/_components/description-input";
+
+import { PartnerFormType } from "../_schemas/partner-form-schema";
+
+import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+
+import { PartnerFormProps } from "../_types/partner-form-props";
+
+export default function PartnerFormComponent({
+  onCancel,
+  onSuccess,
+}: PartnerFormProps) {
+  const { register, control, setValue, handleSubmit, reset } = usePartnerForm();
+
+  const { share_capital, share_decimal, description } = useWatch({ control });
+
+  const { id: karboom_id } = useKarboomsStore((state) => state);
+
+  const { mutate, isSuccess } = useAddPartner();
+
+  const handleIncrementCapital = () => {
+    if (share_capital !== undefined) {
+      if (share_capital < 5) setValue("share_capital", share_capital + 1);
+      else if (share_capital == 5) {
+        setValue("share_capital", 6);
+        setValue("share_decimal", 0);
+      } else if (share_capital == 6) {
+        setValue("share_capital", 1);
+        setValue("share_decimal", 0);
+      }
+    }
+  };
+
+  const handleDecrementCapital = () => {
+    if (share_capital !== undefined) {
+      if (share_capital >= 1) setValue("share_capital", share_capital - 1);
+      else if (share_capital == 0) {
+        setValue("share_capital", 6);
+        setValue("share_decimal", 0);
+      }
+    }
+  };
+
+  const handleIncrementDecimal = () => {
+    if (
+      share_decimal !== undefined &&
+      share_capital !== undefined &&
+      share_capital < 6
+    ) {
+      if (share_decimal < 99) setValue("share_decimal", share_decimal + 1);
+      else if (share_capital !== undefined && share_capital <= 5) {
+        setValue("share_decimal", 0);
+        setValue("share_capital", share_capital + 1);
+      }
+    }
+  };
+
+  const handleDecrementDecimal = () => {
+    if (
+      share_decimal !== undefined &&
+      share_capital !== undefined &&
+      share_capital >= 0
+    ) {
+      if (share_decimal > 1) setValue("share_decimal", share_decimal - 1);
+      else if (share_capital !== undefined && share_capital >= 1) {
+        setValue("share_decimal", 99);
+        setValue("share_capital", share_capital - 1);
+      }
+    }
+  };
+
+  const handleCancel = () => {
+    reset();
+    onCancel();
+  };
+
+  const submit = ({
+    started_at,
+    ended_at,
+    share_capital,
+    share_decimal,
+    ...other
+  }: PartnerFormType) => {
+    const share = Number(`${share_capital}.${share_decimal}`);
+
+    mutate({
+      ...other,
+      share,
+      karboom_id,
+      started_at: started_at.toISOString().split("T")[0],
+      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+    });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      reset();
+      onSuccess();
+    }
+  }, [isSuccess]);
+
+  return (
+    <form
+      className="flex w-full flex-col gap-4"
+      onSubmit={handleSubmit(submit)}
+    >
+      <TextField
+        {...register("phone")}
+        type="tel"
+        label="شماره تماس"
+        slotProps={{
+          input: {
+            endAdornment: (
+              <IconButton>
+                <Notebook size={24} className="text-primary rotate-y-180" />
+              </IconButton>
+            ),
+          },
+        }}
+      />
+      <div className="flex items-center gap-4">
+        <TextField {...register("first_name")} label="نام" fullWidth />
+        <TextField {...register("last_name")} label="نام خانوادگی" fullWidth />
+      </div>
+      <div className="border-secondary-light flex w-full items-center justify-between rounded-2xl border p-4">
+        <span className="text-body">مقدار سهم</span>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded"
+            onClick={handleIncrementDecimal}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded"
+            onClick={handleDecrementDecimal}
+          >
+            -
+          </button>
+        </div>
+        <div className="relative">
+          <input
+            {...register("share_decimal")}
+            type="number"
+            id="share-decimal"
+            className="text-body absolute -right-4 bottom-0 w-8 text-center"
+            placeholder="__"
+            min={0}
+            max={6}
+            readOnly
+          />
+          <span className="text-body text-5xl font-extralight">/</span>
+          <input
+            {...register("share_capital")}
+            type="number"
+            id="share-capital"
+            className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
+            placeholder="_"
+            min={0}
+            max={100}
+            readOnly
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
+            onClick={handleIncrementCapital}
+          >
+            +
+          </button>
+          <button
+            type="button"
+            className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
+            onClick={handleDecrementCapital}
+          >
+            -
+          </button>
+        </div>
+        <span className="text-body-light text-sm">دانگ</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <InfoCircle weight="Broken" size={20} className="text-body-light" />
+        <p className="text-body-light text-xs">
+          مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
+        </p>
+      </div>
+      <div className="flex w-full gap-4">
+        <Controller
+          control={control}
+          name="started_at"
+          render={({ field }) => (
+            <DatePicker
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ شروع"
+              format="YYYY/MM/DD"
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="ended_at"
+          render={({ field }) => (
+            <DatePicker
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ پایان"
+              format="YYYY/MM/DD"
+            />
+          )}
+        />
+      </div>
+      <DescriptionInput
+        register={register("description")}
+        currentlength={description?.length ?? 0}
+        error={false}
+        helperText=""
+      />
+      <div className="flex items-center gap-4">
+        <Button
+          variant="outlined"
+          color="primary"
+          type="button"
+          onClick={handleCancel}
+          fullWidth
+        >
+          انصراف
+        </Button>
+        <Button variant="contained" type="submit" fullWidth>
+          ثبت
+        </Button>
+      </div>
+    </form>
+  );
+}

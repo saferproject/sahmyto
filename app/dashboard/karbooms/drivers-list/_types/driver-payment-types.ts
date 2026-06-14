@@ -1,0 +1,1 @@
+export type DriverPaymentTypes = "monthly" | "daily";
