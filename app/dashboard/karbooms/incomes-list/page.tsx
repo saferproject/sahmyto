@@ -73,6 +73,7 @@ export default function IncomesListPage() {
         onClose={handleCloseRejectDrawer}
         onSubmit={handleSubmitReject}
       />
+      {/* <IncomesListButtonsComponent onAddIncome={handleOpenIncomeForm} /> */}
     </div>
   );
 }

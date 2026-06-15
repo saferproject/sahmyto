@@ -27,24 +27,27 @@ export default function PartnersListItemComponent({
   };
 
   return (
-    <Badge
-      badgeContent={
-        <span
-          className={
-            "relative left-16 rounded-full p-2 " +
-            getActivityStatusColor(status)
-          }
-        >
-          {ACTIVITY_STATUS_FA[status]}
-        </span>
+    <motion.li
+      className={
+        "border-secondary-light w-full rounded-2xl border p-2 overflow-visible " +
+        (status === "pending" ? "opacity-60" : "")
       }
-      anchorOrigin={{ horizontal: "right", vertical: "top" }}
     >
-      <motion.li
-        className={
-          "border-secondary-light w-full rounded-2xl border p-2 " +
-          (status === "pending" ? "opacity-60" : "")
+      <Badge
+        badgeContent={
+          <span
+            className={
+              "relative left-16 rounded-full p-2 " +
+              getActivityStatusColor(status)
+            }
+          >
+            {ACTIVITY_STATUS_FA[status]}
+          </span>
         }
+        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+        sx={{
+          width: "100%",
+        }}
       >
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-4">
@@ -78,7 +81,7 @@ export default function PartnersListItemComponent({
             <MenuItem onClick={() => {}}>حذف</MenuItem>
           </Menu>
         </div>
-      </motion.li>
-    </Badge>
+      </Badge>
+    </motion.li>
   );
 }

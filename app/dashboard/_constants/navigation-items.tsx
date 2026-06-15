@@ -1,4 +1,4 @@
-import { Bus, MoneyRecive, Home, Sms, WalletMoney } from "iconsax-reactjs";
+import { MoneyRecive, Home, Sms, WalletMoney, Truck } from "iconsax-reactjs";
 import NavigationItem from "../_interfaces/navigation-item";
 
 export const NAVIGATION_ITEMS: NavigationItem[] = [
@@ -29,7 +29,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
   {
     id: 5,
     title: "کاربوم ها",
-    icon: <Bus variant="Bold" size={24} />,
+    icon: <Truck variant="Bold" size={24} />,
     path: "/dashboard/karbooms",
   },
 ];

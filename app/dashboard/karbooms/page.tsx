@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Fab } from "@mui/material";
-import { Add } from "iconsax-reactjs";
+import { Add, Truck } from "iconsax-reactjs";
 
 import { useKarboomsStore } from "./_providers/karbooms-store-provider";
 
@@ -69,10 +69,13 @@ export default function KarboomsPage() {
   };
 
   return (
-    <div className="w-full h-full overflow-y-auto">
-      <h2 className="text-body w-full text-right text-xl font-semibold">
-        لیست کاربوم ها
-      </h2>
+    <div className="h-full w-full overflow-y-auto">
+      <div className="flex items-center gap-2 mt-2">
+        <Truck size={32} className="text-primary" />
+        <h2 className="text-body w-full text-right text-xl font-semibold">
+          لیست کاربوم ها
+        </h2>
+      </div>
       <KarboomsComponent />
       <KarboomActionsDrawerComponent
         isOpen={isActionsDrawerOpen}

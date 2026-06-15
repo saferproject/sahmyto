@@ -3,7 +3,7 @@ import { dashboardService } from "../_services/dashboard-service";
 
 export default function useUserLogout() {
   return useMutation({
-    mutationKey: ["USER_INFO"],
+    mutationKey: ["profile"],
     mutationFn: dashboardService.userLogout,
   });
 }

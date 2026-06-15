@@ -56,7 +56,7 @@ export default function DriverListPage() {
           onSuccess={handleCloseDriverForm}
         />
       </div>
-      <DriversListButtonsComponent onAddDriver={handleOpenDriverForm} />
+      <DriversListButtonsComponent onAddDriver={handleOpenDriverForm} />|
     </div>
   );
 }

@@ -4,14 +4,18 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Badge, IconButton } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
+import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
 
 import DashboardHeaderVector from "@/app/_assets/_vectors/dashboard-header.svg";
 
 import DashboardHeaderDrawerComponent from "./dashboard-header-drawer-component";
+import RequestsMenuComponent from "./notifications-menu-component";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
-import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
+import useGetKarboomRequests from "../_hooks/use-get-karboom-requests-endpoint";
+import useAcceptKarboomRequest from "../_hooks/use-accept-karboom-request-endpoint";
+import useRejectKarboomRequest from "../_hooks/use-reject-karboom-request-endpoint";
 
 export default function DashboardHeader() {
   const router = useRouter();
@@ -19,6 +23,24 @@ export default function DashboardHeader() {
   const { avatar } = useUserInfoStore((state) => state);
 
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [mutatingRequest, setMutatingRequest] = useState<number | null>(null);
+
+  const [notificationAnchor, setNotificationAnchor] =
+    useState<HTMLElement | null>(null);
+
+  const { data: requests, isSuccess: gotRequests } = useGetKarboomRequests();
+
+  const {
+    mutate: acceptRequest,
+    isSuccess: requestAccepted,
+    isPending: requestIsAccepting,
+  } = useAcceptKarboomRequest();
+
+  const {
+    mutate: rejectRequest,
+    isSuccess: requestRejected,
+    isPending: requestIsRejecting,
+  } = useRejectKarboomRequest();
 
   const handleOpenDrawer = () => {
     setDrawerOpen(true);
@@ -28,9 +50,31 @@ export default function DashboardHeader() {
     setDrawerOpen(false);
   };
 
+  const handleOpenRequestsMenu = (event: MouseEvent<HTMLButtonElement>) => {
+    setNotificationAnchor(event.currentTarget);
+  };
+
+  const handleCloseRequestsMenu = () => {
+    setNotificationAnchor(null);
+  };
+
+  const handleAcceptRequest = (id: number) => {
+    setMutatingRequest(id);
+    acceptRequest(id);
+  };
+
+  const handleRejectRequest = (id: number) => {
+    setMutatingRequest(id);
+    rejectRequest(id);
+  };
+
   const handleNavigateToProfile = () => {
     router.push("/dashboard/profile");
   };
+
+  useEffect(() => {
+    if (gotRequests && requests.data.length === 0) handleCloseRequestsMenu();
+  }, [gotRequests]);
 
   return (
     <header className="relative h-32 w-full">
@@ -81,25 +125,43 @@ export default function DashboardHeader() {
           <Badge
             className="relative bottom-2 cursor-pointer"
             badgeContent={
-              <div className="text-primary flex size-5 items-center justify-center rounded-full bg-white text-lg shadow-lg">
-                {"2"}
-              </div>
+              requests?.data && requests.data.length > 0 ? (
+                <div className="text-primary flex size-5 items-center justify-center rounded-full bg-white text-lg shadow-lg">
+                  {requests.data.length}
+                </div>
+              ) : null
             }
             anchorOrigin={{
               vertical: "top",
-              horizontal: "left",
+              horizontal: "right",
             }}
           >
-            <div className="border-primary flex h-12 w-12 items-center justify-center rounded-full border bg-white">
+            <button
+              type="button"
+              aria-label="اعلان‌ها"
+              onClick={handleOpenRequestsMenu}
+              className="border-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-white"
+            >
               <Notification1
                 size={24}
                 variant="Broken"
                 className="text-secondary"
               />
-            </div>
+            </button>
           </Badge>
         </div>
       </div>
+      <RequestsMenuComponent
+        anchorEl={notificationAnchor}
+        isOpen={Boolean(notificationAnchor)}
+        onClose={handleCloseRequestsMenu}
+        requests={requests?.data ?? []}
+        onAccept={handleAcceptRequest}
+        onReject={handleRejectRequest}
+        mutatingRequest={mutatingRequest}
+        requestIsAccepting={requestIsAccepting}
+        requestIsRejecting={requestIsRejecting}
+      />
     </header>
   );
 }
