@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import { Badge, Button, Menu, MenuItem } from "@mui/material";
 import { useRef, useState } from "react";
-import { UserCircle } from "@solar-icons/react";
+import { ProfileCircle } from "iconsax-reactjs";
 
 import PartnersListItemProps from "../_interfaces/partners-list-item-props";
 
@@ -47,11 +48,17 @@ export default function PartnersListItemComponent({
       >
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex size-12 items-center justify-center overflow-hidden rounded-full">
+            <div className="relative flex size-12 items-center justify-center overflow-hidden rounded-full">
               {avatar ? (
-                <img src={avatar} alt="عکس شریک" />
+                <Image
+                  src={avatar}
+                  alt="عکس شریک"
+                  fill
+                  className="object-cover"
+                  sizes="48px"
+                />
               ) : (
-                <UserCircle className="text-heading" size={32} />
+                <ProfileCircle className="text-heading" size={32} />
               )}
             </div>
             <div className="flex flex-col gap-2">

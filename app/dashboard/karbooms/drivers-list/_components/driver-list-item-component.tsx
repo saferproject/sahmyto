@@ -46,9 +46,15 @@ export default function DriverListItemComponent({
         }}
       >
         <div className="border-secondary-light flex w-full items-center justify-between overflow-visible rounded-2xl border p-4">
-          <div className="border-primary flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
+          <div className="border-primary relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
             {avatar ? (
-              <img src={avatar} alt="عکس راننده" />
+              <Image
+                src={avatar}
+                alt="عکس راننده"
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
             ) : (
               <User className="text-secondary-light" />
             )}

@@ -12,10 +12,9 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
-import { Notebook } from "@solar-icons/react";
+import { Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useEffect } from "react";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
@@ -38,7 +37,7 @@ export default function DriverFormComponent({
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
-  const { mutate, isSuccess } = useAddDriver();
+  const { mutate } = useAddDriver();
 
   const handleCancel = () => {
     reset();
@@ -46,20 +45,21 @@ export default function DriverFormComponent({
   };
 
   const submit = ({ started_at, ended_at, ...other }: DriverFormType) => {
-    mutate({
-      ...other,
-      karboom_id,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
-    });
+    mutate(
+      {
+        ...other,
+        karboom_id,
+        started_at: started_at.toISOString().split("T")[0],
+        ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+      },
+      {
+        onSuccess: () => {
+          reset();
+          onSuccess();
+        },
+      },
+    );
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      reset();
-      onSuccess();
-    }
-  }, [isSuccess]);
 
   return (
     <form
@@ -74,7 +74,7 @@ export default function DriverFormComponent({
           input: {
             endAdornment: (
               <IconButton>
-                <Notebook size={24} className="text-primary rotate-y-180" />
+                <Book1 size={24} className="text-primary rotate-y-180" />
               </IconButton>
             ),
           },

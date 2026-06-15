@@ -8,14 +8,14 @@ import DashboardHeader from "./_components/dashboard-header";
 import DashboardFooter from "./_components/dashboard-footer";
 import ConfirmationDialogComponent from "./_components/confirmation-dialog-component";
 
-import ThemeRegistry from "../theme-registery";
+import ThemeRegistry from "../theme-registry";
 
 import { ReactQueryProvider } from "../query-client";
 
 import { UserInfoStoreProvider } from "../_providers/user-info-provider";
 import { ConfirmationDialogStoreProvider } from "./_providers/confirmation-dialog-provider";
 
-import { AuthenticationGuard } from "./_utilities/authentication-gaurd";
+import { AuthenticationGuard } from "./_utilities/authentication-guard";
 
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {

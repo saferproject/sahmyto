@@ -1,4 +1,4 @@
-import { Bus } from "@solar-icons/react/ssr";
+import { Bus } from "iconsax-reactjs";
 import { INCOME_TYPES } from "../_constants/income-types";
 
 import { IncomeDrawerTypeListProps } from "../_types/income-drawer-type-list-props";
@@ -10,11 +10,16 @@ export default function IncomeDrawerTypeListComponent({
   return (
     <>
       <div className="mt-8 grid h-96 w-full grid-cols-2 gap-8">
-        {INCOME_TYPES.map((type, index) => (
-          <IncomeTypeComponent key={index} {...type} onSelect={onTypeSelect} />
+        {INCOME_TYPES.map((type) => (
+          <IncomeTypeComponent
+            key={type.type}
+            {...type}
+            onSelect={onTypeSelect}
+          />
         ))}
       </div>
-      <div
+      <button
+        type="button"
         className="border-secondary text-body mt-8 flex w-full items-center justify-between rounded-2xl border p-4"
         onClick={() => onTypeSelect("travel")}
       >
@@ -23,7 +28,7 @@ export default function IncomeDrawerTypeListComponent({
           <h4 className="text-lg font-bold">سفر</h4>
         </div>
         <p>ثبت درآمد کارکرد سفر</p>
-      </div>
+      </button>
     </>
   );
 }

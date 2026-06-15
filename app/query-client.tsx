@@ -49,7 +49,7 @@ export function ReactQueryProvider({
 
         defaultOptions: {
           queries: {
-            staleTime: 0,
+            staleTime: 1000 * 60,
             retry: 0,
             refetchOnWindowFocus: false,
           },

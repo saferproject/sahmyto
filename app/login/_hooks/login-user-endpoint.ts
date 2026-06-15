@@ -4,11 +4,5 @@ import { loginService } from "../_services/login-service";
 export default function useLoginUser() {
   return useMutation({
     mutationFn: loginService.loginUser,
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
   });
 }

@@ -1,10 +1,9 @@
 "use client";
 
 import { Button, IconButton, TextField } from "@mui/material";
-import { InfoCircle, Notebook } from "@solar-icons/react";
+import { InfoCircle, Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useEffect } from "react";
 
 import usePartnerForm from "../_hooks/use-partner-form";
 import useAddPartner from "../_hooks/use-add-partner-endpoint";
@@ -27,7 +26,7 @@ export default function PartnerFormComponent({
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
-  const { mutate, isSuccess } = useAddPartner();
+  const { mutate } = useAddPartner();
 
   const handleIncrementCapital = () => {
     if (share_capital !== undefined) {
@@ -94,21 +93,22 @@ export default function PartnerFormComponent({
   }: PartnerFormType) => {
     const share = Number(`${share_capital}.${share_decimal}`);
 
-    mutate({
-      ...other,
-      share,
-      karboom_id,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
-    });
+    mutate(
+      {
+        ...other,
+        share,
+        karboom_id,
+        started_at: started_at.toISOString().split("T")[0],
+        ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+      },
+      {
+        onSuccess: () => {
+          reset();
+          onSuccess();
+        },
+      },
+    );
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      reset();
-      onSuccess();
-    }
-  }, [isSuccess]);
 
   return (
     <form
@@ -123,7 +123,7 @@ export default function PartnerFormComponent({
           input: {
             endAdornment: (
               <IconButton>
-                <Notebook size={24} className="text-primary rotate-y-180" />
+                <Book1 size={24} className="text-primary rotate-y-180" />
               </IconButton>
             ),
           },
@@ -193,7 +193,7 @@ export default function PartnerFormComponent({
         <span className="text-body-light text-sm">دانگ</span>
       </div>
       <div className="flex items-center gap-2">
-        <InfoCircle weight="Broken" size={20} className="text-body-light" />
+        <InfoCircle variant="Broken" size={20} className="text-body-light" />
         <p className="text-body-light text-xs">
           مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
         </p>

@@ -8,7 +8,7 @@ import { useKarboomsStore } from "./_providers/karbooms-store-provider";
 
 import KarboomsComponent from "./_components/karbooms-component";
 import KarboomFormDrawerComponent from "./_components/karboom-form-drawer-component";
-import PartnerFormDrawerComponent from "./_components/partner-from-drawer-component";
+import PartnerFormDrawerComponent from "./_components/partner-form-drawer-component";
 import DriverFormDrawerComponent from "./_components/driver-form-drawer-component";
 import KarboomActionsDrawerComponent from "./_components/karboom-actions-drawer-component";
 import IncomeDrawerComponent from "./_components/income-drawer-component";

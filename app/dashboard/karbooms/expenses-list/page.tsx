@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import ExpenseListLayout from "./_layouts/expense-list-layout";
 import ExpenseListHeaderLayout from "./_layouts/expense-list-header-layout";
@@ -25,7 +25,7 @@ export default function ExpensesListPage() {
 
   const { id: tagId } = selectedTag;
 
-  const { mutate, isSuccess } = useRejectExpense();
+  const { mutate } = useRejectExpense();
 
   const handleOpenExpenseDtailsDrawer = () => {
     setExpenseDetailsDrawerOpen(true);
@@ -49,20 +49,22 @@ export default function ExpensesListPage() {
   };
 
   const handleSubmitReject = (data: RejectFormType) => {
-    if (selectedExpense) mutate({ ...data, expenseId: selectedExpense });
+    if (selectedExpense)
+      mutate(
+        { ...data, expenseId: selectedExpense },
+        {
+          onSuccess: () => {
+            setSelectedExpense(null);
+            handleCloseRejectDrawer();
+          },
+        },
+      );
     // TODO show a warning alert
   };
 
   const handleTagSelect = (tag: FilterTag) => {
     setSelectedTag(tag);
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      setSelectedExpense(null);
-      handleCloseRejectDrawer();
-    }
-  }, [isSuccess]);
 
   return (
     <div className="flex h-full w-full flex-col gap-4">

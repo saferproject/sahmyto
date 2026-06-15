@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { HamburgerMenu } from "@solar-icons/react";
-import { Badge } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { useState } from "react";
 
 import DashboardHeaderVector from "@/app/_assets/_vectors/dashboard-header.svg";
@@ -12,7 +11,7 @@ import DashboardHeaderVector from "@/app/_assets/_vectors/dashboard-header.svg";
 import DashboardHeaderDrawerComponent from "./dashboard-header-drawer-component";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
-import { User, Notification1 } from "iconsax-reactjs";
+import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
 
 export default function DashboardHeader() {
   const router = useRouter();
@@ -48,7 +47,9 @@ export default function DashboardHeader() {
         fetchPriority="high"
       />
       <div className="absolute top-4 flex w-full items-center justify-between px-8">
-        <HamburgerMenu size={48} onClick={handleOpenDrawer} />
+        <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">
+          <HamburgerMenu size={48} />
+        </IconButton>
         <Image
           src="/images/logo-primary.webp"
           alt="سهمیتو"
@@ -59,16 +60,24 @@ export default function DashboardHeader() {
           height={146}
         />
         <div>
-          <div
-            className="border-primary flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-white"
+          <button
+            type="button"
+            aria-label="پروفایل"
+            className="border-primary relative flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-white"
             onClick={handleNavigateToProfile}
           >
             {avatar ? (
-              <img src={avatar} alt="" />
+              <Image
+                src={avatar}
+                alt="عکس پروفایل"
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
             ) : (
               <User size={24} variant="Broken" className="text-secondary" />
             )}
-          </div>
+          </button>
           <Badge
             className="relative bottom-2 cursor-pointer"
             badgeContent={

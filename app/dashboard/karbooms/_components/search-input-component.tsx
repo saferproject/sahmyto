@@ -1,7 +1,7 @@
 "use client";
 
 import { TextField } from "@mui/material";
-import { Magnifer } from "@solar-icons/react";
+import { SearchNormal1 } from "iconsax-reactjs";
 
 export default function SearchInputComponent() {
   return (
@@ -14,7 +14,7 @@ export default function SearchInputComponent() {
       slotProps={{
         input: {
           startAdornment: (
-            <Magnifer weight="Broken" className="text-primary ml-2" />
+            <SearchNormal1 variant="Broken" className="text-primary ml-2" />
           ),
         },
       }}

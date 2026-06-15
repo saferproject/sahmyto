@@ -2,16 +2,16 @@
 
 import Image from "next/image";
 
-import { DocumentText } from "@solar-icons/react";
+import { DocumentText } from "iconsax-reactjs";
 
 export default function LoginHeader() {
   return (
     <div className="flex w-full items-center justify-between">
       <div className="rounded-lg p-2 shadow-md">
-        <DocumentText weight="Broken" size="32" className="text-secondary" />
+        <DocumentText variant="Broken" size="32" className="text-secondary" />
       </div>
       <div className="rounded-lg p-2 shadow-md">
-        <DocumentText weight="Broken" size="32" className="text-secondary" />
+        <DocumentText variant="Broken" size="32" className="text-secondary" />
       </div>
       <div className="bg-primary rounded-lg shadow-md">
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white object-cover p-2">
@@ -19,10 +19,10 @@ export default function LoginHeader() {
         </div>
       </div>
       <div className="rounded-lg p-2 shadow-md">
-        <DocumentText weight="Broken" size="32" className="text-secondary" />
+        <DocumentText variant="Broken" size="32" className="text-secondary" />
       </div>
       <div className="rounded-lg p-2 shadow-md">
-        <DocumentText weight="Broken" size="32" className="text-secondary" />
+        <DocumentText variant="Broken" size="32" className="text-secondary" />
       </div>
     </div>
   );

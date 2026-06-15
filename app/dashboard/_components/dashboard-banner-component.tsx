@@ -1,12 +1,12 @@
 import Image from "next/image";
 
-import { CloseCircle } from "@solar-icons/react/ssr";
+import { CloseCircle } from "iconsax-reactjs";
 
-import BannerBackgroundImage from "../_assets/_imaegs/home-banner-background.png";
-import BannerCoinXL from "../_assets/_imaegs/home-banner-coin-xl.png";
-import BannerCoinLG from "../_assets/_imaegs/home-banner-coin-lg.png";
-import BannerCoinMD from "../_assets/_imaegs/home-banner-coin-md.png";
-import BannerCoinSM from "../_assets/_imaegs/home-banner-coin-sm.png";
+import BannerBackgroundImage from "../_assets/_images/home-banner-background.png";
+import BannerCoinXL from "../_assets/_images/home-banner-coin-xl.png";
+import BannerCoinLG from "../_assets/_images/home-banner-coin-lg.png";
+import BannerCoinMD from "../_assets/_images/home-banner-coin-md.png";
+import BannerCoinSM from "../_assets/_images/home-banner-coin-sm.png";
 
 export default function DashboardBannerComponent() {
   return (

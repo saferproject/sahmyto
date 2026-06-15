@@ -1,4 +1,4 @@
-import { Bus } from "@solar-icons/react";
+import { Bus } from "iconsax-reactjs";
 
 import DrawerMenuItem from "../_interfaces/drawer-menu-item";
 

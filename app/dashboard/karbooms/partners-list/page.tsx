@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { UsersGroupTwoRounded } from "@solar-icons/react/ssr";
+import { Profile2User } from "iconsax-reactjs";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 
@@ -12,7 +12,7 @@ import PartnersListButtonsComponent from "./_components/partners-list-buttons-co
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import useGetPartnersEndpoint from "./_hooks/use-get-partners-endpoint";
-import PartnerFormDrawerComponent from "../_components/partner-from-drawer-component";
+import PartnerFormDrawerComponent from "../_components/partner-form-drawer-component";
 
 export default function PartnersListPage() {
   const router = useRouter();
@@ -42,10 +42,10 @@ export default function PartnersListPage() {
     <div className="flex h-full w-full flex-col justify-between">
       <div className="flex w-full flex-col">
         <div className="mb-4 flex w-full items-center gap-2">
-          <UsersGroupTwoRounded
+          <Profile2User
             className="text-heading"
             size={24}
-            weight="Broken"
+            variant="Broken"
           />
           <h2 className="text-body text-xl font-bold">افزودن شریک</h2>
         </div>
