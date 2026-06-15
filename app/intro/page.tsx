@@ -31,6 +31,9 @@ export default function IntroLayout() {
   // collide: while a finger is down the auto-advance timer is paused; on
   // release we either navigate (movement crossed the swipe threshold) or just
   // resume (it was a press-and-hold or a tap).
+  //
+  // Directions are mirrored for the app's RTL layout: swiping *right* advances
+  // to the next slide, swiping *left* goes back.
   const bind = useDrag(
     ({ down, last, tap, movement: [moveX] }) => {
       if (tap) {
@@ -47,16 +50,19 @@ export default function IntroLayout() {
       if (last) {
         if (Math.abs(moveX) <= SWIPE_THRESHOLD) {
           resume();
-        } else if (moveX < 0) {
-          // swipe left -> forward
+        } else if (moveX > 0) {
+          // RTL: swipe right -> forward
           goNext();
         } else {
-          // swipe right -> back (resume if there's no previous slide)
+          // RTL: swipe left -> back (resume if there's no previous slide)
           if (!goPrevious()) resume();
         }
       }
     },
-    { filterTaps: true, pointer: { touch: true } },
+    // `triggerAllEvents` makes the handler fire on touch-down even before the
+    // movement crosses the tap threshold, so a stationary press-and-hold still
+    // pauses the timer (otherwise `down` never fires until the finger moves).
+    { filterTaps: true, triggerAllEvents: true, pointer: { touch: true } },
   );
 
   if (currentPageIndex === null) return <IntroLanding />;
