@@ -50,10 +50,6 @@ export default function LoginPage() {
           ورود به سهمیتو
         </Button>
       </form>
-      <div className="flex items-center gap-1">
-        {/* <KeyMinimalistic2 weight="Broken" size={24} className="text-body" />
-        <Button variant="text">فراموشی رمز عبور</Button> */}
-      </div>
     </>
   );
 }

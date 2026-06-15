@@ -5,6 +5,7 @@ import IntroPageCounterProps from "../_interfaces/intro-page-counter-props";
 export default function IntroPageCounter({
   length,
   currentPageIndex,
+  isPaused,
 }: IntroPageCounterProps) {
   return (
     <motion.div
@@ -33,6 +34,7 @@ export default function IntroPageCounter({
             <span
               key={currentPageIndex}
               className="animate-progress bg-primary absolute inset-0"
+              style={{ animationPlayState: isPaused ? "paused" : "running" }}
             />
           )}
         </div>

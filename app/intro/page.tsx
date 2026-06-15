@@ -1,9 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
-import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useDrag } from "@use-gesture/react";
 
 import IntroLanding from "./_components/intro-landing";
 
@@ -12,41 +10,62 @@ import IntroFooter from "./_components/intro-footer";
 import IntroImage from "./_components/intro-image";
 import IntroTitle from "./_components/intro-title";
 
+import useIntroCarousel from "./_hooks/use-intro-carousel";
+
+// NOTE horizontal travel (px) past which a drag counts as a swipe instead of
+//      a press-and-hold; below it, the gesture is treated as a hold/tap.
+const SWIPE_THRESHOLD = 60;
+
 export default function IntroLayout() {
-  const router = useRouter();
+  const {
+    currentPageIndex,
+    isVisible,
+    isPaused,
+    pause,
+    resume,
+    goNext,
+    goPrevious,
+  } = useIntroCarousel(INTRO_PAGES_CONTENTS.length);
 
-  // NOTE if set to null, intro landing is visible
-  const [currentPageIndex, setCurrentPageIndex] = useState<number | null>(null);
-  const [isVisible, setVisibility] = useState(true);
+  // A single drag handler arbitrates between the two gestures so they never
+  // collide: while a finger is down the auto-advance timer is paused; on
+  // release we either navigate (movement crossed the swipe threshold) or just
+  // resume (it was a press-and-hold or a tap).
+  const bind = useDrag(
+    ({ down, last, tap, movement: [moveX] }) => {
+      if (tap) {
+        // A tap still fires `down` first, so make sure we un-pause.
+        resume();
+        return;
+      }
 
-  // NOTE timer for changing slides automatically
-  // NOTE should not be less than 4500 ms
-  // NOTE after timer for all pages end, navigates to login
-  useEffect(() => {
-    if (currentPageIndex === INTRO_PAGES_CONTENTS.length - 1) {
-      setTimeout(() => router.push("/login"), 4500);
-      return;
-    }
+      if (down) {
+        pause();
+        return;
+      }
 
-    const exitAnimationTimer = setTimeout(() => {
-      setVisibility(false);
-    }, 3800);
+      if (last) {
+        if (Math.abs(moveX) <= SWIPE_THRESHOLD) {
+          resume();
+        } else if (moveX < 0) {
+          // swipe left -> forward
+          goNext();
+        } else {
+          // swipe right -> back (resume if there's no previous slide)
+          if (!goPrevious()) resume();
+        }
+      }
+    },
+    { filterTaps: true, pointer: { touch: true } },
+  );
 
-    const pageTimer = setTimeout(() => {
-      setCurrentPageIndex((curValue) => (curValue === null ? 0 : curValue + 1));
-      setVisibility(true);
-    }, 4500);
+  if (currentPageIndex === null) return <IntroLanding />;
 
-    return () => {
-      clearTimeout(pageTimer);
-      clearTimeout(exitAnimationTimer);
-    };
-  }, [currentPageIndex]);
-
-  return currentPageIndex === null ? (
-    <IntroLanding />
-  ) : (
-    <>
+  return (
+    <div
+      {...bind()}
+      className="h-screen w-screen touch-none select-none"
+    >
       <AnimatePresence>
         {isVisible && (
           <motion.div
@@ -64,7 +83,8 @@ export default function IntroLayout() {
       <IntroFooter
         length={INTRO_PAGES_CONTENTS.length}
         currentPageIndex={currentPageIndex}
+        isPaused={isPaused}
       />
-    </>
+    </div>
   );
 }

@@ -23,10 +23,18 @@ function imageRemotePatterns() {
 const nextConfig: NextConfig = {
   devIndicators: { position: "top-right" },
   reactCompiler: true,
-  allowedDevOrigins: ["192.168.0.167"],
-  // output: 'export',
+  allowedDevOrigins: ["192.168.100.12"],
   images: {
     remotePatterns: imageRemotePatterns(),
+  },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/login",
+        permanent: false,
+      },
+    ];
   },
 };
 
