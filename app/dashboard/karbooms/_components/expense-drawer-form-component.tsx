@@ -18,6 +18,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 
 import { Member } from "../_types/member";
+import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
 
 export default function ExpenseDrawerFormComponent({
   isOpen,
@@ -30,6 +31,7 @@ export default function ExpenseDrawerFormComponent({
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useExpenseForm();
 
@@ -43,6 +45,7 @@ export default function ExpenseDrawerFormComponent({
   );
 
   const submit = (data: ExpenseFormType) => {
+    reset(EXPENSE_FORM_INITIAL);
     onSubmit(data);
   };
 
@@ -67,10 +70,10 @@ export default function ExpenseDrawerFormComponent({
             onChange={(_event, value) => field.onChange(value)}
             filterOptions={(option, { inputValue }) =>
               option.filter(({ user: { full_name } }) =>
-                full_name.includes(inputValue),
+                full_name?.includes(inputValue),
               )
             }
-            getOptionLabel={(option) => option.user.full_name}
+            getOptionLabel={(option) => option.user.full_name ?? ''}
             getOptionKey={(option) => option.member.id}
             isOptionEqualToValue={(option, value) =>
               option.member.id === value?.member.id

@@ -13,12 +13,15 @@ import RejectDrawerComponent from "../_components/reject-drawer-component";
 import useRejectExpense from "./_hooks/use-reject-expense";
 import { FilterTag } from "./_types/filter-tag";
 import { EXPENSE_FILTER_TAGS } from "./_constants/expense-filter-tags";
+import ExpenseDrawerComponent from "../_components/expense-drawer-component";
 
 export default function ExpensesListPage() {
   const [isExpenseDetailsDrawerOpen, setExpenseDetailsDrawerOpen] =
     useState<boolean>(false);
   const [isRejectDrawerOpen, setRejectDrawerOpen] = useState<boolean>(false);
   const [selectedExpense, setSelectedExpense] = useState<number | null>(null);
+  const [isExpenseFormDrawerOpen, setExpenseFormDrawerOpen] =
+    useState<boolean>(false);
   const [selectedTag, setSelectedTag] = useState<FilterTag>(
     EXPENSE_FILTER_TAGS[0],
   );
@@ -66,15 +69,24 @@ export default function ExpensesListPage() {
     setSelectedTag(tag);
   };
 
+  const handleOpenExpenseForm = () => {
+    setExpenseFormDrawerOpen(true);
+  };
+
+  const handleCloseExpenseForm = () => {
+    setExpenseFormDrawerOpen(false);
+  };
+
   return (
-    <div className="flex h-full w-full flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4 mt-2">
       <ExpenseListHeaderLayout
         selectedTagId={tagId}
         onTagSelect={handleTagSelect}
-      />
+        />
       <ExpenseListLayout
         onShowDetails={handleOpenExpenseDtailsDrawer}
         onRejectExpense={handleRejectExpense}
+        onOpenExpenseForm={handleOpenExpenseForm}
       />
       <ExpenseDetailsDrawerLayout
         isOpen={isExpenseDetailsDrawerOpen}
@@ -86,6 +98,11 @@ export default function ExpensesListPage() {
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}
         onSubmit={handleSubmitReject}
+      />
+      <ExpenseDrawerComponent
+        isOpen={isExpenseFormDrawerOpen}
+        onOpen={handleOpenExpenseForm}
+        onClose={handleCloseExpenseForm}
       />
     </div>
   );

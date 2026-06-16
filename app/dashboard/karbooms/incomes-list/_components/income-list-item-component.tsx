@@ -46,7 +46,7 @@ export default function IncomeListItemComponent({
   };
 
   return (
-    <div className="border-secondary-lighter w-full rounded-2xl border">
+    <li className="border-secondary-lighter w-full rounded-2xl border">
       <div className="bg-secondary-lightest border-secondary-lighter relative flex w-full items-center justify-between overflow-hidden rounded-2xl border p-4">
         <div className="bg-secondary-lighter absolute -top-16 -right-24 h-96 w-96 rounded-full"></div>
         <div className="z-10 flex items-center gap-2">
@@ -140,6 +140,6 @@ export default function IncomeListItemComponent({
           </Button>
         </div>
       )}
-    </div>
+    </li>
   );
 }

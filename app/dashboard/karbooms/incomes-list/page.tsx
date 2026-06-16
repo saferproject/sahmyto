@@ -11,11 +11,14 @@ import RejectDrawerComponent from "../_components/reject-drawer-component";
 import { RejectFormType } from "../_schemas/reject-form-schema";
 
 import useRejectIncome from "./_hooks/use-reject-income";
+import IncomeDrawerComponent from "../_components/income-drawer-component";
 
 export default function IncomesListPage() {
   const [isIncomeDetailsDrawerOpen, setIncomeDetailsDrawerOpen] =
     useState<boolean>(false);
   const [isRejectDrawerOpen, setRejectDrawerOpen] = useState<boolean>(false);
+  const [isIncomeFormDrawerOpen, setIncomeFormDrawerOpen] =
+    useState<boolean>(false);
   const [selectedIncome, setSelectedIncome] = useState<number | null>(null);
 
   const { mutate } = useRejectIncome();
@@ -36,6 +39,14 @@ export default function IncomesListPage() {
     setRejectDrawerOpen(false);
   };
 
+  const handleOpenIncomeForm = () => {
+    setIncomeFormDrawerOpen(true);
+  };
+
+  const handleCloseIncomeForm = () => {
+    setIncomeFormDrawerOpen(false);
+  };
+
   const handleRejectIncome = (incomeId: number) => {
     setSelectedIncome(incomeId);
     handleOpenRejectDrawer();
@@ -52,7 +63,6 @@ export default function IncomesListPage() {
           },
         },
       );
-    // TODO show a warning alert
   };
 
   return (
@@ -61,6 +71,7 @@ export default function IncomesListPage() {
       <IncomesListLayout
         onShowDetails={handleOpenIncomeDtailsDrawer}
         onRejectIncome={handleRejectIncome}
+        onOpenIncomeForm={handleOpenIncomeForm}
       />
       <IncomeDetailsDrawerLayout
         isOpen={isIncomeDetailsDrawerOpen}
@@ -73,7 +84,11 @@ export default function IncomesListPage() {
         onClose={handleCloseRejectDrawer}
         onSubmit={handleSubmitReject}
       />
-      {/* <IncomesListButtonsComponent onAddIncome={handleOpenIncomeForm} /> */}
+      <IncomeDrawerComponent
+        isOpen={isIncomeFormDrawerOpen}
+        onOpen={handleOpenIncomeForm}
+        onClose={handleCloseIncomeForm}
+      />
     </div>
   );
 }

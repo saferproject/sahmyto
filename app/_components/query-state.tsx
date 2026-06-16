@@ -1,6 +1,7 @@
 "use client";
 
 import { CircularProgress } from "@mui/material";
+import CenteredMessageComponent from "./centered-message-component";
 
 type QueryStateProps = {
   isLoading: boolean;
@@ -11,12 +12,6 @@ type QueryStateProps = {
   errorFallback?: React.ReactNode;
   emptyFallback?: React.ReactNode;
 };
-
-const CenteredMessage = ({ text }: { text: string }) => (
-  <div className="text-body-light flex h-full w-full items-center justify-center py-8 text-sm">
-    {text}
-  </div>
-);
 
 /**
  * Renders the appropriate UI for a React Query result: a spinner while loading,
@@ -42,9 +37,9 @@ export default function QueryState({
     );
 
   if (isError)
-    return errorFallback ?? <CenteredMessage text="خطا در دریافت اطلاعات" />;
+    return errorFallback ?? <CenteredMessageComponent text="خطا در دریافت اطلاعات" />;
 
-  if (isEmpty) return emptyFallback ?? <CenteredMessage text="موردی یافت نشد" />;
+  if (isEmpty) return emptyFallback ?? <CenteredMessageComponent text="موردی یافت نشد" />;
 
   return children;
 }

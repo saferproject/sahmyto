@@ -14,6 +14,7 @@ import { IncomeFormType } from "../_schemas/income-form-schema";
 import IncomeDrawerHeaderComponent from "./income-drawer-header-component";
 import IncomeDrawerTypeListComponent from "./income-drawer-type-list-component";
 import IncomeDrawerFormComponent from "./income-drawer-form-component";
+
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 export default function IncomeDrawerComponent({
@@ -88,7 +89,7 @@ export default function IncomeDrawerComponent({
     >
       <div className="relative h-150 w-full px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex h-full w-full flex-col items-center justify-between">
+        <div className="flex size-full flex-col items-center justify-between">
           <div className="mb-4 flex w-full flex-col overflow-y-auto">
             {incomeType ? (
               <>

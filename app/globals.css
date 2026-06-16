@@ -36,6 +36,7 @@
 * {
   font-family: var(--font-yekan-bakh) !important;
   word-spacing: -0.1em !important;
+  outline: none !important;
 }
 
 *::-webkit-scrollbar,
