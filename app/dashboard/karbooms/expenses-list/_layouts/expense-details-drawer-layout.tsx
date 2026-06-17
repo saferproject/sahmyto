@@ -101,11 +101,11 @@ export default function ExpenseDetailsDrawerLayout({
                   id,
                   status,
                   reject_reason,
-                  user: { full_name, avatar },
+                  user: { full_name, avatar, phone },
                 }) => (
                   <li
                     key={id}
-                    className="border-secondary flex w-full flex-col gap-8 rounded-2xl border border-dashed p-4 text-sm"
+                    className="border-secondary flex w-full flex-col gap-4 rounded-2xl border border-dashed p-4 text-sm"
                   >
                     <div className="flex w-full items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -122,9 +122,14 @@ export default function ExpenseDetailsDrawerLayout({
                             <User size={32} className="text-secondary" />
                           )}
                         </div>
-                        <p>{full_name}</p>
+                        <div className="flex flex-col gap-1">
+                          <p className="text-body">{full_name}</p>
+                          <p className="text-xs text-body-light">{phone}</p>
+                        </div>
                       </div>
-                      <p className={`text-${ACTIVITY_STATUS_COLORS[status]}`}>
+                      <p
+                        className={`rounded-full px-4 py-2 font-semibold text-white bg-${ACTIVITY_STATUS_COLORS[status]}`}
+                      >
                         {ACTIVITY_STATUS_FA[status]}
                       </p>
                     </div>
