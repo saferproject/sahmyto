@@ -16,7 +16,7 @@ export default function PartnersListButtonsComponent({
   };
 
   return (
-    <div className="flex w-full items-center justify-between gap-4 bg-white">
+    <div className="flex w-full items-center justify-between gap-4 bg-white absolute bottom-0">
       <Button variant="outlined" onClick={handleReturn} fullWidth>
         بازگشت
       </Button>

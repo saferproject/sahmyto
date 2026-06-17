@@ -14,6 +14,7 @@ import useRejectExpense from "./_hooks/use-reject-expense";
 import { FilterTag } from "./_types/filter-tag";
 import { EXPENSE_FILTER_TAGS } from "./_constants/expense-filter-tags";
 import ExpenseDrawerComponent from "../_components/expense-drawer-component";
+import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
 export default function ExpensesListPage() {
   const [isExpenseDetailsDrawerOpen, setExpenseDetailsDrawerOpen] =
@@ -78,11 +79,12 @@ export default function ExpensesListPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 mt-2">
+    <div className="mt-2 flex h-full w-full flex-col gap-4">
       <ExpenseListHeaderLayout
         selectedTagId={tagId}
         onTagSelect={handleTagSelect}
-        />
+      />
+      <SelectedKarboomInfoComponent />
       <ExpenseListLayout
         onShowDetails={handleOpenExpenseDtailsDrawer}
         onRejectExpense={handleRejectExpense}

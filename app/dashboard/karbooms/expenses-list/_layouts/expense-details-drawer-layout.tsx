@@ -73,8 +73,14 @@ export default function ExpenseDetailsDrawerLayout({
               label="تاریخ"
               value={dayjs(date).format("YYYY/MM/DD")}
             />
-            <DetailItemComponent label="پرداخت کننده" value={receiverName} />
-            <DetailItemComponent label="ثبت کننده" value={submitterName} />
+            <DetailItemComponent
+              label="پرداخت کننده"
+              value={receiverName ?? ""}
+            />
+            <DetailItemComponent
+              label="ثبت کننده"
+              value={submitterName ?? ""}
+            />
             <DetailItemComponent
               label="وضعیت"
               value={ACTIVITY_STATUS_FA[status]}
@@ -91,8 +97,16 @@ export default function ExpenseDetailsDrawerLayout({
             <h5 className="text-body">وضعیت تاییدیه شرکا</h5>
             <ul className="mt-4 flex w-full flex-col gap-4">
               {approvals.map(
-                ({ status, reject_reason, user: { full_name, avatar } }) => (
-                  <li className="border-secondary flex w-full flex-col gap-8 rounded-2xl border border-dashed p-4 text-sm">
+                ({
+                  id,
+                  status,
+                  reject_reason,
+                  user: { full_name, avatar },
+                }) => (
+                  <li
+                    key={id}
+                    className="border-secondary flex w-full flex-col gap-8 rounded-2xl border border-dashed p-4 text-sm"
+                  >
                     <div className="flex w-full items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div className="border-primary flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">

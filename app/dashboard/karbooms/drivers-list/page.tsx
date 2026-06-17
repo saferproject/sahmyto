@@ -15,6 +15,7 @@ import DriverFormDrawerComponent from "../_components/driver-form-drawer-compone
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import useGetDriversEndpoint from "./_hooks/use-get-karboom-drivers-endpoint";
+import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
 export default function DriverListPage() {
   const router = useRouter();
@@ -41,13 +42,14 @@ export default function DriverListPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col justify-between">
-      <div className="flex w-full flex-col">
-        <div className="mb-4 flex w-full items-center gap-2">
+    <div className="relative mt-2 flex size-full flex-col">
+      <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full items-center gap-2">
           <User className="text-heading" size={24} variant="Broken" />
           <h2 className="text-body text-xl font-bold">رانندگان</h2>
         </div>
         <DriversListHeaderComponent driversCount={data?.data.length ?? 0} />
+        <SelectedKarboomInfoComponent />
         <DriversListComponent drivers={data?.data ?? []} />
         <DriverFormDrawerComponent
           isOpen={isDriverFormDrawerOpen}
@@ -56,7 +58,7 @@ export default function DriverListPage() {
           onSuccess={handleCloseDriverForm}
         />
       </div>
-      <DriversListButtonsComponent onAddDriver={handleOpenDriverForm} />|
+      <DriversListButtonsComponent onAddDriver={handleOpenDriverForm} />
     </div>
   );
 }
