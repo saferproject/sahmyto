@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { Badge, Button } from "@mui/material";
 import { motion } from "motion/react";
-import { NotificationBing, Truck, ArrowLeft } from "iconsax-reactjs";
+import { NotificationBing, ArrowLeft } from "iconsax-reactjs";
 
 import KarboomListItemProps from "../_types/karboom-list-item-props";
 
@@ -52,9 +52,9 @@ export default function KarboomListItemComponent(
         duration: 0.2,
         ease: "easeIn",
       }}
-      className="bg-secondary relative flex w-full flex-col rounded-3xl shadow-lg"
+      className="relative flex w-full flex-col rounded-3xl bg-transparent drop-shadow-lg"
     >
-      <div className="relative flex h-24 w-full items-center justify-center overflow-hidden rounded-t-3xl object-cover">
+      <div className="relative -bottom-5 flex h-24 w-full items-center justify-center overflow-hidden rounded-t-3xl object-cover">
         <Image
           src={image ?? "/images/truck.webp"}
           alt="عکس کاربوم"
@@ -71,7 +71,7 @@ export default function KarboomListItemComponent(
             </div>
           )}
       </div>
-      <div className="relative -top-4 flex w-full flex-col gap-4 rounded-3xl bg-white p-4">
+      <div className="relative flex w-full flex-col gap-4 rounded-3xl bg-white p-4">
         <div className="flex items-center justify-between">
           <p className="text-body font-semibold">{name}</p>
           <Badge
@@ -138,7 +138,7 @@ export default function KarboomListItemComponent(
           عملیات
         </Button>
       </div>
-      <div className="w-full px-7">
+      {/* <div className="w-full px-7">
         <Button
           startIcon={<span className="w-6" />}
           endIcon={<ArrowLeft size={24} />}
@@ -154,7 +154,7 @@ export default function KarboomListItemComponent(
         >
           مدیریت مالی
         </Button>
-      </div>
+      </div> */}
     </motion.li>
   );
 }

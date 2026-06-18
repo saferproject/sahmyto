@@ -10,7 +10,7 @@ export default function SelectedKarboomInfoComponent() {
   const { name, plate } = useKarboomsStore((state) => state);
 
   return (
-    <div className="relative">
+    <div className="relative drop-shadow-lg">
       <Image
         src={yellowRectangle}
         alt=""
@@ -26,7 +26,7 @@ export default function SelectedKarboomInfoComponent() {
         alt=""
         className="absolute -bottom-6 left-4 -z-20"
       />
-      <div className="flex items-center justify-between rounded-2xl bg-[#FEF9E7] p-8 shadow-lg">
+      <div className="flex items-center justify-between rounded-2xl bg-[#FEF9E7] p-8">
         <div>
           <h4 className="text-body-light text-sm">نام کاربوم</h4>
           <p className="text-body text-lg font-semibold">{name}</p>
