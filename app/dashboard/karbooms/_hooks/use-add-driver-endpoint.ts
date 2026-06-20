@@ -9,7 +9,7 @@ export default function useAddDriver() {
     mutationKey: ["add-driver"],
     mutationFn: driverFormService.addDriver,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["drivers"] });
+      queryClient.invalidateQueries({ queryKey: ["drivers", "members"] });
     },
   });
 }

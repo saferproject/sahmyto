@@ -12,10 +12,14 @@ import Plate from "@/app/_components/plate";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
+import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
+
 export default function KarboomListItemComponent(
   karboom: KarboomListItemProps,
 ) {
   const { index, name, plate, image } = karboom;
+
+  const requireKarboomMembers = useRequireKarboomMembers();
 
   const {
     setActiveKarboom,
@@ -31,12 +35,12 @@ export default function KarboomListItemComponent(
 
   const handleAddIncome = () => {
     setActiveKarboom(karboom);
-    openIncomeDrawer();
+    requireKarboomMembers(karboom.id, openIncomeDrawer);
   };
 
   const handleAddExpense = () => {
     setActiveKarboom(karboom);
-    openExpenseDrawer();
+    requireKarboomMembers(karboom.id, openExpenseDrawer);
   };
 
   return (

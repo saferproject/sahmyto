@@ -73,7 +73,7 @@ export default function ExpenseDrawerFormComponent({
                 full_name?.includes(inputValue),
               )
             }
-            getOptionLabel={(option) => option.user.full_name ?? ''}
+            getOptionLabel={(option) => option.user.full_name ?? ""}
             getOptionKey={(option) => option.member.id}
             isOptionEqualToValue={(option, value) =>
               option.member.id === value?.member.id

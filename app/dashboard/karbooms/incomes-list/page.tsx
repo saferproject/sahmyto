@@ -14,6 +14,9 @@ import useRejectIncome from "./_hooks/use-reject-income";
 import IncomeDrawerComponent from "../_components/income-drawer-component";
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
+import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
+
 export default function IncomesListPage() {
   const [isIncomeDetailsDrawerOpen, setIncomeDetailsDrawerOpen] =
     useState<boolean>(false);
@@ -21,6 +24,9 @@ export default function IncomesListPage() {
   const [isIncomeFormDrawerOpen, setIncomeFormDrawerOpen] =
     useState<boolean>(false);
   const [selectedIncome, setSelectedIncome] = useState<number | null>(null);
+
+  const karboomId = useKarboomsStore((state) => state.id);
+  const requireKarboomMembers = useRequireKarboomMembers();
 
   const { mutate } = useRejectIncome();
 
@@ -41,7 +47,7 @@ export default function IncomesListPage() {
   };
 
   const handleOpenIncomeForm = () => {
-    setIncomeFormDrawerOpen(true);
+    requireKarboomMembers(karboomId, () => setIncomeFormDrawerOpen(true));
   };
 
   const handleCloseIncomeForm = () => {

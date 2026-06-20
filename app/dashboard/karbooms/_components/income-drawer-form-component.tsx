@@ -12,9 +12,6 @@ import { IncomeTypes } from "../_types/income-categories";
 import { InfoCircle, Profile2User } from "iconsax-reactjs";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 import { Member } from "../_types/member";
-import { useActionDialogStore } from "../../_providers/action-dialog-provider";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 
 export default function IncomeDrawerFormComponent({
@@ -23,8 +20,6 @@ export default function IncomeDrawerFormComponent({
   incomeType = "daily",
   onSubmit,
 }: IncomeDrawerFormProps) {
-  const router = useRouter();
-
   const {
     register,
     control,
@@ -36,9 +31,6 @@ export default function IncomeDrawerFormComponent({
   const { description } = useWatch({ control });
 
   const selectedKarboomId = useKarboomsStore((state) => state.id);
-
-  const { setDialog: setActionDialog, closeDialog: closeActionDialog, resetDialog: resetActionDialog } =
-    useActionDialogStore((state) => state);
 
   const { data: members, isLoading: gettingMembers } = useGetMembersEndpoint(
     karboomId,
@@ -89,40 +81,6 @@ export default function IncomeDrawerFormComponent({
       label: "مبلغ برای هر سرویس",
     },
   };
-
-  const handleCancelNoMemberAction = () => {
-    resetActionDialog();
-    router.push('/dashboard/karbooms')
-  }
-
-  useEffect(() => {
-    if (members?.data.length === 0)
-      setActionDialog({
-        isOpen: true,
-        icon: <Profile2User size={64} className="text-primary" />,
-        title: "کاربوم عضو ندارد",
-        description:
-          "برای ثبت درآمد ابتدا باید یک شریک یا راننده در کاربوم ثبت کنید",
-        actionButtons: (
-          <>
-            <Button
-              variant="outlined"
-              size="large"
-            >
-              افزودن شریک
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-            >
-              افزودن راننده
-            </Button>
-          </>
-        ),
-        persistant: false,
-        onClose: handleCancelNoMemberAction,
-      });
-  }, [members]);
 
   return (
     <form

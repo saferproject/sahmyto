@@ -7,6 +7,7 @@ import { ExpenseCategory } from "../_types/expense-category";
 import { ExpenseCategoryTypes } from "../_types/expense-category-types";
 import { CreateExpenseBody } from "../_types/create-expense-body";
 import { CreateIncomeBody } from "../_types/create-income-body";
+import { Member } from "../_types/member";
 
 export const karboomService = {
   getKarbooms: () => fetchWithAuth<Karboom[]>("karboom"),
@@ -37,7 +38,7 @@ export const karboomService = {
       body: JSON.stringify(other),
     }),
   getMembers: (karboom_id: number) =>
-    fetchWithAuth<undefined>(`karboom/members/${karboom_id}`, {
+    fetchWithAuth<Member[]>(`karboom/members/${karboom_id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }),

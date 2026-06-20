@@ -26,7 +26,6 @@ import useAddDriver from "../_hooks/use-add-driver-endpoint";
 import { DriverFormType } from "../_schemas/driver-form-schema";
 
 import { DriverFormProps } from "../_types/driver-form-props";
-import formatNumber from "@/app/_utilities/format-numbers";
 
 export default function DriverFormComponent({
   onCancel,

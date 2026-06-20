@@ -16,6 +16,9 @@ import { EXPENSE_FILTER_TAGS } from "./_constants/expense-filter-tags";
 import ExpenseDrawerComponent from "../_components/expense-drawer-component";
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
+import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
+
 export default function ExpensesListPage() {
   const [isExpenseDetailsDrawerOpen, setExpenseDetailsDrawerOpen] =
     useState<boolean>(false);
@@ -28,6 +31,9 @@ export default function ExpensesListPage() {
   );
 
   const { id: tagId } = selectedTag;
+
+  const karboomId = useKarboomsStore((state) => state.id);
+  const requireKarboomMembers = useRequireKarboomMembers();
 
   const { mutate } = useRejectExpense();
 
@@ -71,7 +77,7 @@ export default function ExpensesListPage() {
   };
 
   const handleOpenExpenseForm = () => {
-    setExpenseFormDrawerOpen(true);
+    requireKarboomMembers(karboomId, () => setExpenseFormDrawerOpen(true));
   };
 
   const handleCloseExpenseForm = () => {

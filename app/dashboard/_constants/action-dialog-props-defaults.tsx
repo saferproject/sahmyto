@@ -6,6 +6,7 @@ const ACTION_DIALOG_PROPS_DEFAULTS: ActionDialogProps = {
   description: "",
   icon: <></>,
   actionButtons: <></>,
+  persistant: false,
   onClose: () => {},
 };
 

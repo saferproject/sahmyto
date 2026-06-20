@@ -1,7 +1,6 @@
 "use client";
 
 import { SwipeableDrawer } from "@mui/material";
-import { useSnackbar } from "notistack";
 import { User } from "iconsax-reactjs";
 
 import DriverFormComponent from "./driver-form-component";
@@ -14,8 +13,6 @@ export default function DriverFormDrawerComponent({
   onClose,
   onSuccess,
 }: DriverFormDrawerProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
   return (
     <SwipeableDrawer
       anchor="bottom"
