@@ -31,7 +31,7 @@ export default function ExpenseDrawerCategoryListComponent({
       <p className="text-body text-xs relative">
         دسته هزینه را انتخاب کنید
       </p>
-      <div className="grid w-full grid-cols-3 gap-3">
+      <div className="grid w-full grid-cols-3 gap-2">
         {data?.data.map((expenseCategory) => (
           <ExpenseDrawerListItemComponent
             key={expenseCategory.id}
