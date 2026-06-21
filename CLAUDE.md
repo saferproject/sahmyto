@@ -79,3 +79,33 @@ react-hook-form + `zodResolver`. Convention: schema in `_schemas/*-form-schema.t
 ### Gotchas
 - The `app/dashboard/karbooms/_assets/_Vectors/` folder has a capital `V` (other asset folders use lowercase `_vectors`/`_images`) — match it exactly when importing.
 - The repo has **pre-existing TypeScript and ESLint errors** in files around the expense/income drawers and detail layouts (e.g. `Expense` lacks `started_at`/`ended_at`, several `@ts-ignore`s, refs accessed during render). `next build` will fail on them until they're addressed — they predate the current refactors, so don't assume your change caused a red build; verify with `bunx tsc --noEmit`.
+
+## Design Review (ongoing)
+
+A part-by-part pass over the UI to find bugs and improve cross-device (mobile) stability. **Don't add new design** — fix bugs and make existing design stable/consistent. Workflow: review a part → report findings (bugs + cross-device) → user picks what to fix → fix one by one.
+
+### Design-check dimensions (apply to every part)
+Layout & spacing · RTL correctness (direction, icon mirroring, start/end not left/right) · responsiveness (mobile-first, overflow, safe areas, keyboard) · typography & color (theme tokens, primary `#ff8500`, contrast) · component consistency (MUI, rounded shapes, iconsax `variant`) · states (loading/skeleton, empty, error, disabled) · Persian content (labels, numerals, Jalali dates) · interaction (touch targets, drawers, snackbars, dialogs).
+
+**RTL number rule:** Persian numerals render LTR, but numeric inputs (amounts, phone, OTP, plate, dates) must stay **right-aligned** — don't switch the field to `dir="ltr"`/left-align.
+
+### Parts checklist
+- **A. Entry & onboarding** — `/` landing, `/intro` carousel (+ landing splash, image/title/footer/page-counter, `use-intro-carousel`), `/login` (header/hero/footer), `/login/verify` (phone/form/retry). **✅ reviewed & fixed.**
+- **B. Dashboard shell** — header + header drawer, footer/bottom-nav + navigation-item, banner/shortcuts/slider, notifications (menu, dialog, request). **← resume here.**
+- **C. Karbooms (core)** — list & cards (list/component/skeleton/no-karbooms), form + photo upload, actions drawer + statistics.
+- **D. Karboom sub-features** — incomes-list, expenses-list, partners-list, drivers-list, third-party-insurance (+ plate / insurance-company inputs).
+- **E. Profile, tutorial & shared** — profile + profile-picture, tutorial, shared inputs/dialogs (description, contact-phone, search, confirmation/action dialogs, reject drawer, query-state, centered-message).
+- **F. Theme & RTL foundation** — `theme.ts`, `theme-registry.tsx`, `globals.css`.
+
+### Briefing — where we are
+**Part A is done.** Fixes landed (all in the Part A files + two global tweaks):
+- Intro landing: moved a `setTimeout` out of render into a cleaned-up `useEffect`; made `AnimatePresence`'s direct child a `motion.div` so the existing `exit` animations actually play.
+- Intro carousel: progress-bar CSS duration synced to `PAGE_DURATION` (4.5s) in `globals.css`.
+- Intro slides: replaced `fixed` pixel-offset layout with a flex column; image now uses `next/image` `fill` + `object-contain` in a `flex-1 min-h-0` box (consistent across devices, never overlaps the title); footer pinned with `mt-auto`.
+- Login: removed dead `password`-type branch; wired zod errors into the phone `TextField` (`error`/`helperText`).
+- Verify: removed unreachable retry warning + dead `useSnackbar`; OTP auto-clears on failed verify (`onError`); countdown is now a single lifetime `setInterval`.
+- Global: `globals.css` no longer kills focus rings (`outline:none` scoped to `:focus:not(:focus-visible)` for keyboard a11y); `app/layout.tsx` viewport adds `interactiveWidget: "resizes-content"` so the keyboard doesn't cover inputs; `app/login/layout.tsx` uses `min-h-dvh`.
+
+**Known-but-left (Part A), pending user call:** `app/page.tsx` is an undesigned English placeholder; `sign-in-header.tsx` repeats the same `DocumentText` icon 4× and has a meaningless `object-cover` on a `<div>` (same harmless pattern exists in a few dashboard components); verify-form has leftover dead commented code + a non-exhaustive `useEffect` dep.
+
+**Next session: start Part B (Dashboard shell).**

@@ -34,6 +34,7 @@ export default function VerifyForm() {
               router.push("/dashboard");
             else router.push("/dashboard/profile");
           },
+          onError: () => setOtp(""),
         },
       );
   };

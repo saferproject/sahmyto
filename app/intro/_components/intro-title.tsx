@@ -8,7 +8,7 @@ export default function IntroTitle({
 }: IntroTitleProps) {
   return (
     <motion.div
-      className="font-yekan-bakh flex flex-col items-center gap-2 px-4 fixed bottom-64 w-full"
+      className="font-yekan-bakh flex w-full flex-col items-center gap-2 px-4"
       initial={{ scale: 0.7, opacity: 0 }}
       animate={{
         scale: 1,
@@ -20,7 +20,7 @@ export default function IntroTitle({
         ease: "backOut",
       }}
     >
-      <h1 className="text-heading text-2xl font-semibold">{title}</h1>
+      <h1 className="text-heading text-center text-2xl font-semibold">{title}</h1>
       <p className="text-body text-center text-sm">{description}</p>
     </motion.div>
   );

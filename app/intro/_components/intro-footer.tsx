@@ -9,7 +9,7 @@ export default function IntroFooter({
   isPaused,
 }: IntroFooterProps) {
   return (
-    <div className="flex w-full flex-col items-center gap-8 fixed bottom-16">
+    <div className="mt-auto flex w-full flex-col items-center gap-4 pt-4 pb-8">
       <IntroMoto />
       <IntroPageCounter
         length={length}

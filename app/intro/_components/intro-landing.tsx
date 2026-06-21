@@ -2,19 +2,23 @@ import Image from "next/image";
 
 import { AnimatePresence, motion } from "motion/react";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function IntroLanding() {
   // NOTE when set to false exit animations start
   const [visible, setVisible] = useState(true);
 
   // NOTE timer to start exit animations
-  setTimeout(() => setVisible(false), 3000);
+  useEffect(() => {
+    const id = setTimeout(() => setVisible(false), 3000);
+
+    return () => clearTimeout(id);
+  }, []);
 
   return (
     <AnimatePresence>
       {visible && (
-        <div className="flex h-dvh w-full flex-col justify-end">
+        <motion.div className="flex h-dvh w-full flex-col justify-end">
           <motion.div
             className="bg-primary fixed h-96 w-96 rounded-tr-[160px]"
             initial={{ x: "-100vw", y: "-100vh", rotate: 0 }}
@@ -93,7 +97,7 @@ export default function IntroLanding() {
               </motion.h2>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

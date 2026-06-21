@@ -24,12 +24,12 @@ export default function IntroMoto() {
           alt="سهمیتو"
           loading="eager"
           fetchPriority="high"
-          width={80}
-          height={40}
+          width={64}
+          height={32}
         />
-        <h2 className="text-primary mb-1 text-xl font-semibold">Sahmito</h2>
+        <h2 className="text-primary mb-1 text-lg font-semibold">Sahmito</h2>
       </div>
-      <p className="text-body tracking-wide">Your share of the abacus</p>
+      <p className="text-body text-sm tracking-wide">Your share of the abacus</p>
     </motion.div>
   );
 }

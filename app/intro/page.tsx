@@ -70,11 +70,12 @@ export default function IntroLayout() {
   return (
     <div
       {...bind()}
-      className="h-dvh w-full touch-none select-none"
+      className="flex h-dvh w-full flex-col touch-none select-none"
     >
       <AnimatePresence>
         {isVisible && (
           <motion.div
+            className="flex min-h-0 flex-1 flex-col items-center gap-6 px-6 pt-12"
             exit={{ scale: 0.7, opacity: 0 }}
             transition={{
               duration: 0.2,

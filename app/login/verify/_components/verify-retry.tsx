@@ -2,7 +2,6 @@
 
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSnackbar } from "notistack";
 
 import useLoginUser from "../../_hooks/login-user-endpoint";
 
@@ -10,29 +9,21 @@ import { useUserInfoStore } from "../../../_providers/user-info-provider";
 
 export default function VerifyRetry() {
   const { phone } = useUserInfoStore((state) => state);
-  const { enqueueSnackbar } = useSnackbar();
 
   const [time, setTime] = useState(60);
 
   useEffect(() => {
-    if (time <= 0) return;
-
     const id = setInterval(() => {
-      setTime((t) => t - 1);
+      setTime((t) => (t > 0 ? t - 1 : 0));
     }, 1000);
 
     return () => clearInterval(id);
-  }, [time]);
+  }, []);
 
   const { mutate, isPending } = useLoginUser();
 
   const handleRetry = () => {
-    if (time === 0) mutate({ phone }, { onSuccess: () => setTime(60) });
-    else
-      enqueueSnackbar({
-        variant: "warning",
-        message: `برای درخواست کد مجدد باید ${time} ثانیه صبر کنید`,
-      });
+    mutate({ phone }, { onSuccess: () => setTime(60) });
   };
 
   return (

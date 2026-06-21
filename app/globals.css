@@ -36,7 +36,12 @@
 * {
   font-family: var(--font-yekan-bakh) !important;
   word-spacing: -0.1em !important;
-  outline: none !important;
+}
+
+/* Hide the focus ring for pointer/touch interactions, but keep it visible for
+   keyboard users (accessibility). */
+*:focus:not(:focus-visible) {
+  outline: none;
 }
 
 *::-webkit-scrollbar,
@@ -45,7 +50,9 @@
 }
 
 .animate-progress {
-  animation: progress 4s linear forwards;
+  /* Duration must match PAGE_DURATION in use-intro-carousel.ts (4500ms) so the
+     bar fills exactly when the slide advances. */
+  animation: progress 4.5s linear forwards;
 }
 
 .karboom-background {

@@ -11,7 +11,11 @@ import { useUserInfoStore } from "../_providers/user-info-provider";
 
 export default function LoginPage() {
   const router = useRouter();
-  const { register, handleSubmit } = useLoginForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useLoginForm();
   const { mutate, isPending } = useLoginUser();
   const { setPhone } = useUserInfoStore((state) => state);
 
@@ -20,8 +24,6 @@ export default function LoginPage() {
     mutate(data, {
       onSuccess: (response) => {
         if (response.data.type === "code") router.push("/login/verify");
-        else if (response.data.type === "password") {
-        }
       },
     });
   };
@@ -40,6 +42,8 @@ export default function LoginPage() {
           dir="rtl"
           label="شماره همراه"
           type="tel"
+          error={!!errors.phone}
+          helperText={errors.phone?.message}
         />
         <Button
           variant="contained"

@@ -13,10 +13,13 @@ export const metadata: Metadata = {
 
 // viewport-fit=cover exposes env(safe-area-inset-*) so bottom UI (the dashboard
 // footer nav) can clear the mobile browser/system navigation bar.
+// interactiveWidget=resizes-content shrinks the layout viewport when the
+// on-screen keyboard opens, so form fields/footers aren't hidden behind it.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  interactiveWidget: "resizes-content",
 };
 
 export default function RootLayout({

@@ -21,7 +21,7 @@ export default function SignInPage({ children }: LoginLayoutProps) {
           preventDuplicate
         >
           <ReactQueryProvider>
-            <div className="flex h-dvh w-full flex-col items-center justify-between px-8 py-12">
+            <div className="flex min-h-dvh w-full flex-col items-center justify-between px-8 py-12">
               <LoginHeader />
               <LoginHero />
               {children}
