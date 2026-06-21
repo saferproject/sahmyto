@@ -4,7 +4,7 @@ export default function LoginHero() {
   return (
     <div className="mt-16 flex flex-col items-center gap-4">
       <Image
-        src="/images/logo-primary.webp"
+        src="/images/logo-primary.svg"
         alt="لوگو"
         loading="eager"
         fetchPriority="high"

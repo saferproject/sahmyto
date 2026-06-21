@@ -28,17 +28,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <UserInfoStoreProvider>
             <SnackbarProvider
               maxSnack={2}
-              autoHideDuration={3000}
+              autoHideDuration={4000}
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
               preventDuplicate
             >
               <ReactQueryProvider>
                 <AuthenticationGuard>
-                  <div className="flex h-screen w-screen flex-col justify-between">
+                  <div className="flex h-dvh w-full flex-col justify-between">
                     <ConfirmationDialogComponent />
                     <ActionDialogComponent />
                     <DashboardHeader />
-                    <main className="flex h-[calc(100%-236px)] w-full flex-col items-center overflow-hidden px-8 py-2">
+                    <main className="flex w-full min-h-0 flex-1 flex-col items-center overflow-hidden px-8 py-2">
                       {children}
                     </main>
                     <DashboardFooter />

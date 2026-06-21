@@ -84,17 +84,17 @@ export default function DashboardHeaderDrawerComponent({
         },
       }}
     >
-      <div className="h-[calc(100%-50px)] w-full overflow-hidden rounded-l-3xl bg-white p-8 shadow-lg">
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-3xl bg-white p-8 shadow-lg">
         <div className="bg-secondary-light absolute top-1/2 left-2 h-32 w-2 -translate-y-1/2 rounded-full"></div>
         <div className="flex w-full items-center justify-between">
           <Image
-            src="/images/logo-secondary.webp"
+            src="/images/logo-secondary.svg"
             alt="سهمیتو"
             className="scale-75"
             width={128}
             height={64}
           />
-          <p className="text-body text-sm font-semibold">یه سهم من یه سهم تو</p>
+          <p className="text-body text-xs font-semibold">یه سهم من یه سهم تو</p>
         </div>
         <button
           type="button"
@@ -117,39 +117,37 @@ export default function DashboardHeaderDrawerComponent({
           </div>
           <h3 className="text-body font-semibold">{full_name}</h3>
         </button>
-        <nav className="mt-8 h-[calc(100%-150px)] overflow-y-auto pl-2">
-          <ul>
-            {isOpen &&
-              DRAWER_MENU_ITEMS.map(({ id, title, icon, link }, index) => (
-                <motion.li
-                  initial={{ x: 320 }}
-                  whileTap={{ scale: 0.9 }}
-                  animate={{
-                    x: 0,
-                  }}
-                  exit={{ x: 320 }}
-                  transition={{
-                    delay: 0.1 * index,
-                    duration: 0.2,
-                    ease: "easeOut",
-                  }}
-                  key={id}
-                  role="button"
-                  tabIndex={0}
-                  className="text-body flex items-center justify-between py-4"
-                  onClick={() => handleNavigation(link)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ")
-                      handleNavigation(link);
-                  }}
-                >
-                  <div className="flex items-center gap-4">
-                    {icon} <h4 className="font-semibold">{title}</h4>
-                  </div>
-                  <ArrowLeft2 size={24} />
-                </motion.li>
-              ))}
-          </ul>
+        <nav className="mt-6 min-h-0 flex-1 overflow-y-auto pl-2">
+          {isOpen &&
+            DRAWER_MENU_ITEMS.map(({ id, title, icon, link }, index) => (
+              <motion.li
+                initial={{ x: 320 }}
+                whileTap={{ scale: 0.9 }}
+                animate={{
+                  x: 0,
+                }}
+                exit={{ x: 320 }}
+                transition={{
+                  delay: 0.1 * index,
+                  duration: 0.2,
+                  ease: "easeOut",
+                }}
+                key={id}
+                role="button"
+                tabIndex={0}
+                className="text-body flex items-center justify-between py-4"
+                onClick={() => handleNavigation(link)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ")
+                    handleNavigation(link);
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  {icon} <h4 className="font-semibold">{title}</h4>
+                </div>
+                <ArrowLeft2 size={24} />
+              </motion.li>
+            ))}
         </nav>
       </div>
       <Button

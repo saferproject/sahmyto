@@ -14,7 +14,7 @@ export default function IntroLanding() {
   return (
     <AnimatePresence>
       {visible && (
-        <div className="flex h-screen w-screen flex-col justify-end">
+        <div className="flex h-dvh w-full flex-col justify-end">
           <motion.div
             className="bg-primary fixed h-96 w-96 rounded-tr-[160px]"
             initial={{ x: "-100vw", y: "-100vh", rotate: 0 }}
@@ -45,7 +45,7 @@ export default function IntroLanding() {
                 }}
               >
                 <Image
-                  src="/images/logo-primary.webp"
+                  src="/images/logo-primary.svg"
                   alt="سهمیتو"
                   loading="eager"
                   fetchPriority="high"

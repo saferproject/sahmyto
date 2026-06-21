@@ -15,7 +15,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center gap-4">
+    <div className="flex h-dvh w-full items-center justify-center gap-4">
       <Button onClick={handleNavigationToIntro} variant="contained">
         Intro
       </Button>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
 
@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   description:
     "Web application for income and expance managment for transportations with all types of vehicles",
   authors: { name: "Amir Allahdadian", url: "https://github.com/amir141592" },
+};
+
+// viewport-fit=cover exposes env(safe-area-inset-*) so bottom UI (the dashboard
+// footer nav) can clear the mobile browser/system navigation bar.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

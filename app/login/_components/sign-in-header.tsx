@@ -15,7 +15,12 @@ export default function LoginHeader() {
       </div>
       <div className="bg-primary rounded-lg shadow-md">
         <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white object-cover p-2">
-          <Image src='/images/logo-icon.webp' alt="لوگو" width={64} height={64} />
+          <Image
+            src="/images/logo-icon.svg"
+            alt="لوگو"
+            width={64}
+            height={64}
+          />
         </div>
       </div>
       <div className="rounded-lg p-2 shadow-md">

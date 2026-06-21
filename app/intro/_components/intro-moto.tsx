@@ -20,7 +20,7 @@ export default function IntroMoto() {
     >
       <div className="flex items-center justify-center gap-4">
         <Image
-          src="/images/logo-secondary.webp"
+          src="/images/logo-secondary.svg"
           alt="سهمیتو"
           loading="eager"
           fetchPriority="high"

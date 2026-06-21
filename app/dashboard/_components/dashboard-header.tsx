@@ -95,13 +95,13 @@ export default function DashboardHeader() {
           <HamburgerMenu size={48} />
         </IconButton>
         <Image
-          src="/images/logo-primary.webp"
+          src="/images/logo-primary.svg"
           alt="سهمیتو"
           loading="eager"
           fetchPriority="high"
-          className="scale-50"
-          width={200}
-          height={146}
+          width={100}
+          height={50}
+          className="relative bottom-2"
         />
         <div>
           <button

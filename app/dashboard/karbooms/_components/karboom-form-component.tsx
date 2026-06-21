@@ -78,9 +78,11 @@ export default function KarboomFormComponent({
       />
       <TextField
         {...register("smart_number")}
+        type="tel"
         label="شماره هوشمند"
         error={!!errors.smart_number}
         helperText={errors.smart_number?.message ?? ""}
+        inputMode="numeric"
         slotProps={{
           htmlInput: {
             maxLength: 7,

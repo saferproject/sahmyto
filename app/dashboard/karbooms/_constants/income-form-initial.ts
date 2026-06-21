@@ -23,7 +23,7 @@ export const INCOME_FORM_INITIAL: IncomeFormType = {
   },
   unit_price: null,
   total_price: null,
-  quantity: 0,
+  quantity: null,
   started_at: dayjs(),
   ended_at: dayjs(),
   description: null,

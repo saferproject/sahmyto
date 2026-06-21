@@ -39,7 +39,6 @@ export default function ProfileFormComponent() {
     register,
     handleSubmit,
     control,
-    setValue,
     reset,
     formState: { errors },
   } = useProfileForm();
@@ -65,7 +64,7 @@ export default function ProfileFormComponent() {
 
   return (
     <form
-      className="mt-8 flex w-full flex-col gap-4"
+      className="mt-8 flex w-full flex-col gap-4 px-0.5"
       onSubmit={handleSubmit(submit)}
     >
       <TextField
@@ -76,6 +75,7 @@ export default function ProfileFormComponent() {
         }}
         disabled
         required
+        fullWidth
       />
       <div className="flex items-center gap-2">
         <TextField
@@ -85,6 +85,7 @@ export default function ProfileFormComponent() {
             inputLabel: { shrink: true },
           }}
           required
+          fullWidth
         />
         <TextField
           {...register("last_name")}
@@ -93,6 +94,7 @@ export default function ProfileFormComponent() {
             inputLabel: { shrink: true },
           }}
           required
+          fullWidth
         />
       </div>
       <Accordion

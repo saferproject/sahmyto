@@ -52,9 +52,16 @@ export default function ProfilePicturePage() {
     router.push("/dashboard/profile");
   };
 
+  const hasRequestedFile = useRef(false);
+
   useEffect(() => {
-    if (fileInput.current) fileInput.current.click();
-  }, [fileInput]);
+    // Guard against React Strict Mode double-invoking the effect in dev, which
+    // would otherwise open the file picker twice.
+    if (hasRequestedFile.current) return;
+    hasRequestedFile.current = true;
+
+    fileInput.current?.click();
+  }, []);
 
   return (
     <div className="size-full">
@@ -65,7 +72,7 @@ export default function ProfilePicturePage() {
         className="hidden"
         onChange={handleImageInput}
       />
-      <div className="absolute top-0 left-0 z-10 h-100 w-full overflow-hidden rounded-b-4xl bg-white">
+      <div className="absolute top-0 left-0 z-10 aspect-square w-full overflow-hidden rounded-b-4xl bg-black">
         <Cropper
           image={image}
           crop={crop}
@@ -75,27 +82,27 @@ export default function ProfilePicturePage() {
           onCropComplete={handleCrop}
           onZoomChange={setZoom}
           cropShape="round"
-          cropSize={{ width: 256, height: 256 }}
+          showGrid={false}
           style={{
             cropAreaStyle: { color: "#ffffff70" },
             containerStyle: { backgroundColor: "#000" },
           }}
         />
       </div>
-      <div className="flex size-full flex-col justify-between pt-68">
+      <div className="flex size-full flex-col justify-between pt-[calc(100vw-120px)] overflow-y-auto">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-body text-lg font-semibold">
+            <h3 className="text-body font-semibold">
               قوانین آپلود تصویر
             </h3>
             <UserSquare size="32" className="text-body" />
           </div>
-          <p className="text-body-light mt-4">
+          <p className="text-body-light text-sm mt-4">
             سایز عکس میبایست کمتر از 512 کیلوبایت باشد <br /> فرمت تصاویر
             میبایست با فرمت png و یا jpg باشد
           </p>
         </div>
-        <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 mt-2">
           <Button variant="contained" onClick={handleUploadImage} fullWidth>
             ثبت تصویر
           </Button>

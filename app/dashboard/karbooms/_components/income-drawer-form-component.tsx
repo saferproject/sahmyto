@@ -131,6 +131,8 @@ export default function IncomeDrawerFormComponent({
             label={quantityInputSettings[incomeType].label}
             error={!!errors.unit_price}
             helperText={errors.unit_price?.message ?? ""}
+            type="tel"
+            inputMode="numeric"
             slotProps={{
               input: {
                 endAdornment: (
@@ -139,6 +141,9 @@ export default function IncomeDrawerFormComponent({
                   </p>
                 ),
               },
+              htmlInput: {
+                sx: { textAlign: "left" },
+              },
             }}
             fullWidth
           />
@@ -146,6 +151,8 @@ export default function IncomeDrawerFormComponent({
             {...register("unit_price", { valueAsNumber: true })}
             label={unitPriceSettings[incomeType].label}
             error={!!errors.unit_price}
+            type="tel"
+            inputMode="numeric"
             helperText={
               errors.unit_price ? (
                 (errors.unit_price?.message ?? "")
@@ -163,6 +170,9 @@ export default function IncomeDrawerFormComponent({
                     height={24}
                   />
                 ),
+              },
+              htmlInput: {
+                sx: { textAlign: "left" },
               },
             }}
             fullWidth
