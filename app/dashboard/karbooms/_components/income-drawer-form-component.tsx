@@ -13,6 +13,7 @@ import { InfoCircle, Profile2User } from "iconsax-reactjs";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 import { Member } from "../_types/member";
 import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
+import formatNumber from "@/app/_utilities/format-numbers";
 
 export default function IncomeDrawerFormComponent({
   isOpen,
@@ -28,7 +29,7 @@ export default function IncomeDrawerFormComponent({
     formState: { errors },
   } = useIncomeForm();
 
-  const { description } = useWatch({ control });
+  const { description, unit_price } = useWatch({ control });
 
   const selectedKarboomId = useKarboomsStore((state) => state.id);
 
@@ -145,7 +146,13 @@ export default function IncomeDrawerFormComponent({
             {...register("unit_price", { valueAsNumber: true })}
             label={unitPriceSettings[incomeType].label}
             error={!!errors.unit_price}
-            helperText={errors.unit_price?.message ?? ""}
+            helperText={
+              errors.unit_price ? (
+                (errors.unit_price?.message ?? "")
+              ) : (
+                <span>{formatNumber(unit_price ?? 0)} تومان</span>
+              )
+            }
             slotProps={{
               input: {
                 endAdornment: (

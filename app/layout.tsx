@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "سهمیتو",
   description:
     "Web application for income and expance managment for transportations with all types of vehicles",
-  authors: [{ name: "Amir Allahdadian" }, { name: "Michaeil Nobakht" }],
+  authors: { name: "Amir Allahdadian", url: "https://github.com/amir141592" },
 };
 
 export default function RootLayout({

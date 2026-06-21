@@ -7,7 +7,7 @@ const IncomeFormSchema = z.object({
   reciever: z.custom<Member>(),
   quantity: z.number().nullable(),
   unit_price: z.number().nullable(),
-  total_price: z.number(),
+  total_price: z.number().nullable(),
   started_at: z.custom<Dayjs>(),
   ended_at: z.custom<Dayjs>(),
   // type: z.union([

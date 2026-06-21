@@ -26,14 +26,21 @@ import useAddDriver from "../_hooks/use-add-driver-endpoint";
 import { DriverFormType } from "../_schemas/driver-form-schema";
 
 import { DriverFormProps } from "../_types/driver-form-props";
+import formatNumber from "@/app/_utilities/format-numbers";
 
 export default function DriverFormComponent({
   onCancel,
   onSuccess,
 }: DriverFormProps) {
-  const { register, control, handleSubmit, reset } = useDriverForm();
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useDriverForm();
 
-  const { description } = useWatch({ control });
+  const { description, fixed_amount } = useWatch({ control });
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
@@ -114,6 +121,16 @@ export default function DriverFormComponent({
         {...register("fixed_amount", { valueAsNumber: true })}
         type="number"
         label="دستمزد ثابت"
+        error={!!errors.fixed_amount}
+        helperText={
+          errors.fixed_amount ? (
+            (errors.fixed_amount?.message ?? "")
+          ) : (
+            <span className="text-body">
+              {formatNumber(fixed_amount ?? 0)} تومان
+            </span>
+          )
+        }
         slotProps={{
           input: {
             endAdornment: (

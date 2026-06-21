@@ -38,6 +38,9 @@ export const theme = createTheme({
       },
     },
     MuiInputLabel: {
+      defaultProps: {
+        shrink: true
+      },
       styleOverrides: {
         root: {
           color: "oklch(30.262% 0.10854 266.981)",
