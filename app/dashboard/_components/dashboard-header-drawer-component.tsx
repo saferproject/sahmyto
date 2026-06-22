@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Button, SwipeableDrawer } from "@mui/material";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 import DashboardHeaderDrawerProps from "../_interfaces/dashboard-header-drawer-props";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
@@ -118,36 +118,40 @@ export default function DashboardHeaderDrawerComponent({
           <h3 className="text-body font-semibold">{full_name}</h3>
         </button>
         <nav className="mt-6 min-h-0 flex-1 overflow-y-auto pl-2">
-          {isOpen &&
-            DRAWER_MENU_ITEMS.map(({ id, title, icon, link }, index) => (
-              <motion.li
-                initial={{ x: 320 }}
-                whileTap={{ scale: 0.9 }}
-                animate={{
-                  x: 0,
-                }}
-                exit={{ x: 320 }}
-                transition={{
-                  delay: 0.1 * index,
-                  duration: 0.2,
-                  ease: "easeOut",
-                }}
-                key={id}
-                role="button"
-                tabIndex={0}
-                className="text-body flex items-center justify-between py-4"
-                onClick={() => handleNavigation(link)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ")
-                    handleNavigation(link);
-                }}
-              >
-                <div className="flex items-center gap-4">
-                  {icon} <h4 className="font-semibold">{title}</h4>
-                </div>
-                <ArrowLeft2 size={24} />
-              </motion.li>
-            ))}
+          <ul className="flex flex-col">
+            <AnimatePresence>
+              {isOpen &&
+                DRAWER_MENU_ITEMS.map(({ id, title, icon, link }, index) => (
+                  <motion.li
+                    initial={{ x: 320 }}
+                    whileTap={{ scale: 0.9 }}
+                    animate={{
+                      x: 0,
+                    }}
+                    exit={{ x: 320 }}
+                    transition={{
+                      delay: 0.1 * index,
+                      duration: 0.2,
+                      ease: "easeOut",
+                    }}
+                    key={id}
+                    role="button"
+                    tabIndex={0}
+                    className="text-body flex items-center justify-between py-4"
+                    onClick={() => handleNavigation(link)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ")
+                        handleNavigation(link);
+                    }}
+                  >
+                    <div className="flex items-center gap-4">
+                      {icon} <h4 className="font-semibold">{title}</h4>
+                    </div>
+                    <ArrowLeft2 size={24} />
+                  </motion.li>
+                ))}
+            </AnimatePresence>
+          </ul>
         </nav>
       </div>
       <Button

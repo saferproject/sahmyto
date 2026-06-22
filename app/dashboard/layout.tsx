@@ -38,7 +38,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <ConfirmationDialogComponent />
                     <ActionDialogComponent />
                     <DashboardHeader />
-                    <main className="flex w-full min-h-0 flex-1 flex-col items-center overflow-hidden px-8 py-2">
+                    <main className="flex w-full min-h-0 flex-1 flex-col items-center overflow-x-hidden overflow-y-auto px-8 py-2">
                       {children}
                     </main>
                     <DashboardFooter />

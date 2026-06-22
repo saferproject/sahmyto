@@ -32,13 +32,11 @@ export default function DashboardHeader() {
 
   const {
     mutate: acceptRequest,
-    isSuccess: requestAccepted,
     isPending: requestIsAccepting,
   } = useAcceptKarboomRequest();
 
   const {
     mutate: rejectRequest,
-    isSuccess: requestRejected,
     isPending: requestIsRejecting,
   } = useRejectKarboomRequest();
 
@@ -74,10 +72,10 @@ export default function DashboardHeader() {
 
   useEffect(() => {
     if (gotRequests && requests.data.length === 0) handleCloseRequestsMenu();
-  }, [gotRequests]);
+  }, [gotRequests, requests?.data.length]);
 
   return (
-    <header className="relative h-32 w-full">
+    <header className="relative w-full">
       <DashboardHeaderDrawerComponent
         isOpen={isDrawerOpen}
         onOpen={handleOpenDrawer}

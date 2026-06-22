@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { CloseCircle } from "iconsax-reactjs";
-
 import BannerBackgroundImage from "../_assets/_images/home-banner-background.png";
 import BannerCoinXL from "../_assets/_images/home-banner-coin-xl.png";
 import BannerCoinLG from "../_assets/_images/home-banner-coin-lg.png";
@@ -10,7 +8,7 @@ import BannerCoinSM from "../_assets/_images/home-banner-coin-sm.png";
 
 export default function DashboardBannerComponent() {
   return (
-    <div className="relative w-full mt-4">
+    <div className="relative mt-4 w-full">
       <Image src={BannerBackgroundImage} alt="" className="w-full" loading="eager" fetchPriority="high" />
       <Image
         src={BannerCoinXL}
@@ -32,13 +30,12 @@ export default function DashboardBannerComponent() {
         alt=""
         className="absolute top-16 left-8 scale-75"
       />
-      <h2 className="text-body absolute top-1/4 left-1/2 -translate-x-1/2 text-sm font-bold text-nowrap">
+      <h2 className="text-body absolute top-1/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.875rem)] font-bold text-nowrap">
         سهمیتو، حساب جاده‌ت همیشه رو به راهه!
       </h2>
-      <h3 className="text-body absolute top-2/4 left-1/2 -translate-x-1/2 text-sm text-nowrap">
+      <h3 className="text-body absolute top-2/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.875rem)] text-nowrap">
         جاده رو برو، حساب باما!ً
       </h3>
-      <CloseCircle size={20} className="absolute top-0 -right-1" />
     </div>
   );
 }
