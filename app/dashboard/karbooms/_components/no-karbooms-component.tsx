@@ -6,7 +6,10 @@ export default function NoKarboomsComponent() {
   return (
     <div className="mt-8 flex w-full flex-col items-center gap-8">
       <Image src={NoKarboomIcon} alt="" />
-      <p className="text-sm text-body text-center">کاربومی وجود ندارد! <br /> روی دکمه افزودن ضربه بزنید</p>
+      <div className="text-body text-center text-sm">
+        <p>کاربومی وجود ندارد!</p>
+        <p>روی دکمه افزودن ضربه بزنید</p>
+      </div>
     </div>
   );
 }

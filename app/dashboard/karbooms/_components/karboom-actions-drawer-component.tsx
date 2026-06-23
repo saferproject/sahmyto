@@ -36,13 +36,13 @@ export default function KarboomActionsDrawerComponent({
         },
       }}
     >
-      <div className="relative h-150 w-full px-8 py-12">
+      <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex h-full w-full flex-col items-center justify-between">
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center">
           <h4 className="text-body mb-4 text-lg font-semibold">
             عملیات های کاربوم
           </h4>
-          <menu className="mb-4 flex w-full flex-col overflow-y-auto">
+          <menu className="mb-4 flex w-full min-h-0 flex-1 flex-col overflow-y-auto">
             {KARBOOM_ACTIONS.map(({ label, icon, path }) => (
               <li
                 key={label}

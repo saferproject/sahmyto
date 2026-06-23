@@ -142,23 +142,6 @@ export default function KarboomListItemComponent(
           عملیات
         </Button>
       </div>
-      {/* <div className="w-full px-7">
-        <Button
-          startIcon={<span className="w-6" />}
-          endIcon={<ArrowLeft size={24} />}
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            color: "#162864",
-            fontWeight: "semibold",
-            position: "relative",
-            bottom: "8px",
-          }}
-          fullWidth
-        >
-          مدیریت مالی
-        </Button>
-      </div> */}
     </motion.li>
   );
 }

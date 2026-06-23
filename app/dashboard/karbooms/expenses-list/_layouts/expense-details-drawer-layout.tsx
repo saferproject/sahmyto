@@ -59,9 +59,9 @@ export default function ExpenseDetailsDrawerLayout({
         },
       }}
     >
-      <div className="relative h-120 w-full px-8 py-12">
+      <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex h-full w-full flex-col items-center justify-between overflow-y-auto">
+        <div className="flex w-full min-h-0 flex-1 flex-col items-center overflow-y-auto">
           <h4 className="text-body mt-4 font-semibold">جزئیات درآمد</h4>
           <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
             <DetailItemComponent

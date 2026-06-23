@@ -10,6 +10,7 @@ import PartnersListComponent from "./_components/partners-list-component";
 import PartnersListButtonsComponent from "./_components/partners-list-buttons-component";
 import PartnerFormDrawerComponent from "../_components/partner-form-drawer-component";
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
+import QueryState from "@/app/_components/query-state";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
@@ -26,7 +27,7 @@ export default function PartnersListPage() {
     router.replace("/dashboard/karbooms");
   }
 
-  const { data } = useGetPartnersEndpoint({ karboom_id });
+  const { data, isLoading, isError } = useGetPartnersEndpoint({ karboom_id });
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);
@@ -48,7 +49,13 @@ export default function PartnersListPage() {
         </div>
         <PartnersListHeaderComponent partnersCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />
-        <PartnersListComponent partners={data?.data ?? []} />
+        <QueryState
+          isLoading={isLoading}
+          isError={isError}
+          isEmpty={!data?.data.length}
+        >
+          <PartnersListComponent partners={data?.data ?? []} />
+        </QueryState>
         <PartnerFormDrawerComponent
           isOpen={isDriverFormDrawerOpen}
           onOpen={handleOpenDriverForm}

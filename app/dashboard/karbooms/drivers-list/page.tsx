@@ -16,6 +16,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import useGetDriversEndpoint from "./_hooks/use-get-karboom-drivers-endpoint";
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
+import QueryState from "@/app/_components/query-state";
 
 export default function DriverListPage() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function DriverListPage() {
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);
 
-  const { data } = useGetDriversEndpoint(karboom_id);
+  const { data, isLoading, isError } = useGetDriversEndpoint(karboom_id);
 
   const handleOpenDriverForm = () => {
     setDriverFormDrawerOpen(true);
@@ -50,7 +51,13 @@ export default function DriverListPage() {
         </div>
         <DriversListHeaderComponent driversCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />
-        <DriversListComponent drivers={data?.data ?? []} />
+        <QueryState
+          isLoading={isLoading}
+          isError={isError}
+          isEmpty={!data?.data.length}
+        >
+          <DriversListComponent drivers={data?.data ?? []} />
+        </QueryState>
         <DriverFormDrawerComponent
           isOpen={isDriverFormDrawerOpen}
           onOpen={handleOpenDriverForm}

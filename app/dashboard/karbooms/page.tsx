@@ -113,7 +113,7 @@ export default function KarboomsPage() {
       <Fab
         sx={{
           position: "fixed",
-          bottom: "128px",
+          bottom: "calc(128px + env(safe-area-inset-bottom))",
           left: "32px",
           zIndex: 10,
         }}

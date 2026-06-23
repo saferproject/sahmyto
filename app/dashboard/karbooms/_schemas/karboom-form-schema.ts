@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const KarboomFormSchema = z
   .object({
-    name: z.string(),
+    name: z.string().trim().min(1, "نام کاربوم را وارد کنید"),
     first_number: z.string().max(2).nullish(),
     second_character: z.string().max(1).nullish(),
     third_number: z.string().max(3).nullish(),

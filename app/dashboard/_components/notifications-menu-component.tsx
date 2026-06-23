@@ -1,6 +1,8 @@
 "use client";
 
-import { Menu } from "@mui/material";
+import { CircularProgress, Menu } from "@mui/material";
+
+import QueryState from "@/app/_components/query-state";
 
 import requestsMenuProps from "../_interfaces/notifications-menu-props";
 import RequestComponent from "./request-component";
@@ -10,6 +12,8 @@ export default function requestsMenuComponent({
   isOpen,
   onClose,
   requests,
+  isLoading,
+  isError,
   onAccept,
   onReject,
   mutatingRequest,
@@ -43,11 +47,26 @@ export default function requestsMenuComponent({
         },
       }}
     >
-      {requests.length === 0 ? (
-        <p className="text-body bg-white py-6 text-center text-sm font-semibold">
-          درخواست جدیدی ندارید!
-        </p>
-      ) : (
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        isEmpty={requests.length === 0}
+        loadingFallback={
+          <div className="flex items-center justify-center bg-white py-6">
+            <CircularProgress size={24} color="primary" />
+          </div>
+        }
+        errorFallback={
+          <p className="text-body bg-white py-6 text-center text-sm font-semibold">
+            خطا در دریافت درخواست‌ها
+          </p>
+        }
+        emptyFallback={
+          <p className="text-body bg-white py-6 text-center text-sm font-semibold">
+            درخواست جدیدی ندارید!
+          </p>
+        }
+      >
         <ul className="flex flex-col gap-4">
           {requests.map((request) => (
             <RequestComponent
@@ -61,7 +80,7 @@ export default function requestsMenuComponent({
             />
           ))}
         </ul>
-      )}
+      </QueryState>
     </Menu>
   );
 }

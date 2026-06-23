@@ -1,4 +1,4 @@
-import StaticComponent from "./static.component";
+import StaticComponent from "./static-component";
 
 export default function KarboomsStatics() {
   return (

@@ -28,7 +28,12 @@ export default function DashboardHeader() {
   const [notificationAnchor, setNotificationAnchor] =
     useState<HTMLElement | null>(null);
 
-  const { data: requests, isSuccess: gotRequests } = useGetKarboomRequests();
+  const {
+    data: requests,
+    isSuccess: gotRequests,
+    isLoading: requestsLoading,
+    isError: requestsError,
+  } = useGetKarboomRequests();
 
   const {
     mutate: acceptRequest,
@@ -154,6 +159,8 @@ export default function DashboardHeader() {
         isOpen={Boolean(notificationAnchor)}
         onClose={handleCloseRequestsMenu}
         requests={requests?.data ?? []}
+        isLoading={requestsLoading}
+        isError={requestsError}
         onAccept={handleAcceptRequest}
         onReject={handleRejectRequest}
         mutatingRequest={mutatingRequest}

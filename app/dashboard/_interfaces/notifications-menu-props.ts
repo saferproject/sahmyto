@@ -5,6 +5,8 @@ export default interface NotificationsMenuProps {
   isOpen: boolean;
   onClose: () => void;
   requests: KarboomRequest[];
+  isLoading: boolean;
+  isError: boolean;
   onAccept: (id: number) => void;
   onReject: (id: number) => void;
   mutatingRequest: number | null;

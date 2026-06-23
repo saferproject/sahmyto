@@ -100,10 +100,10 @@ export default function ExpenseDrawerComponent({
         },
       }}
     >
-      <div className="relative h-120 w-full px-8 py-12">
+      <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex h-full w-full flex-col items-center justify-between">
-          <div className="mb-4 flex w-full flex-col overflow-y-auto">
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center">
+          <div className="mb-4 flex w-full min-h-0 flex-1 flex-col overflow-y-auto">
             <ExpenseDrawerHeaderComponent />
             <ExpenseDrawerCategoryListComponent
               categoryType={categoryType}
