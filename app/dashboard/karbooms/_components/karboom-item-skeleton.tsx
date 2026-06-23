@@ -8,8 +8,8 @@ export default function KarboomItemSkeleton() {
           variant="rectangular"
           sx={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
         />
-        <div className="absolute left-4">
-          <Skeleton variant="rounded" width={72} height={32} />
+        <div className="absolute left-4 top-6">
+          <Skeleton variant="rounded" width={120} height={40} />
         </div>
       </div>
       <div className="relative flex w-full flex-col gap-4 rounded-3xl bg-white p-4">

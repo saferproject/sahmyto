@@ -20,7 +20,7 @@ export default function DescriptionInput({
       slotProps={{
         input: {
           endAdornment: (
-            <div className="text-body-light flex">
+            <div className="text-body-light flex" dir="ltr">
               <p>{currentlength}</p>/<p>{maxLength}</p>
             </div>
           ),

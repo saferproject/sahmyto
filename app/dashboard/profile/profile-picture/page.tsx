@@ -36,6 +36,8 @@ export default function ProfilePicturePage() {
   };
 
   const handleUploadImage = async () => {
+    if (!croppedImage) return;
+
     const imageFile = await imageComperssor(
       convertDataURLtoFile(croppedImage, "profile-image"),
       { fileType: "image/jpeg", maxIteration: 20, maxSizeMB: 0.5 },
@@ -64,7 +66,7 @@ export default function ProfilePicturePage() {
   }, []);
 
   return (
-    <div className="size-full">
+    <div className="flex size-full flex-col overflow-y-auto">
       <input
         ref={fileInput}
         type="file"
@@ -72,7 +74,7 @@ export default function ProfilePicturePage() {
         className="hidden"
         onChange={handleImageInput}
       />
-      <div className="absolute top-0 left-0 z-10 aspect-square w-full overflow-hidden rounded-b-4xl bg-black">
+      <div className="relative -mx-8 -mt-2 aspect-square shrink-0 overflow-hidden rounded-b-4xl bg-black">
         <Cropper
           image={image}
           crop={crop}
@@ -89,12 +91,10 @@ export default function ProfilePicturePage() {
           }}
         />
       </div>
-      <div className="flex size-full flex-col justify-between pt-[calc(100vw-120px)] overflow-y-auto">
+      <div className="flex flex-1 flex-col justify-between gap-4 pt-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-body font-semibold">
-              قوانین آپلود تصویر
-            </h3>
+            <h3 className="text-body font-semibold">قوانین آپلود تصویر</h3>
             <UserSquare size="32" className="text-body" />
           </div>
           <p className="text-body-light text-sm mt-4">
@@ -102,8 +102,13 @@ export default function ProfilePicturePage() {
             میبایست با فرمت png و یا jpg باشد
           </p>
         </div>
-        <div className="flex w-full flex-col gap-4 mt-2">
-          <Button variant="contained" onClick={handleUploadImage} fullWidth>
+        <div className="flex w-full flex-col gap-4">
+          <Button
+            variant="contained"
+            onClick={handleUploadImage}
+            disabled={!croppedImage}
+            fullWidth
+          >
             ثبت تصویر
           </Button>
           <Button onClick={handleReturn} fullWidth>

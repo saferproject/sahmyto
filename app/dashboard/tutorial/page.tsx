@@ -32,7 +32,7 @@ export default function TutorialPage() {
             height={128}
             className="absolute -top-3 right-7 -z-10"
           />
-          <div className="felx absolute -top-5 left-2 items-center justify-center rounded-full bg-white p-1 shadow-lg">
+          <div className="flex absolute -top-5 left-2 items-center justify-center rounded-full bg-white p-1 shadow-lg">
             <IconButton
               size="small"
               sx={{

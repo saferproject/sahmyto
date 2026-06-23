@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   TextField,
   Accordion,
@@ -39,9 +39,16 @@ export default function ProfileFormComponent() {
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
-  } = useProfileForm();
+  } = useProfileForm({
+    phone: user.phone,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    father_name: user.father_name,
+    gender: user.gender,
+    email: user.email,
+    birthday: null,
+  });
 
   const { mutate } = useCompleteProfile();
 
@@ -57,10 +64,6 @@ export default function ProfileFormComponent() {
   const HandleToggleOptionalFieldsVisibility = () => {
     setOptionalFieldsVisibility((curValue) => !curValue);
   };
-
-  useEffect(() => {
-    if (user) reset(user);
-  }, [user]);
 
   return (
     <form
@@ -134,8 +137,12 @@ export default function ProfileFormComponent() {
               render={({ field }) => (
                 <FormControl>
                   <InputLabel id="gender-label">جنسیت</InputLabel>
-                  <Select {...field} labelId="gender-label" label="جنسیت">
-                    <MenuItem value={undefined}></MenuItem>
+                  <Select
+                    {...field}
+                    value={field.value ?? ""}
+                    labelId="gender-label"
+                    label="جنسیت"
+                  >
                     <MenuItem value="male">مرد</MenuItem>
                     <MenuItem value="female">زن</MenuItem>
                   </Select>
