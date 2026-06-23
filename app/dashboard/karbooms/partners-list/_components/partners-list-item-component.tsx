@@ -13,6 +13,7 @@ import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 
 export default function PartnersListItemComponent({
   item: { full_name, phone, avatar, status },
+  index,
 }: PartnersListItemProps) {
   const menuButton = useRef<HTMLButtonElement>(null);
 
@@ -28,10 +29,11 @@ export default function PartnersListItemComponent({
 
   return (
     <motion.li
-      className={
-        "border-secondary-light w-full rounded-2xl border p-2 overflow-visible " +
-        (status === "pending" ? "opacity-60" : "")
-      }
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: status === "pending" ? 0.6 : 1 }}
+      exit={{ scale: 0.7, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+      className="border-secondary-light w-full overflow-visible rounded-2xl border p-2"
     >
       <Badge
         badgeContent={

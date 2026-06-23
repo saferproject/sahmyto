@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "iconsax-reactjs";
 
 import { useSnackbar } from "notistack";
@@ -24,10 +24,15 @@ export default function DriverListPage() {
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
-  if (!karboom_id) {
-    enqueueSnackbar({ variant: "warning", message: "کاربومی انتخاب نشده است" });
-    router.replace("/dashboard/karbooms");
-  }
+  useEffect(() => {
+    if (!karboom_id) {
+      enqueueSnackbar({
+        variant: "warning",
+        message: "کاربومی انتخاب نشده است",
+      });
+      router.replace("/dashboard/karbooms");
+    }
+  }, [karboom_id, enqueueSnackbar, router]);
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);
@@ -43,21 +48,23 @@ export default function DriverListPage() {
   };
 
   return (
-    <div className="relative mt-2 flex size-full flex-col">
-      <div className="flex w-full flex-col gap-4">
+    <div className="mt-2 flex size-full flex-col gap-4">
+      <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
         <div className="flex w-full items-center gap-2">
           <User className="text-heading" size={24} variant="Broken" />
           <h2 className="text-body text-xl font-bold">رانندگان</h2>
         </div>
         <DriversListHeaderComponent driversCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />
-        <QueryState
-          isLoading={isLoading}
-          isError={isError}
-          isEmpty={!data?.data.length}
-        >
-          <DriversListComponent drivers={data?.data ?? []} />
-        </QueryState>
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
+          <QueryState
+            isLoading={isLoading}
+            isError={isError}
+            isEmpty={!data?.data.length}
+          >
+            <DriversListComponent drivers={data?.data ?? []} />
+          </QueryState>
+        </div>
         <DriverFormDrawerComponent
           isOpen={isDriverFormDrawerOpen}
           onOpen={handleOpenDriverForm}

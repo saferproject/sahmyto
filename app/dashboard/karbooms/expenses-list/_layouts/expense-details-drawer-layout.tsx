@@ -14,7 +14,10 @@ import formatNumber from "@/app/_utilities/format-numbers";
 import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import { ACTIVITY_STATUS_COLORS } from "../../incomes-list/_constants/income-status-colors";
+import {
+  ACTIVITY_STATUS_BG_COLORS,
+  ACTIVITY_STATUS_TEXT_COLORS,
+} from "../../incomes-list/_constants/income-status-colors";
 
 export default function ExpenseDetailsDrawerLayout({
   isOpen,
@@ -62,7 +65,7 @@ export default function ExpenseDetailsDrawerLayout({
       <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
         <div className="flex w-full min-h-0 flex-1 flex-col items-center overflow-y-auto">
-          <h4 className="text-body mt-4 font-semibold">جزئیات درآمد</h4>
+          <h4 className="text-body mt-4 font-semibold">جزئیات هزینه</h4>
           <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
             <DetailItemComponent
               label="مبلغ"
@@ -84,7 +87,7 @@ export default function ExpenseDetailsDrawerLayout({
             <DetailItemComponent
               label="وضعیت"
               value={ACTIVITY_STATUS_FA[status]}
-              valueColor={ACTIVITY_STATUS_COLORS[status]}
+              valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
             />
           </ul>
           {description && (
@@ -128,7 +131,7 @@ export default function ExpenseDetailsDrawerLayout({
                         </div>
                       </div>
                       <p
-                        className={`rounded-full px-4 py-2 font-semibold text-white bg-${ACTIVITY_STATUS_COLORS[status]}`}
+                        className={`rounded-full px-4 py-2 font-semibold text-white ${ACTIVITY_STATUS_BG_COLORS[status]}`}
                       >
                         {ACTIVITY_STATUS_FA[status]}
                       </p>

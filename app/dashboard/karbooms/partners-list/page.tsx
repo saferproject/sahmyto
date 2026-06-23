@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Profile2User } from "iconsax-reactjs";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
@@ -22,10 +22,15 @@ export default function PartnersListPage() {
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
-  if (!karboom_id) {
-    enqueueSnackbar({ variant: "warning", message: "کاربومی انتخاب نشده است" });
-    router.replace("/dashboard/karbooms");
-  }
+  useEffect(() => {
+    if (!karboom_id) {
+      enqueueSnackbar({
+        variant: "warning",
+        message: "کاربومی انتخاب نشده است",
+      });
+      router.replace("/dashboard/karbooms");
+    }
+  }, [karboom_id, enqueueSnackbar, router]);
 
   const { data, isLoading, isError } = useGetPartnersEndpoint({ karboom_id });
 
@@ -41,21 +46,23 @@ export default function PartnersListPage() {
   };
 
   return (
-    <div className="relative mt-2 flex size-full flex-col">
-      <div className="flex w-full flex-col gap-4">
+    <div className="mt-2 flex size-full flex-col gap-4">
+      <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
         <div className="flex w-full items-center gap-2">
           <Profile2User className="text-heading" size={24} variant="Broken" />
           <h2 className="text-body text-xl font-bold">افزودن شریک</h2>
         </div>
         <PartnersListHeaderComponent partnersCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />
-        <QueryState
-          isLoading={isLoading}
-          isError={isError}
-          isEmpty={!data?.data.length}
-        >
-          <PartnersListComponent partners={data?.data ?? []} />
-        </QueryState>
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
+          <QueryState
+            isLoading={isLoading}
+            isError={isError}
+            isEmpty={!data?.data.length}
+          >
+            <PartnersListComponent partners={data?.data ?? []} />
+          </QueryState>
+        </div>
         <PartnerFormDrawerComponent
           isOpen={isDriverFormDrawerOpen}
           onOpen={handleOpenDriverForm}

@@ -2,6 +2,8 @@
 
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 
+import { AnimatePresence } from "motion/react";
+
 import IncomeListItemComponent from "../_components/income-list-item-component";
 import QueryState from "@/app/_components/query-state";
 
@@ -20,22 +22,29 @@ export default function IncomesListLayout({
   const { data: incomes, isLoading, isError } = useGetIncomes(karboomId);
 
   return (
-    <ul className="mt-4 flex h-[calc(100%-56px)] w-full flex-col gap-4 overflow-y-auto pb-4 relative">
-      <QueryState
-        isLoading={isLoading}
-        isError={isError}
-        isEmpty={!incomes?.data.length}
-      >
-        {incomes?.data.map((income) => (
-          <IncomeListItemComponent
-            key={income.id}
-            income={income}
-            onShowDetails={onShowDetails}
-            onRejectIncome={onRejectIncome}
-          />
-        ))}
-      </QueryState>
+    <div className="mt-4 flex min-h-0 w-full flex-1 flex-col gap-4">
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto pb-2">
+        <QueryState
+          isLoading={isLoading}
+          isError={isError}
+          isEmpty={!incomes?.data.length}
+        >
+          <ul className="flex w-full flex-col gap-4">
+            <AnimatePresence>
+              {incomes?.data.map((income, index) => (
+                <IncomeListItemComponent
+                  key={income.id}
+                  income={income}
+                  index={index}
+                  onShowDetails={onShowDetails}
+                  onRejectIncome={onRejectIncome}
+                />
+              ))}
+            </AnimatePresence>
+          </ul>
+        </QueryState>
+      </div>
       <IncomesListFooterLayout onAddIncome={onOpenIncomeForm} />
-    </ul>
+    </div>
   );
 }

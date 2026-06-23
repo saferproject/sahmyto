@@ -1,3 +1,5 @@
+import formatNumber from "@/app/_utilities/format-numbers";
+
 import PartnersListHeaderProps from "../_interfaces/partners-list-header-props";
 
 export default function PartnersListHeaderComponent({
@@ -5,7 +7,7 @@ export default function PartnersListHeaderComponent({
 }: PartnersListHeaderProps) {
   return (
     <div className="flex w-full items-start justify-start">
-      <p>تعداد شریک ها: {partnersCount}</p>
+      <p>تعداد شریک ها: {formatNumber(partnersCount)}</p>
     </div>
   );
 }

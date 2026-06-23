@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
-import { User } from "iconsax-reactjs";
+import { useRef, useState } from "react";
+import { More, User } from "iconsax-reactjs";
 import { motion } from "motion/react";
-import { Badge } from "@mui/material";
+import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
 
 import { type DriverListItemProps } from "../_types/driver-list-item-props";
 
@@ -21,13 +24,27 @@ export default function DriverListItemComponent({
     payment_type,
     membership_status,
   },
+  index,
 }: DriverListItemProps) {
+  const menuButton = useRef<HTMLButtonElement>(null);
+
+  const [isOpen, setOpen] = useState(false);
+
+  const handleOpenMenu = () => {
+    setOpen(true);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(false);
+  };
+
   return (
     <motion.li
-      className={
-        "overflow-visible " +
-        (membership_status === "pending" ? "opacity-60" : "")
-      }
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: membership_status === "pending" ? 0.6 : 1 }}
+      exit={{ scale: 0.7, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+      className="overflow-visible"
     >
       <Badge
         badgeContent={
@@ -45,8 +62,8 @@ export default function DriverListItemComponent({
           width: "100%",
         }}
       >
-        <div className="border-secondary-light flex w-full items-center justify-between overflow-visible rounded-2xl border p-4">
-          <div className="border-primary relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
+        <div className="border-secondary-light flex w-full items-center gap-4 overflow-visible rounded-2xl border p-4">
+          <div className="border-primary relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border">
             {avatar ? (
               <Image
                 src={avatar}
@@ -59,7 +76,7 @@ export default function DriverListItemComponent({
               <User className="text-secondary-light" />
             )}
           </div>
-          <div className="flex w-[calc(100%-64px)] flex-col gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
             <div className="flex w-full items-center justify-between">
               <p className="text-body text-sm font-semibold">{full_name}</p>
               <p className="text-body text-sm font-semibold">{phone}</p>
@@ -86,6 +103,22 @@ export default function DriverListItemComponent({
               </div>
             </div>
           </div>
+          <IconButton
+            ref={menuButton}
+            onClick={handleOpenMenu}
+            aria-label="عملیات"
+            className="shrink-0"
+          >
+            <More className="text-body" />
+          </IconButton>
+          <Menu
+            anchorEl={menuButton.current}
+            open={isOpen}
+            onClose={handleCloseMenu}
+          >
+            <MenuItem onClick={() => {}}>ویرایش</MenuItem>
+            <MenuItem onClick={() => {}}>حذف</MenuItem>
+          </Menu>
         </div>
       </Badge>
     </motion.li>

@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 
 import dayjs from "dayjs";
 import { Button } from "@mui/material";
+import { motion } from "motion/react";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 
@@ -11,11 +14,12 @@ import { useExpenseListStore } from "../_providers/expense-list-store-provider";
 
 import useApproveExpense from "../_hooks/use-approve-expense";
 
-import { ACTIVITY_STATUS_COLORS } from "../../incomes-list/_constants/income-status-colors";
+import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 
-export default function ExpenselistItemComponent({
+export default function ExpenseListItemComponent({
   expense,
+  index,
   onShowDetails,
   onRejectExpense,
 }: ExpenseListItemProps) {
@@ -48,7 +52,13 @@ export default function ExpenselistItemComponent({
   };
 
   return (
-    <div className="border-secondary-lighter w-full rounded-2xl border">
+    <motion.li
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.7, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+      className="border-secondary-lighter w-full rounded-2xl border"
+    >
       <div className="bg-secondary-lightest border-secondary-lighter relative flex w-full items-center justify-between overflow-hidden rounded-2xl border p-4">
         <div className="bg-secondary-lighter absolute -top-16 -right-24 h-96 w-96 rounded-full"></div>
         <div className="z-10 flex items-center gap-2">
@@ -104,7 +114,7 @@ export default function ExpenselistItemComponent({
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">وضعیت</p>
           <p
-            className={`text-body text-sm font-semibold text-${ACTIVITY_STATUS_COLORS[status]}`}
+            className={`text-sm font-semibold ${ACTIVITY_STATUS_TEXT_COLORS[status]}`}
           >
             {ACTIVITY_STATUS_FA[status]}
           </p>
@@ -142,6 +152,6 @@ export default function ExpenselistItemComponent({
           </Button>
         </div>
       )}
-    </div>
+    </motion.li>
   );
 }

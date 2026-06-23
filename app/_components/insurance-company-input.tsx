@@ -22,7 +22,9 @@ export default function InsuranceCompanyInput({
             id="insurance-company-id"
             label="شرکت بیمه"
           >
-            <MenuItem value={undefined}></MenuItem>
+            <MenuItem value={0} disabled>
+              انتخاب کنید
+            </MenuItem>
             {data?.data?.map(({ id, name }) => (
               <MenuItem key={id} value={id}>
                 {name}

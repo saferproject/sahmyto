@@ -14,14 +14,14 @@ export default function DriversListButtonsComponent({
   };
 
   return (
-    <div className="flex w-full items-center justify-between gap-4 bg-white absolute bottom-0">
+    <div className="flex w-full items-center justify-between gap-4 bg-white">
       <Button variant="outlined" onClick={handleReturn} fullWidth>
         بازگشت
       </Button>
       <Fab
         sx={{
           position: "fixed",
-          bottom: "160px",
+          bottom: "calc(160px + env(safe-area-inset-bottom))",
           left: "32px",
           zIndex: 10,
         }}

@@ -11,7 +11,7 @@ import { useIncomeListStore } from "../_providers/income-list-store-provider";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
 import dayjs from "dayjs";
-import { ACTIVITY_STATUS_COLORS } from "../_constants/income-status-colors";
+import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import DetailItemComponent from "../_components/income-detail-item-component";
 import { User } from "iconsax-reactjs";
@@ -86,7 +86,7 @@ export default function IncomeDetailsDrawerLayout({
             <DetailItemComponent
               label="وضعیت"
               value={ACTIVITY_STATUS_FA[status]}
-              valueColor={ACTIVITY_STATUS_COLORS[status]}
+              valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
             />
           </ul>
           {description && (
@@ -118,7 +118,7 @@ export default function IncomeDetailsDrawerLayout({
                         </div>
                         <p>{full_name}</p>
                       </div>
-                      <p className={`text-${ACTIVITY_STATUS_COLORS[status]}`}>
+                      <p className={ACTIVITY_STATUS_TEXT_COLORS[status]}>
                         {ACTIVITY_STATUS_FA[status]}
                       </p>
                     </div>

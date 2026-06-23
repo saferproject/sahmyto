@@ -1,3 +1,5 @@
+import formatNumber from "@/app/_utilities/format-numbers";
+
 import { DriversListHeaderProps } from "../_types/drivers-list-header-props";
 
 export default function DriversListHeaderComponent({
@@ -5,7 +7,7 @@ export default function DriversListHeaderComponent({
 }: DriversListHeaderProps) {
   return (
     <div className="flex w-full items-start justify-start">
-      <p>تعداد رانندگان: {driversCount}</p>
+      <p>تعداد رانندگان: {formatNumber(driversCount)}</p>
     </div>
   );
 }

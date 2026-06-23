@@ -1,12 +1,15 @@
+"use client";
+
 import { Button } from "@mui/material";
 import Image from "next/image";
+import { motion } from "motion/react";
 import dayjs from "dayjs";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 
 import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import { ACTIVITY_STATUS_COLORS } from "../_constants/income-status-colors";
+import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
 
 import { IncomeListItemProps } from "../_types/income-list-item-props";
 
@@ -16,6 +19,7 @@ import { useIncomeListStore } from "../_providers/income-list-store-provider";
 
 export default function IncomeListItemComponent({
   income,
+  index,
   onShowDetails,
   onRejectIncome,
 }: IncomeListItemProps) {
@@ -46,7 +50,13 @@ export default function IncomeListItemComponent({
   };
 
   return (
-    <li className="border-secondary-lighter w-full rounded-2xl border">
+    <motion.li
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ scale: 0.7, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+      className="border-secondary-lighter w-full rounded-2xl border"
+    >
       <div className="bg-secondary-lightest border-secondary-lighter relative flex w-full items-center justify-between overflow-hidden rounded-2xl border p-4">
         <div className="bg-secondary-lighter absolute -top-16 -right-24 h-96 w-96 rounded-full"></div>
         <div className="z-10 flex items-center gap-2">
@@ -102,7 +112,7 @@ export default function IncomeListItemComponent({
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">وضعیت</p>
           <p
-            className={`text-body text-sm font-semibold text-${ACTIVITY_STATUS_COLORS[status]}`}
+            className={`text-sm font-semibold ${ACTIVITY_STATUS_TEXT_COLORS[status]}`}
           >
             {ACTIVITY_STATUS_FA[status]}
           </p>
@@ -140,6 +150,6 @@ export default function IncomeListItemComponent({
           </Button>
         </div>
       )}
-    </li>
+    </motion.li>
   );
 }
