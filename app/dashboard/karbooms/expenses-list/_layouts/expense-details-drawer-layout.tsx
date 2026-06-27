@@ -17,6 +17,7 @@ import {
   ACTIVITY_STATUS_BG_COLORS,
   ACTIVITY_STATUS_TEXT_COLORS,
 } from "../../incomes-list/_constants/income-status-colors";
+import ApprovalItemComponent from "../../_components/approval-item-component";
 
 export default function ExpenseDetailsDrawerLayout({
   isOpen,
@@ -34,10 +35,11 @@ export default function ExpenseDetailsDrawerLayout({
     payer: { full_name: receiverName },
     sender: { full_name: submitterName },
     approvals,
+    clearActiveExpense,
   } = useExpenseListStore((state) => state);
 
   const handleClose = () => {
-    // TODO remove active income from store
+    clearActiveExpense();
     onClose();
   };
 
@@ -108,52 +110,9 @@ export default function ExpenseDetailsDrawerLayout({
           <div className="mt-4 w-full">
             <h5 className="text-body">وضعیت تاییدیه شرکا</h5>
             <ul className="mt-4 flex w-full flex-col gap-4">
-              {approvals.map(
-                ({
-                  id,
-                  status,
-                  reject_reason,
-                  user: { full_name, avatar, phone },
-                }) => (
-                  <li
-                    key={id}
-                    className="border-secondary flex w-full flex-col gap-4 rounded-2xl border border-dashed p-4 text-sm"
-                  >
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="border-primary flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
-                          {/* @ts-ignore */}
-                          {avatar ? (
-                            <Image
-                              src={avatar}
-                              alt="عکس شریک"
-                              width={48}
-                              height={48}
-                            />
-                          ) : (
-                            <User size={32} className="text-secondary" />
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <p className="text-body">{full_name}</p>
-                          <p className="text-body-light text-xs">{phone}</p>
-                        </div>
-                      </div>
-                      <p
-                        className={`rounded-full px-4 py-2 font-semibold text-white ${ACTIVITY_STATUS_BG_COLORS[status]}`}
-                      >
-                        {ACTIVITY_STATUS_FA[status]}
-                      </p>
-                    </div>
-                    {status === "rejected" && reject_reason && (
-                      <p className="text-body bg-secondary-lightest w-full rounded-2xl p-2">
-                        <span>علت عدم تایید: </span>
-                        {reject_reason}
-                      </p>
-                    )}
-                  </li>
-                ),
-              )}
+              {approvals.map((approval) => (
+                <ApprovalItemComponent key={approval.id} approval={approval} />
+              ))}
             </ul>
           </div>
         </div>

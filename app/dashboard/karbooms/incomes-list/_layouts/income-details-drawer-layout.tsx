@@ -14,6 +14,7 @@ import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors"
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import DetailItemComponent from "../_components/income-detail-item-component";
 import { User } from "iconsax-reactjs";
+import ApprovalItemComponent from "../../_components/approval-item-component";
 
 export default function IncomeDetailsDrawerLayout({
   isOpen,
@@ -31,10 +32,11 @@ export default function IncomeDetailsDrawerLayout({
     receiver: { full_name: receiverName },
     sender: { full_name: submitterName },
     approvals,
+    clearActiveIncome
   } = useIncomeListStore((state) => state);
 
   const handleClose = () => {
-    // TODO remove active income from store
+    clearActiveIncome();
     onClose();
   };
 
@@ -58,7 +60,7 @@ export default function IncomeDetailsDrawerLayout({
     >
       <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex w-full min-h-0 flex-1 flex-col items-center overflow-y-auto">
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center overflow-y-auto">
           <h4 className="text-body mt-4 font-semibold">جزئیات درآمد</h4>
           <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
             <DetailItemComponent
@@ -94,39 +96,9 @@ export default function IncomeDetailsDrawerLayout({
           <div className="mt-4 w-full">
             <h5 className="text-body">وضعیت تاییدیه شرکا</h5>
             <ul className="mt-4 flex w-full flex-col gap-4">
-              {approvals.map(
-                ({ status, reject_reason, user: { full_name, avatar } }) => (
-                  <li className="border-secondary flex w-full flex-col gap-8 rounded-2xl border border-dashed p-4 text-sm">
-                    <div className="flex w-full items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="border-primary flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
-                          {/* @ts-ignore */}
-                          {avatar ? (
-                            <Image
-                              src={avatar}
-                              alt="عکس شریک"
-                              width={48}
-                              height={48}
-                            />
-                          ) : (
-                            <User size={32} className="text-secondary" />
-                          )}
-                        </div>
-                        <p>{full_name}</p>
-                      </div>
-                      <p className={ACTIVITY_STATUS_TEXT_COLORS[status]}>
-                        {ACTIVITY_STATUS_FA[status]}
-                      </p>
-                    </div>
-                    {status === "rejected" && reject_reason && (
-                      <p className="text-body bg-secondary-lightest w-full rounded-2xl p-2">
-                        <span>علت عدم تایید: </span>
-                        {reject_reason}
-                      </p>
-                    )}
-                  </li>
-                ),
-              )}
+              {approvals.map((approval) => (
+                <ApprovalItemComponent key={approval.id} approval={approval} />
+              ))}
             </ul>
           </div>
         </div>
