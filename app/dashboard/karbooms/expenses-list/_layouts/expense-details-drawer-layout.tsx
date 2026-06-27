@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-import { useSnackbar } from "notistack";
 import { SwipeableDrawer } from "@mui/material";
 import { User } from "iconsax-reactjs";
 import dayjs from "dayjs";
@@ -24,13 +23,11 @@ export default function ExpenseDetailsDrawerLayout({
   onOpen,
   onClose,
 }: ExpenseDetailsDrawerProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
   const {
-    id,
     unit_price,
     wage_cost,
     category,
+    type,
     date,
     status,
     description,
@@ -64,14 +61,26 @@ export default function ExpenseDetailsDrawerLayout({
     >
       <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex w-full min-h-0 flex-1 flex-col items-center overflow-y-auto">
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center overflow-y-auto">
           <h4 className="text-body mt-4 font-semibold">جزئیات هزینه</h4>
           <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
             <DetailItemComponent
               label="مبلغ"
               value={formatNumber(unit_price + wage_cost)}
             />
-            <DetailItemComponent label="نوع هزینه" value={category} />
+            {type === "repair" && (
+              <>
+                <DetailItemComponent
+                  label="قیمت قطعات"
+                  value={formatNumber(unit_price)}
+                />
+                <DetailItemComponent
+                  label="اجرت"
+                  value={formatNumber(wage_cost)}
+                />
+              </>
+            )}
+            <DetailItemComponent label="دسته هزینه" value={category} />
             <DetailItemComponent
               label="تاریخ"
               value={dayjs(date).format("YYYY/MM/DD")}
@@ -127,7 +136,7 @@ export default function ExpenseDetailsDrawerLayout({
                         </div>
                         <div className="flex flex-col gap-1">
                           <p className="text-body">{full_name}</p>
-                          <p className="text-xs text-body-light">{phone}</p>
+                          <p className="text-body-light text-xs">{phone}</p>
                         </div>
                       </div>
                       <p

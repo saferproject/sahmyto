@@ -11,7 +11,7 @@ const DriverFormSchema = z.object({
   started_at: z.custom<Dayjs>(),
   ended_at: z.custom<Dayjs>().nullish(),
   payment_type: z.union([z.literal("daily"), z.literal("monthly")]),
-  fixed_amount: z.number().min(0).max(999_999_999),
+  fixed_amount: z.string(),
   percentage_amount: z.number().min(0).max(100),
   description: z.string().max(200).nullish(),
 });

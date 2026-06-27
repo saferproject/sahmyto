@@ -1,19 +1,25 @@
+"use client";
+
 import Image from "next/image";
 
 import { Controller, useWatch } from "react-hook-form";
+import { useEffect } from "react";
+import { InfoCircle } from "iconsax-reactjs";
+import { DatePicker } from "@mui/x-date-pickers";
+import { Autocomplete, Button, TextField } from "@mui/material";
+
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { IncomeFormType } from "../_schemas/income-form-schema";
-import { Autocomplete, Button, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 import DescriptionInput from "@/app/_components/description-input";
 import useIncomeForm from "../_hooks/use-income-form";
 import { IncomeDrawerFormProps } from "../_types/income-drawer-form-props";
 import { IncomeTypes } from "../_types/income-categories";
-import { InfoCircle, Profile2User } from "iconsax-reactjs";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 import { Member } from "../_types/member";
 import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
+import PriceInputComponent from "@/app/_components/price-input-component";
+import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function IncomeDrawerFormComponent({
   isOpen,
@@ -26,10 +32,13 @@ export default function IncomeDrawerFormComponent({
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useIncomeForm();
 
-  const { description, unit_price } = useWatch({ control });
+  const { description, quantity, unit_price, total_price } = useWatch({
+    control,
+  });
 
   const selectedKarboomId = useKarboomsStore((state) => state.id);
 
@@ -83,6 +92,14 @@ export default function IncomeDrawerFormComponent({
     },
   };
 
+  useEffect(() => {
+    if (quantity && unit_price)
+      setValue(
+        "total_price",
+        formatNumber(quantity * (parseNumber(unit_price) || 0)),
+      );
+  }, [quantity, unit_price]);
+
   return (
     <form
       className="flex w-full flex-col items-center gap-4"
@@ -131,7 +148,7 @@ export default function IncomeDrawerFormComponent({
             label={quantityInputSettings[incomeType].label}
             error={!!errors.unit_price}
             helperText={errors.unit_price?.message ?? ""}
-            type="tel"
+            type="number"
             inputMode="numeric"
             slotProps={{
               input: {
@@ -147,35 +164,20 @@ export default function IncomeDrawerFormComponent({
             }}
             fullWidth
           />
-          <TextField
-            {...register("unit_price", { valueAsNumber: true })}
-            label={unitPriceSettings[incomeType].label}
+          <PriceInputComponent
+            register={register("unit_price")}
+            value={unit_price}
             error={!!errors.unit_price}
-            type="tel"
-            inputMode="numeric"
-            helperText={
-              errors.unit_price ? (
-                (errors.unit_price?.message ?? "")
-              ) : (
-                <span>{formatNumber(unit_price ?? 0)} تومان</span>
-              )
-            }
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <Image
-                    src="/images/toman-secondary.webp"
-                    alt="تومان"
-                    width={24}
-                    height={24}
-                  />
-                ),
-              },
-              htmlInput: {
-                sx: { textAlign: "left" },
-              },
-            }}
-            fullWidth
+            helperText={errors.unit_price?.message ?? ""}
+            label={unitPriceSettings[incomeType].label}
+          />
+          <PriceInputComponent
+            register={register("total_price")}
+            value={total_price}
+            label="کل درآمد"
+            error={!!errors.total_price}
+            helperText={errors.total_price?.message ?? ""}
+            disabled
           />
           <div className="mt-2 flex w-full items-center gap-2">
             <InfoCircle size={16} className="text-secondary" />

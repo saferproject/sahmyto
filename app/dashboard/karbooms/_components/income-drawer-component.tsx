@@ -16,6 +16,7 @@ import IncomeDrawerTypeListComponent from "./income-drawer-type-list-component";
 import IncomeDrawerFormComponent from "./income-drawer-form-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function IncomeDrawerComponent({
   isOpen,
@@ -40,11 +41,15 @@ export default function IncomeDrawerComponent({
     started_at,
     ended_at,
     image,
+    unit_price,
+    total_price,
     ...other
   }: IncomeFormType) => {
     if (incomeType)
       createIncome({
         ...other,
+        unit_price: parseNumber(unit_price) || 0,
+        total_price: parseNumber(total_price) || 0,
         type: incomeType,
         receiver_id: reciever.member.id,
         karboom_id: karboomId,

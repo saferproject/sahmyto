@@ -3,7 +3,6 @@
 import Image from "next/image";
 
 import { SwipeableDrawer } from "@mui/material";
-import { useSnackbar } from "notistack";
 
 import { IncomeDetailsDrawerProps } from "../_types/income-details-drawer-props";
 
@@ -21,10 +20,7 @@ export default function IncomeDetailsDrawerLayout({
   onOpen,
   onClose,
 }: IncomeDetailsDrawerProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
   const {
-    id,
     unit_price,
     quantity,
     type,

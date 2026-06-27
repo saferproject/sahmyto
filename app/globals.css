@@ -38,12 +38,7 @@
 * {
   font-family: var(--font-yekan-bakh) !important;
   word-spacing: -0.1em !important;
-}
-
-/* Hide the focus ring for pointer/touch interactions, but keep it visible for
-   keyboard users (accessibility). */
-*:focus:not(:focus-visible) {
-  outline: none;
+  outline: none !important;
 }
 
 *::-webkit-scrollbar,

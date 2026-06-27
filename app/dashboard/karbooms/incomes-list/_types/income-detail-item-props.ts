@@ -1,5 +1,5 @@
-export type IncomeDetailItemProps = {
+export type DetailItemProps = {
   label: string;
-  value: string;
+  value: string | null | undefined;
   valueColor?: string;
 };

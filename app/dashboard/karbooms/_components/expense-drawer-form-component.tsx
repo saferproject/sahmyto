@@ -19,6 +19,7 @@ import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 
 import { Member } from "../_types/member";
 import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
+import PriceInputComponent from "@/app/_components/price-input-component";
 
 export default function ExpenseDrawerFormComponent({
   isOpen,
@@ -35,7 +36,7 @@ export default function ExpenseDrawerFormComponent({
     formState: { errors },
   } = useExpenseForm();
 
-  const { description } = useWatch({ control });
+  const { description, unit_price, wage_cost } = useWatch({ control });
 
   const selectedKarboomId = useKarboomsStore((state) => state.id);
 
@@ -45,8 +46,8 @@ export default function ExpenseDrawerFormComponent({
   );
 
   const submit = (data: ExpenseFormType) => {
-    reset(EXPENSE_FORM_INITIAL);
     onSubmit(data);
+    reset(EXPENSE_FORM_INITIAL);
   };
 
   return (
@@ -91,44 +92,20 @@ export default function ExpenseDrawerFormComponent({
           />
         )}
       />
-      <TextField
-        {...register("unit_price", { valueAsNumber: true })}
+      <PriceInputComponent
+        register={register("unit_price")}
+        value={unit_price}
         label={categoryType === "daily" ? "مبلغ" : "قیمت قطعات"}
         error={!!errors.unit_price}
         helperText={errors.unit_price?.message ?? ""}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <Image
-                src="/images/toman-secondary.webp"
-                alt="تومان"
-                width={24}
-                height={24}
-              />
-            ),
-          },
-        }}
-        fullWidth
       />
       {categoryType === "repair" && (
-        <TextField
-          {...register("wage_cost", { valueAsNumber: true })}
+        <PriceInputComponent
+          register={register("wage_cost")}
+          value={wage_cost}
           label="اجرت"
           error={!!errors.wage_cost}
           helperText={errors.wage_cost?.message ?? ""}
-          slotProps={{
-            input: {
-              endAdornment: (
-                <Image
-                  src="/images/toman-secondary.webp"
-                  alt="تومان"
-                  width={24}
-                  height={24}
-                />
-              ),
-            },
-          }}
-          fullWidth
         />
       )}
       <Controller

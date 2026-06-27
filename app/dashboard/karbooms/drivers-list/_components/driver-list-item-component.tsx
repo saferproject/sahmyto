@@ -44,13 +44,13 @@ export default function DriverListItemComponent({
       animate={{ scale: 1, opacity: membership_status === "pending" ? 0.6 : 1 }}
       exit={{ scale: 0.7, opacity: 0 }}
       transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
-      className="overflow-visible"
+      className="relative overflow-visible"
     >
       <Badge
         badgeContent={
           <span
             className={
-              "relative left-16 rounded-full p-2 " + 
+              "relative left-16 rounded-full p-2 " +
               getActivityStatusColor(membership_status)
             }
           >
@@ -86,7 +86,9 @@ export default function DriverListItemComponent({
                 حقوق {formatPaymentType(payment_type)}
               </p>
               <div className="flex items-center gap-2">
-                <p className="text-body">{formatNumber(fixed_amount)}</p>
+                <p className="text-body font-semibold">
+                  {formatNumber(fixed_amount)}
+                </p>
                 <Image
                   src="/images/toman-primary.webp"
                   alt="تومان"
@@ -98,7 +100,7 @@ export default function DriverListItemComponent({
             <div className="flex w-full items-center justify-between">
               <p className="text-body text-sm font-semibold">حقوق درصدی</p>
               <div className="flex items-center gap-2">
-                <p>{percentage_amount}</p>
+                <p className="text-body font-semibold">{percentage_amount}</p>
                 <p className="text-primary text-lg font-semibold">%</p>
               </div>
             </div>
@@ -107,7 +109,11 @@ export default function DriverListItemComponent({
             ref={menuButton}
             onClick={handleOpenMenu}
             aria-label="عملیات"
-            className="shrink-0"
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: "20px",
+            }}
           >
             <More className="text-body" />
           </IconButton>

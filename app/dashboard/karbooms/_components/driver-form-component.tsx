@@ -27,6 +27,8 @@ import { DriverFormType } from "../_schemas/driver-form-schema";
 
 import { DriverFormProps } from "../_types/driver-form-props";
 import formatNumber from "@/app/_utilities/format-numbers";
+import PriceInputComponent from "@/app/_components/price-input-component";
+import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function DriverFormComponent({
   onCancel,
@@ -51,10 +53,11 @@ export default function DriverFormComponent({
     onCancel();
   };
 
-  const submit = ({ started_at, ended_at, ...other }: DriverFormType) => {
+  const submit = ({ started_at, ended_at, fixed_amount, ...other }: DriverFormType) => {
     mutate(
       {
         ...other,
+        fixed_amount: parseNumber(fixed_amount),
         karboom_id,
         started_at: started_at.toISOString().split("T")[0],
         ended_at: ended_at?.toISOString().split("T")[0] ?? "",
@@ -117,38 +120,22 @@ export default function DriverFormComponent({
           )}
         />
       </div>
-      <TextField
-        {...register("fixed_amount", { valueAsNumber: true })}
-        type="number"
+      <PriceInputComponent
+        register={register("fixed_amount")}
+        value={fixed_amount}
         label="دستمزد ثابت"
         error={!!errors.fixed_amount}
-        helperText={
-          errors.fixed_amount ? (
-            (errors.fixed_amount?.message ?? "")
-          ) : (
-            <span className="text-body">
-              {formatNumber(fixed_amount ?? 0)} تومان
-            </span>
-          )
-        }
-        slotProps={{
-          input: {
-            endAdornment: (
-              <Image
-                src="/images/toman-secondary.webp"
-                alt="تومان"
-                width={24}
-                height={24}
-              />
-            ),
-          },
-        }}
+        helperText={errors.fixed_amount?.message ?? ""}
       />
       <TextField
         {...register("percentage_amount", { valueAsNumber: true })}
         type="number"
         label="دستمزد درصدی"
         slotProps={{
+          htmlInput: {
+            min: 0,
+            max: 100,
+          },
           input: {
             endAdornment: (
               <span className="text-body text-xl font-bold">%</span>

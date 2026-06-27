@@ -7,4 +7,9 @@ export type CreateExpenseBody = {
   receiver_id: number;
   date: string;
   type: ExpenseCategoryTypes;
-} & Omit<ExpenseFormType, "receiver" | "image" | "date">;
+  unit_price: number;
+  wage_cost: number;
+} & Omit<
+  ExpenseFormType,
+  "receiver" | "image" | "date" | "unit_price" | "wage_cost"
+>;

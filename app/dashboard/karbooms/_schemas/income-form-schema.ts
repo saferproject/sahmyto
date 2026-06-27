@@ -5,9 +5,9 @@ import { Member } from "../_types/member";
 
 const IncomeFormSchema = z.object({
   reciever: z.custom<Member>(),
-  quantity: z.number().nullable(),
-  unit_price: z.number().nullable(),
-  total_price: z.number().nullable(),
+  quantity: z.number(),
+  unit_price: z.string(),
+  total_price: z.string().nullable(),
   started_at: z.custom<Dayjs>(),
   ended_at: z.custom<Dayjs>(),
   // type: z.union([

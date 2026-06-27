@@ -16,6 +16,7 @@ import { ExpenseFormType } from "../_schemas/expense-form-schema";
 
 import useCreateExpenseEndpoint from "../_hooks/create-expense-endpoint";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function ExpenseDrawerComponent({
   isOpen,
@@ -60,11 +61,15 @@ export default function ExpenseDrawerComponent({
     receiver,
     date,
     image,
+    unit_price,
+    wage_cost,
     ...other
   }: ExpenseFormType) => {
     if (selectedCategory)
       createExpense({
         ...other,
+        unit_price: parseNumber(unit_price),
+        wage_cost: parseNumber(wage_cost),
         receiver_id: receiver.member.id,
         category_id: selectedCategory,
         karboom_id: karboomId,
