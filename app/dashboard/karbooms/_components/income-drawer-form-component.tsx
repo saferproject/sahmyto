@@ -111,7 +111,6 @@ export default function IncomeDrawerFormComponent({
       <Controller
         control={control}
         name="reciever"
-        rules={{ required: true }}
         render={({ field }) => (
           <Autocomplete<Member>
             {...field}
@@ -135,6 +134,7 @@ export default function IncomeDrawerFormComponent({
                 error={!!errors.reciever}
                 helperText={errors.reciever?.message ?? ""}
                 fullWidth
+                required
               />
             )}
             fullWidth
@@ -146,8 +146,8 @@ export default function IncomeDrawerFormComponent({
           <TextField
             {...register("quantity", { valueAsNumber: true })}
             label={quantityInputSettings[incomeType].label}
-            error={!!errors.unit_price}
-            helperText={errors.unit_price?.message ?? ""}
+            error={!!errors.quantity}
+            helperText={errors.quantity?.message ?? ""}
             type="number"
             inputMode="numeric"
             slotProps={{
@@ -163,6 +163,7 @@ export default function IncomeDrawerFormComponent({
               },
             }}
             fullWidth
+            required
           />
           <PriceInputComponent
             register={register("unit_price")}
@@ -170,6 +171,7 @@ export default function IncomeDrawerFormComponent({
             error={!!errors.unit_price}
             helperText={errors.unit_price?.message ?? ""}
             label={unitPriceSettings[incomeType].label}
+            required
           />
           <PriceInputComponent
             register={register("total_price")}
@@ -202,6 +204,7 @@ export default function IncomeDrawerFormComponent({
                 error: !!errors.started_at,
                 helperText: errors.started_at?.message ?? "",
                 fullWidth: true,
+                required: true,
               },
             }}
             disableFuture
@@ -223,6 +226,7 @@ export default function IncomeDrawerFormComponent({
                 error: !!errors.ended_at,
                 helperText: errors.ended_at?.message ?? "",
                 fullWidth: true,
+                required: true,
               },
             }}
             disableFuture

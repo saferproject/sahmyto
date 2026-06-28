@@ -12,7 +12,7 @@ export default function App() {
 
   const handleNavigationToLogin = () => {
     router.push("/login");
-  }
+  };
 
   return (
     <div className="flex h-dvh w-full items-center justify-center gap-4">

@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 import {
   Button,
   FormControl,
@@ -26,7 +24,6 @@ import useAddDriver from "../_hooks/use-add-driver-endpoint";
 import { DriverFormType } from "../_schemas/driver-form-schema";
 
 import { DriverFormProps } from "../_types/driver-form-props";
-import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
 
@@ -53,7 +50,12 @@ export default function DriverFormComponent({
     onCancel();
   };
 
-  const submit = ({ started_at, ended_at, fixed_amount, ...other }: DriverFormType) => {
+  const submit = ({
+    started_at,
+    ended_at,
+    fixed_amount,
+    ...other
+  }: DriverFormType) => {
     mutate(
       {
         ...other,
@@ -79,6 +81,7 @@ export default function DriverFormComponent({
       <TextField
         {...register("phone")}
         type="tel"
+        inputMode="tel"
         label="شماره تماس"
         slotProps={{
           input: {
@@ -89,10 +92,16 @@ export default function DriverFormComponent({
             ),
           },
         }}
+        required
       />
       <div className="flex items-center gap-4">
-        <TextField {...register("first_name")} label="نام" fullWidth />
-        <TextField {...register("last_name")} label="نام خانوادگی" fullWidth />
+        <TextField {...register("first_name")} label="نام" fullWidth required />
+        <TextField
+          {...register("last_name")}
+          label="نام خانوادگی"
+          fullWidth
+          required
+        />
       </div>
       <div className="flex w-full gap-4">
         <Controller
@@ -104,6 +113,16 @@ export default function DriverFormComponent({
               onChange={(value) => field.onChange(value)}
               label="تاریخ شروع"
               format="YYYY/MM/DD"
+              views={["year", "month", "day"]}
+              slotProps={{
+                textField: {
+                  error: !!errors.started_at,
+                  helperText: errors.started_at?.message ?? "",
+                  fullWidth: true,
+                  required: true,
+                },
+              }}
+              disableFuture
             />
           )}
         />
@@ -116,6 +135,16 @@ export default function DriverFormComponent({
               onChange={(value) => field.onChange(value)}
               label="تاریخ پایان"
               format="YYYY/MM/DD"
+              views={["year", "month", "day"]}
+              slotProps={{
+                textField: {
+                  error: !!errors.ended_at,
+                  helperText: errors.ended_at?.message ?? "",
+                  fullWidth: true,
+                  required: true,
+                },
+              }}
+              disablePast
             />
           )}
         />
@@ -126,6 +155,7 @@ export default function DriverFormComponent({
         label="دستمزد ثابت"
         error={!!errors.fixed_amount}
         helperText={errors.fixed_amount?.message ?? ""}
+        required
       />
       <TextField
         {...register("percentage_amount", { valueAsNumber: true })}
@@ -142,6 +172,7 @@ export default function DriverFormComponent({
             ),
           },
         }}
+        required
       />
       <DescriptionInput
         register={register("description")}
@@ -153,7 +184,7 @@ export default function DriverFormComponent({
         name="payment_type"
         control={control}
         render={({ field }) => (
-          <FormControl>
+          <FormControl required>
             <FormLabel>
               دستمزد این راننده در چه بازه زمانی پرداخت می شود؟
             </FormLabel>

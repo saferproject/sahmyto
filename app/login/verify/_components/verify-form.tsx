@@ -64,16 +64,3 @@ export default function VerifyForm() {
     </div>
   );
 }
-
-{
-  /* <input
-  {...register("firstDigit")}
-  type="tel"
-  className={
-    "h-12 w-12 rounded border-2 border-dashed text-center text-4xl " +
-    (firstDigitTouched ? "border-primary" : "border-secondary")
-  }
-  maxLength={1}
-  autoFocus
-/>; */
-}

@@ -22,7 +22,14 @@ export default function PartnerFormComponent({
   onCancel,
   onSuccess,
 }: PartnerFormProps) {
-  const { register, control, setValue, handleSubmit, reset } = usePartnerForm();
+  const {
+    register,
+    control,
+    setValue,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = usePartnerForm();
 
   const { share_capital, share_decimal, description } = useWatch({ control });
 
@@ -130,10 +137,16 @@ export default function PartnerFormComponent({
             ),
           },
         }}
+        required
       />
       <div className="flex items-center gap-4">
-        <TextField {...register("first_name")} label="نام" fullWidth />
-        <TextField {...register("last_name")} label="نام خانوادگی" fullWidth />
+        <TextField {...register("first_name")} label="نام" fullWidth required />
+        <TextField
+          {...register("last_name")}
+          label="نام خانوادگی"
+          fullWidth
+          required
+        />
       </div>
       <div className="border-secondary-light flex w-full items-center justify-between rounded-2xl border p-4">
         <span className="text-body">مقدار سهم</span>
@@ -210,6 +223,16 @@ export default function PartnerFormComponent({
               onChange={(value) => field.onChange(value)}
               label="تاریخ شروع"
               format="YYYY/MM/DD"
+              views={["year", "month", "day"]}
+              slotProps={{
+                textField: {
+                  error: !!errors.started_at,
+                  helperText: errors.started_at?.message ?? "",
+                  fullWidth: true,
+                  required: true,
+                },
+              }}
+              disableFuture
             />
           )}
         />
@@ -222,6 +245,16 @@ export default function PartnerFormComponent({
               onChange={(value) => field.onChange(value)}
               label="تاریخ پایان"
               format="YYYY/MM/DD"
+              views={["year", "month", "day"]}
+              slotProps={{
+                textField: {
+                  error: !!errors.ended_at,
+                  helperText: errors.ended_at?.message ?? "",
+                  fullWidth: true,
+                  required: true,
+                },
+              }}
+              disablePast
             />
           )}
         />
@@ -229,8 +262,8 @@ export default function PartnerFormComponent({
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}
-        error={false}
-        helperText=""
+        error={!!errors.description}
+        helperText={errors.description?.message ?? ""}
       />
       <div className="flex items-center gap-4">
         <Button

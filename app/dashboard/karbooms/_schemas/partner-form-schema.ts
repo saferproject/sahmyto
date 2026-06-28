@@ -1,19 +1,53 @@
 import { Dayjs } from "dayjs";
 import { z } from "zod";
 
-const PartnerFormSchema = z.object({
-  phone: z
-    .string()
-    .length(11, "شماره تماس باید 11 رقم باشد")
-    .regex(/09\d{9}/g, "شماره تماس باید با 09 شروع شود"),
-  first_name: z.string(),
-  last_name: z.string(),
-  share_capital: z.number().nonnegative(),
-  share_decimal: z.number().nonnegative(),
-  started_at: z.custom<Dayjs>(),
-  ended_at: z.custom<Dayjs>().nullish(),
-  description: z.string().max(200).nullish(),
-});
+const PartnerFormSchema = z
+  .object({
+    phone: z
+      .string()
+      .length(11, "شماره تماس باید 11 رقم باشد")
+      .regex(/09\d{9}/g, "شماره تماس باید با 09 شروع شود"),
+    first_name: z.string(),
+    last_name: z.string(),
+    share_capital: z.number().nonnegative().readonly(),
+    share_decimal: z.number().nonnegative().readonly(),
+    started_at: z
+      .custom<Dayjs>()
+      .refine(
+        (value) => value.diff() <= 0,
+        "تاریخ شروع نباید بعد از امروز باشد",
+      ),
+    ended_at: z
+      .custom<Dayjs>()
+      .nullish()
+      .refine((value) => {
+        if (value) {
+          if (value.diff() <= 0) return false;
+        } else return true;
+      }, "تاریخ پایان نباید بعد از امروز باشد"),
+    description: z.string().max(200).nullish(),
+  })
+  .superRefine(({ started_at, ended_at }, ctx) => {
+    if (started_at.diff(ended_at) > 0)
+      ctx.addIssue({
+        code: "too_big",
+        origin: "date",
+        input: started_at,
+        path: ["started_at"],
+        maximum: 1,
+        message: "تاریخ شروع نباید بعد از تاریخ پایان باشد",
+      });
+
+    if (ended_at && ended_at.diff(started_at) < 0)
+      ctx.addIssue({
+        code: "too_big",
+        origin: "date",
+        input: ended_at,
+        path: ["ended_at"],
+        maximum: 1,
+        message: "تاریخ پایان نباید قبل از تاریخ شروع باشد",
+      });
+  });
 
 export default PartnerFormSchema;
 

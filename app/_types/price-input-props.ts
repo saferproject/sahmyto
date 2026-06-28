@@ -7,4 +7,5 @@ export type PriceInputProps = {
   error: boolean;
   helperText: string;
   disabled?: boolean;
+  required?: boolean;
 };

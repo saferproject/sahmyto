@@ -86,6 +86,7 @@ export default function ExpenseDrawerFormComponent({
                 error={!!errors.receiver}
                 helperText={errors.receiver?.message ?? ""}
                 fullWidth
+                required
               />
             )}
             fullWidth
@@ -98,6 +99,7 @@ export default function ExpenseDrawerFormComponent({
         label={categoryType === "daily" ? "مبلغ" : "قیمت قطعات"}
         error={!!errors.unit_price}
         helperText={errors.unit_price?.message ?? ""}
+        required
       />
       {categoryType === "repair" && (
         <PriceInputComponent
@@ -106,6 +108,7 @@ export default function ExpenseDrawerFormComponent({
           label="اجرت"
           error={!!errors.wage_cost}
           helperText={errors.wage_cost?.message ?? ""}
+          required
         />
       )}
       <Controller
@@ -123,6 +126,7 @@ export default function ExpenseDrawerFormComponent({
                 error: !!errors.date,
                 helperText: errors.date?.message ?? "",
                 fullWidth: true,
+                required: true,
               },
             }}
             disableFuture

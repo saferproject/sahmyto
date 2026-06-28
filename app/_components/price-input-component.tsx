@@ -17,6 +17,7 @@ export default function PriceInputComponent({
   error = false,
   helperText = "",
   disabled = false,
+  required = false,
 }: PriceInputProps) {
   const amount = parseNumber(value) || 0;
 
@@ -53,6 +54,7 @@ export default function PriceInputComponent({
       }}
       fullWidth
       disabled={disabled}
+      required={required}
     />
   );
 }

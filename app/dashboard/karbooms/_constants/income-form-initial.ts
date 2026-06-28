@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
-import { IncomeFormType } from "../_schemas/income-form-schema";
+import { IncomeFormInput } from "../_schemas/income-form-schema";
 
-export const INCOME_FORM_INITIAL: IncomeFormType = {
+export const INCOME_FORM_INITIAL: IncomeFormInput = {
   reciever: {
     member: {
       id: 0,
@@ -21,7 +21,7 @@ export const INCOME_FORM_INITIAL: IncomeFormType = {
       status: "active",
     },
   },
-  quantity: 0,
+  quantity: null,
   unit_price: '',
   total_price: '',
   started_at: dayjs(),
