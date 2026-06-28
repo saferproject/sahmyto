@@ -11,20 +11,8 @@ const PartnerFormSchema = z
     last_name: z.string(),
     share_capital: z.number().nonnegative().readonly(),
     share_decimal: z.number().nonnegative().readonly(),
-    started_at: z
-      .custom<Dayjs>()
-      .refine(
-        (value) => value.diff() <= 0,
-        "تاریخ شروع نباید بعد از امروز باشد",
-      ),
-    ended_at: z
-      .custom<Dayjs>()
-      .nullish()
-      .refine((value) => {
-        if (value) {
-          if (value.diff() <= 0) return false;
-        } else return true;
-      }, "تاریخ پایان نباید بعد از امروز باشد"),
+    started_at: z.custom<Dayjs>(),
+    ended_at: z.custom<Dayjs>().nullish(),
     description: z.string().max(200).nullish(),
   })
   .superRefine(({ started_at, ended_at }, ctx) => {
