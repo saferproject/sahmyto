@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+
+import { CloseCircle } from "iconsax-reactjs";
 
 import BannerBackgroundImage from "../_assets/_images/home-banner-background.png";
 import BannerCoinXL from "../_assets/_images/home-banner-coin-xl.png";
@@ -42,6 +46,7 @@ export default function DashboardBannerComponent() {
       <h3 className="text-body absolute top-2/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.875rem)] text-nowrap">
         جاده رو برو، حساب باما!ً
       </h3>
+      <CloseCircle size={20} className="absolute top-0 -right-1" />
     </div>
   );
 }
