@@ -96,27 +96,40 @@ export default function DashboardHeaderDrawerComponent({
           />
           <p className="text-body text-xs font-semibold">یه سهم من یه سهم تو</p>
         </div>
-        <button
-          type="button"
-          aria-label="پروفایل"
-          className="mt-4 flex w-full flex-col items-center gap-2"
-          onClick={handleNavigationToProfile}
-        >
-          <div className="border-secondary relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border object-cover">
-            {avatar ? (
-              <Image
-                src={avatar}
-                alt="عکس پروفایل"
-                fill
-                className="object-cover"
-                sizes="96px"
-              />
-            ) : (
-              <User size={48} className="text-secondary" />
-            )}
-          </div>
-          <h3 className="text-body font-semibold">{full_name}</h3>
-        </button>
+        {isOpen && (
+          <motion.button
+            initial={{ scale: 0.7, opacity: 0 }}
+            whileTap={{ scale: 0.9 }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+            }}
+            transition={{
+              delay: 0.2,
+              duration: 0.2,
+              ease: "easeOut",
+            }}
+            type="button"
+            aria-label="پروفایل"
+            className="mt-4 flex w-full flex-col items-center gap-2"
+            onClick={handleNavigationToProfile}
+          >
+            <div className="border-secondary relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border object-cover">
+              {avatar ? (
+                <Image
+                  src={avatar}
+                  alt="عکس پروفایل"
+                  fill
+                  className="object-cover"
+                  sizes="96px"
+                />
+              ) : (
+                <User size={48} className="text-secondary" />
+              )}
+            </div>
+            <h3 className="text-body font-semibold">{full_name}</h3>
+          </motion.button>
+        )}
         <nav className="mt-6 min-h-0 flex-1 overflow-y-auto pl-2">
           <ul className="flex flex-col">
             <AnimatePresence>
@@ -128,9 +141,8 @@ export default function DashboardHeaderDrawerComponent({
                     animate={{
                       x: 0,
                     }}
-                    exit={{ x: 320 }}
                     transition={{
-                      delay: 0.1 * index,
+                      delay: 0.2 + 0.1 * index,
                       duration: 0.2,
                       ease: "easeOut",
                     }}
@@ -145,7 +157,7 @@ export default function DashboardHeaderDrawerComponent({
                     }}
                   >
                     <div className="flex items-center gap-4">
-                      {icon} <h4 className="font-semibold">{title}</h4>
+                      {icon} <h4 className="font-semibold text-sm">{title}</h4>
                     </div>
                     <ArrowLeft2 size={24} />
                   </motion.li>

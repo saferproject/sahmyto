@@ -26,6 +26,10 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.100.12"],
   images: {
     remotePatterns: imageRemotePatterns(),
+    // Dev backend runs on a LAN/private IP; Next 16 blocks optimizing remote
+    // images that resolve to a private IP (SSRF guard). Allow it in dev only —
+    // the production image host is public, so the guard stays on there.
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === "development",
   },
   async redirects() {
     return [

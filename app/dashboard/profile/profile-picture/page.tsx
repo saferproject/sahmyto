@@ -54,6 +54,10 @@ export default function ProfilePicturePage() {
     router.push("/dashboard/profile");
   };
 
+  const handleSelectImage = () => {
+    if (fileInput.current) fileInput.current.click();
+  };
+
   const hasRequestedFile = useRef(false);
 
   useEffect(() => {
@@ -74,7 +78,7 @@ export default function ProfilePicturePage() {
         className="hidden"
         onChange={handleImageInput}
       />
-      <div className="relative -mx-8 -mt-2 aspect-square shrink-0 overflow-hidden rounded-b-4xl bg-black">
+      <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl bg-black">
         <Cropper
           image={image}
           crop={crop}
@@ -87,7 +91,7 @@ export default function ProfilePicturePage() {
           showGrid={false}
           style={{
             cropAreaStyle: { color: "#ffffff70" },
-            containerStyle: { backgroundColor: "#000" },
+            containerStyle: { backgroundColor: "#000", borderRadius: "16px" },
           }}
         />
       </div>
@@ -97,7 +101,7 @@ export default function ProfilePicturePage() {
             <h3 className="text-body font-semibold">قوانین آپلود تصویر</h3>
             <UserSquare size="32" className="text-body" />
           </div>
-          <p className="text-body-light text-sm mt-4">
+          <p className="text-body-light mt-4 text-sm">
             سایز عکس میبایست کمتر از 512 کیلوبایت باشد <br /> فرمت تصاویر
             میبایست با فرمت png و یا jpg باشد
           </p>
@@ -110,6 +114,9 @@ export default function ProfilePicturePage() {
             fullWidth
           >
             ثبت تصویر
+          </Button>
+          <Button variant="outlined" onClick={handleSelectImage} fullWidth>
+            انتخاب عکس
           </Button>
           <Button onClick={handleReturn} fullWidth>
             انصراف
