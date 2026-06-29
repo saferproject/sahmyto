@@ -175,7 +175,6 @@ export default function PartnerFormComponent({
             placeholder="__"
             min={0}
             max={6}
-            readOnly
           />
           <span className="text-body text-5xl font-extralight">/</span>
           <input
@@ -186,7 +185,6 @@ export default function PartnerFormComponent({
             placeholder="_"
             min={0}
             max={100}
-            readOnly
           />
         </div>
         <div className="flex flex-col gap-2">

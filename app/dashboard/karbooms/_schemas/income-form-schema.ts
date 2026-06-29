@@ -19,7 +19,7 @@ const IncomeFormSchema = z
     image: z.file().mime(["image/jpeg", "image/png"]).nullish(),
   })
   .superRefine(({ started_at, ended_at }, ctx) => {
-    if (started_at.diff(ended_at) > 0)
+    if (ended_at && started_at.diff(ended_at) > 0)
       ctx.addIssue({
         code: "too_big",
         origin: "date",

@@ -17,7 +17,7 @@ export default function ApprovalItemComponent({
   },
 }: ApprovalItemProps) {
   return (
-    <li className="border-secondary flex w-full flex-col gap-8 rounded-2xl border border-dashed p-4 text-sm">
+    <li className="border-secondary flex w-full flex-col gap-4 rounded-2xl border border-dashed p-4 text-sm">
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="border-primary flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
@@ -27,7 +27,7 @@ export default function ApprovalItemComponent({
               <User size={32} className="text-secondary" />
             )}
           </div>
-          <p>{full_name}</p>
+          <p className="text-body font-semibold">{full_name}</p>
         </div>
         <p
           className={`rounded-full px-4 py-2 font-semibold text-white ${ACTIVITY_STATUS_BG_COLORS[status]}`}
@@ -36,9 +36,9 @@ export default function ApprovalItemComponent({
         </p>
       </div>
       {status === "rejected" && reject_reason && (
-        <p className="text-body bg-secondary-lightest w-full rounded-2xl p-2">
+        <p className="text-body bg-secondary-lightest w-full rounded-full p-4">
           <span>علت عدم تایید: </span>
-          {reject_reason}
+          <span className="font-semibold">{reject_reason}</span>
         </p>
       )}
     </li>
