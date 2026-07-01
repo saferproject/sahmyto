@@ -9,12 +9,19 @@ import DescriptionInput from "@/app/_components/description-input";
 import { Controller, useWatch } from "react-hook-form";
 import { ThirdPartyInsuranceFormType } from "../_schemas/third-party-insurance-form-schema";
 import useAddThirdPartyInsurance from "../_hooks/use-add-third-party-insurance-endpoint";
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import { ThirdPartyInsuranceFormProps } from "../_types/third-party-insurance-form-props";
 
-export default function ThirdPartyInsuranceFormComponent() {
-  const { register, control, handleSubmit, formState: {errors} } = useThirdPartyInsuranceForm();
-
-  const karboomId = useKarboomsStore((state) => state.id);
+export default function ThirdPartyInsuranceFormComponent({
+  isOpen,
+  karboomId,
+  onSubmit,
+}: ThirdPartyInsuranceFormProps) {
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useThirdPartyInsuranceForm();
 
   const { description } = useWatch({ control });
 
@@ -44,10 +51,7 @@ export default function ThirdPartyInsuranceFormComponent() {
         error={!!errors.insurance_number}
         helperText={errors.insurance_number?.message ?? ""}
       />
-      {
-        //@ts-ignore
-        <InsuranceCompanyInput control={control} />
-      }
+      <InsuranceCompanyInput control={control} />
       <TextField
         {...register("insurance_code")}
         label="کد یکتای بیمه"
@@ -96,7 +100,7 @@ export default function ThirdPartyInsuranceFormComponent() {
         register={register("description")}
         currentlength={description?.length ?? 0}
         error={!!errors.description}
-        helperText={errors.description?.message ?? ''}
+        helperText={errors.description?.message ?? ""}
       />
       <Button type="submit" variant="contained">
         ثبت

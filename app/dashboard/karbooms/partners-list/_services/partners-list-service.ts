@@ -7,6 +7,6 @@ export const PartnersListService = {
   getPartners: ({ karboom_id, ...other }: GetPartnersQueryParams) =>
     fetchWithAuth<Partner[]>(
       `karboom/partners/${karboom_id}${createQueryParams<Omit<GetPartnersQueryParams, "karboom_id">>(other)}`,
-      { method: "GET" },
+      { method: "GET", headers: { "Content-Type": "application/json" } },
     ),
 };

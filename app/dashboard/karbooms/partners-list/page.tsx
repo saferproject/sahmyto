@@ -50,7 +50,7 @@ export default function PartnersListPage() {
       <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
         <div className="flex w-full items-center gap-2">
           <Profile2User className="text-heading" size={24} variant="Broken" />
-          <h2 className="text-body text-xl font-bold">افزودن شریک</h2>
+          <h2 className="text-body text-xl font-bold">لیست شرکا</h2>
         </div>
         <PartnersListHeaderComponent partnersCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />

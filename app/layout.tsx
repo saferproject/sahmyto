@@ -9,12 +9,9 @@ export const metadata: Metadata = {
   description:
     "Web application for income and expance managment for transportations with all types of vehicles",
   authors: { name: "Amir Allahdadian", url: "https://github.com/amir141592" },
+  keywords: ['nextjs', '']
 };
 
-// viewport-fit=cover exposes env(safe-area-inset-*) so bottom UI (the dashboard
-// footer nav) can clear the mobile browser/system navigation bar.
-// interactiveWidget=resizes-content shrinks the layout viewport when the
-// on-screen keyboard opens, so form fields/footers aren't hidden behind it.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,

@@ -61,8 +61,6 @@ export default function ProfilePicturePage() {
   const hasRequestedFile = useRef(false);
 
   useEffect(() => {
-    // Guard against React Strict Mode double-invoking the effect in dev, which
-    // would otherwise open the file picker twice.
     if (hasRequestedFile.current) return;
     hasRequestedFile.current = true;
 
@@ -102,7 +100,7 @@ export default function ProfilePicturePage() {
             <UserSquare size="32" className="text-body" />
           </div>
           <p className="text-body-light mt-4 text-sm">
-            سایز عکس میبایست کمتر از 512 کیلوبایت باشد <br /> فرمت تصاویر
+            سایز عکس میبایست کمتر از 512 کیلوبایت باشد فرمت تصاویر
             میبایست با فرمت png و یا jpg باشد
           </p>
         </div>
