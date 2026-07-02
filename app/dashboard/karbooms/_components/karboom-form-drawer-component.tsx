@@ -12,8 +12,6 @@ export default function KarboomFormDrawerComponent({
   onClose,
   onSuccess,
 }: KarboomFormDrawerProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
   return (
     <SwipeableDrawer
       anchor="bottom"

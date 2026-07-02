@@ -17,7 +17,6 @@ const DriverFormSchema = z
     description: z.string().max(200).nullish(),
   })
   .superRefine(({ started_at, ended_at }, ctx) => {
-    debugger
     if (ended_at && started_at.diff(ended_at) > 0)
       ctx.addIssue({
         code: "too_big",

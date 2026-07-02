@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "Web application for income and expance managment for transportations with all types of vehicles",
   authors: { name: "Amir Allahdadian", url: "https://github.com/amir141592" },
-  keywords: ['nextjs', '']
+  keywords: ["nextjs", "abacus"],
 };
 
 export const viewport: Viewport = {

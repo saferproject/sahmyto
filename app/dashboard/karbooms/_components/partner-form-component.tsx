@@ -249,7 +249,6 @@ export default function PartnerFormComponent({
                   error: !!errors.ended_at,
                   helperText: errors.ended_at?.message ?? "",
                   fullWidth: true,
-                  required: true,
                 },
               }}
               disablePast

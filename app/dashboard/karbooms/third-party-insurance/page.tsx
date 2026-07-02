@@ -5,6 +5,7 @@ import ThirdPartyInsuranceBannerComponent from "./_components/third-party-insura
 import { useState } from "react";
 import ThirdPartyInsuranceListHeaderLayout from "./_layouts/third-party-insurance-list-header-layout";
 import ThirdPartyInsuranceListLayout from "./_layouts/third-party-insurance-list-layout";
+import ThirdPartyInsuranceFormDrawerComponent from "./_components/third-party-insurance-form-drawer-component";
 
 // TODO compare this page with incomes list page
 export default function ThirdPartyInsurancePage() {

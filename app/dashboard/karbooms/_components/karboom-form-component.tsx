@@ -14,6 +14,7 @@ import { KarboomFormType } from "../_schemas/karboom-form-schema";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import { KarboomFormProps } from "../_types/karboom-form-props";
+import { KARBOOM_FORM_INITIAL } from "../_constants/karboom-form-initial";
 
 export default function KarboomFormComponent({
   onCancel,
@@ -55,7 +56,7 @@ export default function KarboomFormComponent({
   };
 
   const handleCancel = () => {
-    reset();
+    reset(KARBOOM_FORM_INITIAL);
     onCancel();
   };
 
