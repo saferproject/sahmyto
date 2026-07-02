@@ -7,11 +7,7 @@ import Karboom from "@/app/_interfaces/karboom";
 export default function useCreateKarboom() {
   const queryClient = useQueryClient();
 
-  return useMutation<
-    BaseResponse<Karboom>,
-    Record<keyof KarboomFormType, Array<string>>,
-    KarboomFormType
-  >({
+  return useMutation<BaseResponse<Karboom>, BaseResponse, KarboomFormType>({
     mutationKey: ["create-karboom"],
     mutationFn: karboomService.createKarboom,
     onSuccess: () => {

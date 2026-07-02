@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 import { Controller, useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { InfoCircle } from "iconsax-reactjs";

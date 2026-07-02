@@ -1,0 +1,1 @@
+export type ThirdPartyInsuranceStatus = "active" | "expired";

@@ -45,9 +45,8 @@ export default function KarboomFormComponent({
       },
       onError: (error) => {
         Object.entries(error).forEach(([field, errors]) =>
-          // @ts-expect-error server returns a field-keyed error map
-          setError(field, {
-            message: errors[0],
+          setError(field as keyof KarboomFormType, {
+            message: errors[field],
             type: "validate",
           }),
         );
@@ -71,6 +70,7 @@ export default function KarboomFormComponent({
         error={!!errors.name}
         helperText={errors.name?.message ?? ""}
         fullWidth
+        required
       />
       <PlateInput<KarboomFormType>
         register={register}

@@ -114,7 +114,7 @@ export default function DashboardHeaderDrawerComponent({
             className="mt-4 flex w-full flex-col items-center gap-2"
             onClick={handleNavigationToProfile}
           >
-            <div className="border-secondary relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border object-cover">
+            <div className="border-primary relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 object-cover">
               {avatar ? (
                 <Image
                   src={avatar}
