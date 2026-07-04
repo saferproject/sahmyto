@@ -21,6 +21,7 @@ function imageRemotePatterns() {
 }
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   devIndicators: { position: "top-right" },
   reactCompiler: true,
   allowedDevOrigins: ["192.168.100.12"],

@@ -1,0 +1,71 @@
+services:
+  proxy:
+    image: nginx:1.27-alpine
+    container_name: sahmito-proxy
+    depends_on:
+      - app-blue
+    ports:
+      - "${APP_PORT:-3000}:80"
+    volumes:
+      - ./deploy/nginx:/etc/nginx/templates:ro
+    networks:
+      - sahmito-network
+    restart: unless-stopped
+
+  app-blue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sahmito-app:${APP_IMAGE_TAG:-latest}
+    container_name: sahmito-app-blue
+    env_file:
+      - .env.production
+    expose:
+      - "3000"
+    networks:
+      - sahmito-network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  app-green:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sahmito-app:${APP_IMAGE_TAG:-latest}
+    container_name: sahmito-app-green
+    env_file:
+      - .env.production
+    expose:
+      - "3000"
+    networks:
+      - sahmito-network
+    restart: unless-stopped
+    profiles:
+      - standby
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((response) => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  sahmito-network:
+    driver: bridge
