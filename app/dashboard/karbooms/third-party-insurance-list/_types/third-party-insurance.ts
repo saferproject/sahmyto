@@ -1,5 +1,5 @@
-import { InsuranceCompany } from "./insurance-company";
-import { ThirdPartyInsuranceStatus } from "./third-party-insurance-status";
+import { InsuranceCompany } from "../../_types/insurance-company";
+import { InsuranceStatus } from "../../_types/insurance-status";
 
 export type ThirdPartyInsurance = {
   id: string;
@@ -10,6 +10,6 @@ export type ThirdPartyInsurance = {
   insurance_code: string;
   started_at: string;
   ended_at: string;
-  status: ThirdPartyInsuranceStatus;
+  status: InsuranceStatus;
   description: null | string;
 };

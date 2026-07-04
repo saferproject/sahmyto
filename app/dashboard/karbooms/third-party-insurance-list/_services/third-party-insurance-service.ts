@@ -4,13 +4,16 @@ import { ThirdPartyInsurance } from "../_types/third-party-insurance";
 
 export const thirdPartyInsuranceService = {
   getThirdPartyInsurances: (id: number) =>
-    fetchWithAuth<ThirdPartyInsurance[]>(`${id}`, {
+    fetchWithAuth<ThirdPartyInsurance[]>(`insurance/third-party/${id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }),
-  addThirdPartyInsurance: (body: ThirdPartyInsuranceBodyType) =>
-    fetchWithAuth<undefined>("insurance/third-party-add", {
-      body: JSON.stringify(body),
+  addThirdPartyInsurance: ({
+    karboom_id,
+    ...other
+  }: ThirdPartyInsuranceBodyType) =>
+    fetchWithAuth<undefined>(`insurance/third-party-add/${karboom_id}`, {
+      body: JSON.stringify(other),
       method: "POST",
       headers: { "Content-Type": "application/json" },
     }),

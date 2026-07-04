@@ -55,7 +55,7 @@ export default function KarboomActionsDrawerComponent({
                     handleNavigation(path);
                 }}
               >
-                <p className="text-body text-lg">{label}</p>
+                <p className="text-body">{label}</p>
                 {icon}
               </li>
             ))}

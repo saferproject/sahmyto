@@ -1,43 +1,14 @@
-import { useEffect } from "react";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
-import { ThirdPartyInsuranceFormType } from "../_schemas/third-party-insurance-form-schema";
 import { SwipeableDrawer } from "@mui/material";
 import { DocumentText } from "iconsax-reactjs";
 import ThirdPartyInsuranceFormComponent from "./third-party-insurance-form-component";
 import { ThirdPartyInsuranceDrawerProps } from "../_types/third-party-insurance-drawer-props";
-import useAddThirdPartyInsuranceEndpoint from "../_hooks/use-add-third-party-insurance-endpoint";
 
 export default function ThirdPartyInsuranceFormDrawerComponent({
   isOpen,
   onOpen,
   onClose,
 }: ThirdPartyInsuranceDrawerProps) {
-  const karboomId = useKarboomsStore((state) => state.id);
-
-  const {
-    mutate: createIncome,
-    isPending: creatingIncome,
-    isSuccess: createdIncome,
-    isError: creatingIncomeFailed,
-  } = useAddThirdPartyInsuranceEndpoint();
-
-  const handleSubmit = ({
-    started_at,
-    ended_at,
-    ...other
-  }: ThirdPartyInsuranceFormType) => {
-    createIncome({
-      ...other,
-      karboom_id: karboomId,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at.toISOString().split("T")[0],
-    });
-  };
-
-  useEffect(() => {
-    if (createdIncome) onClose();
-  }, [createdIncome]);
-
   return (
     <SwipeableDrawer
       anchor="bottom"
@@ -66,12 +37,13 @@ export default function ThirdPartyInsuranceFormDrawerComponent({
                 size={24}
                 variant="Broken"
               />
-              <h2 className="text-body text-xl font-bold">افزودن شریک</h2>
+              <h2 className="text-body text-xl font-bold">
+                افزودن بیمه شخص ثالث
+              </h2>
             </div>
             <ThirdPartyInsuranceFormComponent
               isOpen={isOpen}
-              karboomId={karboomId}
-              onSubmit={handleSubmit}
+              onSuccess={onClose}
             />
           </div>
         </div>

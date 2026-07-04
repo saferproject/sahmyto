@@ -4,18 +4,12 @@ import { useForm } from "react-hook-form";
 import ThirdPartyInsuranceFormSchema, {
   ThirdPartyInsuranceFormType,
 } from "../_schemas/third-party-insurance-form-schema";
-import dayjs from "dayjs";
+
+import { THIRD_PARTY_INSURANCE_FORM_INITIAL } from "../_constants/third-party-insurance-form-initial";
 
 export default function useThirdPartyInsuranceForm() {
   return useForm<ThirdPartyInsuranceFormType>({
     resolver: zodResolver(ThirdPartyInsuranceFormSchema),
-    defaultValues: {
-      insurance_number: "",
-      insurance_company_id: 0,
-      insurance_code: "",
-      started_at: dayjs(),
-      ended_at: dayjs(),
-      description: "",
-    },
+    defaultValues: THIRD_PARTY_INSURANCE_FORM_INITIAL,
   });
 }

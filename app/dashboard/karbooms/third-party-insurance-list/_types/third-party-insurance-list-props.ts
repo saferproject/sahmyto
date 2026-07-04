@@ -1,3 +1,3 @@
 export type ThirdPartyInsuranceListProps = {
-  onOpenIncomeForm: () => void;
+  onOpenThirdPartyInsuranceForm: () => void;
 };

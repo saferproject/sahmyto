@@ -6,8 +6,9 @@ import useGetInsuranceCompaniesEndpoint from "../_hooks/use-get-insurance-compan
 
 export default function InsuranceCompanyInput({
   control,
+  enableGettingData,
 }: InsuranceCompanyInputProps) {
-  const { data } = useGetInsuranceCompaniesEndpoint();
+  const { data } = useGetInsuranceCompaniesEndpoint(enableGettingData);
 
   return (
     <Controller

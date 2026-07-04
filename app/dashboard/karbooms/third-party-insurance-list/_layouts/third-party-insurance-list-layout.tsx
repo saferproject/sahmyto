@@ -8,12 +8,12 @@ import ThirdPartyInsuranceListItemComponent from "../_components/third-party-ins
 import ThirdPartyInsuranceListFooterLayout from "./third-party-insurance-list-footer-layout";
 
 export default function ThirdPartyInsuranceListLayout({
-  onOpenIncomeForm,
+  onOpenThirdPartyInsuranceForm,
 }: ThirdPartyInsuranceListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
   const {
-    data: thirdPrtyInsurances,
+    data: thirdPartyInsurances,
     isLoading,
     isError,
   } = useGetThirdPartyInsurancesEndpoint(karboomId);
@@ -24,11 +24,11 @@ export default function ThirdPartyInsuranceListLayout({
         <QueryState
           isLoading={isLoading}
           isError={isError}
-          isEmpty={!thirdPrtyInsurances?.data.length}
+          isEmpty={!thirdPartyInsurances?.data.length}
         >
           <ul className="flex w-full flex-col gap-4">
             <AnimatePresence>
-              {thirdPrtyInsurances?.data.map((thirdPartyInsurance, index) => (
+              {thirdPartyInsurances?.data.map((thirdPartyInsurance, index) => (
                 <ThirdPartyInsuranceListItemComponent
                   key={thirdPartyInsurance.id}
                   thirdPartyInsurance={thirdPartyInsurance}
@@ -39,7 +39,9 @@ export default function ThirdPartyInsuranceListLayout({
           </ul>
         </QueryState>
       </div>
-      <ThirdPartyInsuranceListFooterLayout onAddIncome={onOpenIncomeForm} />
+      <ThirdPartyInsuranceListFooterLayout
+        onAddThirdPartyInsurance={onOpenThirdPartyInsuranceForm}
+      />
     </div>
   );
 }

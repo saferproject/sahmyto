@@ -1,4 +1,4 @@
-import { Book1, Bus, DocumentForward, Sms, Truck, VideoPlay, Wallet } from "iconsax-reactjs";
+import { Book1, Sms, Truck, VideoPlay, Wallet } from "iconsax-reactjs";
 
 import DrawerMenuItem from "../_interfaces/drawer-menu-item";
 

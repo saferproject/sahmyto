@@ -1,13 +1,14 @@
 "use client";
 
-import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
-import ThirdPartyInsuranceBannerComponent from "./_components/third-party-insurance-banner-component";
 import { useState } from "react";
-import ThirdPartyInsuranceListHeaderLayout from "./_layouts/third-party-insurance-list-header-layout";
-import ThirdPartyInsuranceListLayout from "./_layouts/third-party-insurance-list-layout";
+
+import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
+import InsuranceBannerComponent from "../_components/insurance-banner-component";
 import ThirdPartyInsuranceFormDrawerComponent from "./_components/third-party-insurance-form-drawer-component";
 
-// TODO compare this page with incomes list page
+import ThirdPartyInsuranceListHeaderLayout from "./_layouts/third-party-insurance-list-header-layout";
+import ThirdPartyInsuranceListLayout from "./_layouts/third-party-insurance-list-layout";
+
 export default function ThirdPartyInsurancePage() {
   const [
     isThirdPartyInsuranceFormDrawerOpen,
@@ -25,10 +26,10 @@ export default function ThirdPartyInsurancePage() {
   return (
     <div className="mt-2 flex h-full w-full flex-col gap-4">
       <ThirdPartyInsuranceListHeaderLayout />
-      <ThirdPartyInsuranceBannerComponent />
+      <InsuranceBannerComponent />
       <SelectedKarboomInfoComponent />
       <ThirdPartyInsuranceListLayout
-        onOpenIncomeForm={handleOpenThirdPartyInsuranceForm}
+        onOpenThirdPartyInsuranceForm={handleOpenThirdPartyInsuranceForm}
       />
       <ThirdPartyInsuranceFormDrawerComponent
         isOpen={isThirdPartyInsuranceFormDrawerOpen}
