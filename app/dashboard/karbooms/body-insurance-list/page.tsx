@@ -6,6 +6,7 @@ import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-c
 import BodyInsuranceListHeaderLayout from "./_layouts/body-insurance-list-header-layout";
 import InsuranceBannerComponent from "../_components/insurance-banner-component";
 import BodyInsuranceListLayout from "./_layouts/body-insurance-list-layout";
+import BodyInsuranceDrawerComponent from "./_components/body-insurance-drawer-component";
 
 export default function BodyInsurancePage() {
   const [isBodyInsuranceFormDrawerOpen, setBodyInsuranceFormDrawerOpen] =
@@ -27,11 +28,15 @@ export default function BodyInsurancePage() {
       <BodyInsuranceListLayout
         onOpenBodyInsuranceForm={handleOpenBodyInsuranceForm}
       />
-      {/* <BodyInsuranceFormDrawerComponent
+      <BodyInsuranceDrawerComponent
         isOpen={isBodyInsuranceFormDrawerOpen}
         onOpen={handleOpenBodyInsuranceForm}
         onClose={handleCloseBodyInsuranceForm}
-      /> */}
+      />
     </div>
   );
 }
+
+/*
+
+*/

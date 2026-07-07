@@ -27,8 +27,7 @@ export default function ExpenseListItemComponent({
     id,
     unit_price,
     wage_cost,
-    started_at,
-    ended_at,
+    date,
     status,
     category,
     payer: { full_name: receiverName },
@@ -80,13 +79,13 @@ export default function ExpenseListItemComponent({
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">تاریخ هزینه</p>
           <p className="text-body text-sm font-semibold">
-            {dayjs(started_at).format("YYYY/MM/DD")}
+            {dayjs(date).format("YYYY/MM/DD")}
           </p>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">تاریخ تسویه</p>
           <p className="text-body text-sm font-semibold">
-            {dayjs(ended_at).format("YYYY/MM/DD")}
+            {dayjs(date).format("YYYY/MM/DD")}
           </p>
         </div>
         <div className="flex flex-col gap-1">
