@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" className={YekanBakhFont.variable} dir="rtl">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased caret-body">{children}</body>
     </html>
   );
 }

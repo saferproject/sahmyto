@@ -27,9 +27,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         <ConfirmationDialogStoreProvider>
           <UserInfoStoreProvider>
             <SnackbarProvider
-              maxSnack={2}
+              maxSnack={3}
               autoHideDuration={4000}
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
               preventDuplicate
             >
               <ReactQueryProvider>

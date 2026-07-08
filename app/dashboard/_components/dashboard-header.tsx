@@ -35,15 +35,11 @@ export default function DashboardHeader() {
     isError: requestsError,
   } = useGetKarboomRequests();
 
-  const {
-    mutate: acceptRequest,
-    isPending: requestIsAccepting,
-  } = useAcceptKarboomRequest();
+  const { mutate: acceptRequest, isPending: requestIsAccepting } =
+    useAcceptKarboomRequest();
 
-  const {
-    mutate: rejectRequest,
-    isPending: requestIsRejecting,
-  } = useRejectKarboomRequest();
+  const { mutate: rejectRequest, isPending: requestIsRejecting } =
+    useRejectKarboomRequest();
 
   const handleOpenDrawer = () => {
     setDrawerOpen(true);

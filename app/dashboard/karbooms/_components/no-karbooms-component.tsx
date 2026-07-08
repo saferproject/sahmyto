@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import NoKarboomIcon from "../_assets/_Vectors/no-karboom-icon.svg";
+import NoKarboomIcon from "../_assets/_vectors/no-karboom-icon.svg";
 
 export default function NoKarboomsComponent() {
   return (

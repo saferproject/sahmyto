@@ -15,13 +15,6 @@ export default function IncomeTypeComponent({
       className="border-secondary relative flex flex-col items-center justify-center gap-4 rounded-2xl border border-dashed p-2"
       onClick={() => onSelect(type)}
     >
-      {/* <Image
-        src="/images/income-type-bg.svg"
-        alt=""
-        className="absolute h-auto w-full"
-        width={160}
-        height={160}
-      /> */}
       <Image
         src="/images/income-type-tag.svg"
         alt=""

@@ -77,7 +77,6 @@ react-hook-form + `zodResolver`. Convention: schema in `_schemas/*-form-schema.t
 - Prettier uses `prettier-plugin-tailwindcss`; the workspace sets `printWidth: 140` (`.vscode/settings.json`).
 
 ### Gotchas
-- The `app/dashboard/karbooms/_assets/_Vectors/` folder has a capital `V` (other asset folders use lowercase `_vectors`/`_images`) — match it exactly when importing.
 - The repo has **pre-existing TypeScript and ESLint errors** in files around the expense/income drawers and detail layouts (e.g. `Expense` lacks `started_at`/`ended_at`, several `@ts-ignore`s, refs accessed during render). `next build` will fail on them until they're addressed — they predate the current refactors, so don't assume your change caused a red build; verify with `bunx tsc --noEmit`.
 
 ## Design Review (ongoing)

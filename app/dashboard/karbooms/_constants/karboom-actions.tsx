@@ -3,25 +3,20 @@ import {
   Health,
   MoneyAdd,
   MoneyRemove,
-  Moneys,
   Profile2User,
   Setting,
   User,
   Wallet1,
 } from "iconsax-reactjs";
+
 import { KarboomAction } from "../_types/karboom-action";
 
 export const KARBOOM_ACTIONS: KarboomAction[] = [
   {
     label: "مدیریت ماه مالی",
     icon: <Wallet1 size="24" />,
-    path: "/dashboard/karbooms/financial-managment",
+    path: "/dashboard/karbooms/financial-management",
   },
-  // {
-  //   label: "تراز ماه مالی",
-  //   icon: <Moneys size="24" />,
-  //   path: "/dashboard/karbooms/financial-balance",
-  // },
   {
     label: "مدیریت شرکا",
     icon: <Profile2User size="24" />,
