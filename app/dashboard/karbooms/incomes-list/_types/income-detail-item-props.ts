@@ -1,5 +1,5 @@
 export type DetailItemProps = {
   label: string;
-  value: string | null | undefined;
+  value: React.ReactNode | string | null | undefined;
   valueColor?: string;
 };

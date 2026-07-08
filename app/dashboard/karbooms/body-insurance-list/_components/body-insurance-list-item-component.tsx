@@ -12,6 +12,7 @@ export default function BodyInsuranceListItemComponent({
     started_at,
     ended_at,
     description,
+    status
   },
   index,
 }: BodyInsuranceListItemProps) {
@@ -31,7 +32,7 @@ export default function BodyInsuranceListItemComponent({
       <DetailItemComponent label="شرکت بیمه گر" value={insuranceCompany} />
       <DetailItemComponent
         label="مدت باقی مانده"
-        value={`${endedAt.diff(started_at, "days").toString()} روز`}
+        value={status === 'active' ? `${endedAt.diff(dayjs(), "days").toString()} روز` : <span className="text-red-500 font-semibold">پایان یافته</span>}
       />
       <DetailItemComponent
         label="تاریخ شروع"

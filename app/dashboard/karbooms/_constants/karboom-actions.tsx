@@ -1,4 +1,5 @@
 import {
+  Car,
   Health,
   MoneyAdd,
   MoneyRemove,
@@ -16,11 +17,11 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
     icon: <Wallet1 size="24" />,
     path: "/dashboard/karbooms/financial-managment",
   },
-  {
-    label: "تراز ماه مالی",
-    icon: <Moneys size="24" />,
-    path: "/dashboard/karbooms/financial-balance",
-  },
+  // {
+  //   label: "تراز ماه مالی",
+  //   icon: <Moneys size="24" />,
+  //   path: "/dashboard/karbooms/financial-balance",
+  // },
   {
     label: "مدیریت شرکا",
     icon: <Profile2User size="24" />,
@@ -48,7 +49,12 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
   },
   {
     label: "مدیریت بیمه شخص ثالث",
-    icon: <Health size="24"/>,
-    path: "/dashboard/karbooms/third-party-insurance-list"
-  }
+    icon: <Health size="24" />,
+    path: "/dashboard/karbooms/third-party-insurance-list",
+  },
+  {
+    label: "مدیریت بیمه بدنه",
+    icon: <Car size="24" />,
+    path: "/dashboard/karbooms/body-insurance-list",
+  },
 ];

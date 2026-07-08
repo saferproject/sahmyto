@@ -1,6 +1,5 @@
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { SwipeableDrawer } from "@mui/material";
-import { DocumentText } from "iconsax-reactjs";
+import { Health } from "iconsax-reactjs";
 import ThirdPartyInsuranceFormComponent from "./third-party-insurance-form-component";
 import { ThirdPartyInsuranceDrawerProps } from "../_types/third-party-insurance-drawer-props";
 
@@ -32,11 +31,7 @@ export default function ThirdPartyInsuranceFormDrawerComponent({
         <div className="flex min-h-0 w-full flex-1 flex-col items-center">
           <div className="mb-4 flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
             <div className="mb-4 flex w-full items-center gap-2">
-              <DocumentText
-                className="text-heading"
-                size={24}
-                variant="Broken"
-              />
+              <Health className="text-heading" size={24} variant="Broken" />
               <h2 className="text-body text-xl font-bold">
                 افزودن بیمه شخص ثالث
               </h2>
