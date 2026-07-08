@@ -47,8 +47,6 @@
 }
 
 .animate-progress {
-  /* Duration must match PAGE_DURATION in use-intro-carousel.ts (4500ms) so the
-     bar fills exactly when the slide advances. */
   animation: progress 4.5s linear forwards;
 }
 

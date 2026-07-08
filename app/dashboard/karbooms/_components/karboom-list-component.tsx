@@ -7,7 +7,7 @@ import KarboomListItemComponent from "./karboom-list-item-component";
 
 export default function KarboomListComponent({ karbooms }: KarboomListProps) {
   return (
-    <ul className="flex w-full flex-col gap-8 pb-4">
+    <ul className="flex w-full flex-col gap-8 pb-4 snap-y snap-mandatory">
       <AnimatePresence>
         {karbooms.map((karboom, index) => (
           <KarboomListItemComponent
