@@ -83,7 +83,7 @@ export default function KarboomListItemComponent(
             color="primary"
             anchorOrigin={{
               vertical: "top",
-              horizontal: "left",
+              horizontal: "right",
             }}
           >
             <NotificationBing
