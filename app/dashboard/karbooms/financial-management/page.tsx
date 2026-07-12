@@ -1,10 +1,7 @@
 "use client";
 
-import formatNumber from "@/app/_utilities/format-numbers";
 import { Button } from "@mui/material";
 import {
-  Key,
-  Lock,
   Money,
   ArrowCircleUp2,
   ArrowDown2,
@@ -12,16 +9,72 @@ import {
   Add,
   ArrowCircleDown2,
   Lock1,
+  Calendar,
 } from "iconsax-reactjs";
+import { useEffect, useState } from "react";
+
+import formatNumber from "@/app/_utilities/format-numbers";
+
 import MonthListLayout from "./_layouts/months-list-layout";
+
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
+import useValidateClosingFinancialMonthEndpoint from "./_hooks/use-validate-closing-financial-month-endpoint";
+
+import { useConfirmationDialogStore } from "../../_providers/confirmation-dialog-provider";
+
+import { FinancialMonth } from "./_types/financial-month";
+import dayjs from "dayjs";
+import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
+
 export default function FinancialManagementPage() {
+  const [selectedMonth, setSelectedMonth] = useState<null | FinancialMonth>(
+    null,
+  );
+
+  const {
+    mutate: validateMonth,
+    isPending: validatingMonth,
+    isSuccess: validatedMonth,
+  } = useValidateClosingFinancialMonthEndpoint();
+
+  const { setDialog: setConfirmationDialog, onClose: closeConfirmationDialog } =
+    useConfirmationDialogStore((state) => state);
+
+  const handleValidateMonth = () => {
+    validateMonth(selectedMonth?.id ?? 0);
+  };
+
+  const handleSelectMonth = (month: FinancialMonth) => {
+    setSelectedMonth(month);
+  };
+
+  const handleOpenConfirmationDialog = () => {
+    setConfirmationDialog({
+      isOpen: true,
+      title: "بستن ماه مالی",
+      mainDiscription: `شما درحال بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]} هستید`,
+      extraDescription:
+        "درحین بستن و پس از بستن ماه مالی امکان تغییر در درآمد و هزینه های این ماه وجود ندارد. از وارد کردن تمام درآمد ها و هزینه های این ماه اطمینان حاصل کنید و فرآیند را شروع کنید.",
+      icon: <Calendar size={48} className="text-primary" />,
+      onConfirm: () => {},
+      onClose: closeConfirmationDialog,
+      confirmButtonTitle: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
+    });
+  };
+
+  useEffect(() => {
+    if (validatedMonth) handleOpenConfirmationDialog();
+  }, [validatedMonth]);
+
   return (
     <div className="flex size-full flex-col justify-between">
       <div className="h-dvh min-h-0 flex-1">
         <SelectedKarboomInfoComponent />
-        <MonthListLayout />
+        <MonthListLayout
+          selectedMonth={selectedMonth}
+          onSelectMonth={handleSelectMonth}
+        />
         <ul className="mt-4 flex flex-col gap-4">
           <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
             <div className="flex items-center gap-2">
@@ -67,6 +120,8 @@ export default function FinancialManagementPage() {
           marginTop: "8px",
           justifyContent: "space-between",
         }}
+        onClick={handleValidateMonth}
+        loading={validatingMonth}
       >
         بستن ماه مالی
       </Button>

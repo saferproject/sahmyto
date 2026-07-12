@@ -56,7 +56,7 @@ export default function KarboomListItemComponent(
         duration: 0.2,
         ease: "easeIn",
       }}
-      className="relative flex w-full flex-col rounded-3xl bg-transparent drop-shadow-lg snap-start"
+      className="relative flex w-full snap-start flex-col rounded-3xl bg-transparent drop-shadow-lg"
     >
       <div className="relative -bottom-5 flex h-24 w-full items-center justify-center overflow-hidden rounded-t-3xl object-cover">
         <Image

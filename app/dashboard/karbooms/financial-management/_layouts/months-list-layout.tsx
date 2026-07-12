@@ -5,12 +5,13 @@ import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import MonthListItemComponent from "../_components/month-list-item-component";
 
 import useGetFinancialMonthsEndpoint from "../_hooks/use-get-financial-management-months-endpoint";
+
 import QueryState from "@/app/_components/query-state";
 
-export default function MonthListLayout() {
-  const karboomId = useKarboomsStore((state) => state.id);
+import { MonthListProps } from "../_types/month-list-props";
 
-  const [selectedMonthId, setSelectedMonthId] = useState<null | number>(null);
+export default function MonthListLayout({ selectedMonth, onSelectMonth }: MonthListProps) {
+  const karboomId = useKarboomsStore((state) => state.id);
 
   const {
     data: financialMonths,
@@ -19,12 +20,8 @@ export default function MonthListLayout() {
     isLoading: gettingFinancialMonths,
   } = useGetFinancialMonthsEndpoint(karboomId);
 
-  const handleSelectMonth = (monthId: number) => {
-    setSelectedMonthId(monthId);
-  };
-
   useEffect(() => {
-    if (gotFinancialMonths) handleSelectMonth(financialMonths.data[0].id);
+    if (gotFinancialMonths) onSelectMonth(financialMonths.data[0]);
   }, [gotFinancialMonths, financialMonths]);
 
   return (
@@ -41,8 +38,8 @@ export default function MonthListLayout() {
           <MonthListItemComponent
             key={financialMonth.id}
             financialMonth={financialMonth}
-            selectedMonthId={selectedMonthId}
-            onSelectMonth={handleSelectMonth}
+            selectedMonth={selectedMonth}
+            onSelectMonth={onSelectMonth}
             index={index}
           />
         ))}

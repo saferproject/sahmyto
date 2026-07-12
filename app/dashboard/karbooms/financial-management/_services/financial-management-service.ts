@@ -12,4 +12,12 @@ export const financialManagmentService = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }),
+  startProcessingFinancialMonth: (FinancialMonthId: number) =>
+    fetchWithAuth<unknown>(
+      `karboom/financials/processing/${FinancialMonthId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      },
+    ),
 };

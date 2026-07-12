@@ -1,14 +1,4 @@
-import {
-  Key,
-  Lock,
-  Money,
-  ArrowCircleUp2,
-  ArrowDown2,
-  Minus,
-  Add,
-  ArrowCircleDown2,
-  Lock1,
-} from "iconsax-reactjs";
+import { Key, Lock } from "iconsax-reactjs";
 import dayjs from "dayjs";
 import { motion } from "motion/react";
 
@@ -17,12 +7,15 @@ import { MonthListItemProps } from "../_types/month-list-item-props";
 import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
 
 export default function MonthListItemComponent({
-  financialMonth: { id, date, status },
-  selectedMonthId,
+  financialMonth,
+  selectedMonth,
   onSelectMonth,
-  index
+  index,
 }: MonthListItemProps) {
+  const { id, date, status } = financialMonth;
+  
   const formattedDate = dayjs(date);
+  const selectedMonthId = selectedMonth?.id ?? 0;
 
   return (
     <motion.li
@@ -36,7 +29,7 @@ export default function MonthListItemComponent({
           ? "bg-primary text-white"
           : "border-body text-body border border-dashed bg-white")
       }
-      onClick={() => onSelectMonth(id)}
+      onClick={() => onSelectMonth(financialMonth)}
     >
       <span className="absolute -top-5 left-1/2 flex -translate-x-1/2 items-center justify-between rounded-full bg-white p-1 shadow-lg">
         {status === "open" ? (

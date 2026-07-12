@@ -1,8 +1,6 @@
 import { FinancialMonth } from "./financial-month";
 
-export type MonthListItemProps = {
-  financialMonth: FinancialMonth;
+export type MonthListProps = {
   selectedMonth: null | FinancialMonth;
-  index: number;
   onSelectMonth: (month: FinancialMonth) => void;
 };
