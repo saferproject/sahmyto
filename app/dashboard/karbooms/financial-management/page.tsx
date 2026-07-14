@@ -26,8 +26,11 @@ import { useConfirmationDialogStore } from "../../_providers/confirmation-dialog
 import { FinancialMonth } from "./_types/financial-month";
 import dayjs from "dayjs";
 import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
+import { useRouter } from "next/navigation";
 
 export default function FinancialManagementPage() {
+  const router = useRouter();
+
   const [selectedMonth, setSelectedMonth] = useState<null | FinancialMonth>(
     null,
   );
@@ -49,15 +52,20 @@ export default function FinancialManagementPage() {
     setSelectedMonth(month);
   };
 
+  const handleNavigateToDriversSalary = () => {
+    closeConfirmationDialog();
+    router.push("/dashboard/karbooms/financial-management/drivers-salary");
+  };
+
   const handleOpenConfirmationDialog = () => {
     setConfirmationDialog({
       isOpen: true,
       title: "بستن ماه مالی",
-      mainDiscription: `شما درحال بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]} هستید`,
+      mainDiscription: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
       extraDescription:
-        "درحین بستن و پس از بستن ماه مالی امکان تغییر در درآمد و هزینه های این ماه وجود ندارد. از وارد کردن تمام درآمد ها و هزینه های این ماه اطمینان حاصل کنید و فرآیند را شروع کنید.",
-      icon: <Calendar size={48} className="text-primary" />,
-      onConfirm: () => {},
+        "درحین بستن و پس از بستن ماه مالی امکان تغییر درآمد و هزینه های این ماه وجود ندارد. از وارد کردن تمام درآمد ها و هزینه های این ماه اطمینان حاصل کنید و فرآیند را شروع کنید.",
+      icon: <Calendar size={24} className="text-primary" />,
+      onConfirm: handleNavigateToDriversSalary,
       onClose: closeConfirmationDialog,
       confirmButtonTitle: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
     });
@@ -75,7 +83,7 @@ export default function FinancialManagementPage() {
           selectedMonth={selectedMonth}
           onSelectMonth={handleSelectMonth}
         />
-        <ul className="mt-4 flex flex-col gap-4">
+        {/* <ul className="mt-4 flex flex-col gap-4">
           <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
             <div className="flex items-center gap-2">
               <div className="relative text-green-500">
@@ -110,7 +118,7 @@ export default function FinancialManagementPage() {
               <ArrowDown2 size="16" className="text-body" />
             </div>
           </li>
-        </ul>
+        </ul> */}
       </div>
       <Button
         variant="contained"
