@@ -140,10 +140,19 @@ export default function PartnerFormComponent({
         required
       />
       <div className="flex items-center gap-4">
-        <TextField {...register("first_name")} label="نام" fullWidth required />
+        <TextField
+          {...register("first_name")}
+          label="نام"
+          error={!!errors.first_name}
+          helperText={errors.first_name?.message ?? ""}
+          fullWidth
+          required
+        />
         <TextField
           {...register("last_name")}
           label="نام خانوادگی"
+          error={!!errors.last_name}
+          helperText={errors.last_name?.message ?? ""}
           fullWidth
           required
         />

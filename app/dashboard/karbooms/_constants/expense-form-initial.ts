@@ -21,7 +21,7 @@ export const EXPENSE_FORM_INITIAL: ExpenseFormType = {
       status: "active",
     },
   },
-  unit_price: '',
+  unit_price: null,
   wage_cost: null,
   date: dayjs(),
   description: null,

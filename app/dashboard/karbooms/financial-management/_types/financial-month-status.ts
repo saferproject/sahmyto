@@ -1,0 +1,1 @@
+export type FinancialMonthStatus = "closed" | "open" | "processing" | "approval";

@@ -5,7 +5,7 @@ import { Member } from "../_types/member";
 
 const ExpenseFormSchema = z.object({
   receiver: z.custom<Member>(),
-  unit_price: z.string(),
+  unit_price: z.string().nullable(),
   wage_cost: z.string().nullable(),
   date: z
     .custom<Dayjs>()

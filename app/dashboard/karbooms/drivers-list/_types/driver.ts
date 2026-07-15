@@ -10,6 +10,7 @@ export type Driver = {
   full_name: string;
   phone: string;
   fixed_amount: number;
+  service_amount: number;
   percentage_amount: number;
   payment_type: DriverPaymentTypes;
   description: string | null;

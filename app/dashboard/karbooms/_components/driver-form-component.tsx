@@ -17,6 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import DescriptionInput from "@/app/_components/description-input";
+import PriceInputComponent from "@/app/_components/price-input-component";
 
 import useDriverForm from "../_hooks/use-driver-form";
 import useAddDriver from "../_hooks/use-add-driver-endpoint";
@@ -24,7 +25,7 @@ import useAddDriver from "../_hooks/use-add-driver-endpoint";
 import { DriverFormType } from "../_schemas/driver-form-schema";
 
 import { DriverFormProps } from "../_types/driver-form-props";
-import PriceInputComponent from "@/app/_components/price-input-component";
+
 import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function DriverFormComponent({
@@ -39,11 +40,11 @@ export default function DriverFormComponent({
     formState: { errors },
   } = useDriverForm();
 
-  const { description, fixed_amount } = useWatch({ control });
+  const { description, fixed_amount, service_amount } = useWatch({ control });
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
-  const { mutate } = useAddDriver();
+  const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
 
   const handleCancel = () => {
     reset();
@@ -56,9 +57,10 @@ export default function DriverFormComponent({
     fixed_amount,
     ...other
   }: DriverFormType) => {
-    mutate(
+    addDriver(
       {
         ...other,
+        service_amount: parseNumber(service_amount),
         fixed_amount: parseNumber(fixed_amount),
         karboom_id,
         started_at: started_at.toISOString().split("T")[0],
@@ -148,12 +150,47 @@ export default function DriverFormComponent({
           )}
         />
       </div>
+      <Controller
+        name="payment_type"
+        control={control}
+        render={({ field }) => (
+          <FormControl required>
+            <FormLabel>
+              دستمزد این راننده در چه بازه زمانی پرداخت می شود؟
+            </FormLabel>
+            <RadioGroup
+              {...field}
+              onChange={(event) => field.onChange(event.target.value)}
+              sx={{ flexDirection: "row", marginTop: 0, paddingTop: 0 }}
+            >
+              <FormControlLabel
+                value={"monthly"}
+                label="ماهانه"
+                control={<Radio />}
+              />
+              <FormControlLabel
+                value={"daily"}
+                label="روزانه"
+                control={<Radio />}
+              />
+            </RadioGroup>
+          </FormControl>
+        )}
+      />
       <PriceInputComponent
         register={register("fixed_amount")}
         value={fixed_amount}
         label="دستمزد ثابت"
         error={!!errors.fixed_amount}
         helperText={errors.fixed_amount?.message ?? ""}
+        required
+      />
+      <PriceInputComponent
+        register={register("service_amount")}
+        value={service_amount}
+        label="دستمزد سرویسی"
+        error={!!errors.service_amount}
+        helperText={errors.service_amount?.message ?? ""}
         required
       />
       <TextField
@@ -179,32 +216,6 @@ export default function DriverFormComponent({
         error={false}
         helperText=""
       />
-      <Controller
-        name="payment_type"
-        control={control}
-        render={({ field }) => (
-          <FormControl required>
-            <FormLabel>
-              دستمزد این راننده در چه بازه زمانی پرداخت می شود؟
-            </FormLabel>
-            <RadioGroup
-              {...field}
-              onChange={(event) => field.onChange(event.target.value)}
-            >
-              <FormControlLabel
-                value={"monthly"}
-                label="ماهانه"
-                control={<Radio />}
-              />
-              <FormControlLabel
-                value={"daily"}
-                label="روزانه"
-                control={<Radio />}
-              />
-            </RadioGroup>
-          </FormControl>
-        )}
-      />
       <div className="flex items-center gap-4">
         <Button
           variant="outlined"
@@ -215,7 +226,12 @@ export default function DriverFormComponent({
         >
           انصراف
         </Button>
-        <Button variant="contained" type="submit" fullWidth>
+        <Button
+          variant="contained"
+          type="submit"
+          loading={addingDriver}
+          fullWidth
+        >
           ثبت
         </Button>
       </div>

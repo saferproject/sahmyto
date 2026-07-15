@@ -67,8 +67,8 @@ export default function IncomeDrawerFormComponent({
       endAdonrment: "ماه",
     },
     services: {
-      label: "تعداد سفر",
-      endAdonrment: "سفر",
+      label: "تعداد سرویس",
+      endAdonrment: "سرویس",
     },
   };
 

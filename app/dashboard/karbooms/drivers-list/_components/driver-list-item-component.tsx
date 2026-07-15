@@ -20,6 +20,7 @@ export default function DriverListItemComponent({
     full_name,
     phone,
     fixed_amount,
+    service_amount,
     percentage_amount,
     payment_type,
     membership_status,
@@ -83,7 +84,7 @@ export default function DriverListItemComponent({
             </div>
             <div className="flex w-full items-center justify-between">
               <p className="text-body text-sm font-semibold">
-                حقوق {formatPaymentType(payment_type)}
+                دستمزد {formatPaymentType(payment_type)}
               </p>
               <div className="flex items-center gap-2">
                 <p className="text-body font-semibold">
@@ -98,7 +99,21 @@ export default function DriverListItemComponent({
               </div>
             </div>
             <div className="flex w-full items-center justify-between">
-              <p className="text-body text-sm font-semibold">حقوق درصدی</p>
+              <p className="text-body text-sm font-semibold">دستمزد سرویسی</p>
+              <div className="flex items-center gap-2">
+                <p className="text-body font-semibold">
+                  {formatNumber(service_amount)}
+                </p>
+                <Image
+                  src="/images/toman-primary.webp"
+                  alt="تومان"
+                  width={20}
+                  height={20}
+                />
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-between">
+              <p className="text-body text-sm font-semibold">دستمزد درصدی</p>
               <div className="flex items-center gap-2">
                 <p className="text-body font-semibold">{percentage_amount}</p>
                 <p className="text-primary text-lg font-semibold">%</p>

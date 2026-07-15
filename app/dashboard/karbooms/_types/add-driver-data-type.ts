@@ -2,12 +2,13 @@ import { DriverFormType } from "../_schemas/driver-form-schema";
 
 type AddDriverDataType = Omit<
   DriverFormType,
-  "started_at" | "ended_at" | "fixed_amount"
+  "started_at" | "ended_at" | "fixed_amount" | "service_amount"
 > & {
   started_at: string;
   ended_at: string;
   karboom_id: number;
-  fixed_amount: number;
+  fixed_amount: number | null;
+  service_amount: number | null;
 };
 
 export default AddDriverDataType;

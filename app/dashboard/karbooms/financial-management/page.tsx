@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { Button } from "@mui/material";
 import {
   Money,
@@ -10,8 +12,11 @@ import {
   ArrowCircleDown2,
   Lock1,
   Calendar,
+  EmptyWalletTime,
 } from "iconsax-reactjs";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 
@@ -24,9 +29,8 @@ import useValidateClosingFinancialMonthEndpoint from "./_hooks/use-validate-clos
 import { useConfirmationDialogStore } from "../../_providers/confirmation-dialog-provider";
 
 import { FinancialMonth } from "./_types/financial-month";
-import dayjs from "dayjs";
 import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
-import { useRouter } from "next/navigation";
+import useGetFinancialMonthDataEndpoint from "./_hooks/use-get-financial-month-data-endpoint";
 
 export default function FinancialManagementPage() {
   const router = useRouter();
@@ -40,6 +44,11 @@ export default function FinancialManagementPage() {
     isPending: validatingMonth,
     isSuccess: validatedMonth,
   } = useValidateClosingFinancialMonthEndpoint();
+
+  const { data: financialMonthData } = useGetFinancialMonthDataEndpoint(
+    selectedMonth?.id ?? 0,
+    !!selectedMonth,
+  );
 
   const { setDialog: setConfirmationDialog, onClose: closeConfirmationDialog } =
     useConfirmationDialogStore((state) => state);
@@ -83,42 +92,60 @@ export default function FinancialManagementPage() {
           selectedMonth={selectedMonth}
           onSelectMonth={handleSelectMonth}
         />
-        {/* <ul className="mt-4 flex flex-col gap-4">
-          <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
-            <div className="flex items-center gap-2">
-              <div className="relative text-green-500">
-                <Money size="24" variant="Broken" />
-                <ArrowCircleUp2
-                  size="16"
-                  className="absolute -right-5 bottom-0"
-                />
+        {selectedMonth?.status === "open" ? (
+          <div className="text-body border-secondary mt-4 flex w-full items-center justify-between rounded-2xl border border-dashed p-4">
+            <div className="flex items-center gap-4">
+              <EmptyWalletTime size="32" />
+              <p>تراز دوره</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <p>{formatNumber(120_000_000)}</p>
+              <Image
+                src="/images/toman-secondary.webp"
+                alt="تومان"
+                width={24}
+                height={24}
+              />
+            </div>
+          </div>
+        ) : (
+          <ul className="mt-4 flex flex-col gap-4">
+            <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
+              <div className="flex items-center gap-2">
+                <div className="relative text-green-500">
+                  <Money size="24" variant="Broken" />
+                  <ArrowCircleUp2
+                    size="16"
+                    className="absolute -right-5 bottom-0"
+                  />
+                </div>
+                <p className="text-body text-sm">{"امیر الله دادیان"}</p>
               </div>
-              <p className="text-body text-sm">{"امیر الله دادیان"}</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <p>{formatNumber(123456789)}</p>
-              <Add size="20" className="text-green-500" />
-              <ArrowDown2 size="16" className="text-body" />
-            </div>
-          </li>
-          <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
-            <div className="flex items-center gap-2">
-              <div className="relative text-red-500">
-                <Money size="24" variant="Broken" />
-                <ArrowCircleDown2
-                  size="16"
-                  className="absolute -right-5 bottom-0"
-                />
+              <div className="flex items-center gap-1">
+                <p>{formatNumber(123456789)}</p>
+                <Add size="20" className="text-green-500" />
+                <ArrowDown2 size="16" className="text-body" />
               </div>
-              <p className="text-body text-sm">{"امیر الله دادیان"}</p>
-            </div>
-            <div className="flex items-center gap-1">
-              <p>{formatNumber(987654321)}</p>
-              <Minus size="20" className="text-red-500" />
-              <ArrowDown2 size="16" className="text-body" />
-            </div>
-          </li>
-        </ul> */}
+            </li>
+            <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
+              <div className="flex items-center gap-2">
+                <div className="relative text-red-500">
+                  <Money size="24" variant="Broken" />
+                  <ArrowCircleDown2
+                    size="16"
+                    className="absolute -right-5 bottom-0"
+                  />
+                </div>
+                <p className="text-body text-sm">{"امیر الله دادیان"}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <p>{formatNumber(987654321)}</p>
+                <Minus size="20" className="text-red-500" />
+                <ArrowDown2 size="16" className="text-body" />
+              </div>
+            </li>
+          </ul>
+        )}
       </div>
       <Button
         variant="contained"
