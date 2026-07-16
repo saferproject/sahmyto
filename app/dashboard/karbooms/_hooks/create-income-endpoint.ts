@@ -8,7 +8,9 @@ export default function useCreateIncomeEndpoint() {
     mutationKey: ["create-income"],
     mutationFn: karboomService.createIncome,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["incomes"] });
+      queryClient.invalidateQueries({
+        queryKey: ["incomes", "financial-month-data"],
+      });
     },
   });
 }

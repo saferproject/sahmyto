@@ -12,7 +12,6 @@ import {
   ArrowCircleDown2,
   Lock1,
   Calendar,
-  EmptyWalletTime,
 } from "iconsax-reactjs";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
@@ -31,6 +30,7 @@ import { useConfirmationDialogStore } from "../../_providers/confirmation-dialog
 import { FinancialMonth } from "./_types/financial-month";
 import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
 import useGetFinancialMonthDataEndpoint from "./_hooks/use-get-financial-month-data-endpoint";
+import MonthBalanceComponent from "./_components/month-balance-component";
 
 export default function FinancialManagementPage() {
   const router = useRouter();
@@ -38,6 +38,11 @@ export default function FinancialManagementPage() {
   const [selectedMonth, setSelectedMonth] = useState<null | FinancialMonth>(
     null,
   );
+  const [isIncomeDetailsOpen, setIncomeDetailsOpen] = useState(false);
+  const [isIncomeMonthlyOpen, setIncomeMonthlyOpen] = useState(false);
+  const [isIncomeDailyOpen, setIncomeDailyOpen] = useState(false);
+  const [isIncomeHourlyOpen, setIncomeHourlyOpen] = useState(false);
+  const [isIncomeServiceOpen, setIncomeServiceOpen] = useState(false);
 
   const {
     mutate: validateMonth,
@@ -80,34 +85,353 @@ export default function FinancialManagementPage() {
     });
   };
 
+  const handleToggleIncomeDetails = () => {
+    setIncomeDetailsOpen((curValue) => !curValue);
+  };
+
+  const handleToggleMonthly = () => {
+    setIncomeMonthlyOpen((curValue) => !curValue);
+  };
+
+  const handleToggleDaily = () => {
+    setIncomeDailyOpen((curValue) => !curValue);
+  };
+
+  const handleToggleHourly = () => {
+    setIncomeHourlyOpen((curValue) => !curValue);
+  };
+
+  const handleToggleService = () => {
+    setIncomeServiceOpen((curValue) => !curValue);
+  };
+
   useEffect(() => {
     if (validatedMonth) handleOpenConfirmationDialog();
   }, [validatedMonth]);
 
+  const totalIncome =
+    financialMonthData?.data.incomes
+      .map((income) => income.unit_price * income.quantity)
+      .reduce(
+        (previousValue, currentValue) => previousValue + currentValue,
+        0,
+      ) ?? 0;
+
+  const incomesGroupedByType = Object.groupBy(
+    financialMonthData?.data.incomes ?? [],
+    (item) => item.type,
+  );
+
+  const totalExpense =
+    financialMonthData?.data.expenses
+      .map((expense) => expense.unit_price + expense.wage_cost)
+      .reduce(
+        (previousValue, currentValue) => previousValue + currentValue,
+        0,
+      ) ?? 0;
+
   return (
     <div className="flex size-full flex-col justify-between">
-      <div className="h-dvh min-h-0 flex-1">
-        <SelectedKarboomInfoComponent />
-        <MonthListLayout
-          selectedMonth={selectedMonth}
-          onSelectMonth={handleSelectMonth}
-        />
+      <SelectedKarboomInfoComponent />
+      <MonthListLayout
+        selectedMonth={selectedMonth}
+        onSelectMonth={handleSelectMonth}
+      />
+      <div className="h-dvh min-h-0 flex-1 overflow-y-auto">
         {selectedMonth?.status === "open" ? (
-          <div className="text-body border-secondary mt-4 flex w-full items-center justify-between rounded-2xl border border-dashed p-4">
-            <div className="flex items-center gap-4">
-              <EmptyWalletTime size="32" />
-              <p>تراز دوره</p>
-            </div>
-            <div className="flex items-center gap-4">
-              <p>{formatNumber(120_000_000)}</p>
-              <Image
-                src="/images/toman-secondary.webp"
-                alt="تومان"
-                width={24}
-                height={24}
-              />
-            </div>
-          </div>
+          <>
+            <MonthBalanceComponent balance={totalIncome - totalExpense} />
+            <ul className="mt-4 flex w-full flex-col gap-4">
+              <li
+                className={
+                  "text-body overflow-y-hidden transition-all duration-300 " +
+                  (isIncomeDetailsOpen ? "max-h-1000" : "max-h-14.5")
+                }
+              >
+                <div
+                  className="border-secondary flex w-full items-center justify-between rounded-2xl border bg-white p-4"
+                  onClick={handleToggleIncomeDetails}
+                >
+                  <p>درآمد</p>
+                  <div className="flex items-center gap-4">
+                    <p>{formatNumber(totalIncome)}</p>
+                    <Image
+                      src="/images/toman-secondary.webp"
+                      alt="تومان"
+                      width={24}
+                      height={24}
+                    />
+                    <ArrowDown2
+                      size="24"
+                      className={
+                        "transition-all " +
+                        (isIncomeDetailsOpen ? "rotate-z-180" : undefined)
+                      }
+                    />
+                  </div>
+                </div>
+                <ul className="mt-4 flex w-full flex-col gap-4 pr-4">
+                  <li
+                    className={
+                      "text-body overflow-y-hidden transition-all duration-300 " +
+                      (isIncomeMonthlyOpen ? "max-h-1000" : "max-h-14.5")
+                    }
+                  >
+                    <div
+                      className="border-secondary flex w-full items-center justify-between rounded-2xl border bg-white p-4"
+                      onClick={handleToggleMonthly}
+                    >
+                      <p>ماهانه</p>
+                      <div className="flex items-center gap-4">
+                        <p>
+                          {formatNumber(
+                            incomesGroupedByType.monthly
+                              ?.map(
+                                (income) => income.unit_price * income.quantity,
+                              )
+                              .reduce(
+                                (previousValue, currentValue) =>
+                                  previousValue + currentValue,
+                                0,
+                              ) ?? 0,
+                          )}
+                        </p>
+                        <Image
+                          src="/images/toman-secondary.webp"
+                          alt="تومان"
+                          width={24}
+                          height={24}
+                        />
+                        <ArrowDown2
+                          size="24"
+                          className={
+                            "transition-all " +
+                            (isIncomeMonthlyOpen ? "rotate-z-180" : undefined)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <ul className="mt-4 flex flex-col gap-2 pr-4">
+                      {incomesGroupedByType.monthly?.map(
+                        ({ receiver: { full_name }, unit_price, quantity }) => (
+                          <li className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2">
+                            <p>{full_name}</p>
+                            <div className="flex items-center gap-2">
+                              <p>{formatNumber(unit_price * quantity)}</p>
+                              <Image
+                                src="/images/toman-secondary.webp"
+                                alt="تومان"
+                                width={24}
+                                height={24}
+                              />
+                            </div>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </li>
+                  <li
+                    className={
+                      "text-body overflow-y-hidden transition-all duration-300 " +
+                      (isIncomeDailyOpen ? "max-h-1000" : "max-h-14.5")
+                    }
+                  >
+                    <div
+                      className="border-secondary flex w-full items-center justify-between rounded-2xl border p-4"
+                      onClick={handleToggleDaily}
+                    >
+                      <p>روزانه</p>
+                      <div className="flex items-center gap-4">
+                        <p>
+                          {formatNumber(
+                            incomesGroupedByType.daily
+                              ?.map(
+                                (income) => income.unit_price * income.quantity,
+                              )
+                              .reduce(
+                                (previousValue, currentValue) =>
+                                  previousValue + currentValue,
+                                0,
+                              ) ?? 0,
+                          )}
+                        </p>
+                        <Image
+                          src="/images/toman-secondary.webp"
+                          alt="تومان"
+                          width={24}
+                          height={24}
+                        />
+                        <ArrowDown2
+                          size="24"
+                          className={
+                            "transition-all " +
+                            (isIncomeDailyOpen ? "rotate-z-180" : undefined)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <ul className="mt-4 flex flex-col gap-2 pr-4">
+                      {incomesGroupedByType.daily?.map(
+                        ({ receiver: { full_name }, unit_price, quantity }) => (
+                          <li className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2">
+                            <p>{full_name}</p>
+                            <div className="flex items-center gap-2">
+                              <p>{formatNumber(unit_price * quantity)}</p>
+                              <Image
+                                src="/images/toman-secondary.webp"
+                                alt="تومان"
+                                width={24}
+                                height={24}
+                              />
+                            </div>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </li>
+                  <li
+                    className={
+                      "text-body overflow-y-hidden transition-all duration-300 " +
+                      (isIncomeHourlyOpen ? "max-h-1000" : "max-h-14.5")
+                    }
+                  >
+                    <div
+                      className="border-secondary flex w-full items-center justify-between rounded-2xl border p-4"
+                      onClick={handleToggleHourly}
+                    >
+                      <p>ساعتی</p>
+                      <div className="flex items-center gap-4">
+                        <p>
+                          {formatNumber(
+                            incomesGroupedByType.hourly
+                              ?.map(
+                                (income) => income.unit_price * income.quantity,
+                              )
+                              .reduce(
+                                (previousValue, currentValue) =>
+                                  previousValue + currentValue,
+                                0,
+                              ) ?? 0,
+                          )}
+                        </p>
+                        <Image
+                          src="/images/toman-secondary.webp"
+                          alt="تومان"
+                          width={24}
+                          height={24}
+                        />
+                        <ArrowDown2
+                          size="24"
+                          className={
+                            "transition-all " +
+                            (isIncomeHourlyOpen ? "rotate-z-180" : undefined)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <ul className="mt-4 flex flex-col gap-2 pr-4">
+                      {incomesGroupedByType.hourly?.map(
+                        ({ receiver: { full_name }, unit_price, quantity }) => (
+                          <li className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2">
+                            <p>{full_name}</p>
+                            <div className="flex items-center gap-2">
+                              <p>{formatNumber(unit_price * quantity)}</p>
+                              <Image
+                                src="/images/toman-secondary.webp"
+                                alt="تومان"
+                                width={24}
+                                height={24}
+                              />
+                            </div>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </li>
+                  <li
+                    className={
+                      "text-body overflow-y-hidden transition-all duration-300 " +
+                      (isIncomeServiceOpen ? "max-h-1000" : "max-h-14.5")
+                    }
+                  >
+                    <div
+                      className="border-secondary flex w-full items-center justify-between rounded-2xl border p-4"
+                      onClick={handleToggleService}
+                    >
+                      <p>سرویسی</p>
+                      <div className="flex items-center gap-4">
+                        <p>
+                          {formatNumber(
+                            incomesGroupedByType.services
+                              ?.map(
+                                (income) => income.unit_price * income.quantity,
+                              )
+                              .reduce(
+                                (previousValue, currentValue) =>
+                                  previousValue + currentValue,
+                                0,
+                              ) ?? 0,
+                          )}
+                        </p>
+                        <Image
+                          src="/images/toman-secondary.webp"
+                          alt="تومان"
+                          width={24}
+                          height={24}
+                        />
+                        <ArrowDown2
+                          size="24"
+                          className={
+                            "transition-all " +
+                            (isIncomeServiceOpen ? "rotate-z-180" : undefined)
+                          }
+                        />
+                      </div>
+                    </div>
+                    <ul className="mt-4 flex flex-col gap-2 pr-4">
+                      {incomesGroupedByType.services?.map(
+                        ({ receiver: { full_name }, unit_price, quantity }) => (
+                          <li className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2">
+                            <p>{full_name}</p>
+                            <div className="flex items-center gap-2">
+                              <p>{formatNumber(unit_price * quantity)}</p>
+                              <Image
+                                src="/images/toman-secondary.webp"
+                                alt="تومان"
+                                width={24}
+                                height={24}
+                              />
+                            </div>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li className="border-secondary text-body flex items-center justify-between rounded-2xl border p-4">
+                <div className="flex w-full items-center justify-between">
+                  <p>هزینه</p>
+                  <div className="flex items-center gap-4">
+                    <p>{formatNumber(totalExpense)}</p>
+                    <Image
+                      src="/images/toman-secondary.webp"
+                      alt="تومان"
+                      width={24}
+                      height={24}
+                    />
+                    <ArrowDown2
+                      size="24"
+                      className={
+                        "transition-all " +
+                        (isIncomeDetailsOpen ? "rotate-z-180" : undefined)
+                      }
+                    />
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </>
         ) : (
           <ul className="mt-4 flex flex-col gap-4">
             <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">

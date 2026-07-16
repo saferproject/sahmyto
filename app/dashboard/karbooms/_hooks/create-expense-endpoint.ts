@@ -8,7 +8,9 @@ export default function useCreateExpenseEndpoint() {
     mutationKey: ["create-expense"],
     mutationFn: karboomService.createExpense,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenses"] });
+      queryClient.invalidateQueries({
+        queryKey: ["expenses", "financial-month-data"],
+      });
     },
   });
 }
