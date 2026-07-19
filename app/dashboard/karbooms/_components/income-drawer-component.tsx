@@ -2,77 +2,33 @@
 
 import { useEffect, useState } from "react";
 import { SwipeableDrawer } from "@mui/material";
-import { useSnackbar } from "notistack";
 
 import { KarboomIncomeDrawerProps } from "../_types/karboom-income-drawer-props";
 import { IncomeTypes } from "../_types/income-categories";
-
-import useCreateIncomeEndpoint from "../_hooks/create-income-endpoint";
-
-import { IncomeFormType } from "../_schemas/income-form-schema";
 
 import IncomeDrawerHeaderComponent from "./income-drawer-header-component";
 import IncomeDrawerTypeListComponent from "./income-drawer-type-list-component";
 import IncomeDrawerFormComponent from "./income-drawer-form-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
-import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function IncomeDrawerComponent({
   isOpen,
   onOpen,
   onClose,
 }: KarboomIncomeDrawerProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
   const [incomeType, setIncomeType] = useState<IncomeTypes | null>(null);
 
   const karboomId = useKarboomsStore((state) => state.id);
-
-  const {
-    mutate: createIncome,
-    isPending: creatingIncome,
-    isSuccess: createdIncome,
-    isError: creatingIncomeFailed,
-  } = useCreateIncomeEndpoint();
-
-  const handleSubmit = ({
-    reciever,
-    started_at,
-    ended_at,
-    image,
-    unit_price,
-    total_price,
-    ...other
-  }: IncomeFormType) => {
-    if (incomeType)
-      createIncome({
-        ...other,
-        unit_price: parseNumber(unit_price) || 0,
-        total_price: parseNumber(total_price) || 0,
-        type: incomeType,
-        receiver_id: reciever.member.id,
-        karboom_id: karboomId,
-        started_at: started_at.toISOString().split("T")[0],
-        ended_at: ended_at.toISOString().split("T")[0],
-      });
-    else
-      enqueueSnackbar({
-        variant: "warning",
-        message: "نوع درآمد را انتخاب کنید",
-      });
-  };
 
   const handleTypeSelect = (type: IncomeTypes) => {
     setIncomeType(type);
   };
 
-  useEffect(() => {
-    if (createdIncome) {
-      onClose();
-      setIncomeType(null);
-    }
-  }, [createdIncome]);
+  const handleSuccess = () => {
+    onClose();
+    setIncomeType(null);
+  };
 
   useEffect(() => {
     setIncomeType(null);
@@ -107,7 +63,7 @@ export default function IncomeDrawerComponent({
                   isOpen={isOpen}
                   karboomId={karboomId}
                   incomeType={incomeType}
-                  onSubmit={handleSubmit}
+                  onSuccess={handleSuccess}
                 />
               </>
             ) : (

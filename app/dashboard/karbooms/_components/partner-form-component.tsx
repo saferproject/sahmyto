@@ -17,6 +17,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { PartnerFormProps } from "../_types/partner-form-props";
 
 import { PARTNER_FORM_INITIAL } from "../_constants/partner-form-initial";
+import BaseResponse from "@/app/_interfaces/base-response";
 
 export default function PartnerFormComponent({
   onCancel,
@@ -27,7 +28,8 @@ export default function PartnerFormComponent({
     control,
     setValue,
     handleSubmit,
-    reset,
+    setError,
+    setValues,
     formState: { errors },
   } = usePartnerForm();
 
@@ -35,7 +37,7 @@ export default function PartnerFormComponent({
 
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
-  const { mutate } = useAddPartner();
+  const { mutate: addPartner } = useAddPartner();
 
   const handleIncrementCapital = () => {
     if (share_capital !== undefined) {
@@ -89,7 +91,7 @@ export default function PartnerFormComponent({
   };
 
   const handleCancel = () => {
-    reset(PARTNER_FORM_INITIAL);
+    setValues(PARTNER_FORM_INITIAL);
     onCancel();
   };
 
@@ -102,7 +104,7 @@ export default function PartnerFormComponent({
   }: PartnerFormType) => {
     const share = Number(`${share_capital}.${share_decimal}`);
 
-    mutate(
+    addPartner(
       {
         ...other,
         share,
@@ -112,8 +114,19 @@ export default function PartnerFormComponent({
       },
       {
         onSuccess: () => {
-          reset(PARTNER_FORM_INITIAL);
+          setValues(PARTNER_FORM_INITIAL);
           onSuccess();
+        },
+        onError: (error) => {
+          const err = error as unknown as BaseResponse;
+
+          if (err.errors)
+            Object.entries(err.errors).forEach(([field, errors]) =>
+              setError(field as keyof PartnerFormType, {
+                message: errors[0],
+                type: "validate",
+              }),
+            );
         },
       },
     );
@@ -128,6 +141,8 @@ export default function PartnerFormComponent({
         {...register("phone")}
         type="tel"
         label="شماره تماس"
+        error={!!errors.phone}
+        helperText={errors.phone?.message ?? ""}
         slotProps={{
           input: {
             endAdornment: (
@@ -183,7 +198,7 @@ export default function PartnerFormComponent({
             className="text-body absolute -right-4 bottom-0 w-8 text-center"
             placeholder="__"
             min={0}
-            max={6}
+            max={100}
           />
           <span className="text-body text-5xl font-extralight">/</span>
           <input
@@ -193,7 +208,7 @@ export default function PartnerFormComponent({
             className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
             placeholder="_"
             min={0}
-            max={100}
+            max={6}
           />
         </div>
         <div className="flex flex-col gap-2">

@@ -15,6 +15,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import { KarboomFormProps } from "../_types/karboom-form-props";
 import { KARBOOM_FORM_INITIAL } from "../_constants/karboom-form-initial";
+import BaseResponse from "@/app/_interfaces/base-response";
 
 export default function KarboomFormComponent({
   onCancel,
@@ -26,7 +27,7 @@ export default function KarboomFormComponent({
     handleSubmit,
     setFocus,
     setError,
-    reset,
+    setValues,
     formState: { errors },
   } = useKarboomForm();
 
@@ -34,28 +35,31 @@ export default function KarboomFormComponent({
 
   const { setActiveKarboom } = useKarboomsStore((state) => state);
 
-  const { mutate } = useCreateKarboom();
+  const { mutate: createKarboom, isPending: creatingKarboom } = useCreateKarboom();
 
   const submit = (data: KarboomFormType) => {
-    mutate(data, {
+    createKarboom(data, {
       onSuccess: (response) => {
         setActiveKarboom(response.data);
-        reset();
+        setValues(KARBOOM_FORM_INITIAL);
         onSuccess();
       },
       onError: (error) => {
-        Object.entries(error).forEach(([field, errors]) =>
-          setError(field as keyof KarboomFormType, {
-            message: errors[field],
-            type: "validate",
-          }),
-        );
+        const err = error as unknown as BaseResponse;
+
+        if (err.errors)
+          Object.entries(err.errors).forEach(([field, errors]) =>
+            setError(field as keyof KarboomFormType, {
+              message: errors[0],
+              type: "validate",
+            }),
+          );
       },
     });
   };
 
   const handleCancel = () => {
-    reset(KARBOOM_FORM_INITIAL);
+    setValues(KARBOOM_FORM_INITIAL);
     onCancel();
   };
 
@@ -107,7 +111,12 @@ export default function KarboomFormComponent({
         >
           انصراف
         </Button>
-        <Button variant="contained" type="submit" fullWidth>
+        <Button
+          variant="contained"
+          type="submit"
+          loading={creatingKarboom}
+          fullWidth
+        >
           ثبت کاربوم
         </Button>
       </div>

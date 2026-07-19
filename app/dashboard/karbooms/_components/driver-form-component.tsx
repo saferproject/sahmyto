@@ -27,6 +27,8 @@ import { DriverFormType } from "../_schemas/driver-form-schema";
 import { DriverFormProps } from "../_types/driver-form-props";
 
 import parseNumber from "@/app/_utilities/parse-numbers";
+import BaseResponse from "@/app/_interfaces/base-response";
+import { DRIVER_FORM_INITIAL } from "../_constants/driver-form-initial";
 
 export default function DriverFormComponent({
   onCancel,
@@ -36,18 +38,19 @@ export default function DriverFormComponent({
     register,
     control,
     handleSubmit,
-    reset,
+    setValues,
+    setError,
     formState: { errors },
   } = useDriverForm();
 
   const { description, fixed_amount, service_amount } = useWatch({ control });
 
-  const { id: karboom_id } = useKarboomsStore((state) => state);
+  const { id: karboomId } = useKarboomsStore((state) => state);
 
   const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
 
   const handleCancel = () => {
-    reset();
+    setValues(DRIVER_FORM_INITIAL);
     onCancel();
   };
 
@@ -55,6 +58,7 @@ export default function DriverFormComponent({
     started_at,
     ended_at,
     fixed_amount,
+    service_amount,
     ...other
   }: DriverFormType) => {
     addDriver(
@@ -62,14 +66,25 @@ export default function DriverFormComponent({
         ...other,
         service_amount: parseNumber(service_amount),
         fixed_amount: parseNumber(fixed_amount),
-        karboom_id,
+        karboom_id: karboomId,
         started_at: started_at.toISOString().split("T")[0],
         ended_at: ended_at?.toISOString().split("T")[0] ?? "",
       },
       {
         onSuccess: () => {
-          reset();
+          setValues(DRIVER_FORM_INITIAL);
           onSuccess();
+        },
+        onError: (error) => {
+          const err = error as unknown as BaseResponse;
+
+          if (err.errors)
+            Object.entries(err.errors).forEach(([field, errors]) =>
+              setError(field as keyof DriverFormType, {
+                message: errors[0],
+                type: "validate",
+              }),
+            );
         },
       },
     );
@@ -85,6 +100,8 @@ export default function DriverFormComponent({
         type="tel"
         inputMode="tel"
         label="شماره تماس"
+        error={!!errors.phone}
+        helperText={errors.phone?.message ?? ""}
         slotProps={{
           input: {
             endAdornment: (
@@ -97,10 +114,19 @@ export default function DriverFormComponent({
         required
       />
       <div className="flex items-center gap-4">
-        <TextField {...register("first_name")} label="نام" fullWidth required />
+        <TextField
+          {...register("first_name")}
+          label="نام"
+          error={!!errors.first_name}
+          helperText={errors.first_name?.message ?? ""}
+          fullWidth
+          required
+        />
         <TextField
           {...register("last_name")}
           label="نام خانوادگی"
+          error={!!errors.last_name}
+          helperText={errors.last_name?.message ?? ""}
           fullWidth
           required
         />
@@ -183,7 +209,6 @@ export default function DriverFormComponent({
         label="دستمزد ثابت"
         error={!!errors.fixed_amount}
         helperText={errors.fixed_amount?.message ?? ""}
-        required
       />
       <PriceInputComponent
         register={register("service_amount")}
@@ -191,12 +216,13 @@ export default function DriverFormComponent({
         label="دستمزد سرویسی"
         error={!!errors.service_amount}
         helperText={errors.service_amount?.message ?? ""}
-        required
       />
       <TextField
         {...register("percentage_amount", { valueAsNumber: true })}
         type="number"
         label="دستمزد درصدی"
+        error={!!errors.percentage_amount}
+        helperText={errors.percentage_amount?.message ?? ""}
         slotProps={{
           htmlInput: {
             min: 0,
@@ -208,13 +234,12 @@ export default function DriverFormComponent({
             ),
           },
         }}
-        required
       />
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}
-        error={false}
-        helperText=""
+        error={!!errors.description}
+        helperText={errors.description?.message ?? ""}
       />
       <div className="flex items-center gap-4">
         <Button

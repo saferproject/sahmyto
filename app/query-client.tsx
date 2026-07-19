@@ -41,7 +41,7 @@ export function ReactQueryProvider({
           onError(response) {
             const res = response as unknown as BaseResponse;
 
-            enqueueSnackbar(res.errors?.["error"][0] ?? "عملیات با خطا مواجه شد", {
+            enqueueSnackbar(res.errors?.["error"]?.[0] ?? "عملیات با خطا مواجه شد", {
               variant: "error",
             });
           },

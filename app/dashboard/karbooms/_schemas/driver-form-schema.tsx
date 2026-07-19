@@ -14,7 +14,7 @@ const DriverFormSchema = z
     payment_type: z.union([z.literal("daily"), z.literal("monthly")]),
     fixed_amount: z.string().nullable(),
     service_amount: z.string().nullable(),
-    percentage_amount: z.number().min(0).max(100),
+    percentage_amount: z.number().min(0).max(100).nullable(),
     description: z.string().max(200).nullish(),
   })
   .superRefine(({ started_at, ended_at }, ctx) => {

@@ -11,5 +11,6 @@ export default function usePartnerForm() {
   return useForm<PartnerFormType>({
     resolver: zodResolver(PartnerFormSchema),
     defaultValues: PARTNER_FORM_INITIAL,
+    reValidateMode: "onSubmit",
   });
 }

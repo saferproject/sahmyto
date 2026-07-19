@@ -37,11 +37,11 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
     icon: <MoneyRemove size="24" />,
     path: "/dashboard/karbooms/expenses-list",
   },
-  {
-    label: "مدیریت تعمیرات دوره ای",
-    icon: <Setting size="24" />,
-    path: "/dashboard/karbooms/maintenance-list",
-  },
+  // {
+  //   label: "مدیریت تعمیرات دوره ای",
+  //   icon: <Setting size="24" />,
+  //   path: "/dashboard/karbooms/maintenance-list",
+  // },
   {
     label: "مدیریت بیمه شخص ثالث",
     icon: <Health size="24" />,

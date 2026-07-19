@@ -100,7 +100,7 @@ export default function ExpenseDrawerFormComponent({
         label={categoryType === "daily" ? "مبلغ" : "قیمت قطعات"}
         error={!!errors.unit_price}
         helperText={errors.unit_price?.message ?? ""}
-        required
+        required={categoryType === "daily"}
       />
       {categoryType === "repair" && (
         <PriceInputComponent
@@ -109,7 +109,6 @@ export default function ExpenseDrawerFormComponent({
           label="اجرت"
           error={!!errors.wage_cost}
           helperText={errors.wage_cost?.message ?? ""}
-          required
         />
       )}
       <Controller

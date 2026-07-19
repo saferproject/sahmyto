@@ -7,9 +7,9 @@ export const DRIVER_FORM_INITIAL: DriverFormType = {
   last_name: "",
   started_at: dayjs(),
   ended_at: null,
-  fixed_amount: "",
-  service_amount: "",
-  percentage_amount: 0,
-  description: "",
+  fixed_amount: null,
+  service_amount: null,
+  percentage_amount: null,
+  description: null,
   payment_type: "monthly",
 };

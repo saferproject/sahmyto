@@ -18,19 +18,22 @@ import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
+import BaseResponse from "@/app/_interfaces/base-response";
+import useCreateIncomeEndpoint from "../_hooks/create-income-endpoint";
 
 export default function IncomeDrawerFormComponent({
   isOpen,
   karboomId,
-  incomeType = "daily",
-  onSubmit,
+  incomeType,
+  onSuccess,
 }: IncomeDrawerFormProps) {
   const {
     register,
     control,
     handleSubmit,
-    reset,
+    setError,
     setValue,
+    setValues,
     formState: { errors },
   } = useIncomeForm();
 
@@ -45,9 +48,51 @@ export default function IncomeDrawerFormComponent({
     isOpen && karboomId == selectedKarboomId,
   );
 
-  const submit = (data: IncomeFormType) => {
-    onSubmit(data);
-    reset(INCOME_FORM_INITIAL);
+  const {
+    mutate: createIncome,
+    isPending: creatingIncome,
+    isSuccess: createdIncome,
+    isError: creatingIncomeFailed,
+  } = useCreateIncomeEndpoint();
+
+  const submit = ({
+    reciever,
+    started_at,
+    ended_at,
+    image,
+    unit_price,
+    total_price,
+    ...other
+  }: IncomeFormType) => {
+    createIncome(
+      {
+        ...other,
+        unit_price: parseNumber(unit_price) || 0,
+        total_price: parseNumber(total_price) || 0,
+        type: incomeType,
+        receiver_id: reciever.member.id,
+        karboom_id: karboomId,
+        started_at: started_at.toISOString().split("T")[0],
+        ended_at: ended_at.toISOString().split("T")[0],
+      },
+      {
+        onSuccess() {
+          onSuccess();
+          setValues(INCOME_FORM_INITIAL);
+        },
+        onError(error) {
+          const err = error as unknown as BaseResponse;
+
+          if (err.errors)
+            Object.entries(err.errors).forEach(([field, errors]) =>
+              setError(field as keyof IncomeFormType, {
+                message: errors[0],
+                type: "validate",
+              }),
+            );
+        },
+      },
+    );
   };
 
   const quantityInputSettings: Record<
@@ -139,54 +184,50 @@ export default function IncomeDrawerFormComponent({
           />
         )}
       />
-      {incomeType !== "travel" && (
-        <>
-          <TextField
-            {...register("quantity", { valueAsNumber: true })}
-            label={quantityInputSettings[incomeType].label}
-            error={!!errors.quantity}
-            helperText={errors.quantity?.message ?? ""}
-            type="number"
-            inputMode="numeric"
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <p className="text-body font-semibold">
-                    {quantityInputSettings[incomeType].endAdonrment}
-                  </p>
-                ),
-              },
-              htmlInput: {
-                sx: { textAlign: "left" },
-              },
-            }}
-            fullWidth
-            required
-          />
-          <PriceInputComponent
-            register={register("unit_price")}
-            value={unit_price}
-            error={!!errors.unit_price}
-            helperText={errors.unit_price?.message ?? ""}
-            label={unitPriceSettings[incomeType].label}
-            required
-          />
-          <PriceInputComponent
-            register={register("total_price")}
-            value={total_price}
-            label="کل درآمد"
-            error={!!errors.total_price}
-            helperText={errors.total_price?.message ?? ""}
-            disabled
-          />
-          <div className="mt-2 flex w-full items-center gap-2">
-            <InfoCircle size={16} className="text-secondary" />
-            <p className="text-secondary text-xs">
-              تاریخ شروع و پایان بر حسب روز کامل حساب می‌شود
-            </p>
-          </div>
-        </>
-      )}
+      <TextField
+        {...register("quantity", { valueAsNumber: true })}
+        label={quantityInputSettings[incomeType].label}
+        error={!!errors.quantity}
+        helperText={errors.quantity?.message ?? ""}
+        type="number"
+        inputMode="numeric"
+        slotProps={{
+          input: {
+            endAdornment: (
+              <p className="text-body font-semibold">
+                {quantityInputSettings[incomeType].endAdonrment}
+              </p>
+            ),
+          },
+          htmlInput: {
+            sx: { textAlign: "left" },
+          },
+        }}
+        fullWidth
+        required
+      />
+      <PriceInputComponent
+        register={register("unit_price")}
+        value={unit_price}
+        error={!!errors.unit_price}
+        helperText={errors.unit_price?.message ?? ""}
+        label={unitPriceSettings[incomeType].label}
+        required
+      />
+      <PriceInputComponent
+        register={register("total_price")}
+        value={total_price}
+        label="کل درآمد"
+        error={!!errors.total_price}
+        helperText={errors.total_price?.message ?? ""}
+        disabled
+      />
+      <div className="mt-2 flex w-full items-center gap-2">
+        <InfoCircle size={16} className="text-secondary" />
+        <p className="text-secondary text-xs">
+          تاریخ شروع و پایان بر حسب روز کامل حساب می‌شود
+        </p>
+      </div>
       <Controller
         control={control}
         name="started_at"
@@ -237,7 +278,13 @@ export default function IncomeDrawerFormComponent({
         error={!!errors.description}
         helperText={errors.description?.message ?? ""}
       />
-      <Button type="submit" variant="contained" size="large" fullWidth>
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+        loading={creatingIncome}
+        fullWidth
+      >
         ثبت درآمد
       </Button>
     </form>
