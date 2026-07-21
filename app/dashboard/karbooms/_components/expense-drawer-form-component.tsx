@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
-
 import { Autocomplete, Button, TextField } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useWatch } from "react-hook-form";
 
@@ -18,22 +17,28 @@ import { ExpenseFormType } from "../_schemas/expense-form-schema";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
-import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
-
 import PriceInputComponent from "@/app/_components/price-input-component";
+import useCreateExpenseEndpoint from "../_hooks/create-expense-endpoint";
+import parseNumber from "@/app/_utilities/parse-numbers";
+import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
+import BaseResponse from "@/app/_interfaces/base-response";
 
 export default function ExpenseDrawerFormComponent({
   isOpen,
   karboomId,
   expenseFormRef,
   categoryType,
-  onSubmit,
+  selectedCategory,
+  onSuccess,
 }: ExpenseDrawerFormProps) {
+  const { enqueueSnackbar } = useSnackbar();
+
   const {
     register,
     control,
     handleSubmit,
-    reset,
+    setError,
+    setValues,
     formState: { errors },
   } = useExpenseForm();
 
@@ -46,9 +51,56 @@ export default function ExpenseDrawerFormComponent({
     isOpen && selectedKarboomId === karboomId,
   );
 
-  const submit = (data: ExpenseFormType) => {
-    onSubmit(data);
-    reset(EXPENSE_FORM_INITIAL);
+  const {
+    mutate: createExpense,
+    isPending: creatingExpense,
+    isSuccess: createdExpense,
+    isError: creatingExpenseFailed,
+  } = useCreateExpenseEndpoint();
+
+  const submit = ({
+    receiver,
+    date,
+    image,
+    unit_price,
+    wage_cost,
+    ...other
+  }: ExpenseFormType) => {
+    if (selectedCategory)
+      createExpense(
+        {
+          ...other,
+          unit_price: parseNumber(unit_price),
+          wage_cost: parseNumber(wage_cost),
+          receiver_id: receiver.member.id,
+          category_id: selectedCategory,
+          karboom_id: karboomId,
+          type: categoryType,
+          date: date.toISOString().split("T")[0],
+        },
+        {
+          onSuccess() {
+            onSuccess();
+            setValues(EXPENSE_FORM_INITIAL);
+          },
+          onError(error) {
+            const err = error as unknown as BaseResponse;
+
+            if (err.errors)
+              Object.entries(err.errors).forEach(([field, errors]) =>
+                setError(field as keyof ExpenseFormType, {
+                  message: errors[0],
+                  type: "validate",
+                }),
+              );
+          },
+        },
+      );
+    else
+      enqueueSnackbar({
+        message: "دسته هزینه را انتخاب کنید",
+        variant: "warning",
+      });
   };
 
   return (
@@ -139,7 +191,13 @@ export default function ExpenseDrawerFormComponent({
         error={!!errors.description}
         helperText={errors.description?.message ?? ""}
       />
-      <Button type="submit" variant="contained" size="large" fullWidth>
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+        loading={creatingExpense}
+        fullWidth
+      >
         ثبت هزینه
       </Button>
     </form>

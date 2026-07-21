@@ -62,8 +62,10 @@ export default function FinancialManagementPage() {
     !!selectedMonth,
   );
 
-  const { setDialog: setConfirmationDialog, onClose: closeConfirmationDialog } =
-    useConfirmationDialogStore((state) => state);
+  const {
+    setDialog: setConfirmationDialog,
+    closeDialog: closeConfirmationDialog,
+  } = useConfirmationDialogStore((state) => state);
 
   const handleValidateMonth = () => {
     validateMonth(selectedMonth?.id ?? 0);

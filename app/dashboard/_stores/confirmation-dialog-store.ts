@@ -9,8 +9,8 @@ export const createConfirmationDialogStore = (
 ) => {
   return createStore<ConfirmationDialogStore>()((set) => ({
     ...initState,
-    openDialog: () => set(() => ({ isOpen: true })),
-    closeDialog: () => set(() => ({ isOpen: false })),
+    openDialog: () => set((curValue) => ({ ...curValue, isOpen: true })),
+    closeDialog: () => set((curValue) => ({ ...curValue, isOpen: false })),
     setDialog: (props) => set(() => props),
   }));
 };

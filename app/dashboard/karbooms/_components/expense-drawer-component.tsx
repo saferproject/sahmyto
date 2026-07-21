@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SwipeableDrawer } from "@mui/material";
-import { useSnackbar } from "notistack";
 
 import ExpenseDrawerHeaderComponent from "./expense-drawer-header-component";
 import ExpenseDrawerCategoryListComponent from "./expense-drawer-list-component";
@@ -12,19 +11,13 @@ import { KarboomExpenseDrawerProps } from "../_types/karboom-expense-drawer-prop
 import { ExpensesCategoryTypes } from "../_types/expenses-category-types";
 import { ExpenseCategoryTypes } from "../_types/expense-category-types";
 
-import { ExpenseFormType } from "../_schemas/expense-form-schema";
-
-import useCreateExpenseEndpoint from "../_hooks/create-expense-endpoint";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
-import parseNumber from "@/app/_utilities/parse-numbers";
 
 export default function ExpenseDrawerComponent({
   isOpen,
   onOpen,
   onClose,
 }: KarboomExpenseDrawerProps) {
-  const { enqueueSnackbar } = useSnackbar();
-
   const expenseForm = useRef<HTMLFormElement>(null);
 
   const [categoryType, setCategoryType] =
@@ -32,13 +25,6 @@ export default function ExpenseDrawerComponent({
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   const karboomId = useKarboomsStore((state) => state.id);
-
-  const {
-    mutate: createExpense,
-    isPending: creatingExpense,
-    isSuccess: createdExpense,
-    isError: creatingExpenseFailed,
-  } = useCreateExpenseEndpoint();
 
   const handleSelectCategoryType = (categoryType: ExpenseCategoryTypes) => {
     setCategoryType(categoryType);
@@ -57,35 +43,9 @@ export default function ExpenseDrawerComponent({
     onClose();
   };
 
-  const handleSubmit = ({
-    receiver,
-    date,
-    image,
-    unit_price,
-    wage_cost,
-    ...other
-  }: ExpenseFormType) => {
-    if (selectedCategory)
-      createExpense({
-        ...other,
-        unit_price: parseNumber(unit_price),
-        wage_cost: parseNumber(wage_cost),
-        receiver_id: receiver.member.id,
-        category_id: selectedCategory,
-        karboom_id: karboomId,
-        type: categoryType,
-        date: date.toISOString().split("T")[0],
-      });
-    else
-      enqueueSnackbar({
-        message: "دسته هزینه را انتخاب کنید",
-        variant: "warning",
-      });
+  const handleSuccess = () => {
+    handleClose();
   };
-
-  useEffect(() => {
-    if (createdExpense) handleClose();
-  }, [createdExpense]);
 
   return (
     <SwipeableDrawer
@@ -108,7 +68,7 @@ export default function ExpenseDrawerComponent({
       <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
         <div className="flex min-h-0 w-full flex-1 flex-col items-center">
-          <div className="mb-4 flex w-full min-h-0 flex-1 flex-col overflow-y-auto">
+          <div className="mb-4 flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
             <ExpenseDrawerHeaderComponent />
             <ExpenseDrawerCategoryListComponent
               categoryType={categoryType}
@@ -121,7 +81,8 @@ export default function ExpenseDrawerComponent({
               karboomId={karboomId}
               expenseFormRef={expenseForm}
               categoryType={categoryType}
-              onSubmit={handleSubmit}
+              selectedCategory={selectedCategory}
+              onSuccess={handleSuccess}
             />
           </div>
         </div>

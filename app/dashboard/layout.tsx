@@ -6,7 +6,6 @@ import DashboardLayoutProps from "./_interfaces/dashboard-layout-props";
 
 import DashboardHeader from "./_components/dashboard-header";
 import DashboardFooter from "./_components/dashboard-footer";
-import ConfirmationDialogComponent from "./_components/confirmation-dialog-component";
 
 import ThemeRegistry from "../theme-registry";
 
@@ -18,6 +17,7 @@ import { ConfirmationDialogStoreProvider } from "./_providers/confirmation-dialo
 import { AuthenticationGuard } from "./_utilities/authentication-guard";
 import ActionDialogComponent from "./_components/action-dialog-component";
 import { ActionDialogStoreProvider } from "./_providers/action-dialog-provider";
+import ConfirmationDialog from "./_components/confirmation-dialog";
 
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -35,7 +35,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <ReactQueryProvider>
                 <AuthenticationGuard>
                   <div className="flex h-dvh w-full flex-col justify-between">
-                    <ConfirmationDialogComponent />
+                    <ConfirmationDialog />
                     <ActionDialogComponent />
                     <DashboardHeader />
                     <main className="flex w-full min-h-0 flex-1 flex-col items-center overflow-x-hidden overflow-y-auto px-8 py-2">
