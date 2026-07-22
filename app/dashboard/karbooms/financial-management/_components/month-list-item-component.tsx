@@ -26,7 +26,7 @@ export default function MonthListItemComponent({
       className={
         "relative flex min-w-28 snap-start snap-always flex-col items-center gap-1 rounded-2xl px-4 py-2 transition-all " +
         (selectedMonthId === id
-          ? "bg-primary text-white"
+          ? "bg-primary text-white shadow-lg"
           : "border-body text-body border border-dashed bg-white")
       }
       onClick={() => onSelectMonth(financialMonth)}

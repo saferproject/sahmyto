@@ -3,16 +3,18 @@
 import Image from "next/image";
 
 import { useState } from "react";
-import { MoneyRecive } from "iconsax-reactjs";
 import { Button } from "@mui/material";
+import { MoneyRecive } from "iconsax-reactjs";
 
+import QueryState from "@/app/_components/query-state";
+import DriverTipDrawerComponent from "./_components/driver-tip-drawer-component";
 import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
 
 import formatNumber from "@/app/_utilities/format-numbers";
-import DriverTipDrawerComponent from "./_components/driver-tip-drawer-component";
+
 import useGetDriversSalaryEndpoint from "./_hooks/use-get-drivers-salaries-endpoint";
+
 import { useFinancialMonthStore } from "../_providers/financial-managment-store-provider";
-import QueryState from "@/app/_components/query-state";
 
 export default function DriversSalaryPage() {
   const [isDriverTipDrawerOpen, setDriverTipDrawerOpen] = useState(false);

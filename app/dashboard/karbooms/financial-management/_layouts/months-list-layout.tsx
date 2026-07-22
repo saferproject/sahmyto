@@ -10,7 +10,10 @@ import QueryState from "@/app/_components/query-state";
 
 import { MonthListProps } from "../_types/month-list-props";
 
-export default function MonthListLayout({ selectedMonth, onSelectMonth }: MonthListProps) {
+export default function MonthListLayout({
+  selectedMonth,
+  onSelectMonth,
+}: MonthListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
   const {
@@ -32,7 +35,7 @@ export default function MonthListLayout({ selectedMonth, onSelectMonth }: MonthL
     >
       <ul
         dir="ltr"
-        className="mt-4 flex w-full snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5"
+        className="mt-4 flex w-full snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5 pb-4"
       >
         {financialMonths?.data.map((financialMonth, index) => (
           <MonthListItemComponent

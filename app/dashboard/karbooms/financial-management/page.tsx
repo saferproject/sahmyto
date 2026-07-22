@@ -31,13 +31,14 @@ import { FinancialMonth } from "./_types/financial-month";
 import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
 import useGetFinancialMonthDataEndpoint from "./_hooks/use-get-financial-month-data-endpoint";
 import MonthBalanceComponent from "./_components/month-balance-component";
+import { useFinancialMonthStore } from "./_providers/financial-managment-store-provider";
 
 export default function FinancialManagementPage() {
   const router = useRouter();
 
-  const [selectedMonth, setSelectedMonth] = useState<null | FinancialMonth>(
-    null,
-  );
+  // const [selectedMonth, setSelectedMonth] = useState<null | FinancialMonth>(
+  //   null,
+  // );
   const [isIncomeDetailsOpen, setIncomeDetailsOpen] = useState(false);
   const [isIncomeMonthlyOpen, setIncomeMonthlyOpen] = useState(false);
   const [isIncomeDailyOpen, setIncomeDailyOpen] = useState(false);
@@ -50,6 +51,9 @@ export default function FinancialManagementPage() {
     useState<Record<string, boolean> | null>(null);
   const [isExpenseRepairCategoriesOpen, setExpenseRepairCategoriesOpen] =
     useState<Record<string, boolean> | null>(null);
+
+  const { setFinancialMonth: setSelectedMonth, ...selectedMonth } =
+    useFinancialMonthStore((state) => state);
 
   const {
     mutate: validateMonth,
