@@ -47,7 +47,7 @@ export default function DriverListPage() {
   };
 
   return (
-    <div className="mt-2 flex size-full flex-col gap-4">
+    <div className="py-24 flex size-full flex-col gap-4">
       <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
         <div className="flex w-full items-center gap-2">
           <User className="text-heading" size={24} variant="Broken" />

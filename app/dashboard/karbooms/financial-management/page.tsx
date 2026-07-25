@@ -211,7 +211,7 @@ export default function FinancialManagementPage() {
     });
 
   return (
-    <div className="flex size-full flex-col justify-between">
+    <div className="flex size-full flex-col justify-between py-24">
       <SelectedKarboomInfoComponent />
       <MonthListLayout
         selectedMonth={selectedMonth}

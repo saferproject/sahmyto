@@ -85,7 +85,7 @@ export default function ExpensesListPage() {
   };
 
   return (
-    <div className="mt-2 flex h-full w-full flex-col gap-4">
+    <div className="py-24 flex h-full w-full flex-col gap-4">
       <ExpenseListHeaderLayout
         selectedTagId={tagId}
         onTagSelect={handleTagSelect}

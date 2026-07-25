@@ -1,14 +1,17 @@
 import Image from "next/image";
 
-import { Play } from "iconsax-reactjs";
+import { Play, VideoPlay } from "iconsax-reactjs";
 import { IconButton } from "@mui/material";
 
 import formatTime from "./_utilities/format-time";
 
 export default function TutorialPage() {
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto">
-      <h2 className="">آموزش کار با سهمیتو</h2>
+    <div className="flex h-full w-full flex-col overflow-y-auto py-24">
+      <div className="flex items-center gap-2">
+        <VideoPlay size="32" className="text-primary" />
+        <h2 className="text-body font-semibold">آموزش کار با سهمیتو</h2>
+      </div>
       <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-12">
         <div className="relative col-span-2">
           <Image
@@ -32,7 +35,7 @@ export default function TutorialPage() {
             height={128}
             className="absolute -top-3 right-7 -z-10"
           />
-          <div className="flex absolute -top-5 left-2 items-center justify-center rounded-full bg-white p-1 shadow-lg">
+          <div className="absolute -top-5 left-2 flex items-center justify-center rounded-full bg-white p-1 shadow-lg">
             <IconButton
               size="small"
               sx={{

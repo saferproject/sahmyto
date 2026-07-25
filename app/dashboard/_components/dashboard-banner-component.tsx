@@ -12,7 +12,7 @@ import BannerCoinSM from "../_assets/_images/home-banner-coin-sm.png";
 
 export default function DashboardBannerComponent() {
   return (
-    <div className="relative mt-4 w-full">
+    <div className="relative mt-4 w-full overflow-x-visible">
       <Image
         src={BannerBackgroundImage}
         alt=""

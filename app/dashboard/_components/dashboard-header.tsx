@@ -7,8 +7,6 @@ import { Badge, IconButton } from "@mui/material";
 import { useEffect, useState, type MouseEvent } from "react";
 import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
 
-import DashboardHeaderVector from "@/app/_assets/_vectors/dashboard-header.svg";
-
 import DashboardHeaderDrawerComponent from "./dashboard-header-drawer-component";
 import RequestsMenuComponent from "./notifications-menu-component";
 
@@ -76,71 +74,12 @@ export default function DashboardHeader() {
   }, [gotRequests, requests?.data.length]);
 
   return (
-    <header className="relative w-full">
+    <header className="fixed top-4 w-full bg-transparent px-4 z-50">
       <DashboardHeaderDrawerComponent
         isOpen={isDrawerOpen}
         onOpen={handleOpenDrawer}
         onClose={handleCloseDrawer}
       />
-      <Image
-        src={DashboardHeaderVector}
-        alt="وکتور پس زمینه هدر"
-        className="h-auto w-full"
-        loading="eager"
-        fetchPriority="high"
-      />
-      <div className="absolute top-4 flex w-full items-center justify-between px-8">
-        <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">
-          <HamburgerMenu size={48} />
-        </IconButton>
-        <div>
-          <button
-            type="button"
-            aria-label="پروفایل"
-            className="border-primary relative flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border bg-white"
-            onClick={handleNavigateToProfile}
-          >
-            {avatar ? (
-              <Image
-                src={avatar}
-                alt="عکس پروفایل"
-                fill
-                className="object-cover"
-                sizes="48px"
-              />
-            ) : (
-              <User size={24} variant="Broken" className="text-secondary" />
-            )}
-          </button>
-          <Badge
-            className="relative bottom-2 cursor-pointer"
-            badgeContent={
-              requests?.data && requests.data.length > 0 ? (
-                <div className="text-primary flex size-5 items-center justify-center rounded-full bg-white text-lg shadow-lg">
-                  {requests.data.length}
-                </div>
-              ) : null
-            }
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-          >
-            <button
-              type="button"
-              aria-label="اعلان‌ها"
-              onClick={handleOpenRequestsMenu}
-              className="border-primary flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border bg-white"
-            >
-              <Notification1
-                size={24}
-                variant="Broken"
-                className="text-secondary"
-              />
-            </button>
-          </Badge>
-        </div>
-      </div>
       <RequestsMenuComponent
         anchorEl={notificationAnchor}
         isOpen={Boolean(notificationAnchor)}
@@ -154,6 +93,59 @@ export default function DashboardHeader() {
         requestIsAccepting={requestIsAccepting}
         requestIsRejecting={requestIsRejecting}
       />
+      <div className="bg-secondary-lightest/60 flex items-center justify-between rounded-full p-3 shadow-lg backdrop-blur-sm">
+        <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">
+          <HamburgerMenu size={32} />
+        </IconButton>
+        <Image src="/images/logo-primary.svg" alt="" width={64} height={32} />
+        <div className="flex items-center">
+          <Badge
+            className="relative -left-4 z-10 cursor-pointer"
+            badgeContent={
+              requests?.data && requests.data.length > 0 ? (
+                <div className="text-primary flex size-4 items-center justify-center rounded-full bg-white text-lg shadow-lg">
+                  {requests.data.length}
+                </div>
+              ) : null
+            }
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          >
+            <button
+              type="button"
+              aria-label="اعلان‌ها"
+              onClick={handleOpenRequestsMenu}
+              className="border-primary flex size-10 cursor-pointer items-center justify-center rounded-full border bg-white"
+            >
+              <Notification1
+                size={20}
+                variant="Broken"
+                className="text-secondary"
+              />
+            </button>
+          </Badge>
+          <button
+            type="button"
+            aria-label="پروفایل"
+            className="bg-primary-light flex size-12 cursor-pointer items-center justify-center overflow-hidden rounded-full"
+            onClick={handleNavigateToProfile}
+          >
+            {avatar ? (
+              <Image
+                src={avatar}
+                alt="عکس پروفایل"
+                fill
+                className="object-cover"
+                sizes="48px"
+              />
+            ) : (
+              <User size={24} variant="Broken" className="text-white" />
+            )}
+          </button>
+        </div>
+      </div>
     </header>
   );
 }

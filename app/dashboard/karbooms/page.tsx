@@ -61,8 +61,8 @@ export default function KarboomsPage() {
   };
 
   return (
-    <div className="h-full w-full overflow-y-auto">
-      <div className="mt-2 flex items-center gap-2">
+    <div className="h-full w-full overflow-y-auto py-24">
+      <div className="flex items-center gap-2">
         <Truck size={32} className="text-primary" />
         <h2 className="text-body w-full text-right text-xl font-semibold">
           لیست کاربوم ها
