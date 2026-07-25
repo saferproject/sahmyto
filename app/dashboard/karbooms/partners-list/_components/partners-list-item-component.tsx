@@ -12,7 +12,7 @@ import getActivityStatusColor from "../_utilities/get-partner-status-color";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 
 export default function PartnersListItemComponent({
-  item: { full_name, phone, avatar, status },
+  item: { full_name, phone, avatar, share, status },
   index,
 }: PartnersListItemProps) {
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -69,6 +69,7 @@ export default function PartnersListItemComponent({
             <div className="flex flex-col gap-2">
               <p className="text-body font-semibold">{full_name}</p>
               <p className="text-body">{phone}</p>
+              <p className="text-body">{share} دانگ</p>
             </div>
           </div>
           <Button ref={menuButton} onClick={handleOpenMenu}>

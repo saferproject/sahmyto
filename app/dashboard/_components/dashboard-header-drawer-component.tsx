@@ -106,7 +106,6 @@ export default function DashboardHeaderDrawerComponent({
         onSuccess={handleAddKarboomSuccess}
       />
       <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-3xl bg-white p-8 shadow-lg">
-        <div className="bg-secondary-light absolute top-1/2 left-2 h-32 w-2 -translate-y-1/2 rounded-full"></div>
         <div className="flex w-full items-center justify-between">
           <Image
             src="/images/logo-secondary.svg"

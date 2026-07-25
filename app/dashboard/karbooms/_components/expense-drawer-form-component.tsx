@@ -22,6 +22,8 @@ import useCreateExpenseEndpoint from "../_hooks/create-expense-endpoint";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
 import BaseResponse from "@/app/_interfaces/base-response";
+import { useEffect } from "react";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function ExpenseDrawerFormComponent({
   isOpen,
@@ -38,15 +40,21 @@ export default function ExpenseDrawerFormComponent({
     control,
     handleSubmit,
     setError,
+    setValue,
     setValues,
     formState: { errors },
   } = useExpenseForm();
 
   const { description, unit_price, wage_cost } = useWatch({ control });
 
+  const userId = useUserInfoStore((state) => state.id);
   const selectedKarboomId = useKarboomsStore((state) => state.id);
 
-  const { data: members, isLoading: gettingMembers } = useGetMembersEndpoint(
+  const {
+    data: members,
+    isLoading: gettingMembers,
+    isSuccess: gotMembers,
+  } = useGetMembersEndpoint(
     karboomId,
     isOpen && selectedKarboomId === karboomId,
   );
@@ -102,6 +110,16 @@ export default function ExpenseDrawerFormComponent({
         variant: "warning",
       });
   };
+
+  useEffect(() => {
+    if (gotMembers) {
+      const currentMember = members.data.find(
+        (member) => member.user.id === userId,
+      );
+
+      if (currentMember) setValue("receiver", currentMember);
+    }
+  }, [gotMembers, members]);
 
   return (
     <form

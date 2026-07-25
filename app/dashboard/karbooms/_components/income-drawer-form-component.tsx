@@ -20,6 +20,7 @@ import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import BaseResponse from "@/app/_interfaces/base-response";
 import useCreateIncomeEndpoint from "../_hooks/create-income-endpoint";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function IncomeDrawerFormComponent({
   isOpen,
@@ -41,9 +42,10 @@ export default function IncomeDrawerFormComponent({
     control,
   });
 
+  const userId = useUserInfoStore((state) => state.id);
   const selectedKarboomId = useKarboomsStore((state) => state.id);
 
-  const { data: members, isLoading: gettingMembers } = useGetMembersEndpoint(
+  const { data: members, isLoading: gettingMembers, isSuccess: gotMembers } = useGetMembersEndpoint(
     karboomId,
     isOpen && karboomId == selectedKarboomId,
   );
@@ -142,6 +144,16 @@ export default function IncomeDrawerFormComponent({
         formatNumber(quantity * (parseNumber(unit_price) || 0)),
       );
   }, [quantity, unit_price]);
+
+  useEffect(() => {
+    if (gotMembers) {
+      const currentMember = members.data.find(
+        (member) => member.user.id === userId,
+      );
+
+      if (currentMember) setValue("reciever", currentMember);
+    }
+  }, [gotMembers, members]);
 
   return (
     <form
