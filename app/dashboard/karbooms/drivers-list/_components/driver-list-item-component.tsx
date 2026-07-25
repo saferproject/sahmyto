@@ -10,9 +10,9 @@ import { type DriverListItemProps } from "../_types/driver-list-item-props";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 import formatPaymentType from "../_utilities/format-payment-type";
-import getActivityStatusColor from "../../partners-list/_utilities/get-partner-status-color";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
+import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
 
 export default function DriverListItemComponent({
   driver: {
@@ -52,13 +52,13 @@ export default function DriverListItemComponent({
           <span
             className={
               "relative left-16 rounded-full p-2 " +
-              getActivityStatusColor(membership_status)
+              ACTIVITY_STATUS_COLORS[membership_status]
             }
           >
             {ACTIVITY_STATUS_FA[membership_status]}
           </span>
         }
-        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
         sx={{
           width: "100%",
         }}

@@ -3,4 +3,5 @@ export default interface NavigationItem {
   title: string;
   icon: React.ReactNode;
   path: string;
+  disabled: boolean;
 }

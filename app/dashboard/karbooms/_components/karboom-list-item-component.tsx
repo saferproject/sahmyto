@@ -22,10 +22,9 @@ export default function KarboomListItemComponent(
 
   const { index, name, plate, image } = karboom;
 
-  const {
-    setActiveKarboom,
-    openKarboomActionDrawer,
-  } = useKarboomsStore((state) => state);
+  const { setActiveKarboom, openKarboomActionDrawer } = useKarboomsStore(
+    (state) => state,
+  );
 
   const handleShowActions = () => {
     setActiveKarboom(karboom);
@@ -34,7 +33,7 @@ export default function KarboomListItemComponent(
 
   const handleNavigateToIncomeList = () => {
     setActiveKarboom(karboom);
-    router.push('/dashboard/karbooms/incomes-list');
+    router.push("/dashboard/karbooms/incomes-list");
   };
 
   const handleNavigateToExpenseList = () => {
@@ -64,6 +63,8 @@ export default function KarboomListItemComponent(
           fill
           className="object-cover"
           sizes="100vw"
+          loading="eager"
+          priority
         />
         {plate.first_number &&
           plate.second_character &&

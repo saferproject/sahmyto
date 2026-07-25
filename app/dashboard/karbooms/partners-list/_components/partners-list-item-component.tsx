@@ -10,6 +10,7 @@ import PartnersListItemProps from "../_interfaces/partners-list-item-props";
 
 import getActivityStatusColor from "../_utilities/get-partner-status-color";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
+import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
 
 export default function PartnersListItemComponent({
   item: { full_name, phone, avatar, share, status },
@@ -39,14 +40,14 @@ export default function PartnersListItemComponent({
         badgeContent={
           <span
             className={
-              "relative left-16 rounded-full p-2 " +
-              getActivityStatusColor(status)
+              "relative -top-2 left-16 rounded-full p-2 " +
+              ACTIVITY_STATUS_COLORS[status]
             }
           >
             {ACTIVITY_STATUS_FA[status]}
           </span>
         }
-        anchorOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
         sx={{
           width: "100%",
         }}

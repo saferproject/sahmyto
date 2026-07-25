@@ -1,14 +1,17 @@
 import { usePathname, useRouter } from "next/navigation";
 
 import NavigationItemProps from "../_types/navigation-item-props";
+import { useSnackbar } from "notistack";
 
 export default function NavigationItemComponent({
   title,
   icon,
   path,
+  disabled
 }: NavigationItemProps) {
   const currentPath = usePathname();
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   // The home tab ("/dashboard") matches only its exact path; every other tab
   // also stays active on its nested routes (e.g. /dashboard/karbooms/...).
@@ -18,15 +21,16 @@ export default function NavigationItemComponent({
       : currentPath === path || currentPath.startsWith(path + "/");
 
   const handleNavigation = (path: string) => {
-    router.push(path);
+    if (!disabled) router.push(path);
+    else enqueueSnackbar({variant: 'info', message: 'صفحه درحال توسعه است'})
   };
 
   return (
     <li
       title={title}
       className={
-        "text-body flex items-center rounded-full py-2 px-4 gap-2 " +
-        (isActive ? "bg-primary-light" : "")
+        "flex items-center gap-2 rounded-full px-4 py-2 " +
+        (disabled ? "text-secondary" : isActive ? "bg-primary-light text-body" : "text-body")
       }
       onClick={() => handleNavigation(path)}
     >

@@ -3,4 +3,5 @@ export default interface DrawerMenuItem {
   title: string;
   icon: React.ReactNode;
   link: string;
+  disabled: boolean;
 }

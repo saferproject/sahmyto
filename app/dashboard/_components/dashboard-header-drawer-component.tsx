@@ -15,6 +15,9 @@ import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-pr
 import { User, ArrowLeft2, Logout } from "iconsax-reactjs";
 import KarboomFormDrawerComponent from "../karbooms/_components/karboom-form-drawer-component";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
+import PartnerFormDrawerComponent from "../karbooms/_components/partner-form-drawer-component";
+import DriverFormDrawerComponent from "../karbooms/_components/driver-form-drawer-component";
 
 export default function DashboardHeaderDrawerComponent({
   isOpen,
@@ -22,8 +25,11 @@ export default function DashboardHeaderDrawerComponent({
   onClose,
 }: DashboardHeaderDrawerProps) {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [isKarboomFormDrawerOpen, setkarboomFormDrawerOpen] = useState(false);
+  const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] = useState(false);
+  const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] = useState(false);
 
   const { avatar, full_name } = useUserInfoStore((state) => state);
   const {
@@ -31,11 +37,14 @@ export default function DashboardHeaderDrawerComponent({
     closeDialog: closeConfirmationDialog,
   } = useConfirmationDialogStore((state) => state);
 
-  const { mutate } = useUserLogout();
+  const { mutate: logout } = useUserLogout();
 
-  const handleNavigation = (link: string) => {
-    router.push(link);
-    onClose();
+  const handleNavigation = (link: string, disabled: boolean) => {
+    if (!disabled) {
+      router.push(link);
+      onClose();
+    } else
+      enqueueSnackbar({ variant: "info", message: "صفحه درحال توسعه است" });
   };
 
   const handleNavigationToProfile = () => {
@@ -44,7 +53,7 @@ export default function DashboardHeaderDrawerComponent({
   };
 
   const handleLogout = () => {
-    mutate(undefined, {
+    logout(undefined, {
       onSuccess: () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
@@ -72,10 +81,36 @@ export default function DashboardHeaderDrawerComponent({
     setkarboomFormDrawerOpen(false);
   };
 
-  const handleAddKarboomSuccess = () => {
+  const handleOpenPartnerFormDrawer = () => {
+    setPartnerFormDrawerOpen(true);
+  };
+
+  const handleClosePartnerFormDrawer = () => {
+    setPartnerFormDrawerOpen(false);
+  };
+
+  const handleOpenDriverFormDrawer = () => {
+    setDriverFormDrawerOpen(true);
+  };
+
+  const handleCloseDriverFormDrawer = () => {
+    setDriverFormDrawerOpen(false);
+  };
+
+  const handleKarboomFormSuccess = () => {
     handleCloseKarboomFormDrawer();
-    onClose();
-  }
+    handleOpenPartnerFormDrawer();
+  };
+
+  const handlePartnerFormSuccess = () => {
+    handleClosePartnerFormDrawer();
+    handleOpenDriverFormDrawer();
+  };
+
+  const handleDriverFormSuccess = () => {
+    handleCloseDriverFormDrawer();
+    handleNavigation("/dashboard/karbooms", false);
+  };
 
   return (
     <SwipeableDrawer
@@ -103,7 +138,19 @@ export default function DashboardHeaderDrawerComponent({
         isOpen={isKarboomFormDrawerOpen}
         onOpen={handleOpenKarboomFormDrawer}
         onClose={handleCloseKarboomFormDrawer}
-        onSuccess={handleAddKarboomSuccess}
+        onSuccess={handleKarboomFormSuccess}
+      />
+      <PartnerFormDrawerComponent
+        isOpen={isPartnerFormDrawerOpen}
+        onOpen={handleOpenPartnerFormDrawer}
+        onClose={handleClosePartnerFormDrawer}
+        onSuccess={handlePartnerFormSuccess}
+      />
+      <DriverFormDrawerComponent
+        isOpen={isDriverFormDrawerOpen}
+        onOpen={handleOpenDriverFormDrawer}
+        onClose={handleCloseDriverFormDrawer}
+        onSuccess={handleDriverFormSuccess}
       />
       <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-3xl bg-white p-8 shadow-lg">
         <div className="flex w-full items-center justify-between">
@@ -164,34 +211,40 @@ export default function DashboardHeaderDrawerComponent({
           <ul className="flex flex-col">
             <AnimatePresence>
               {isOpen &&
-                DRAWER_MENU_ITEMS.map(({ id, title, icon, link }, index) => (
-                  <motion.li
-                    initial={{ x: 320 }}
-                    whileTap={{ scale: 0.9 }}
-                    animate={{
-                      x: 0,
-                    }}
-                    transition={{
-                      delay: 0.2 + 0.1 * index,
-                      duration: 0.2,
-                      ease: "easeOut",
-                    }}
-                    key={id}
-                    role="button"
-                    tabIndex={0}
-                    className="text-body flex items-center justify-between py-4"
-                    onClick={() => handleNavigation(link)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ")
-                        handleNavigation(link);
-                    }}
-                  >
-                    <div className="flex items-center gap-4">
-                      {icon} <h4 className="text-sm font-semibold">{title}</h4>
-                    </div>
-                    <ArrowLeft2 size={24} />
-                  </motion.li>
-                ))}
+                DRAWER_MENU_ITEMS.map(
+                  ({ id, title, icon, link, disabled }, index) => (
+                    <motion.li
+                      initial={{ x: 320 }}
+                      whileTap={{ scale: 0.9 }}
+                      animate={{
+                        x: 0,
+                      }}
+                      transition={{
+                        delay: 0.2 + 0.1 * index,
+                        duration: 0.2,
+                        ease: "easeOut",
+                      }}
+                      key={id}
+                      role="button"
+                      tabIndex={0}
+                      className={
+                        "flex items-center justify-between py-4 " +
+                        (disabled ? "text-secondary" : "text-body")
+                      }
+                      onClick={() => handleNavigation(link, disabled)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ")
+                          handleNavigation(link, disabled);
+                      }}
+                    >
+                      <div className="flex items-center gap-4">
+                        {icon}{" "}
+                        <h4 className="text-sm font-semibold">{title}</h4>
+                      </div>
+                      <ArrowLeft2 size={24} />
+                    </motion.li>
+                  ),
+                )}
             </AnimatePresence>
           </ul>
         </nav>
