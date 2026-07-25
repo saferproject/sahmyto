@@ -41,7 +41,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: "14px",
-          marginTop: '6px',
+          marginTop: "6px",
           color: "oklch(30.262% 0.10854 266.981)",
         },
       },
@@ -50,6 +50,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
+          borderWidth: "0.5px",
         },
       },
     },
@@ -58,6 +59,7 @@ export const theme = createTheme({
         input: {
           height: "32px",
           fontSize: "14px",
+          borderWidth: "0.5px",
         },
         root: {
           borderRadius: 12,

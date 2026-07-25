@@ -12,7 +12,7 @@ import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { DRAWER_MENU_ITEMS } from "../_constants/drawer-menu-items";
 import useUserLogout from "../_hooks/use-user-logout-endpoint";
 import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-provider";
-import { User, ArrowLeft2, Logout } from "iconsax-reactjs";
+import { User, ArrowLeft2, Logout, Add } from "iconsax-reactjs";
 import KarboomFormDrawerComponent from "../karbooms/_components/karboom-form-drawer-component";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
@@ -123,13 +123,13 @@ export default function DashboardHeaderDrawerComponent({
           sx: {
             position: "relative",
             width: "90%",
-            borderRadius: "0 24px 24px 0",
+            borderRadius: "0 50px 50px 0",
             display: "flex",
             justifyContent: "space-between",
             backgroundColor: "#e66203",
             paddingBottom: "12px",
-            paddingRight: "4px",
-            paddingTop: "4px",
+            // paddingRight: "4px",
+            // paddingTop: "4px",
           },
         },
       }}
@@ -152,12 +152,12 @@ export default function DashboardHeaderDrawerComponent({
         onClose={handleCloseDriverFormDrawer}
         onSuccess={handleDriverFormSuccess}
       />
-      <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-3xl bg-white p-8 shadow-lg">
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-[50px] bg-white p-8 shadow-lg">
         <div className="flex w-full items-center justify-between">
           <Image
             src="/images/logo-secondary.svg"
             alt="سهمیتو"
-            className="scale-75"
+            className="origin-right scale-65"
             width={128}
             height={64}
           />
@@ -202,13 +202,16 @@ export default function DashboardHeaderDrawerComponent({
             variant="contained"
             sx={{
               marginBottom: "8px",
+              justifyContent: "space-between",
             }}
             onClick={handleOpenKarboomFormDrawer}
+            startIcon={<Add size={20} className="text-white" />}
+            endIcon={<div className="w-5"></div>}
             fullWidth
           >
             ایجاد کاربوم
           </Button>
-          <ul className="flex flex-col">
+          <ul className="mt-4 flex flex-col">
             <AnimatePresence>
               {isOpen &&
                 DRAWER_MENU_ITEMS.map(
@@ -241,7 +244,7 @@ export default function DashboardHeaderDrawerComponent({
                         {icon}{" "}
                         <h4 className="text-sm font-semibold">{title}</h4>
                       </div>
-                      <ArrowLeft2 size={24} />
+                      <ArrowLeft2 size={20} />
                     </motion.li>
                   ),
                 )}

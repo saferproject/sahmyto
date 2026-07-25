@@ -45,7 +45,7 @@ export default function PartnersListPage() {
   };
 
   return (
-    <div className="py-24 flex size-full flex-col gap-4">
+    <div className="flex size-full flex-col gap-4 pt-26 pb-24">
       <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
         <div className="flex w-full items-center gap-2">
           <Profile2User className="text-heading" size={24} variant="Broken" />

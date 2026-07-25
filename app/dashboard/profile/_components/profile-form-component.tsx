@@ -100,6 +100,25 @@ export default function ProfileFormComponent() {
           fullWidth
         />
       </div>
+      {/* <Controller
+        name="gender"
+        control={control}
+        render={({ field }) => (
+          <FormControl>
+            <InputLabel id="gender-label">جنسیت</InputLabel>
+            <Select
+              {...field}
+              defaultValue="male"
+              value={field.value ?? ""}
+              labelId="gender-label"
+              label="جنسیت"
+            >
+              <MenuItem value="male">مرد</MenuItem>
+              <MenuItem value="female">زن</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      /> */}
       <Accordion
         expanded={isOptionalFieldsVisible}
         onChange={HandleToggleOptionalFieldsVisibility}
@@ -131,24 +150,7 @@ export default function ProfileFormComponent() {
               )}
             />
             <TextField {...register("father_name")} label="نام پدر" />
-            <Controller
-              name="gender"
-              control={control}
-              render={({ field }) => (
-                <FormControl>
-                  <InputLabel id="gender-label">جنسیت</InputLabel>
-                  <Select
-                    {...field}
-                    value={field.value ?? ""}
-                    labelId="gender-label"
-                    label="جنسیت"
-                  >
-                    <MenuItem value="male">مرد</MenuItem>
-                    <MenuItem value="female">زن</MenuItem>
-                  </Select>
-                </FormControl>
-              )}
-            />
+
             <TextField {...register("email")} label="ایمیل" type="email" />
           </div>
         </AccordionDetails>

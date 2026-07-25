@@ -30,7 +30,7 @@ export default function PriceInputComponent({
       type="text"
       inputMode="numeric"
       helperText={
-        error ? helperText : <span>{transformNumber(amount)} تومان</span>
+        value && (error ? helperText : <span>{transformNumber(amount)} تومان</span>)
       }
       slotProps={{
         input: {
@@ -38,8 +38,8 @@ export default function PriceInputComponent({
             <Image
               src="/images/toman-secondary.webp"
               alt="تومان"
-              width={24}
-              height={24}
+              width={20}
+              height={20}
             />
           ),
         },

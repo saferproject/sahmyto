@@ -21,7 +21,7 @@ export default function BodyInsurancePage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 py-24">
+    <div className="flex h-full w-full flex-col gap-4 pt-26 pb-24">
       <BodyInsuranceListHeaderLayout />
       <InsuranceBannerComponent />
       <SelectedKarboomInfoComponent />

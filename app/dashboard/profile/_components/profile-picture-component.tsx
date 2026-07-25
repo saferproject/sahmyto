@@ -18,7 +18,10 @@ export default function ProfilePictureComponent() {
 
   return (
     <div className="border-primary relative flex h-32 min-h-32 w-32 min-w-32 items-center justify-center rounded-full border-2 shadow-lg">
-      <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full">
+      <div
+        className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full"
+        onClick={handleNavigateToUploadProfileImage}
+      >
         {avatar ? (
           <Image
             src={avatar}
@@ -31,10 +34,7 @@ export default function ProfilePictureComponent() {
           <User size={48} className="text-secondary" />
         )}
       </div>
-      <button
-        className="bg-primary absolute -bottom-4 rounded-full p-2 text-white shadow-lg"
-        onClick={handleNavigateToUploadProfileImage}
-      >
+      <button className="bg-primary absolute -bottom-4 rounded-full p-2 text-white shadow-lg">
         <DocumentUpload size={24} variant="Broken" />
       </button>
     </div>

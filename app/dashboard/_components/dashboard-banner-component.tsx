@@ -40,11 +40,11 @@ export default function DashboardBannerComponent() {
         alt=""
         className="absolute top-16 left-8 scale-75"
       />
-      <h2 className="text-body absolute top-1/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.875rem)] font-bold text-nowrap">
+      <h2 className="text-body absolute top-1/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.795rem)] font-bold text-nowrap">
         سهمیتو، حساب جاده‌ت همیشه رو به راهه!
       </h2>
-      <h3 className="text-body absolute top-2/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.875rem)] text-nowrap">
-        جاده رو برو، حساب باما!ً
+      <h3 className="text-body absolute top-2/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.795rem)] text-nowrap">
+        جاده رو برو، حساب باما  !
       </h3>
       <CloseCircle size={20} className="absolute top-0 -right-1" />
     </div>

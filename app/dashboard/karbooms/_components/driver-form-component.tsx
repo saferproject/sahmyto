@@ -181,22 +181,31 @@ export default function DriverFormComponent({
         control={control}
         render={({ field }) => (
           <FormControl required>
-            <FormLabel>
+            <FormLabel
+              sx={{
+                fontSize: "14px",
+              }}
+            >
               دستمزد این راننده در چه بازه زمانی پرداخت می شود؟
             </FormLabel>
             <RadioGroup
               {...field}
               onChange={(event) => field.onChange(event.target.value)}
-              sx={{ flexDirection: "row", marginTop: 0, paddingTop: 0 }}
+              sx={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: '8px',
+                paddingTop: 0,
+              }}
             >
               <FormControlLabel
                 value={"monthly"}
-                label="ماهانه"
+                label="به صورت ماهانه"
                 control={<Radio />}
               />
               <FormControlLabel
                 value={"daily"}
-                label="روزانه"
+                label="به صورت روزانه"
                 control={<Radio />}
               />
             </RadioGroup>

@@ -70,7 +70,7 @@ export default function KarboomListItemComponent(
           plate.second_character &&
           plate.third_number &&
           plate.fourth_number && (
-            <div className="absolute left-4">
+            <div className="absolute left-4 top-5">
               <Plate {...plate} />
             </div>
           )}

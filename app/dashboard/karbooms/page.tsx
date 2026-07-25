@@ -61,13 +61,10 @@ export default function KarboomsPage() {
   };
 
   return (
-    <div className="h-full w-full overflow-y-auto py-24">
-      <div className="flex items-center gap-2">
-        <Truck size={32} className="text-primary" />
-        <h2 className="text-body w-full text-right text-xl font-semibold">
-          لیست کاربوم ها
-        </h2>
-      </div>
+    <div className="h-full w-full overflow-y-auto pt-26 pb-24">
+      <h2 className="text-body w-full text-right text-lg font-semibold mr-4">
+        لیست کاربوم ها
+      </h2>
       <KarboomsComponent onAddKarboom={handleOpenKarboomFormDrawer} />
       <KarboomActionsDrawerComponent
         isOpen={isActionsDrawerOpen}

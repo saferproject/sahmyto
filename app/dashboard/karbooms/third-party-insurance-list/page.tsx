@@ -24,7 +24,7 @@ export default function ThirdPartyInsurancePage() {
   };
 
   return (
-    <div className="py-24 flex h-full w-full flex-col gap-4">
+    <div className="pb-24 pt-26 flex h-full w-full flex-col gap-4">
       <ThirdPartyInsuranceListHeaderLayout />
       <InsuranceBannerComponent />
       <SelectedKarboomInfoComponent />

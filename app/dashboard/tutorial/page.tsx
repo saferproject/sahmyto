@@ -7,7 +7,7 @@ import formatTime from "./_utilities/format-time";
 
 export default function TutorialPage() {
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto py-24">
+    <div className="flex h-full w-full flex-col overflow-y-auto pt-26 pb-24">
       <div className="flex items-center gap-2">
         <VideoPlay size="32" className="text-primary" />
         <h2 className="text-body font-semibold">آموزش کار با سهمیتو</h2>

@@ -32,15 +32,10 @@ export default function DriverFormDrawerComponent({
       }}
     >
       <div className="relative flex max-h-[90dvh] w-full flex-col px-8 pt-12 pb-8">
-        <div className="bg-secondary-light absolute top-6 left-1/2 h-2 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex min-h-0 w-full flex-1 flex-col items-center">
-          <div className="flex w-full min-h-0 flex-1 flex-col overflow-y-auto">
-            <div className="mb-4 flex w-full items-center gap-2">
-              <User className="text-primary" size={24} />
-              <h2 className="text-body text-xl font-bold">افزودن راننده</h2>
-            </div>
-            <DriverFormComponent onCancel={onClose} onSuccess={onSuccess} />
-          </div>
+        <div className="bg-secondary-light absolute top-6 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full"></div>
+        <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-5 overflow-y-auto">
+          <h2 className="text-body text-xl font-bold">افزودن راننده</h2>
+          <DriverFormComponent onCancel={onClose} onSuccess={onSuccess} />
         </div>
       </div>
     </SwipeableDrawer>

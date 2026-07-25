@@ -32,13 +32,12 @@ import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-mont
 import useGetFinancialMonthDataEndpoint from "./_hooks/use-get-financial-month-data-endpoint";
 import MonthBalanceComponent from "./_components/month-balance-component";
 import { useFinancialMonthStore } from "./_providers/financial-managment-store-provider";
+import { useSnackbar } from "notistack";
 
 export default function FinancialManagementPage() {
   const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
 
-  // const [selectedMonth, setSelectedMonth] = useState<null | FinancialMonth>(
-  //   null,
-  // );
   const [isIncomeDetailsOpen, setIncomeDetailsOpen] = useState(false);
   const [isIncomeMonthlyOpen, setIncomeMonthlyOpen] = useState(false);
   const [isIncomeDailyOpen, setIncomeDailyOpen] = useState(false);
@@ -62,8 +61,8 @@ export default function FinancialManagementPage() {
   } = useValidateClosingFinancialMonthEndpoint();
 
   const { data: financialMonthData } = useGetFinancialMonthDataEndpoint(
-    selectedMonth?.id ?? 0,
-    !!selectedMonth,
+    selectedMonth.id,
+    !!selectedMonth.id,
   );
 
   const {
@@ -72,7 +71,12 @@ export default function FinancialManagementPage() {
   } = useConfirmationDialogStore((state) => state);
 
   const handleValidateMonth = () => {
-    validateMonth(selectedMonth?.id ?? 0);
+    if (selectedMonth) validateMonth(selectedMonth.id);
+    else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "ماه مالی را انتخاب کنید",
+      });
   };
 
   const handleSelectMonth = (month: FinancialMonth) => {
@@ -211,7 +215,7 @@ export default function FinancialManagementPage() {
     });
 
   return (
-    <div className="flex size-full flex-col justify-between py-24">
+    <div className="flex size-full flex-col justify-between pt-26 pb-24">
       <SelectedKarboomInfoComponent />
       <MonthListLayout
         selectedMonth={selectedMonth}

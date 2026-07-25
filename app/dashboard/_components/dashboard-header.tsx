@@ -74,7 +74,7 @@ export default function DashboardHeader() {
   }, [gotRequests, requests?.data.length]);
 
   return (
-    <header className="fixed top-4 w-full bg-transparent px-4 z-50">
+    <header className="fixed top-4 z-50 w-full bg-transparent px-4">
       <DashboardHeaderDrawerComponent
         isOpen={isDrawerOpen}
         onOpen={handleOpenDrawer}
@@ -97,7 +97,9 @@ export default function DashboardHeader() {
         <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">
           <HamburgerMenu size={32} className="text-body" />
         </IconButton>
-        <Image src="/images/logo-body.svg" alt="" width={64} height={32} />
+        <div className="relative -left-4">
+          <Image src="/images/logo-body.svg" alt="" width={64} height={32} />
+        </div>
         <div className="flex items-center">
           <Badge
             className="relative -left-4 z-10 cursor-pointer"
