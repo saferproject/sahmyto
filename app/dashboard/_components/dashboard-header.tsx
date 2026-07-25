@@ -136,9 +136,9 @@ export default function DashboardHeader() {
               <Image
                 src={avatar}
                 alt="عکس پروفایل"
-                fill
                 className="object-cover"
-                sizes="48px"
+                width={48}
+                height={48}
               />
             ) : (
               <User size={24} variant="Broken" className="text-white" />

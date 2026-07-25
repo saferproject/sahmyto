@@ -68,7 +68,7 @@ export default function ProfilePicturePage() {
   }, []);
 
   return (
-    <div className="flex size-full flex-col overflow-y-auto">
+    <div className="flex size-full flex-col overflow-y-auto py-24">
       <input
         ref={fileInput}
         type="file"
