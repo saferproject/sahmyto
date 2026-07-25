@@ -1,12 +1,11 @@
 import {
   Car,
   Health,
-  MoneyAdd,
-  MoneyRemove,
   Profile2User,
-  Setting,
   User,
   Wallet1,
+  WalletAdd1,
+  WalletMinus,
 } from "iconsax-reactjs";
 
 import { KarboomAction } from "../_types/karboom-action";
@@ -29,19 +28,14 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
   },
   {
     label: "مدیریت درآمد ها",
-    icon: <MoneyAdd size="24" />,
+    icon: <WalletAdd1 size="24" />,
     path: "/dashboard/karbooms/incomes-list",
   },
   {
     label: "مدیریت هزینه ها",
-    icon: <MoneyRemove size="24" />,
+    icon: <WalletMinus size="24" />,
     path: "/dashboard/karbooms/expenses-list",
   },
-  // {
-  //   label: "مدیریت تعمیرات دوره ای",
-  //   icon: <Setting size="24" />,
-  //   path: "/dashboard/karbooms/maintenance-list",
-  // },
   {
     label: "مدیریت بیمه شخص ثالث",
     icon: <Health size="24" />,

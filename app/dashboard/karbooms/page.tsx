@@ -11,8 +11,6 @@ import KarboomFormDrawerComponent from "./_components/karboom-form-drawer-compon
 import PartnerFormDrawerComponent from "./_components/partner-form-drawer-component";
 import DriverFormDrawerComponent from "./_components/driver-form-drawer-component";
 import KarboomActionsDrawerComponent from "./_components/karboom-actions-drawer-component";
-import IncomeDrawerComponent from "./_components/income-drawer-component";
-import ExpenseDrawerComponent from "./_components/expense-drawer-component";
 
 export default function KarboomsPage() {
   const [isKarboomFormDrawerOpen, setKarboomFormDrawerOpen] =
@@ -24,14 +22,8 @@ export default function KarboomsPage() {
 
   const {
     isActionsDrawerOpen,
-    isIncomeDrawerOpen,
-    isExpenseDrawerOpen,
     openKarboomActionDrawer,
-    openIncomeDrawer,
-    openExpenseDrawer,
     closeKarboomActionDrawer,
-    closeIncomeDrawer,
-    closeExpenseDrawer,
   } = useKarboomsStore((state) => state);
 
   const handleOpenKarboomFormDrawer = () => {
@@ -70,27 +62,17 @@ export default function KarboomsPage() {
 
   return (
     <div className="h-full w-full overflow-y-auto">
-      <div className="flex items-center gap-2 mt-2">
+      <div className="mt-2 flex items-center gap-2">
         <Truck size={32} className="text-primary" />
         <h2 className="text-body w-full text-right text-xl font-semibold">
           لیست کاربوم ها
         </h2>
       </div>
-      <KarboomsComponent />
+      <KarboomsComponent onAddKarboom={handleOpenKarboomFormDrawer} />
       <KarboomActionsDrawerComponent
         isOpen={isActionsDrawerOpen}
         onOpen={openKarboomActionDrawer}
         onClose={closeKarboomActionDrawer}
-      />
-      <IncomeDrawerComponent
-        isOpen={isIncomeDrawerOpen}
-        onOpen={openIncomeDrawer}
-        onClose={closeIncomeDrawer}
-      />
-      <ExpenseDrawerComponent
-        isOpen={isExpenseDrawerOpen}
-        onOpen={openExpenseDrawer}
-        onClose={closeExpenseDrawer}
       />
       <KarboomFormDrawerComponent
         isOpen={isKarboomFormDrawerOpen}
@@ -110,18 +92,6 @@ export default function KarboomsPage() {
         onClose={handleCloseDriverFormDrawer}
         onSuccess={handleCloseDriverFormDrawer}
       />
-      <Fab
-        sx={{
-          position: "fixed",
-          bottom: "calc(128px + env(safe-area-inset-bottom))",
-          left: "32px",
-          zIndex: 10,
-        }}
-        color="primary"
-        onClick={handleOpenKarboomFormDrawer}
-      >
-        <Add size={32} className="text-white" />
-      </Fab>
     </div>
   );
 }

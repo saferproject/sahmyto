@@ -35,7 +35,7 @@ export default function VerifyRetry() {
         </div>
       )}
       <div className="flex flex-col items-center">
-        <p className="text-xs">هنوز رمز فعال سازی را دریافت نکرده اید؟</p>
+        <p className="text-xs text-body">هنوز رمز فعال سازی را دریافت نکرده اید؟</p>
         <Button
           variant="text"
           onClick={handleRetry}

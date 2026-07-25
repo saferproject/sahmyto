@@ -45,10 +45,10 @@ export default function SelectedKarboomInfoComponent() {
         alt=""
         className="absolute -bottom-4 left-0 -z-10 scale-120"
       />
-      <div className="flex items-center justify-between rounded-2xl bg-[#FEF9E7] p-8">
+      <div className="flex items-center justify-between rounded-2xl bg-[#FEF9E7] p-4">
         <div>
           <h4 className="text-body-light text-xs">نام کاربوم</h4>
-          <p className="text-body font-semibold">{name}</p>
+          <p className="text-body font-semibold text-sm">{name}</p>
         </div>
         <Plate {...plate} />
       </div>

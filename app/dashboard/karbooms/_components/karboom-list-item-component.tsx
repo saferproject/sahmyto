@@ -13,19 +13,18 @@ import Plate from "@/app/_components/plate";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
+import { useRouter } from "next/navigation";
 
 export default function KarboomListItemComponent(
   karboom: KarboomListItemProps,
 ) {
-  const { index, name, plate, image } = karboom;
+  const router = useRouter();
 
-  const requireKarboomMembers = useRequireKarboomMembers();
+  const { index, name, plate, image } = karboom;
 
   const {
     setActiveKarboom,
     openKarboomActionDrawer,
-    openIncomeDrawer,
-    openExpenseDrawer,
   } = useKarboomsStore((state) => state);
 
   const handleShowActions = () => {
@@ -33,14 +32,14 @@ export default function KarboomListItemComponent(
     openKarboomActionDrawer();
   };
 
-  const handleAddIncome = () => {
+  const handleNavigateToIncomeList = () => {
     setActiveKarboom(karboom);
-    requireKarboomMembers(karboom.id, openIncomeDrawer);
+    router.push('/dashboard/karbooms/incomes-list');
   };
 
-  const handleAddExpense = () => {
+  const handleNavigateToExpenseList = () => {
     setActiveKarboom(karboom);
-    requireKarboomMembers(karboom.id, openExpenseDrawer);
+    router.push("/dashboard/karbooms/expenses-list");
   };
 
   return (
@@ -97,17 +96,17 @@ export default function KarboomListItemComponent(
             variant="outlined"
             color="secondary"
             className="text-body!"
-            onClick={handleAddIncome}
+            onClick={handleNavigateToIncomeList}
           >
-            ثبت درآمد
+            درآمد ها
           </Button>
           <Button
             variant="outlined"
             color="secondary"
             className="text-body!"
-            onClick={handleAddExpense}
+            onClick={handleNavigateToExpenseList}
           >
-            ثبت هزینه
+            هزینه ها
           </Button>
           <Button
             variant="outlined"
@@ -115,7 +114,7 @@ export default function KarboomListItemComponent(
             className="text-body!"
             // onClick={onCreateMaintenance}
           >
-            ثبت تعمیر
+            تعمیرات
           </Button>
           <Button
             variant="outlined"
@@ -123,7 +122,7 @@ export default function KarboomListItemComponent(
             className="text-body!"
             // onClick={onCreateTransfer}
           >
-            ثبت پرداختی
+            پرداختی ها
           </Button>
         </div>
         <Button

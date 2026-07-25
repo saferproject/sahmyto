@@ -19,7 +19,7 @@ export const theme = createTheme({
     fontFamily: "var(--font-yekan-bakh), sans-serif",
   },
   shape: {
-    borderRadius: 16,
+    borderRadius: 12,
   },
   components: {
     MuiSkeleton: {
@@ -38,11 +38,10 @@ export const theme = createTheme({
       },
     },
     MuiInputLabel: {
-      defaultProps: {
-        shrink: true
-      },
       styleOverrides: {
         root: {
+          fontSize: "14px",
+          marginTop: '6px',
           color: "oklch(30.262% 0.10854 266.981)",
         },
       },
@@ -50,14 +49,18 @@ export const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          borderRadius: 20,
+          borderRadius: 12,
         },
       },
     },
     MuiOutlinedInput: {
       styleOverrides: {
+        input: {
+          height: "32px",
+          fontSize: "14px",
+        },
         root: {
-          borderRadius: 20,
+          borderRadius: 12,
           // Default border
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "#ced4da",

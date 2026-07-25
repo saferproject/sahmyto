@@ -13,6 +13,8 @@ import { DRAWER_MENU_ITEMS } from "../_constants/drawer-menu-items";
 import useUserLogout from "../_hooks/use-user-logout-endpoint";
 import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-provider";
 import { User, ArrowLeft2, Logout } from "iconsax-reactjs";
+import KarboomFormDrawerComponent from "../karbooms/_components/karboom-form-drawer-component";
+import { useState } from "react";
 
 export default function DashboardHeaderDrawerComponent({
   isOpen,
@@ -20,6 +22,8 @@ export default function DashboardHeaderDrawerComponent({
   onClose,
 }: DashboardHeaderDrawerProps) {
   const router = useRouter();
+
+  const [isKarboomFormDrawerOpen, setkarboomFormDrawerOpen] = useState(false);
 
   const { avatar, full_name } = useUserInfoStore((state) => state);
   const {
@@ -39,9 +43,7 @@ export default function DashboardHeaderDrawerComponent({
     onClose();
   };
 
-  // TODO refactor entire component using SOLID
-
-  const logout = () => {
+  const handleLogout = () => {
     mutate(undefined, {
       onSuccess: () => {
         localStorage.removeItem("user");
@@ -57,10 +59,23 @@ export default function DashboardHeaderDrawerComponent({
       title: "خروج از حساب",
       icon: <Logout size="32" className="text-primary rotate-y-180" />,
       mainDiscription: "آیا می خواهید از حساب کاربریتان خارج شوید؟",
-      onConfirm: logout,
+      onConfirm: handleLogout,
       onClose: closeConfirmationDialog,
     });
   };
+
+  const handleOpenKarboomFormDrawer = () => {
+    setkarboomFormDrawerOpen(true);
+  };
+
+  const handleCloseKarboomFormDrawer = () => {
+    setkarboomFormDrawerOpen(false);
+  };
+
+  const handleAddKarboomSuccess = () => {
+    handleCloseKarboomFormDrawer();
+    onClose();
+  }
 
   return (
     <SwipeableDrawer
@@ -84,6 +99,12 @@ export default function DashboardHeaderDrawerComponent({
         },
       }}
     >
+      <KarboomFormDrawerComponent
+        isOpen={isKarboomFormDrawerOpen}
+        onOpen={handleOpenKarboomFormDrawer}
+        onClose={handleCloseKarboomFormDrawer}
+        onSuccess={handleAddKarboomSuccess}
+      />
       <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-3xl bg-white p-8 shadow-lg">
         <div className="bg-secondary-light absolute top-1/2 left-2 h-32 w-2 -translate-y-1/2 rounded-full"></div>
         <div className="flex w-full items-center justify-between">
@@ -131,6 +152,16 @@ export default function DashboardHeaderDrawerComponent({
           </motion.button>
         )}
         <nav className="mt-6 min-h-0 flex-1 overflow-y-auto pl-2">
+          <Button
+            variant="contained"
+            sx={{
+              marginBottom: "8px",
+            }}
+            onClick={handleOpenKarboomFormDrawer}
+            fullWidth
+          >
+            ایجاد کاربوم
+          </Button>
           <ul className="flex flex-col">
             <AnimatePresence>
               {isOpen &&
@@ -157,7 +188,7 @@ export default function DashboardHeaderDrawerComponent({
                     }}
                   >
                     <div className="flex items-center gap-4">
-                      {icon} <h4 className="font-semibold text-sm">{title}</h4>
+                      {icon} <h4 className="text-sm font-semibold">{title}</h4>
                     </div>
                     <ArrowLeft2 size={24} />
                   </motion.li>

@@ -14,9 +14,5 @@ export const createKarboomsStore = (
     clearActiveKarboom: () => set(() => KARBOOMS_STORE_DEFAULTS),
     openKarboomActionDrawer: () => set(() => ({ isActionsDrawerOpen: true })),
     closeKarboomActionDrawer: () => set(() => ({ isActionsDrawerOpen: false })),
-    openIncomeDrawer: () => set(() => ({ isIncomeDrawerOpen: true })),
-    closeIncomeDrawer: () => set(() => ({ isIncomeDrawerOpen: false })),
-    openExpenseDrawer: () => set(() => ({ isExpenseDrawerOpen: true })),
-    closeExpenseDrawer: () => set(() => ({ isExpenseDrawerOpen: false })),
   }));
 };

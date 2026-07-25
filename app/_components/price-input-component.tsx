@@ -48,7 +48,6 @@ export default function PriceInputComponent({
         },
       }}
       onChange={(event) => {
-        debugger
         const digits = parseNumber(event.target.value);
         event.target.value = digits === 0 ? "" : formatNumber(digits);
         register.onChange(event);

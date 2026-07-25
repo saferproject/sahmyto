@@ -56,7 +56,7 @@ export default function VerifyForm() {
         renderInput={(props) => (
           <input
             {...props}
-            className="min-h-12 min-w-12 rounded-lg border-2 border-dashed text-center text-4xl"
+            className="min-h-16 min-w-16 rounded-lg border border-dashed text-center text-4xl"
           />
         )}
         shouldAutoFocus

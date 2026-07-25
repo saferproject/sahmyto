@@ -18,6 +18,7 @@ import { AuthenticationGuard } from "./_utilities/authentication-guard";
 import ActionDialogComponent from "./_components/action-dialog-component";
 import { ActionDialogStoreProvider } from "./_providers/action-dialog-provider";
 import ConfirmationDialog from "./_components/confirmation-dialog";
+import { KarboomsStoreProvider } from "./karbooms/_providers/karbooms-store-provider";
 
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
@@ -34,15 +35,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             >
               <ReactQueryProvider>
                 <AuthenticationGuard>
-                  <div className="flex h-dvh w-full flex-col justify-between">
-                    <ConfirmationDialog />
-                    <ActionDialogComponent />
-                    <DashboardHeader />
-                    <main className="flex w-full min-h-0 flex-1 flex-col items-center overflow-x-hidden overflow-y-auto px-8 py-2">
-                      {children}
-                    </main>
-                    <DashboardFooter />
-                  </div>
+                  <KarboomsStoreProvider>
+                    <div className="flex h-dvh w-full flex-col justify-between">
+                      <ConfirmationDialog />
+                      <ActionDialogComponent />
+                      <DashboardHeader />
+                      <main className="flex min-h-0 w-full flex-1 flex-col items-center overflow-x-hidden overflow-y-auto px-8 py-2">
+                        {children}
+                      </main>
+                      <DashboardFooter />
+                    </div>
+                  </KarboomsStoreProvider>
                 </AuthenticationGuard>
               </ReactQueryProvider>
             </SnackbarProvider>

@@ -2,7 +2,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 import NavigationItemProps from "../_types/navigation-item-props";
 
-export default function NavigationItemCompoent({ title, icon, path }: NavigationItemProps) {
+export default function NavigationItemComponent({
+  title,
+  icon,
+  path,
+}: NavigationItemProps) {
   const currentPath = usePathname();
   const router = useRouter();
 
@@ -20,17 +24,14 @@ export default function NavigationItemCompoent({ title, icon, path }: Navigation
   return (
     <li
       title={title}
-      className="flex w-1/5 justify-center"
+      className={
+        "text-body flex items-center rounded-full py-2 px-4 gap-2 " +
+        (isActive ? "bg-primary-light" : "")
+      }
       onClick={() => handleNavigation(path)}
     >
-      <div
-        className={
-          "flex h-10 w-10 items-center justify-center rounded-full " +
-          (isActive ? "bg-primary text-white" : "")
-        }
-      >
-        {icon}
-      </div>
+      {isActive && <span className="text-sm">{title}</span>}
+      {icon}
     </li>
   );
 }

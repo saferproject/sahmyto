@@ -1,35 +1,29 @@
-import { MoneyRecive, Home, Sms, WalletMoney, Truck } from "iconsax-reactjs";
+import { Card, Home2, Profile, MessageText1 } from "iconsax-reactjs";
 import NavigationItem from "../_interfaces/navigation-item";
 
 export const NAVIGATION_ITEMS: NavigationItem[] = [
   {
     id: 1,
-    title: "درآمد ها",
-    icon: <WalletMoney variant="Bold" size={24} />,
-    path: "/dashboard/expenses",
+    title: "پیام ها",
+    icon: <MessageText1 variant="Bold" size="24" />,
+    path: "/dashboard/requests",
   },
   {
     id: 2,
-    title: "هزینه ها",
-    icon: <MoneyRecive variant="Bold" size={24} />,
-    path: "/dashboard/incomes",
+    title: "کیف پول",
+    icon: <Card variant="Bold" size="24" />,
+    path: "/dashboard/wallet",
   },
   {
     id: 3,
     title: "داشبورد",
-    icon: <Home variant="Bold" size={32} />,
+    icon: <Home2 variant="Bold" size="24" />,
     path: "/dashboard",
   },
   {
     id: 4,
-    title: "پیام ها",
-    icon: <Sms variant="Bold" size={24} />,
-    path: "/dashboard/inbox",
-  },
-  {
-    id: 5,
-    title: "کاربوم ها",
-    icon: <Truck variant="Bold" size={24} />,
-    path: "/dashboard/karbooms",
+    title: "پروفایل",
+    icon: <Profile variant="Bold" size="24" />,
+    path: "/dashboard/profile",
   },
 ];

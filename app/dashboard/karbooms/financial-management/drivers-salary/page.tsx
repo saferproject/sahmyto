@@ -75,7 +75,7 @@ export default function DriversSalaryPage() {
                 value={formatNumber(25_000_000)}
               />
               <DetailItemComponent
-                label="دستمزد کل"
+                label="مجموع"
                 value={formatNumber(47_000_000)}
               />
             </ul>

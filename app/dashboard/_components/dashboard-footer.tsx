@@ -1,12 +1,12 @@
 import { NAVIGATION_ITEMS } from "../_constants/navigation-items";
-import NavigationItemCompoent from "./navigation-item-component";
+import NavigationItemComponent from "./navigation-item-component";
 
 export default function DashboardFooter() {
   return (
-    <footer className="bg-gray-100 w-full rounded-t-[48px] px-8 pt-8 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-      <ul className="border-secondary flex items-center justify-evenly rounded-full border bg-white px-4 py-2 shadow-lg">
+    <footer className="fixed bottom-4 w-full bg-transparent px-4">
+      <ul className="bg-secondary-lightest/60 flex items-center justify-between rounded-full p-3 shadow-lg backdrop-blur-sm">
         {NAVIGATION_ITEMS.map(({ id, ...other }) => (
-          <NavigationItemCompoent key={id} {...other} />
+          <NavigationItemComponent key={id} {...other} />
         ))}
       </ul>
     </footer>

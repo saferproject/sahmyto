@@ -8,15 +8,21 @@ import useLoginForm from "./_hooks/use-login-form";
 import { LoginFormType } from "./_schemas/login-schema";
 import useLoginUser from "./_hooks/login-user-endpoint";
 import { useUserInfoStore } from "../_providers/user-info-provider";
+import { useWatch } from "react-hook-form";
 
 export default function LoginPage() {
   const router = useRouter();
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useLoginForm();
+
+  const {phone} = useWatch({control})
+
   const { mutate, isPending } = useLoginUser();
+
   const { setPhone } = useUserInfoStore((state) => state);
 
   const submit = (data: LoginFormType) => {
@@ -44,12 +50,25 @@ export default function LoginPage() {
           type="tel"
           error={!!errors.phone}
           helperText={errors.phone?.message}
+          placeholder="شماره همراه را وارد کنید"
+          slotProps={{
+            htmlInput: {
+              style: {
+                textAlign: "right",
+              },
+            },
+            inputLabel: {
+              shrink: !!phone,
+            },
+          }}
         />
         <Button
           variant="contained"
-          size="large"
           type="submit"
           loading={isPending}
+          sx={{
+            height: "64px",
+          }}
         >
           ورود به سهمیتو
         </Button>

@@ -93,15 +93,6 @@ export default function DashboardHeader() {
         <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">
           <HamburgerMenu size={48} />
         </IconButton>
-        <Image
-          src="/images/logo-primary.svg"
-          alt="سهمیتو"
-          loading="eager"
-          fetchPriority="high"
-          width={100}
-          height={50}
-          className="relative bottom-2"
-        />
         <div>
           <button
             type="button"

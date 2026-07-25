@@ -5,7 +5,6 @@ import { Profile2User } from "iconsax-reactjs";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 
-import PartnersListHeaderComponent from "./_components/partners-list-header-component";
 import PartnersListComponent from "./_components/partners-list-component";
 import PartnersListButtonsComponent from "./_components/partners-list-buttons-component";
 import PartnerFormDrawerComponent from "../_components/partner-form-drawer-component";
@@ -52,7 +51,6 @@ export default function PartnersListPage() {
           <Profile2User className="text-heading" size={24} variant="Broken" />
           <h2 className="text-body text-xl font-bold">لیست شرکا</h2>
         </div>
-        <PartnersListHeaderComponent partnersCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
           <QueryState

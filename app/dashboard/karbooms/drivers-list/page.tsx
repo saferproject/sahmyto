@@ -8,7 +8,6 @@ import { User } from "iconsax-reactjs";
 import { useSnackbar } from "notistack";
 
 import DriversListComponent from "./_components/drivers-list-component";
-import DriversListHeaderComponent from "./_components/drivers-list-header-component";
 import DriversListButtonsComponent from "./_components/drivers-list-buttons-component";
 import DriverFormDrawerComponent from "../_components/driver-form-drawer-component";
 
@@ -54,7 +53,6 @@ export default function DriverListPage() {
           <User className="text-heading" size={24} variant="Broken" />
           <h2 className="text-body text-xl font-bold">رانندگان</h2>
         </div>
-        <DriversListHeaderComponent driversCount={data?.data.length ?? 0} />
         <SelectedKarboomInfoComponent />
         <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
           <QueryState
