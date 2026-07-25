@@ -95,9 +95,9 @@ export default function DashboardHeader() {
       />
       <div className="bg-secondary-lightest/60 flex items-center justify-between rounded-full p-3 shadow-lg backdrop-blur-sm">
         <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">
-          <HamburgerMenu size={32} />
+          <HamburgerMenu size={32} className="text-body" />
         </IconButton>
-        <Image src="/images/logo-primary.svg" alt="" width={64} height={32} />
+        <Image src="/images/logo-body.svg" alt="" width={64} height={32} />
         <div className="flex items-center">
           <Badge
             className="relative -left-4 z-10 cursor-pointer"
