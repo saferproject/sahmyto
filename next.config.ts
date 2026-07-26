@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   devIndicators: { position: "top-right" },
   reactCompiler: true,
-  allowedDevOrigins: ["192.168.100.12"],
+  allowedDevOrigins: ["192.168.100.6"],
   images: {
     remotePatterns: imageRemotePatterns(),
     // Dev backend runs on a LAN/private IP; Next 16 blocks optimizing remote

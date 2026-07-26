@@ -17,12 +17,9 @@ export default function ExpenseListHeaderLayout({
 
   return (
     <>
-      <div className="flex items-center gap-2">
-        <WalletMinus size={32} className="text-primary" />
-        <h2 className="text-body w-full text-right text-xl font-semibold">
-          لیست هزینه ها
-        </h2>
-      </div>
+      <h2 className="text-body w-full text-center text-lg font-semibold">
+        لیست هزینه ها
+      </h2>
       <SearchInputComponent />
       <div className="flex items-center gap-4">
         {EXPENSE_FILTER_TAGS.map((filter) => (

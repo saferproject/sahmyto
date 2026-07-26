@@ -10,9 +10,9 @@ import {
   AccordionDetails,
   Button,
   FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { ArrowDown2 } from "iconsax-reactjs";
 import { Controller } from "react-hook-form";
@@ -100,25 +100,31 @@ export default function ProfileFormComponent() {
           fullWidth
         />
       </div>
-      {/* <Controller
+      <Controller
         name="gender"
         control={control}
         render={({ field }) => (
-          <FormControl>
-            <InputLabel id="gender-label">جنسیت</InputLabel>
-            <Select
+          <FormControl required>
+            <RadioGroup
               {...field}
-              defaultValue="male"
-              value={field.value ?? ""}
-              labelId="gender-label"
-              label="جنسیت"
+              onChange={(event) => field.onChange(event.target.value)}
             >
-              <MenuItem value="male">مرد</MenuItem>
-              <MenuItem value="female">زن</MenuItem>
-            </Select>
+              <div className="grid grid-cols-2 w-full">
+                <FormControlLabel
+                  value={"male"}
+                  label="آقا"
+                  control={<Radio />}
+                />
+                <FormControlLabel
+                  value={"female"}
+                  label="خانم"
+                  control={<Radio />}
+                />
+              </div>
+            </RadioGroup>
           </FormControl>
         )}
-      /> */}
+      />
       <Accordion
         expanded={isOptionalFieldsVisible}
         onChange={HandleToggleOptionalFieldsVisibility}

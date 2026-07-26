@@ -16,6 +16,7 @@ import { IncomeListItemProps } from "../_types/income-list-item-props";
 import useApproveIncome from "../_hooks/use-approve-income";
 
 import { useIncomeListStore } from "../_providers/income-list-store-provider";
+import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 
 export default function IncomeListItemComponent({
   income,
@@ -35,6 +36,8 @@ export default function IncomeListItemComponent({
     sender: { full_name: submitterName },
     approvals,
   } = income;
+
+  const userKarboomRoles = useKarboomsStore((state) => state.roles);
 
   const setActiveIncome = useIncomeListStore((state) => state.setActiveIncome);
 
@@ -128,7 +131,7 @@ export default function IncomeListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" && (
+      {status === "pending" && userKarboomRoles.includes("partner") && (
         <div className="flex items-center gap-4 px-4 py-2">
           <Button
             variant="outlined"

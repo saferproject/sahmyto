@@ -28,7 +28,7 @@ export default function ThirdPartyInsuranceListItemComponent({
       transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
       className="border-secondary-lighter w-full rounded-2xl border p-4"
     >
-      <ul className="flex w-full flex-col gap-2">
+      <ul className="flex w-full flex-col gap-3">
         <DetailItemComponent label="شماره بیمه نامه" value={insurance_number} />
         <DetailItemComponent label="کد یکتای بیمه" value={insurance_code} />
         <DetailItemComponent label="شرکت بیمه گر" value={insuranceCompany} />
@@ -51,7 +51,7 @@ export default function ThirdPartyInsuranceListItemComponent({
           value={endedAt.format("YYYY/MM/DD")}
         />
         {description && (
-          <p className="bg-secondary-lightest text-body rounded-2xl p-4 text-sm">
+          <p className="bg-secondary-lightest text-body rounded-2xl p-4 text-sm mt-2">
             <span className="font-semibold">توضیحات : </span>
             {description}
           </p>

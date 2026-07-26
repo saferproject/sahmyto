@@ -8,7 +8,8 @@ export default function useAcceptKarboomRequest() {
     mutationKey: ["accept-request"],
     mutationFn: dashboardService.acceptKarboomRequest,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["requests", "karbooms"] });
+      queryClient.invalidateQueries({ queryKey: ["requests"] });
+      queryClient.invalidateQueries({ queryKey: ["karbooms"] });
     },
   });
 }

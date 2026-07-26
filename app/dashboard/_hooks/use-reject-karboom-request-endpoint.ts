@@ -9,7 +9,8 @@ export default function useRejectKarboomRequest() {
     mutationKey: ["requests"],
     mutationFn: dashboardService.rejectKarboomRequest,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["requests", "karbooms"] });
+      queryClient.invalidateQueries({ queryKey: ["requests"] });
+      queryClient.invalidateQueries({ queryKey: ["karbooms"] });
     },
   });
 }

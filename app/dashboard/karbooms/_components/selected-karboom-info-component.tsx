@@ -33,20 +33,20 @@ export default function SelectedKarboomInfoComponent() {
       <Image
         src={yellowRectangle}
         alt=""
-        className="absolute bottom-0 -left-2 -z-30 scale-120"
+        className="absolute bottom-2 -left-2 -z-30 scale-120"
       />
       <Image
         src={lightBlueRectangle}
         alt=""
-        className="absolute -bottom-6 left-4 -z-20 scale-120"
+        className="absolute -bottom-4 left-4 -z-20 scale-120"
       />
       <Image
         src={darkBlueRectangle}
         alt=""
-        className="absolute -bottom-4 left-0 -z-10 scale-120"
+        className="absolute -bottom-2 left-0 -z-10 scale-120"
       />
       <div className="flex items-center justify-between rounded-2xl bg-[#FEF9E7] p-4">
-        <div>
+        <div className="flex flex-col gap-1">
           <h4 className="text-body-light text-xs">نام کاربوم</h4>
           <p className="text-body font-semibold text-sm">{name}</p>
         </div>
