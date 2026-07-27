@@ -128,8 +128,6 @@ export default function DashboardHeaderDrawerComponent({
             justifyContent: "space-between",
             backgroundColor: "#e66203",
             paddingBottom: "12px",
-            // paddingRight: "4px",
-            // paddingTop: "4px",
           },
         },
       }}
@@ -231,7 +229,7 @@ export default function DashboardHeaderDrawerComponent({
                       role="button"
                       tabIndex={0}
                       className={
-                        "flex items-center justify-between py-4 " +
+                        "flex items-center justify-between cursor-pointer py-4 " +
                         (disabled ? "text-secondary" : "text-body")
                       }
                       onClick={() => handleNavigation(link, disabled)}

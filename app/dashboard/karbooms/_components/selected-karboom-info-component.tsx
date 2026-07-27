@@ -48,9 +48,12 @@ export default function SelectedKarboomInfoComponent() {
       <div className="flex items-center justify-between rounded-2xl bg-[#FEF9E7] p-4">
         <div className="flex flex-col gap-1">
           <h4 className="text-body-light text-xs">نام کاربوم</h4>
-          <p className="text-body font-semibold text-sm">{name}</p>
+          <p className="text-body text-sm font-semibold">{name}</p>
         </div>
-        <Plate {...plate} />
+        {plate.first_number &&
+          plate.second_character &&
+          plate.third_number &&
+          plate.fourth_number && <Plate {...plate} />}
       </div>
     </div>
   );

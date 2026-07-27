@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+import { ArrowDown2 } from "iconsax-reactjs";
 
 export const theme = createTheme({
   direction: "rtl",
@@ -88,6 +89,18 @@ export const theme = createTheme({
           //   borderColor: "#e0e0e0",
           // },
         },
+      },
+    },
+    MuiSelect: {
+      defaultProps: {
+        IconComponent: () => (
+          <ArrowDown2 size={24} className="text-body ml-2" />
+        ),
+      },
+    },
+    MuiAutocomplete: {
+      defaultProps: {
+        popupIcon: <ArrowDown2 size={24} className="text-body ml-2" />,
       },
     },
   },

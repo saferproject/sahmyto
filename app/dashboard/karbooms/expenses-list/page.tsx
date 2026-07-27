@@ -14,7 +14,6 @@ import useRejectExpense from "./_hooks/use-reject-expense";
 import { FilterTag } from "./_types/filter-tag";
 import { EXPENSE_FILTER_TAGS } from "./_constants/expense-filter-tags";
 import ExpenseDrawerComponent from "../_components/expense-drawer-component";
-import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
@@ -90,7 +89,7 @@ export default function ExpensesListPage() {
         selectedTagId={tagId}
         onTagSelect={handleTagSelect}
       />
-      <SelectedKarboomInfoComponent />
+      
       <ExpenseListLayout
         onShowDetails={handleOpenExpenseDtailsDrawer}
         onRejectExpense={handleRejectExpense}

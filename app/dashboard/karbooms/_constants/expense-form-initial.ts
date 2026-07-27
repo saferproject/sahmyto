@@ -1,25 +1,13 @@
 import dayjs from "dayjs";
 import { ExpenseFormType } from "../_schemas/expense-form-schema";
+import { USER_DEFAULTS } from "../../_constants/user-defaults";
 
 export const EXPENSE_FORM_INITIAL: ExpenseFormType = {
-  receiver: {
+  payer: {
     member: {
       id: 0,
     },
-    user: {
-      avatar: null,
-      first_name: "",
-      full_name: "",
-      id: 0,
-      last_name: "",
-      phone: "",
-      bio: null,
-      email: null,
-      father_name: "",
-      gender: "female",
-      is_complete_profile: false,
-      status: "active",
-    },
+    user: USER_DEFAULTS,
   },
   unit_price: null,
   wage_cost: null,

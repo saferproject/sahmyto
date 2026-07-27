@@ -22,7 +22,7 @@ export default function ActionDialog({
           }}
         >
           {icon}
-          <h3 className="text-body text-xl font-bold">{title}</h3>
+          <h3 className="text-body text-lg font-bold">{title}</h3>
           <p className="text-body-light text-center">{description}</p>
         </DialogContent>
         <DialogActions>{actionButtons}</DialogActions>

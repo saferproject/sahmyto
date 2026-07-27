@@ -49,9 +49,13 @@ export default function DriverListPage() {
   return (
     <div className="flex size-full flex-col gap-4 pt-26 pb-24">
       <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-        <h2 className="text-body text-lg w-full text-center font-bold">رانندگان</h2>
-        <SelectedKarboomInfoComponent />
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
+        <h2 className="text-body w-full text-center text-lg font-bold">
+          رانندگان
+        </h2>
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
+          <div className="mb-4">
+            <SelectedKarboomInfoComponent />
+          </div>
           <QueryState
             isLoading={isLoading}
             isError={isError}

@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 
-import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 import BodyInsuranceListHeaderLayout from "./_layouts/body-insurance-list-header-layout";
-import InsuranceBannerComponent from "../_components/insurance-banner-component";
 import BodyInsuranceListLayout from "./_layouts/body-insurance-list-layout";
 import BodyInsuranceDrawerComponent from "./_components/body-insurance-drawer-component";
 
@@ -23,8 +21,6 @@ export default function BodyInsurancePage() {
   return (
     <div className="flex h-full w-full flex-col gap-4 pt-26 pb-24">
       <BodyInsuranceListHeaderLayout />
-      <InsuranceBannerComponent />
-      <SelectedKarboomInfoComponent />
       <BodyInsuranceListLayout
         onOpenBodyInsuranceForm={handleOpenBodyInsuranceForm}
       />

@@ -47,9 +47,9 @@ export default function PartnersListPage() {
   return (
     <div className="flex size-full flex-col gap-4 pt-26 pb-24">
       <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-        <h2 className="text-body text-xl font-bold mr-4">لیست شرکا</h2>
-        <SelectedKarboomInfoComponent />
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
+        <h2 className="text-body text-center text-lg font-bold">لیست شرکا</h2>
+        <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
+          <SelectedKarboomInfoComponent />
           <QueryState
             isLoading={isLoading}
             isError={isError}

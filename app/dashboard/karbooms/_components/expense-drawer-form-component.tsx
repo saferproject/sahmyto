@@ -67,7 +67,7 @@ export default function ExpenseDrawerFormComponent({
   } = useCreateExpenseEndpoint();
 
   const submit = ({
-    receiver,
+    payer,
     date,
     image,
     unit_price,
@@ -80,7 +80,7 @@ export default function ExpenseDrawerFormComponent({
           ...other,
           unit_price: parseNumber(unit_price),
           wage_cost: parseNumber(wage_cost),
-          receiver_id: receiver.member.id,
+          payer_id: payer.member.id,
           category_id: selectedCategory,
           karboom_id: karboomId,
           type: categoryType,
@@ -117,7 +117,7 @@ export default function ExpenseDrawerFormComponent({
         (member) => member.user.id === userId,
       );
 
-      if (currentMember) setValue("receiver", currentMember);
+      if (currentMember) setValue("payer", currentMember);
     }
   }, [gotMembers, members]);
 
@@ -132,7 +132,7 @@ export default function ExpenseDrawerFormComponent({
       </p>
       <Controller
         control={control}
-        name="receiver"
+        name="payer"
         rules={{ required: true }}
         render={({ field }) => (
           <Autocomplete<Member>
@@ -154,8 +154,8 @@ export default function ExpenseDrawerFormComponent({
               <TextField
                 {...params}
                 label="پرداخت کننده"
-                error={!!errors.receiver}
-                helperText={errors.receiver?.message ?? ""}
+                error={!!errors.payer}
+                helperText={errors.payer?.message ?? ""}
                 fullWidth
                 required
               />

@@ -4,7 +4,7 @@ import SearchInputComponent from "../../_components/search-input-component";
 export default function IncomesListHeaderLayout() {
   return (
     <>
-      <h2 className="text-body w-full text-right text-xl font-semibold mr-4">
+      <h2 className="text-body text-center text-lg font-semibold">
         لیست درآمد ها
       </h2>
       <div className="w-full">

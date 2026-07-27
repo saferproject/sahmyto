@@ -11,6 +11,7 @@ import useGetIncomes from "../_hooks/use-get-incomes";
 
 import { IncomeListProps } from "../_types/income-list-props";
 import IncomesListFooterLayout from "./incomes-list-footer-layout";
+import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
 
 export default function IncomesListLayout({
   onShowDetails,
@@ -23,7 +24,8 @@ export default function IncomesListLayout({
 
   return (
     <div className="mt-4 flex min-h-0 w-full flex-1 flex-col gap-4">
-      <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto pb-2">
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto pb-2">
+        <SelectedKarboomInfoComponent />
         <QueryState
           isLoading={isLoading}
           isError={isError}

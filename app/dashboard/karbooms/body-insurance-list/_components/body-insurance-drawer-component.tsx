@@ -3,7 +3,6 @@ import { SwipeableDrawer } from "@mui/material";
 import { BodyInsuranceDrawerProps } from "../_types/body-insurance-drawer-props";
 
 import BodyInsuranceFormComponent from "./body-insurance-form-component";
-import { Car } from "iconsax-reactjs";
 
 export default function BodyInsuranceDrawerComponent({
   isOpen,

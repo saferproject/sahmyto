@@ -30,7 +30,7 @@ export default function VerifyRetry() {
     <div className="mt-8 flex flex-col items-center gap-4">
       {time !== 0 && (
         <div className="flex items-center gap-2">
-          <p className="text-body text-xl font-semibold">{time}</p>
+          <p className="text-body text-lg font-semibold">{time}</p>
           <p className="text-primary">ثانیه دیگر...</p>
         </div>
       )}

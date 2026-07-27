@@ -11,7 +11,7 @@ export default function LoginHero() {
         width={128}
         height={64}
       />
-      <h1 className="text-body font-yekan-bakh text-xl font-semibold">
+      <h1 className="text-body font-yekan-bakh text-lg font-semibold">
         چُرتکه سهم تو
       </h1>
     </div>

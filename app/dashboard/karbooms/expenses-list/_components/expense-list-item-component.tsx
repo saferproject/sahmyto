@@ -16,6 +16,7 @@ import useApproveExpense from "../_hooks/use-approve-expense";
 
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
+import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 
 export default function ExpenseListItemComponent({
   expense,
@@ -35,6 +36,7 @@ export default function ExpenseListItemComponent({
     approvals,
   } = expense;
 
+  const activeKarboomRoles = useKarboomsStore((state) => state.roles);
   const setActiveExpense = useExpenseListStore(
     (state) => state.setActiveExpense,
   );
@@ -129,7 +131,7 @@ export default function ExpenseListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" && (
+      {status === "pending" && activeKarboomRoles.includes("partner") && (
         <div className="flex items-center gap-4 px-4 py-2">
           <Button
             variant="outlined"

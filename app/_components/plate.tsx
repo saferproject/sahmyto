@@ -27,12 +27,12 @@ export default function Plate({
           priority
           loading="eager"
         />
-        <div className="flex flex-col items-start justify-between mt-1">
+        <div className="mt-1 flex flex-col items-start justify-between">
           <p className="text-center text-[10px] font-bold text-white">IR</p>
           <p className="text-[10px] text-white">IRAN</p>
         </div>
       </div>
-      <div className="flex h-full w-24 items-center justify-evenly">
+      <div className="flex h-full w-24 items-center justify-evenly tracking-widest">
         <p>{first_number}</p>
         <p>{second_character}</p>
         <p>{third_number}</p>
@@ -41,7 +41,7 @@ export default function Plate({
         <div className="h-full border-l"></div>
         <div className="mr-1 flex flex-col items-center justify-between">
           <p className="text-body text-[8px] font-bold">ایران</p>
-          <p>{fourth_number}</p>
+          <p className="tracking-widest">{fourth_number}</p>
         </div>
       </div>
     </div>

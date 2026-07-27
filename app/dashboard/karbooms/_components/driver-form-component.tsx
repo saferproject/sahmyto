@@ -239,7 +239,7 @@ export default function DriverFormComponent({
           },
           input: {
             endAdornment: (
-              <span className="text-body text-xl font-bold">%</span>
+              <span className="text-body text-lg font-bold">%</span>
             ),
           },
         }}

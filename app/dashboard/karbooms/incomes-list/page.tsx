@@ -12,7 +12,6 @@ import { RejectFormType } from "../_schemas/reject-form-schema";
 
 import useRejectIncome from "./_hooks/use-reject-income";
 import IncomeDrawerComponent from "../_components/income-drawer-component";
-import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
@@ -73,9 +72,8 @@ export default function IncomesListPage() {
   };
 
   return (
-    <div className="pb-24 pt-26 flex h-full w-full flex-col gap-4">
+    <div className="flex h-full w-full flex-col gap-4 pt-26 pb-24">
       <IncomesListHeaderLayout />
-      <SelectedKarboomInfoComponent />
       <IncomesListLayout
         onShowDetails={handleOpenIncomeDtailsDrawer}
         onRejectIncome={handleRejectIncome}

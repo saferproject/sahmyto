@@ -8,7 +8,6 @@ import { ProfileCircle } from "iconsax-reactjs";
 
 import PartnersListItemProps from "../_interfaces/partners-list-item-props";
 
-import getActivityStatusColor from "../_utilities/get-partner-status-color";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
 
