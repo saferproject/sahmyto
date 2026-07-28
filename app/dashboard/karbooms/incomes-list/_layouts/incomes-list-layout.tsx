@@ -31,7 +31,7 @@ export default function IncomesListLayout({
           isError={isError}
           isEmpty={!incomes?.data.length}
         >
-          <ul className="flex w-full flex-col gap-4">
+          <ul className="flex w-full flex-col gap-4 mt-6">
             <AnimatePresence>
               {incomes?.data.map((income, index) => (
                 <IncomeListItemComponent

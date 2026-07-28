@@ -17,6 +17,7 @@ import useApproveExpense from "../_hooks/use-approve-expense";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function ExpenseListItemComponent({
   expense,
@@ -36,6 +37,7 @@ export default function ExpenseListItemComponent({
     approvals,
   } = expense;
 
+  const loggedInUserId = useUserInfoStore((state) => state.id);
   const activeKarboomRoles = useKarboomsStore((state) => state.roles);
   const setActiveExpense = useExpenseListStore(
     (state) => state.setActiveExpense,
@@ -131,28 +133,30 @@ export default function ExpenseListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" && activeKarboomRoles.includes("partner") && (
-        <div className="flex items-center gap-4 px-4 py-2">
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={() => onRejectExpense(id)}
-            fullWidth
-          >
-            رد
-          </Button>
-          <Button
-            variant="outlined"
-            color="success"
-            size="small"
-            onClick={handleApprove}
-            fullWidth
-          >
-            تایید
-          </Button>
-        </div>
-      )}
+      {status === "pending" &&
+        activeKarboomRoles.includes("partner") &&
+        !approvals.find((approval) => approval.user.id == loggedInUserId) && (
+          <div className="flex items-center gap-4 px-4 py-2">
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={() => onRejectExpense(id)}
+              fullWidth
+            >
+              رد
+            </Button>
+            <Button
+              variant="outlined"
+              color="success"
+              size="small"
+              onClick={handleApprove}
+              fullWidth
+            >
+              تایید
+            </Button>
+          </div>
+        )}
     </motion.li>
   );
 }

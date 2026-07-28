@@ -13,12 +13,15 @@ import { ReactQueryProvider } from "../query-client";
 
 import { UserInfoStoreProvider } from "../_providers/user-info-provider";
 import { ConfirmationDialogStoreProvider } from "./_providers/confirmation-dialog-provider";
+import { KarboomsStoreProvider } from "./karbooms/_providers/karbooms-store-provider";
 
 import { AuthenticationGuard } from "./_utilities/authentication-guard";
+
 import ActionDialogComponent from "./_components/action-dialog-component";
-import { ActionDialogStoreProvider } from "./_providers/action-dialog-provider";
 import ConfirmationDialog from "./_components/confirmation-dialog";
-import { KarboomsStoreProvider } from "./karbooms/_providers/karbooms-store-provider";
+
+import { ActionDialogStoreProvider } from "./_providers/action-dialog-provider";
+
 
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {

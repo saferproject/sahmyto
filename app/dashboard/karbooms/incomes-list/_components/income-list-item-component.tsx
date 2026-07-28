@@ -17,6 +17,7 @@ import useApproveIncome from "../_hooks/use-approve-income";
 
 import { useIncomeListStore } from "../_providers/income-list-store-provider";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function IncomeListItemComponent({
   income,
@@ -36,6 +37,8 @@ export default function IncomeListItemComponent({
     sender: { full_name: submitterName },
     approvals,
   } = income;
+
+  const loggedInUserId = useUserInfoStore(state => state.id);
 
   const userKarboomRoles = useKarboomsStore((state) => state.roles);
 
@@ -131,28 +134,30 @@ export default function IncomeListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" && userKarboomRoles.includes("partner") && (
-        <div className="flex items-center gap-4 px-4 py-2">
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={() => onRejectIncome(id)}
-            fullWidth
-          >
-            رد
-          </Button>
-          <Button
-            variant="outlined"
-            color="success"
-            size="small"
-            onClick={handleApprove}
-            fullWidth
-          >
-            تایید
-          </Button>
-        </div>
-      )}
+      {status === "pending" &&
+        userKarboomRoles.includes("partner") &&
+        !approvals.find((approval) => approval.user.id == loggedInUserId) && (
+          <div className="flex items-center gap-4 px-4 py-2">
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={() => onRejectIncome(id)}
+              fullWidth
+            >
+              رد
+            </Button>
+            <Button
+              variant="outlined"
+              color="success"
+              size="small"
+              onClick={handleApprove}
+              fullWidth
+            >
+              تایید
+            </Button>
+          </div>
+        )}
     </motion.li>
   );
 }
