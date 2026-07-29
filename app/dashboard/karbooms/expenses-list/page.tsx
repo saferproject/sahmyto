@@ -102,6 +102,7 @@ export default function ExpensesListPage() {
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        title="هزینه"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}
         onSubmit={handleSubmitReject}

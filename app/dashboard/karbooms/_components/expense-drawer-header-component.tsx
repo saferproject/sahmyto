@@ -4,7 +4,7 @@ export default function ExpenseDrawerHeaderComponent({
 }: ExpenseDrawerHeaderProps) {
   return (
     <div className="my-4 flex w-full items-center justify-center">
-      <h4 className="text-body font-semibold text-lg">ثبت هزینه</h4>
+      <h4 className="text-body font-bold text-lg">ثبت هزینه</h4>
     </div>
   );
 }

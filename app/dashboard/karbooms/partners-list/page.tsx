@@ -14,6 +14,7 @@ import QueryState from "@/app/_components/query-state";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import useGetPartnersEndpoint from "./_hooks/use-get-partners-endpoint";
+import ListFooterLayout from "../_layouts/PaymentsListFooterLayout";
 
 export default function PartnersListPage() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function PartnersListPage() {
           onSuccess={handleCloseDriverForm}
         />
       </div>
-      <PartnersListButtonsComponent onAddPartner={handleOpenDriverForm} />
+      <ListFooterLayout onAdd={handleOpenDriverForm} />
     </div>
   );
 }

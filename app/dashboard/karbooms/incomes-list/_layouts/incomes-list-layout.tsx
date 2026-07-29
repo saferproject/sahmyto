@@ -12,6 +12,7 @@ import useGetIncomes from "../_hooks/use-get-incomes";
 import { IncomeListProps } from "../_types/income-list-props";
 import IncomesListFooterLayout from "./incomes-list-footer-layout";
 import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
+import ListFooterLayout from "../../_layouts/PaymentsListFooterLayout";
 
 export default function IncomesListLayout({
   onShowDetails,
@@ -46,7 +47,7 @@ export default function IncomesListLayout({
           </ul>
         </QueryState>
       </div>
-      <IncomesListFooterLayout onAddIncome={onOpenIncomeForm} />
+      <ListFooterLayout onAdd={onOpenIncomeForm} />
     </div>
   );
 }

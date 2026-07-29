@@ -8,6 +8,7 @@ import ThirdPartyInsuranceListItemComponent from "../_components/third-party-ins
 import ThirdPartyInsuranceListFooterLayout from "./third-party-insurance-list-footer-layout";
 import InsuranceBannerComponent from "../../_components/insurance-banner-component";
 import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
+import ListFooterLayout from "../../_layouts/PaymentsListFooterLayout";
 
 export default function ThirdPartyInsuranceListLayout({
   onOpenThirdPartyInsuranceForm,
@@ -22,7 +23,7 @@ export default function ThirdPartyInsuranceListLayout({
 
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-      <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto overflow-x-hidden pb-2">
+      <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto pb-2">
         <div className="mb-4">
           <InsuranceBannerComponent />
         </div>
@@ -47,9 +48,7 @@ export default function ThirdPartyInsuranceListLayout({
           </ul>
         </QueryState>
       </div>
-      <ThirdPartyInsuranceListFooterLayout
-        onAddThirdPartyInsurance={onOpenThirdPartyInsuranceForm}
-      />
+      <ListFooterLayout onAdd={onOpenThirdPartyInsuranceForm} />
     </div>
   );
 }

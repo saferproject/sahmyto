@@ -86,6 +86,7 @@ export default function IncomesListPage() {
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        title="درآمد"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}
         onSubmit={handleSubmitReject}

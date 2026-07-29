@@ -1,12 +1,9 @@
 import { Button, Fab } from "@mui/material";
 import { Add } from "iconsax-reactjs";
 import { useRouter } from "next/navigation";
+import { ListFooterProps } from "../_types/list-footer-props";
 
-import { DriversListButtonsProps } from "../_types/drivers-list-buttons-props";
-
-export default function DriversListButtonsComponent({
-  onAddDriver,
-}: DriversListButtonsProps) {
+export default function ListFooterLayout({ onAdd }: ListFooterProps) {
   const router = useRouter();
 
   const handleReturn = () => {
@@ -26,7 +23,7 @@ export default function DriversListButtonsComponent({
           zIndex: 10,
         }}
         color="primary"
-        onClick={onAddDriver}
+        onClick={onAdd}
       >
         <Add size={32} className="text-white" />
       </Fab>

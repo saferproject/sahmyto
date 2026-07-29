@@ -5,6 +5,7 @@ import { useState } from "react";
 import BodyInsuranceListHeaderLayout from "./_layouts/body-insurance-list-header-layout";
 import BodyInsuranceListLayout from "./_layouts/body-insurance-list-layout";
 import BodyInsuranceDrawerComponent from "./_components/body-insurance-drawer-component";
+import ListFooterLayout from "../_layouts/PaymentsListFooterLayout";
 
 export default function BodyInsurancePage() {
   const [isBodyInsuranceFormDrawerOpen, setBodyInsuranceFormDrawerOpen] =

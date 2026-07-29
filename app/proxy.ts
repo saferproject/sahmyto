@@ -1,17 +1,22 @@
 import BaseResponse from "./_interfaces/base-response";
 
+interface FetchWithAuthOptions extends RequestInit {
+  redirectOnUnauthorized?: boolean;
+}
+
 export async function fetchWithAuth<ResponseType>(
   path: string,
-  options: RequestInit = {},
+  options: FetchWithAuthOptions = {},
 ): Promise<BaseResponse<ResponseType>> {
+  const { redirectOnUnauthorized = true, ...requestOptions } = options;
   const token = localStorage.getItem("token");
 
-  const headers = new Headers(options.headers);
+  const headers = new Headers(requestOptions.headers);
 
   if (token) headers.set("Authorization", `Bearer ${token}`);
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
-    ...options,
+    ...requestOptions,
     headers,
     cache: "no-cache",
   });
@@ -20,7 +25,7 @@ export async function fetchWithAuth<ResponseType>(
   if (response.status === 401) {
     localStorage.clear();
 
-    window.location.href = "/login";
+    if (redirectOnUnauthorized) window.location.href = "/login";
     throw new Error("Unauthorized");
   }
 

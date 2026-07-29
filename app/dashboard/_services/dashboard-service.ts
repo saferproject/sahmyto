@@ -2,11 +2,18 @@ import User from "@/app/_interfaces/user";
 import { fetchWithAuth } from "@/app/proxy";
 import { KarboomRequest } from "../_types/karboom-request";
 
+interface GetProfileInfoOptions {
+  redirectOnUnauthorized?: boolean;
+}
+
 export const dashboardService = {
-  getProfileInfo: () =>
+  getProfileInfo: ({
+    redirectOnUnauthorized = true,
+  }: GetProfileInfoOptions = {}) =>
     fetchWithAuth<User>("user/profile", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      redirectOnUnauthorized,
     }),
   userLogout: () =>
     fetchWithAuth<undefined>("user/logout", {

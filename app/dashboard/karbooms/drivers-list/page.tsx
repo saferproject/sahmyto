@@ -3,12 +3,10 @@
 import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
-import { User } from "iconsax-reactjs";
 
 import { useSnackbar } from "notistack";
 
 import DriversListComponent from "./_components/drivers-list-component";
-import DriversListButtonsComponent from "./_components/drivers-list-buttons-component";
 import DriverFormDrawerComponent from "../_components/driver-form-drawer-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
@@ -16,6 +14,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useGetDriversEndpoint from "./_hooks/use-get-karboom-drivers-endpoint";
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 import QueryState from "@/app/_components/query-state";
+import ListFooterLayout from "../_layouts/PaymentsListFooterLayout";
 
 export default function DriverListPage() {
   const router = useRouter();
@@ -71,7 +70,7 @@ export default function DriverListPage() {
           onSuccess={handleCloseDriverForm}
         />
       </div>
-      <DriversListButtonsComponent onAddDriver={handleOpenDriverForm} />
+      <ListFooterLayout onAdd={handleOpenDriverForm} />
     </div>
   );
 }

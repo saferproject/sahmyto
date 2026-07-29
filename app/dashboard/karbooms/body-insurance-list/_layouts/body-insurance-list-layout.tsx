@@ -3,10 +3,10 @@ import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { AnimatePresence } from "motion/react";
 import useGetBodyInsurancesEndpoint from "../_hooks/use-get-body-insurances-endpoint";
 import BodyInsuranceListItemComponent from "../_components/body-insurance-list-item-component";
-import BodyInsuranceListFooterLayout from "./body-insurance-list-footer-layout";
 import { BodyInsuranceListProps } from "../_types/body-insurance-list-props";
 import InsuranceBannerComponent from "../../_components/insurance-banner-component";
 import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
+import ListFooterLayout from "../../_layouts/PaymentsListFooterLayout";
 
 export default function BodyInsuranceListLayout({
   onOpenBodyInsuranceForm,
@@ -46,8 +46,8 @@ export default function BodyInsuranceListLayout({
           </ul>
         </QueryState>
       </div>
-      <BodyInsuranceListFooterLayout
-        onAddBodyInsurance={onOpenBodyInsuranceForm}
+      <ListFooterLayout
+        onAdd={onOpenBodyInsuranceForm}
       />
     </div>
   );

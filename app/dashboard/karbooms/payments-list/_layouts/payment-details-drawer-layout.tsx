@@ -1,39 +1,30 @@
-"use client";
-
 import { SwipeableDrawer } from "@mui/material";
-
-import { IncomeDetailsDrawerProps } from "../_types/income-details-drawer-props";
-
-import { useIncomeListStore } from "../_providers/income-list-store-provider";
-import formatNumber from "@/app/_utilities/format-numbers";
-import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
+import { PaymentDetailsDrawerProps } from "../_types/payment-details-drawer-props";
+import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
 import dayjs from "dayjs";
-import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
+import formatNumber from "@/app/_utilities/format-numbers";
+import { usePaymentListStore } from "../_providers/payments-list-store-provider";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import DetailItemComponent from "../_components/income-detail-item-component";
+import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import ApprovalItemComponent from "../../_components/approval-item-component";
 
-export default function IncomeDetailsDrawerLayout({
+export default function PaymentDetailsDrawerLayout({
   isOpen,
   onOpen,
   onClose,
-}: IncomeDetailsDrawerProps) {
+}: PaymentDetailsDrawerProps) {
   const {
-    unit_price,
-    quantity,
+    total_price,
     type,
-    started_at,
-    ended_at,
+    date,
     status,
     description,
-    receiver: { full_name: receiverName },
-    sender: { full_name: submitterName },
     approvals,
-    clearActiveIncome
-  } = useIncomeListStore((state) => state);
+    clearActivePayment,
+  } = usePaymentListStore((state) => state);
 
   const handleClose = () => {
-    clearActiveIncome();
+    clearActivePayment();
     onClose();
   };
 
@@ -62,22 +53,16 @@ export default function IncomeDetailsDrawerLayout({
           <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
             <DetailItemComponent
               label="مبلغ"
-              value={formatNumber(unit_price * quantity)}
+              value={formatNumber(total_price)}
             />
+            <DetailItemComponent label="نوع" value={PAYMENT_TYPES_FA[type]} />
             <DetailItemComponent
-              label="نوع کارکرد"
-              value={INCOME_TYPES_FA[type]}
+              label="تاریخ"
+              value={dayjs(date).format("YYYY/MM/DD")}
             />
-            <DetailItemComponent
-              label="تاریخ / زمان شروع"
-              value={dayjs(started_at).format("YYYY/MM/DD")}
-            />
-            <DetailItemComponent
-              label="تاریخ / زمان پایان"
-              value={dayjs(ended_at).format("YYYY/MM/DD")}
-            />
-            <DetailItemComponent label="دریافت کننده" value={receiverName} />
             <DetailItemComponent label="ثبت کننده" value={submitterName} />
+            <DetailItemComponent label="پرداخت کننده" value={submitterName} />
+            <DetailItemComponent label="دریافت کننده" value={receiverName} />
             <DetailItemComponent
               label="وضعیت"
               value={ACTIVITY_STATUS_FA[status]}
@@ -91,7 +76,7 @@ export default function IncomeDetailsDrawerLayout({
             </div>
           )}
           <div className="mt-4 w-full">
-            <h5 className="text-body">وضعیت تاییدیه شرکا</h5>
+            <h5 className="text-body">وضعیت تاییدیه</h5>
             <ul className="mt-4 flex w-full flex-col gap-4">
               {approvals.map((approval) => (
                 <ApprovalItemComponent key={approval.id} approval={approval} />

@@ -7,6 +7,7 @@ import useGetExpenses from "../_hooks/use-get-expenses";
 import { ExpenseListProps } from "../_types/expense-list-props";
 import ExpensesListFooterLayout from "./expense-list-footer-layout";
 import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
+import ListFooterLayout from "../../_layouts/PaymentsListFooterLayout";
 
 export default function ExpenseListLayout({
   onShowDetails,
@@ -41,7 +42,7 @@ export default function ExpenseListLayout({
           </ul>
         </QueryState>
       </div>
-      <ExpensesListFooterLayout onAddExpense={onOpenExpenseForm} />
+      <ListFooterLayout onAdd={onOpenExpenseForm} />
     </div>
   );
 }
