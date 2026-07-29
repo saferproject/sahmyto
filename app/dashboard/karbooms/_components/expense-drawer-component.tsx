@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { SwipeableDrawer } from "@mui/material";
+
+import FormDrawerComponent from "@/app/_components/form-drawer-component";
 
 import ExpenseDrawerHeaderComponent from "./expense-drawer-header-component";
 import ExpenseDrawerCategoryListComponent from "./expense-drawer-list-component";
@@ -48,45 +49,22 @@ export default function ExpenseDrawerComponent({
   };
 
   return (
-    <SwipeableDrawer
-      anchor="bottom"
-      open={isOpen}
-      onOpen={onOpen}
-      onClose={handleClose}
-      slotProps={{
-        paper: {
-          sx: {
-            width: "100%",
-            borderRadius: "32px 32px 0 0",
-            margin: "auto",
-            display: "flex",
-            justifyContent: "space-between",
-          },
-        },
-      }}
-    >
-      <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
-        <div className="bg-secondary-light absolute top-6 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex min-h-0 w-full flex-1 flex-col items-center">
-          <div className="mb-4 flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
-            <ExpenseDrawerHeaderComponent />
-            <ExpenseDrawerCategoryListComponent
-              categoryType={categoryType}
-              selectedCategory={selectedCategory}
-              onSelectCategoryType={handleSelectCategoryType}
-              onSelectCategory={handleSelectCategory}
-            />
-            <ExpenseDrawerFormComponent
-              isOpen={isOpen}
-              karboomId={karboomId}
-              expenseFormRef={expenseForm}
-              categoryType={categoryType}
-              selectedCategory={selectedCategory}
-              onSuccess={handleSuccess}
-            />
-          </div>
-        </div>
-      </div>
-    </SwipeableDrawer>
+    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={handleClose}>
+      <ExpenseDrawerHeaderComponent />
+      <ExpenseDrawerCategoryListComponent
+        categoryType={categoryType}
+        selectedCategory={selectedCategory}
+        onSelectCategoryType={handleSelectCategoryType}
+        onSelectCategory={handleSelectCategory}
+      />
+      <ExpenseDrawerFormComponent
+        isOpen={isOpen}
+        karboomId={karboomId}
+        expenseFormRef={expenseForm}
+        categoryType={categoryType}
+        selectedCategory={selectedCategory}
+        onSuccess={handleSuccess}
+      />
+    </FormDrawerComponent>
   );
 }

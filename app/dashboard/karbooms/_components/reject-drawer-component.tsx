@@ -1,7 +1,7 @@
-import { Button, SwipeableDrawer } from "@mui/material";
-import { MoneyForbidden } from "iconsax-reactjs";
+import { Button } from "@mui/material";
 import { useWatch } from "react-hook-form";
 
+import FormDrawerComponent from "@/app/_components/form-drawer-component";
 import { RejectDrawerProps } from "../_types/reject-drawer-props";
 
 import DescriptionInput from "@/app/_components/description-input";
@@ -31,59 +31,31 @@ export default function RejectDrawerComponent({
   };
 
   return (
-    <SwipeableDrawer
-      anchor="bottom"
-      open={isOpen}
-      onOpen={onOpen}
-      onClose={onClose}
-      slotProps={{
-        paper: {
-          sx: {
-            width: "100%",
-            borderRadius: "32px 32px 0 0",
-            margin: "auto",
-            display: "flex",
-            justifyContent: "space-between",
-          },
-        },
-      }}
-    >
-      <div className="relative flex max-h-[90dvh] w-full flex-col px-8 pt-12 pb-8">
-        <div className="bg-secondary-light absolute top-6 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full"></div>
-        <div className="flex min-h-0 w-full flex-1 flex-col items-center">
-          <div className="flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
-            <h2 className="text-body text-lg font-bold text-center">رد {title}</h2>
-            <form onSubmit={handleSubmit(submit)}>
-              <DescriptionInput
-                label={"علت رد " + title}
-                register={register("reject_reason")}
-                currentlength={reject_reason?.length ?? 0}
-                error={!!errors.reject_reason}
-                helperText={errors.reject_reason?.message ?? ""}
-              />
-              <div className="mt-4 flex w-full items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outlined"
-                  color="secondary"
-                  onClick={onClose}
-                  fullWidth
-                >
-                  انصراف
-                </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="error"
-                  fullWidth
-                >
-                  رد {title}
-                </Button>
-              </div>
-            </form>
-          </div>
+    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+      <h2 className="text-body text-center text-lg font-bold">رد {title}</h2>
+      <form className="w-full" onSubmit={handleSubmit(submit)}>
+        <DescriptionInput
+          label={"علت رد " + title}
+          register={register("reject_reason")}
+          currentlength={reject_reason?.length ?? 0}
+          error={!!errors.reject_reason}
+          helperText={errors.reject_reason?.message ?? ""}
+        />
+        <div className="mt-4 flex w-full items-center gap-2">
+          <Button
+            type="button"
+            variant="outlined"
+            color="secondary"
+            onClick={onClose}
+            fullWidth
+          >
+            انصراف
+          </Button>
+          <Button type="submit" variant="contained" color="error" fullWidth>
+            رد {title}
+          </Button>
         </div>
-      </div>
-    </SwipeableDrawer>
+      </form>
+    </FormDrawerComponent>
   );
 }

@@ -3,13 +3,23 @@
 import { useState } from "react";
 import RejectDrawerComponent from "../_components/reject-drawer-component";
 import SearchInputComponent from "../_components/search-input-component";
+import PaymentDrawerComponent from "../_components/payment-drawer-component";
 import PaymentDetailsDrawerLayout from "./_layouts/payment-details-drawer-layout";
 import PaymentsListLayout from "./_layouts/payments-list-layout";
 
 export default function PaymentsListPage() {
+  const [isPaymentFormDrawerOpen, setPaymentFormDrawerOpen] = useState(false);
   const [isPaymentDetailsDrawerOpen, setPaymentDetailsDrawerOpen] =
     useState(false);
   const [isRejectDrawerOpen, setRejectDrawerOpen] = useState(false);
+
+  const handleOpenPaymentFormDrawer = () => {
+    setPaymentFormDrawerOpen(true);
+  };
+
+  const handleClosePaymentFormDrawer = () => {
+    setPaymentFormDrawerOpen(false);
+  };
 
   const handleOpenPaymentDtailsDrawer = () => {
     setPaymentDetailsDrawerOpen(true);
@@ -37,7 +47,7 @@ export default function PaymentsListPage() {
       </h2>
       <SearchInputComponent />
       <PaymentsListLayout
-        onOpenForm={}
+        onOpenForm={handleOpenPaymentFormDrawer}
         onOpenDetails={handleOpenPaymentDtailsDrawer}
       />
       <PaymentDetailsDrawerLayout
@@ -53,9 +63,9 @@ export default function PaymentsListPage() {
         onSubmit={handleSubmitReject}
       />
       <PaymentDrawerComponent
-        isOpen={isIncomeFormDrawerOpen}
-        onOpen={handleOpenIncomeForm}
-        onClose={handleCloseIncomeForm}
+        isOpen={isPaymentFormDrawerOpen}
+        onOpen={handleOpenPaymentFormDrawer}
+        onClose={handleClosePaymentFormDrawer}
       />
     </div>
   );
