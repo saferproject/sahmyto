@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
         destination: "/login",
         permanent: false,
       },
+      {
+        source: "/dashboard",
+        destination: "/dashboard/karbooms",
+        permanent: true,
+      },
     ];
   },
 };

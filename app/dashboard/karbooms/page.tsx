@@ -60,7 +60,7 @@ export default function KarboomsPage() {
 
   return (
     <>
-      <h2 className="text-body text-right text-lg font-semibold mr-4">
+      <h2 className="text-body text-right text-lg font-semibold">
         لیست کاربوم ها
       </h2>
       <KarboomsComponent onAddKarboom={handleOpenKarboomFormDrawer} />

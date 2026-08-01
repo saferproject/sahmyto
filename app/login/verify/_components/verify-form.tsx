@@ -31,7 +31,7 @@ export default function VerifyForm() {
             setUser(response.data.user);
 
             if (response.data.user.is_complete_profile)
-              router.push("/dashboard");
+              router.push("/dashboard/karbooms");
             else router.push("/dashboard/profile");
           },
           onError: () => setOtp(""),

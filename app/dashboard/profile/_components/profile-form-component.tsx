@@ -26,7 +26,6 @@ import { ProfileFormType } from "../_schemas/profile-schema";
 import { DatePicker } from "@mui/x-date-pickers";
 
 export default function ProfileFormComponent() {
-  const [isEditing, setIsEditing] = useState(false);
   const [isOptionalFieldsVisible, setOptionalFieldsVisibility] =
     useState(false);
 
@@ -87,7 +86,6 @@ export default function ProfileFormComponent() {
           label="نام"
           slotProps={{
             inputLabel: { shrink: true },
-            htmlInput: { readOnly: !isEditing },
           }}
           required
           fullWidth
@@ -97,7 +95,6 @@ export default function ProfileFormComponent() {
           label="نام خانوادگی"
           slotProps={{
             inputLabel: { shrink: true },
-            htmlInput: { readOnly: !isEditing },
           }}
           required
           fullWidth
@@ -110,19 +107,18 @@ export default function ProfileFormComponent() {
           <FormControl required>
             <RadioGroup
               {...field}
-              aria-readonly={!isEditing}
               onChange={(event) => field.onChange(event.target.value)}
             >
               <div className="grid w-full grid-cols-2">
                 <FormControlLabel
                   value={"male"}
                   label="آقا"
-                  control={<Radio disabled={!isEditing} />}
+                  control={<Radio />}
                 />
                 <FormControlLabel
                   value={"female"}
                   label="خانم"
-                  control={<Radio disabled={!isEditing} />}
+                  control={<Radio />}
                 />
               </div>
             </RadioGroup>
@@ -148,7 +144,6 @@ export default function ProfileFormComponent() {
                   label="تاریخ تولد"
                   format="YYYY/MM/DD"
                   views={["year", "month", "day"]}
-                  readOnly={!isEditing}
                   slotProps={{
                     textField: {
                       error: !!errors.birthday,
@@ -160,28 +155,13 @@ export default function ProfileFormComponent() {
                 />
               )}
             />
-            <TextField
-              {...register("father_name")}
-              label="نام پدر"
-              slotProps={{ htmlInput: { readOnly: !isEditing } }}
-            />
-
-            <TextField
-              {...register("email")}
-              label="ایمیل"
-              type="email"
-              slotProps={{ htmlInput: { readOnly: !isEditing } }}
-            />
+            <TextField {...register("father_name")} label="نام پدر" />
+            <TextField {...register("email")} label="ایمیل" type="email" />
           </div>
         </AccordionDetails>
       </Accordion>
-      <Button
-        variant="contained"
-        size="large"
-        type={isEditing ? "submit" : "button"}
-        onClick={isEditing ? undefined : () => setIsEditing(true)}
-      >
-        {isEditing ? "ثبت" : "ویرایش"}
+      <Button variant="contained" size="large" type="submit">
+        ثبت
       </Button>
     </form>
   );
