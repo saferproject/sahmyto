@@ -46,7 +46,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                       <main className="flex min-h-0 w-full flex-1 flex-col items-center overflow-x-visible overflow-y-auto px-4">
                         {children}
                       </main>
-                      <DashboardFooter />
                     </div>
                   </KarboomsStoreProvider>
                 </AuthenticationGuard>

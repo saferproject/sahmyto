@@ -6,6 +6,7 @@ import SearchInputComponent from "../_components/search-input-component";
 import PaymentDrawerComponent from "../_components/payment-drawer-component";
 import PaymentDetailsDrawerLayout from "./_layouts/payment-details-drawer-layout";
 import PaymentsListLayout from "./_layouts/payments-list-layout";
+import ListHeaderLayout from "../_layouts/list-header-layout";
 
 export default function PaymentsListPage() {
   const [isPaymentFormDrawerOpen, setPaymentFormDrawerOpen] = useState(false);
@@ -41,11 +42,8 @@ export default function PaymentsListPage() {
   const handleSubmitReject = () => {};
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 pt-26 pb-24">
-      <h2 className="text-body text-center text-lg font-semibold">
-        لیست درآمد ها
-      </h2>
-      <SearchInputComponent />
+    <>
+      <ListHeaderLayout title="لیست دریافتی و پرداختی ها" />
       <PaymentsListLayout
         onOpenForm={handleOpenPaymentFormDrawer}
         onOpenDetails={handleOpenPaymentDtailsDrawer}
@@ -67,6 +65,6 @@ export default function PaymentsListPage() {
         onOpen={handleOpenPaymentFormDrawer}
         onClose={handleClosePaymentFormDrawer}
       />
-    </div>
+    </>
   );
 }

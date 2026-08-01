@@ -38,7 +38,7 @@ export default function IncomeListItemComponent({
     approvals,
   } = income;
 
-  const loggedInUserId = useUserInfoStore(state => state.id);
+  const loggedInUserId = useUserInfoStore((state) => state.id);
 
   const userKarboomRoles = useKarboomsStore((state) => state.roles);
 
@@ -136,7 +136,10 @@ export default function IncomeListItemComponent({
       </div>
       {status === "pending" &&
         userKarboomRoles.includes("partner") &&
-        !approvals.find((approval) => approval.user.id == loggedInUserId) && (
+        !approvals.find(
+          (approval) =>
+            approval.user.id == loggedInUserId && approval.status !== "pending",
+        ) && (
           <div className="flex items-center gap-4 px-4 py-2">
             <Button
               variant="outlined"

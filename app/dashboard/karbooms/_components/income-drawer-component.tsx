@@ -9,7 +9,7 @@ import { IncomeTypes } from "../_types/income-categories";
 
 import IncomeDrawerHeaderComponent from "./income-drawer-header-component";
 import IncomeDrawerTypeListComponent from "./income-drawer-type-list-component";
-import IncomeDrawerFormComponent from "./income-drawer-form-component";
+import IncomeFormComponent from "./income-form-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
@@ -40,7 +40,7 @@ export default function IncomeDrawerComponent({
       {incomeType ? (
         <>
           <IncomeDrawerHeaderComponent incomeType={incomeType} />
-          <IncomeDrawerFormComponent
+          <IncomeFormComponent
             isOpen={isOpen}
             karboomId={karboomId}
             incomeType={incomeType}

@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Fab } from "@mui/material";
-import { Add, Truck } from "iconsax-reactjs";
 
 import { useKarboomsStore } from "./_providers/karbooms-store-provider";
 
@@ -61,7 +59,7 @@ export default function KarboomsPage() {
   };
 
   return (
-    <div className="h-full w-full overflow-y-auto pt-26 pb-24">
+    <>
       <h2 className="text-body text-right text-lg font-semibold mr-4">
         لیست کاربوم ها
       </h2>
@@ -89,6 +87,6 @@ export default function KarboomsPage() {
         onClose={handleCloseDriverFormDrawer}
         onSuccess={handleCloseDriverFormDrawer}
       />
-    </div>
+    </>
   );
 }

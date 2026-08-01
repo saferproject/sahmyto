@@ -14,7 +14,8 @@ import QueryState from "@/app/_components/query-state";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import useGetPartnersEndpoint from "./_hooks/use-get-partners-endpoint";
-import ListFooterLayout from "../_layouts/PaymentsListFooterLayout";
+import ListFooterLayout from "../_layouts/list-footer-layout";
+import ListHeaderLayout from "../_layouts/list-header-layout";
 
 export default function PartnersListPage() {
   const router = useRouter();
@@ -46,27 +47,23 @@ export default function PartnersListPage() {
   };
 
   return (
-    <div className="flex size-full flex-col gap-4 pt-26 pb-24">
-      <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-        <h2 className="text-body text-center text-lg font-bold">لیست شرکا</h2>
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
-          <SelectedKarboomInfoComponent />
-          <QueryState
-            isLoading={isLoading}
-            isError={isError}
-            isEmpty={!data?.data.length}
-          >
-            <PartnersListComponent partners={data?.data ?? []} />
-          </QueryState>
-        </div>
-        <PartnerFormDrawerComponent
-          isOpen={isDriverFormDrawerOpen}
-          onOpen={handleOpenDriverForm}
-          onClose={handleCloseDriverForm}
-          onSuccess={handleCloseDriverForm}
-        />
-      </div>
+    <>
+      <ListHeaderLayout title="لیست شرکا" />
+      <SelectedKarboomInfoComponent />
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        isEmpty={!data?.data.length}
+      >
+        <PartnersListComponent partners={data?.data ?? []} />
+      </QueryState>
+      <PartnerFormDrawerComponent
+        isOpen={isDriverFormDrawerOpen}
+        onOpen={handleOpenDriverForm}
+        onClose={handleCloseDriverForm}
+        onSuccess={handleCloseDriverForm}
+      />
       <ListFooterLayout onAdd={handleOpenDriverForm} />
-    </div>
+    </>
   );
 }

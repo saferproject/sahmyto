@@ -6,7 +6,7 @@ import FormDrawerComponent from "@/app/_components/form-drawer-component";
 
 import ExpenseDrawerHeaderComponent from "./expense-drawer-header-component";
 import ExpenseDrawerCategoryListComponent from "./expense-drawer-list-component";
-import ExpenseDrawerFormComponent from "./expense-drawer-form-component";
+import ExpenseFormComponent from "./expense-form-component";
 
 import { KarboomExpenseDrawerProps } from "../_types/karboom-expense-drawer-props";
 import { ExpensesCategoryTypes } from "../_types/expenses-category-types";
@@ -57,7 +57,7 @@ export default function ExpenseDrawerComponent({
         onSelectCategoryType={handleSelectCategoryType}
         onSelectCategory={handleSelectCategory}
       />
-      <ExpenseDrawerFormComponent
+      <ExpenseFormComponent
         isOpen={isOpen}
         karboomId={karboomId}
         expenseFormRef={expenseForm}

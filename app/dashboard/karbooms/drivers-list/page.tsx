@@ -14,7 +14,8 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useGetDriversEndpoint from "./_hooks/use-get-karboom-drivers-endpoint";
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 import QueryState from "@/app/_components/query-state";
-import ListFooterLayout from "../_layouts/PaymentsListFooterLayout";
+import ListFooterLayout from "../_layouts/list-footer-layout";
+import ListHeaderLayout from "../_layouts/list-header-layout";
 
 export default function DriverListPage() {
   const router = useRouter();
@@ -46,31 +47,23 @@ export default function DriverListPage() {
   };
 
   return (
-    <div className="flex size-full flex-col gap-4 pt-26 pb-24">
-      <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-        <h2 className="text-body w-full text-center text-lg font-bold">
-          رانندگان
-        </h2>
-        <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto">
-          <div className="mb-4">
-            <SelectedKarboomInfoComponent />
-          </div>
-          <QueryState
-            isLoading={isLoading}
-            isError={isError}
-            isEmpty={!data?.data.length}
-          >
-            <DriversListComponent drivers={data?.data ?? []} />
-          </QueryState>
-        </div>
-        <DriverFormDrawerComponent
-          isOpen={isDriverFormDrawerOpen}
-          onOpen={handleOpenDriverForm}
-          onClose={handleCloseDriverForm}
-          onSuccess={handleCloseDriverForm}
-        />
-      </div>
+    <>
+      <ListHeaderLayout title="لیست رانندگان" />
+      <SelectedKarboomInfoComponent />
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        isEmpty={!data?.data.length}
+      >
+        <DriversListComponent drivers={data?.data ?? []} />
+      </QueryState>
+      <DriverFormDrawerComponent
+        isOpen={isDriverFormDrawerOpen}
+        onOpen={handleOpenDriverForm}
+        onClose={handleCloseDriverForm}
+        onSuccess={handleCloseDriverForm}
+      />
       <ListFooterLayout onAdd={handleOpenDriverForm} />
-    </div>
+    </>
   );
 }

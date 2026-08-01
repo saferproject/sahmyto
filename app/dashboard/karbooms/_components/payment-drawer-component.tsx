@@ -8,8 +8,6 @@ export default function PaymentDrawerComponent({
   onOpen,
   onClose,
 }: KarboomPaymentDrawerProps) {
-  const karboomId = useKarboomsStore((state) => state.id);
-
   const handleSuccess = () => {
     onClose();
   };
@@ -21,7 +19,6 @@ export default function PaymentDrawerComponent({
       </h4>
       <PaymentFormComponent
         isOpen={isOpen}
-        karboomId={karboomId}
         onSuccess={handleSuccess}
       />
     </FormDrawerComponent>

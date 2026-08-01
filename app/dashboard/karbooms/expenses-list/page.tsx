@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import ExpenseListLayout from "./_layouts/expense-list-layout";
-import ExpenseListHeaderLayout from "./_layouts/expense-list-header-layout";
 import ExpenseDetailsDrawerLayout from "./_layouts/expense-details-drawer-layout";
 
 import { RejectFormType } from "../_schemas/reject-form-schema";
@@ -11,12 +10,11 @@ import { RejectFormType } from "../_schemas/reject-form-schema";
 import RejectDrawerComponent from "../_components/reject-drawer-component";
 
 import useRejectExpense from "./_hooks/use-reject-expense";
-import { FilterTag } from "./_types/filter-tag";
-import { EXPENSE_FILTER_TAGS } from "./_constants/expense-filter-tags";
 import ExpenseDrawerComponent from "../_components/expense-drawer-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
+import ListHeaderLayout from "../_layouts/list-header-layout";
 
 export default function ExpensesListPage() {
   const [isExpenseDetailsDrawerOpen, setExpenseDetailsDrawerOpen] =
@@ -25,11 +23,6 @@ export default function ExpensesListPage() {
   const [selectedExpense, setSelectedExpense] = useState<number | null>(null);
   const [isExpenseFormDrawerOpen, setExpenseFormDrawerOpen] =
     useState<boolean>(false);
-  const [selectedTag, setSelectedTag] = useState<FilterTag>(
-    EXPENSE_FILTER_TAGS[0],
-  );
-
-  const { id: tagId } = selectedTag;
 
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
@@ -71,10 +64,6 @@ export default function ExpensesListPage() {
     // TODO show a warning alert
   };
 
-  const handleTagSelect = (tag: FilterTag) => {
-    setSelectedTag(tag);
-  };
-
   const handleOpenExpenseForm = () => {
     requireKarboomMembers(karboomId, () => setExpenseFormDrawerOpen(true));
   };
@@ -84,12 +73,8 @@ export default function ExpensesListPage() {
   };
 
   return (
-    <div className="pb-24 pt-26 flex h-full w-full flex-col gap-4">
-      <ExpenseListHeaderLayout
-        selectedTagId={tagId}
-        onTagSelect={handleTagSelect}
-      />
-      
+    <>
+      <ListHeaderLayout title="لیست هزینه ها" />
       <ExpenseListLayout
         onShowDetails={handleOpenExpenseDtailsDrawer}
         onRejectExpense={handleRejectExpense}
@@ -112,6 +97,6 @@ export default function ExpensesListPage() {
         onOpen={handleOpenExpenseForm}
         onClose={handleCloseExpenseForm}
       />
-    </div>
+    </>
   );
 }

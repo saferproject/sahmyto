@@ -135,7 +135,10 @@ export default function ExpenseListItemComponent({
       </div>
       {status === "pending" &&
         activeKarboomRoles.includes("partner") &&
-        !approvals.find((approval) => approval.user.id == loggedInUserId) && (
+        !approvals.find(
+          (approval) =>
+            approval.user.id == loggedInUserId && approval.status !== "pending",
+        ) && (
           <div className="flex items-center gap-4 px-4 py-2">
             <Button
               variant="outlined"

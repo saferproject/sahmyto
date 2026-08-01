@@ -22,7 +22,7 @@ import BaseResponse from "@/app/_interfaces/base-response";
 import useCreateIncomeEndpoint from "../_hooks/create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
-export default function IncomeDrawerFormComponent({
+export default function IncomeFormComponent({
   isOpen,
   karboomId,
   incomeType,
@@ -45,7 +45,11 @@ export default function IncomeDrawerFormComponent({
   const userId = useUserInfoStore((state) => state.id);
   const selectedKarboomId = useKarboomsStore((state) => state.id);
 
-  const { data: members, isLoading: gettingMembers, isSuccess: gotMembers } = useGetMembersEndpoint(
+  const {
+    data: members,
+    isLoading: gettingMembers,
+    isSuccess: gotMembers,
+  } = useGetMembersEndpoint(
     karboomId,
     isOpen && karboomId == selectedKarboomId,
   );

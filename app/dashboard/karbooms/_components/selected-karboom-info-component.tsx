@@ -29,7 +29,7 @@ export default function SelectedKarboomInfoComponent() {
   }, [id]);
 
   return (
-    <div className="relative drop-shadow-lg">
+    <div className="relative drop-shadow-lg mb-4">
       <Image
         src={yellowRectangle}
         alt=""

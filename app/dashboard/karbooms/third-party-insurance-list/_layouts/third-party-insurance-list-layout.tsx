@@ -8,7 +8,7 @@ import ThirdPartyInsuranceListItemComponent from "../_components/third-party-ins
 import ThirdPartyInsuranceListFooterLayout from "./third-party-insurance-list-footer-layout";
 import InsuranceBannerComponent from "../../_components/insurance-banner-component";
 import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
-import ListFooterLayout from "../../_layouts/PaymentsListFooterLayout";
+import ListFooterLayout from "../../_layouts/list-footer-layout";
 
 export default function ThirdPartyInsuranceListLayout({
   onOpenThirdPartyInsuranceForm,
@@ -22,33 +22,27 @@ export default function ThirdPartyInsuranceListLayout({
   } = useGetThirdPartyInsurancesEndpoint(karboomId);
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col gap-4">
-      <div className="flex min-h-0 w-full flex-1 flex-col overflow-x-hidden overflow-y-auto pb-2">
-        <div className="mb-4">
-          <InsuranceBannerComponent />
-        </div>
-        <div className="mb-6">
-          <SelectedKarboomInfoComponent />
-        </div>
-        <QueryState
-          isLoading={isLoading}
-          isError={isError}
-          isEmpty={!thirdPartyInsurances?.data.length}
-        >
-          <ul className="flex w-full flex-col gap-4">
-            <AnimatePresence>
-              {thirdPartyInsurances?.data.map((thirdPartyInsurance, index) => (
-                <ThirdPartyInsuranceListItemComponent
-                  key={thirdPartyInsurance.id}
-                  thirdPartyInsurance={thirdPartyInsurance}
-                  index={index}
-                />
-              ))}
-            </AnimatePresence>
-          </ul>
-        </QueryState>
-      </div>
+    <>
+      <InsuranceBannerComponent />
+      <SelectedKarboomInfoComponent />
+      <QueryState
+        isLoading={isLoading}
+        isError={isError}
+        isEmpty={!thirdPartyInsurances?.data.length}
+      >
+        <ul className="flex w-full flex-col gap-4">
+          <AnimatePresence>
+            {thirdPartyInsurances?.data.map((thirdPartyInsurance, index) => (
+              <ThirdPartyInsuranceListItemComponent
+                key={thirdPartyInsurance.id}
+                thirdPartyInsurance={thirdPartyInsurance}
+                index={index}
+              />
+            ))}
+          </AnimatePresence>
+        </ul>
+      </QueryState>
       <ListFooterLayout onAdd={onOpenThirdPartyInsuranceForm} />
-    </div>
+    </>
   );
 }

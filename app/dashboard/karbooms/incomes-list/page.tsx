@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import IncomesListLayout from "./_layouts/incomes-list-layout";
-import IncomesListHeaderLayout from "./_layouts/incomes-list-header-layout";
 import IncomeDetailsDrawerLayout from "./_layouts/income-details-drawer-layout";
 
 import RejectDrawerComponent from "../_components/reject-drawer-component";
@@ -15,6 +14,7 @@ import IncomeDrawerComponent from "../_components/income-drawer-component";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
+import ListHeaderLayout from "../_layouts/list-header-layout";
 
 export default function IncomesListPage() {
   const [isIncomeDetailsDrawerOpen, setIncomeDetailsDrawerOpen] =
@@ -72,8 +72,8 @@ export default function IncomesListPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 pt-26 pb-24">
-      <IncomesListHeaderLayout />
+    <>
+      <ListHeaderLayout title="لیست درآمد ها" />
       <IncomesListLayout
         onShowDetails={handleOpenIncomeDtailsDrawer}
         onRejectIncome={handleRejectIncome}
@@ -96,6 +96,6 @@ export default function IncomesListPage() {
         onOpen={handleOpenIncomeForm}
         onClose={handleCloseIncomeForm}
       />
-    </div>
+    </>
   );
 }

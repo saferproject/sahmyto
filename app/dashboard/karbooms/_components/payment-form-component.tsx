@@ -1,39 +1,26 @@
-"use client";
-
-import { Autocomplete, Button, TextField } from "@mui/material";
-import { useSnackbar } from "notistack";
-import { DatePicker } from "@mui/x-date-pickers";
+import usePaymentForm from "../_hooks/use-payment-form";
 import { Controller, useWatch } from "react-hook-form";
-
-import useExpenseForm from "../_hooks/use-expense-form";
-import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
-
-import { ExpenseDrawerFormProps } from "../_types/expense-drawer-form-props";
-import { Member } from "../_types/member";
-
-import DescriptionInput from "@/app/_components/description-input";
-
-import { ExpenseFormType } from "../_schemas/expense-form-schema";
-
-import { useKarboomsStore } from "../_providers/karbooms-store-provider";
-
 import PriceInputComponent from "@/app/_components/price-input-component";
-import useCreateExpenseEndpoint from "../_hooks/create-expense-endpoint";
-import parseNumber from "@/app/_utilities/parse-numbers";
-import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import { DatePicker } from "@mui/x-date-pickers";
+import DescriptionInput from "@/app/_components/description-input";
+import { Autocomplete, Button, TextField } from "@mui/material";
+import { Member } from "../_types/member";
 import { useEffect } from "react";
+import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import { PaymentFormProps } from "../_types/payment-form-props";
+import useAddPaymentEndpoint from "../_hooks/use-add-payment-endpoint";
+import { PaymentFormType } from "../_schemas/payment-form-schema";
+import parseNumber from "@/app/_utilities/parse-numbers";
+import { PAYMENT_FORM_INITIAL } from "../_constants/payment-form-initial";
+import BaseResponse from "@/app/_interfaces/base-response";
 
-export default function ExpenseDrawerFormComponent({
+export default function PaymentFormComponent({
   isOpen,
   karboomId,
-  expenseFormRef,
-  categoryType,
-  selectedCategory,
   onSuccess,
-}: ExpenseDrawerFormProps) {
-  const { enqueueSnackbar } = useSnackbar();
+}: PaymentFormProps) {
 
   const {
     register,
@@ -43,9 +30,9 @@ export default function ExpenseDrawerFormComponent({
     setValue,
     setValues,
     formState: { errors },
-  } = useExpenseForm();
+  } = usePaymentForm();
 
-  const { description, unit_price, wage_cost } = useWatch({ control });
+  const { description, total_price } = useWatch({ control });
 
   const userId = useUserInfoStore((state) => state.id);
   const selectedKarboomId = useKarboomsStore((state) => state.id);
@@ -64,51 +51,42 @@ export default function ExpenseDrawerFormComponent({
     isPending: creatingExpense,
     isSuccess: createdExpense,
     isError: creatingExpenseFailed,
-  } = useCreateExpenseEndpoint();
+  } = useAddPaymentEndpoint();
 
   const submit = ({
     payer,
+    reciever,
     date,
-    image,
-    unit_price,
-    wage_cost,
+    total_price,
     ...other
-  }: ExpenseFormType) => {
-    if (selectedCategory)
-      createExpense(
-        {
-          ...other,
-          unit_price: parseNumber(unit_price),
-          wage_cost: parseNumber(wage_cost),
-          payer_id: payer.member.id,
-          category_id: selectedCategory,
-          karboom_id: karboomId,
-          type: categoryType,
-          date: date.toISOString().split("T")[0],
+  }: PaymentFormType) => {
+    createExpense(
+      {
+        ...other,
+        total_price: parseNumber(total_price),
+        payer_id: payer.member.id,
+        reciever_id: reciever.member.id,
+        karboomId: karboomId,
+        date: date.toISOString().split("T")[0],
+      },
+      {
+        onSuccess() {
+          onSuccess();
+          setValues(PAYMENT_FORM_INITIAL);
         },
-        {
-          onSuccess() {
-            onSuccess();
-            setValues(EXPENSE_FORM_INITIAL);
-          },
-          onError(error) {
-            const err = error as unknown as BaseResponse;
+        onError(error) {
+          const err = error as unknown as BaseResponse;
 
-            if (err.errors)
-              Object.entries(err.errors).forEach(([field, errors]) =>
-                setError(field as keyof ExpenseFormType, {
-                  message: errors[0],
-                  type: "validate",
-                }),
-              );
-          },
+          if (err.errors)
+            Object.entries(err.errors).forEach(([field, errors]) =>
+              setError(field as keyof PaymentFormType, {
+                message: errors[0],
+                type: "validate",
+              }),
+            );
         },
-      );
-    else
-      enqueueSnackbar({
-        message: "دسته هزینه را انتخاب کنید",
-        variant: "warning",
-      });
+      },
+    );
   };
 
   useEffect(() => {
@@ -123,12 +101,11 @@ export default function ExpenseDrawerFormComponent({
 
   return (
     <form
-      ref={expenseFormRef}
       className="flex w-full flex-col items-center gap-4"
       onSubmit={handleSubmit(submit)}
     >
       <p className="text-body relative overflow-visible text-xs">
-        اطلاعات رسید هزینه را وارد کنید
+        اطلاعات رسید دریافتی یا پرداختی را وارد کنید
       </p>
       <Controller
         control={control}
@@ -165,22 +142,13 @@ export default function ExpenseDrawerFormComponent({
         )}
       />
       <PriceInputComponent
-        register={register("unit_price")}
-        value={unit_price}
-        label={categoryType === "daily" ? "مبلغ" : "قیمت قطعات"}
-        error={!!errors.unit_price}
-        helperText={errors.unit_price?.message ?? ""}
-        required={categoryType === "daily"}
+        register={register("total_price")}
+        value={total_price}
+        label="مبلغ"
+        error={!!errors.total_price}
+        helperText={errors.total_price?.message ?? ""}
+        required
       />
-      {categoryType === "repair" && (
-        <PriceInputComponent
-          register={register("wage_cost")}
-          value={wage_cost}
-          label="اجرت"
-          error={!!errors.wage_cost}
-          helperText={errors.wage_cost?.message ?? ""}
-        />
-      )}
       <Controller
         control={control}
         name="date"
@@ -216,7 +184,7 @@ export default function ExpenseDrawerFormComponent({
         loading={creatingExpense}
         fullWidth
       >
-        ثبت هزینه
+        ثبت دریافتی یا پرداختی
       </Button>
     </form>
   );
