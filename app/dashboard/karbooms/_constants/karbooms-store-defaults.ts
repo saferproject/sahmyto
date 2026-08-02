@@ -9,6 +9,7 @@ export const KARBOOMS_STORE_DEFAULTS: Karboom & KarboomStoreTriggers = {
   income: 0,
   expense: 0,
   owner: USER_DEFAULTS,
+  roles: [],
   plate: {
     first_number: 0,
     second_character: "",

@@ -8,6 +8,7 @@ export type Payment = {
   id: number;
   receiver: User;
   payer: User;
+  sender: User;
   approvals: Approval[];
   total_price: number;
   type: PaymentTypes;

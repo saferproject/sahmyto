@@ -1,4 +1,4 @@
-import { SwipeableDrawer } from "@mui/material";
+import { Button, SwipeableDrawer } from "@mui/material";
 import { PaymentDetailsDrawerProps } from "../_types/payment-details-drawer-props";
 import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
 import dayjs from "dayjs";
@@ -8,13 +8,18 @@ import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import ApprovalItemComponent from "../../_components/approval-item-component";
 import { PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import useApprovePaymentEndpoint from "../_hooks/use-approve-payment-endpoint";
 
 export default function PaymentDetailsDrawerLayout({
   isOpen,
   onOpen,
   onClose,
+  onReject,
 }: PaymentDetailsDrawerProps) {
   const {
+    id,
     total_price,
     type,
     description,
@@ -25,6 +30,15 @@ export default function PaymentDetailsDrawerLayout({
     approvals,
     clearActivePayment,
   } = usePaymentListStore((state) => state);
+
+  const loggedInUserId = useUserInfoStore((state) => state.id);
+  const userKarboomRoles = useKarboomsStore((state) => state.roles);
+
+  const { mutate: approvePayment } = useApprovePaymentEndpoint();
+
+  const handleApprove = () => {
+    approvePayment(id);
+  };
 
   const handleClose = () => {
     clearActivePayment();
@@ -86,6 +100,34 @@ export default function PaymentDetailsDrawerLayout({
               ))}
             </ul>
           </div>
+          {status === "pending" &&
+            userKarboomRoles.includes("partner") &&
+            !approvals.find(
+              (approval) =>
+                approval.user.id == loggedInUserId &&
+                approval.status !== "pending",
+            ) && (
+              <div className="flex w-full items-center gap-4 py-2">
+                <Button
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={onReject}
+                  fullWidth
+                >
+                  رد
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="success"
+                  size="small"
+                  onClick={handleApprove}
+                  fullWidth
+                >
+                  تایید
+                </Button>
+              </div>
+            )}
         </div>
       </div>
     </SwipeableDrawer>

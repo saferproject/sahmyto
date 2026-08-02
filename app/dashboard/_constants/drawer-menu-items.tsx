@@ -29,7 +29,7 @@ export const DRAWER_MENU_ITEMS: DrawerMenuItem[] = [
     title: "کیف پول",
     icon: <Wallet size={24} />,
     link: "/dashboard/wallet",
-    disabled: true,
+    disabled: false,
   },
   {
     id: 5,

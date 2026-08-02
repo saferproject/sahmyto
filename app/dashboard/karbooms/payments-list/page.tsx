@@ -5,12 +5,19 @@ import RejectDrawerComponent from "../_components/reject-drawer-component";
 import PaymentDrawerComponent from "../_components/payment-drawer-component";
 import PaymentDetailsDrawerLayout from "./_layouts/payment-details-drawer-layout";
 import PaymentsListLayout from "./_layouts/payments-list-layout";
+import useRejectPaymentEndpoint from "./_hooks/use-reject-payment-endpoint";
+import { usePaymentListStore } from "./_providers/payments-list-store-provider";
+import { RejectFormType } from "../_schemas/reject-form-schema";
 
 export default function PaymentsListPage() {
   const [isPaymentFormDrawerOpen, setPaymentFormDrawerOpen] = useState(false);
   const [isPaymentDetailsDrawerOpen, setPaymentDetailsDrawerOpen] =
     useState(false);
   const [isRejectDrawerOpen, setRejectDrawerOpen] = useState(false);
+
+  const selectedPaymentId = usePaymentListStore((state) => state.id);
+
+  const { mutate: rejectPayment } = useRejectPaymentEndpoint();
 
   const handleOpenPaymentFormDrawer = () => {
     setPaymentFormDrawerOpen(true);
@@ -36,8 +43,9 @@ export default function PaymentsListPage() {
     setRejectDrawerOpen(false);
   };
 
-  // TODO develope this function
-  const handleSubmitReject = () => {};
+  const handleSubmitReject = (data: RejectFormType) => {
+    rejectPayment({ paymentId: selectedPaymentId, ...data });
+  };
 
   return (
     <>
@@ -50,6 +58,7 @@ export default function PaymentsListPage() {
         isOpen={isPaymentDetailsDrawerOpen}
         onOpen={handleOpenPaymentDtailsDrawer}
         onClose={handleClosePaymentDtailsDrawer}
+        onReject={handleOpenRejectDrawer}
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}

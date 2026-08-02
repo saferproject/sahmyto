@@ -83,6 +83,7 @@ export default function IncomesListPage() {
         isOpen={isIncomeDetailsDrawerOpen}
         onOpen={handleOpenIncomeDtailsDrawer}
         onClose={handleCloseIncomeDtailsDrawer}
+        onRejectIncome={handleRejectIncome}
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}

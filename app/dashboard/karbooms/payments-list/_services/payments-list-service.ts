@@ -4,11 +4,23 @@ import { Payment } from "../_types/payment";
 import { RejectPaymentBody } from "../_types/rehect-payment-body";
 
 export const paymentsListService = {
-  getPayments: (karboomId: number) =>
-    fetchWithAuth<Payment[]>(`karboom/payment/${karboomId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
+  getPayments: async (karboomId: number) => {
+    const response = await fetchWithAuth<Payment[]>(
+      `karboom/payment/${karboomId}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+
+    return {
+      ...response,
+      data: response.data.map((payment) => ({
+        ...payment,
+        approvals: Array.isArray(payment.approvals) ? payment.approvals : [],
+      })),
+    };
+  },
   addPayment: ({ karboomId, ...body }: AddPaymentBody) =>
     fetchWithAuth<Payment>(`karboom/payment/store/${karboomId}`, {
       method: "POST",

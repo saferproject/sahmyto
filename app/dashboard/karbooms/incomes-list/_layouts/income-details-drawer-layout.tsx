@@ -12,13 +12,19 @@ import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors"
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import DetailItemComponent from "../_components/income-detail-item-component";
 import ApprovalItemComponent from "../../_components/approval-item-component";
+import { Button } from "@mui/material";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import useApproveIncome from "../_hooks/use-approve-income";
 
 export default function IncomeDetailsDrawerLayout({
   isOpen,
   onOpen,
   onClose,
+  onRejectIncome,
 }: IncomeDetailsDrawerProps) {
   const {
+    id,
     unit_price,
     quantity,
     type,
@@ -31,6 +37,15 @@ export default function IncomeDetailsDrawerLayout({
     approvals,
     clearActiveIncome,
   } = useIncomeListStore((state) => state);
+
+  const loggedInUserId = useUserInfoStore((state) => state.id);
+  const userKarboomRoles = useKarboomsStore((state) => state.roles);
+
+  const { mutate: approveIncome } = useApproveIncome();
+
+  const handleApprove = () => {
+    approveIncome(id);
+  };
 
   const handleClose = () => {
     clearActiveIncome();
@@ -76,6 +91,33 @@ export default function IncomeDetailsDrawerLayout({
           ))}
         </ul>
       </div>
+      {status === "pending" &&
+        userKarboomRoles.includes("partner") &&
+        !approvals.find(
+          (approval) =>
+            approval.user.id == loggedInUserId && approval.status !== "pending",
+        ) && (
+          <div className="flex w-full items-center gap-4 py-2">
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={() => onRejectIncome(id)}
+              fullWidth
+            >
+              رد
+            </Button>
+            <Button
+              variant="outlined"
+              color="success"
+              size="small"
+              onClick={handleApprove}
+              fullWidth
+            >
+              تایید
+            </Button>
+          </div>
+        )}
     </FormDrawerComponent>
   );
 }

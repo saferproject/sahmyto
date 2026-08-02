@@ -84,6 +84,7 @@ export default function ExpensesListPage() {
         isOpen={isExpenseDetailsDrawerOpen}
         onOpen={handleOpenExpenseDtailsDrawer}
         onClose={handleCloseExpenseDtailsDrawer}
+        onRejectExpense={handleRejectExpense}
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}

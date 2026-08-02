@@ -14,7 +14,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     title: "کیف پول",
     icon: <Card variant="Bold" size="24" />,
     path: "/dashboard/wallet",
-    disabled: true,
+    disabled: false,
   },
   {
     id: 3,
