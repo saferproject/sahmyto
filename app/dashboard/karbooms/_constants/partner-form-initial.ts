@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export const PARTNER_FORM_INITIAL = {
+export const getPartnerFormInitial = () => ({
   phone: "",
   first_name: "",
   last_name: "",
@@ -9,4 +9,4 @@ export const PARTNER_FORM_INITIAL = {
   started_at: dayjs(),
   ended_at: null,
   description: "",
-};
+});

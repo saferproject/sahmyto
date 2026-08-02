@@ -1,0 +1,1 @@
+export type PaymentTypes = "debit" | "sheba" | "account" | "cash" | "bridge";

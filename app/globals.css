@@ -51,6 +51,24 @@ html {
   letter-spacing: normal;
 }
 
+input:is(:autofill, :-webkit-autofill),
+input:is(:autofill, :-webkit-autofill):hover,
+input:is(:autofill, :-webkit-autofill):focus,
+input:is(:autofill, :-webkit-autofill):active,
+textarea:is(:autofill, :-webkit-autofill),
+textarea:is(:autofill, :-webkit-autofill):hover,
+textarea:is(:autofill, :-webkit-autofill):focus,
+textarea:is(:autofill, :-webkit-autofill):active,
+select:is(:autofill, :-webkit-autofill),
+select:is(:autofill, :-webkit-autofill):hover,
+select:is(:autofill, :-webkit-autofill):focus,
+select:is(:autofill, :-webkit-autofill):active {
+  caret-color: inherit;
+  -webkit-text-fill-color: currentColor;
+  background-clip: text;
+  transition: background-color 9999s ease-out;
+}
+
 .animate-progress {
   animation: progress 4.5s linear forwards;
 }

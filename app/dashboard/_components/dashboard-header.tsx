@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Badge, IconButton } from "@mui/material";
-import { useEffect, useState, type MouseEvent } from "react";
+import { useState, type MouseEvent } from "react";
 import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
 
 import DashboardHeaderDrawerComponent from "./dashboard-header-drawer-component";
@@ -28,7 +28,6 @@ export default function DashboardHeader() {
 
   const {
     data: requests,
-    isSuccess: gotRequests,
     isLoading: requestsLoading,
     isError: requestsError,
   } = useGetKarboomRequests();
@@ -48,7 +47,7 @@ export default function DashboardHeader() {
   };
 
   const handleOpenRequestsMenu = (event: MouseEvent<HTMLButtonElement>) => {
-    setNotificationAnchor(event.currentTarget);
+    if (requests?.data.length) setNotificationAnchor(event.currentTarget);
   };
 
   const handleCloseRequestsMenu = () => {
@@ -57,21 +56,25 @@ export default function DashboardHeader() {
 
   const handleAcceptRequest = (id: number) => {
     setMutatingRequest(id);
-    acceptRequest(id);
+    acceptRequest(id, {
+      onSuccess: () => {
+        if (requests?.data.length === 1) handleCloseRequestsMenu();
+      },
+    });
   };
 
   const handleRejectRequest = (id: number) => {
     setMutatingRequest(id);
-    rejectRequest(id);
+    rejectRequest(id, {
+      onSuccess: () => {
+        if (requests?.data.length === 1) handleCloseRequestsMenu();
+      },
+    });
   };
 
   const handleNavigateToProfile = () => {
     router.push("/dashboard/profile");
   };
-
-  useEffect(() => {
-    if (gotRequests && requests.data.length === 0) handleCloseRequestsMenu();
-  }, [gotRequests, requests?.data.length]);
 
   return (
     <header className="fixed top-4 z-50 w-full bg-transparent px-4">

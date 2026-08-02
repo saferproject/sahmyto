@@ -5,7 +5,7 @@ export type AddPaymentBody = Omit<
   "reciever" | "payer" | "total_price" | "date"
 > & {
   karboomId: number;
-  reciever_id: number;
+  receiver_id: number;
   payer_id: number;
   total_price: number;
   date: string;

@@ -3,35 +3,38 @@
 import Image from "next/image";
 
 import { useEffect } from "react";
-import { FieldValues, useWatch } from "react-hook-form";
+import { FieldValues, type Path, useWatch } from "react-hook-form";
 
 import IranFlag from "../_assets/images/iran-flag.jpg";
 
-import PlateInputProps from "../_interfaces/plate-input-props";
+import PlateInputProps, {
+  type PlateFormFields,
+} from "../_interfaces/plate-input-props";
 
-export default function PlateInput<FormType extends FieldValues>({
-  register,
-  control,
-  setFocus,
-}: PlateInputProps<FormType>) {
-  const { first_number, second_character, third_number } = useWatch({
+export default function PlateInput<
+  FormType extends FieldValues & PlateFormFields,
+>({ register, control, setFocus }: PlateInputProps<FormType>) {
+  const firstNumberField = "first_number" as Path<FormType>;
+  const secondCharacterField = "second_character" as Path<FormType>;
+  const thirdNumberField = "third_number" as Path<FormType>;
+  const fourthNumberField = "fourth_number" as Path<FormType>;
+
+  const [firstNumber, secondCharacter, thirdNumber] = useWatch({
     control,
+    name: [firstNumberField, secondCharacterField, thirdNumberField],
   });
 
   useEffect(() => {
-    //@ts-ignore
-    if (first_number?.length === 2) setFocus("second_character");
-  }, [first_number]);
+    if (String(firstNumber ?? "").length === 2) setFocus(secondCharacterField);
+  }, [firstNumber, secondCharacterField, setFocus]);
 
   useEffect(() => {
-    //@ts-ignore
-    if (second_character?.length === 1) setFocus("third_number");
-  }, [second_character]);
+    if (String(secondCharacter ?? "").length === 1) setFocus(thirdNumberField);
+  }, [secondCharacter, setFocus, thirdNumberField]);
 
   useEffect(() => {
-    //@ts-ignore
-    if (third_number?.length === 3) setFocus("fourth_number");
-  }, [third_number]);
+    if (String(thirdNumber ?? "").length === 3) setFocus(fourthNumberField);
+  }, [fourthNumberField, setFocus, thirdNumber]);
 
   return (
     <div
@@ -49,14 +52,13 @@ export default function PlateInput<FormType extends FieldValues>({
           loading="eager"
         />
         <div className="flex flex-col items-start">
-          <p className="text-center text-xs text-white font-bold">IR</p>
+          <p className="text-center text-xs font-bold text-white">IR</p>
           <p className="text-xs text-white">IRAN</p>
         </div>
       </div>
       <div className="flex h-full w-[calc(66%-24px)] min-w-24 items-center justify-evenly text-xl">
         <input
-          //@ts-ignore
-          {...register("first_number")}
+          {...register(firstNumberField)}
           type="tel"
           id="first_number"
           maxLength={2}
@@ -64,8 +66,7 @@ export default function PlateInput<FormType extends FieldValues>({
           className="w-10 text-center font-bold tracking-wider"
         />
         <input
-          //@ts-ignore
-          {...register("second_character")}
+          {...register(secondCharacterField)}
           type="text"
           id="second_character"
           maxLength={1}
@@ -73,8 +74,7 @@ export default function PlateInput<FormType extends FieldValues>({
           className="w-5 text-center font-bold tracking-wider"
         />
         <input
-          //@ts-ignore
-          {...register("third_number")}
+          {...register(thirdNumberField)}
           type="tel"
           id="third_number"
           maxLength={3}
@@ -87,8 +87,7 @@ export default function PlateInput<FormType extends FieldValues>({
         <div className="mr-6 flex flex-col items-center justify-between">
           <p className="text-body mt-1 text-xs font-bold">ایران</p>
           <input
-            //@ts-ignore
-            {...register("fourth_number")}
+            {...register(fourthNumberField)}
             type="tel"
             id="fourth_number"
             maxLength={2}

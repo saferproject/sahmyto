@@ -2,9 +2,16 @@ import formatNumber from "@/app/_utilities/format-numbers";
 import { ArrowDown2 } from "iconsax-reactjs";
 import Image from "next/image";
 import { useState } from "react";
-import DataListComponent from "./data-list-component";
 
-export default function DataListItemComponent({ title, value, children }) {
+type DataListItemProps = {
+  title: string;
+  value: number;
+};
+
+export default function DataListItemComponent({
+  title,
+  value,
+}: DataListItemProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const handleToggleDetails = () => {
@@ -38,7 +45,6 @@ export default function DataListItemComponent({ title, value, children }) {
             }
           />
         </div>
-        <DataListComponent />
       </div>
     </li>
   );

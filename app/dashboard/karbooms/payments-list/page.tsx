@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import RejectDrawerComponent from "../_components/reject-drawer-component";
-import SearchInputComponent from "../_components/search-input-component";
 import PaymentDrawerComponent from "../_components/payment-drawer-component";
 import PaymentDetailsDrawerLayout from "./_layouts/payment-details-drawer-layout";
 import PaymentsListLayout from "./_layouts/payments-list-layout";
-import ListHeaderLayout from "../_layouts/list-header-layout";
 
 export default function PaymentsListPage() {
   const [isPaymentFormDrawerOpen, setPaymentFormDrawerOpen] = useState(false);
@@ -43,10 +41,10 @@ export default function PaymentsListPage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست دریافتی و پرداختی ها" />
       <PaymentsListLayout
         onOpenForm={handleOpenPaymentFormDrawer}
         onOpenDetails={handleOpenPaymentDtailsDrawer}
+        onOpenReject={handleOpenRejectDrawer}
       />
       <PaymentDetailsDrawerLayout
         isOpen={isPaymentDetailsDrawerOpen}

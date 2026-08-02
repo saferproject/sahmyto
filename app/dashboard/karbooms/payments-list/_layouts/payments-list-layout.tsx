@@ -10,10 +10,13 @@ import useGetPaymentsEndpoint from "../_hooks/use-get-payments-endpoint";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 
 import { PaymentsListProps } from "../_types/payments-list-props";
+import PaymentListItemComponent from "../_components/payment-list-item-component";
+import ListHeaderLayout from "../../_layouts/list-header-layout";
 
 export default function PaymentsListLayout({
   onOpenForm,
   onOpenDetails,
+  onOpenReject,
 }: PaymentsListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
@@ -25,6 +28,7 @@ export default function PaymentsListLayout({
 
   return (
     <>
+      <ListHeaderLayout title="لیست دریافتی و پرداختی ها" />
       <SelectedKarboomInfoComponent />
       <QueryState
         isLoading={gettingPayments}
@@ -33,7 +37,15 @@ export default function PaymentsListLayout({
       >
         <ul className="flex w-full flex-col gap-4">
           <AnimatePresence>
-            {/* TODO map the payments data and display them here */}
+            {payments?.data.map((payment, index) => (
+              <PaymentListItemComponent
+                key={payment.id}
+                payment={payment}
+                index={index}
+                onReject={onOpenReject}
+                onShowDetails={onOpenDetails}
+              />
+            ))}
           </AnimatePresence>
         </ul>
       </QueryState>

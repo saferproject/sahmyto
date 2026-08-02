@@ -70,7 +70,9 @@ export default function useIntroCarousel(pagesCount: number) {
             router.push("/login");
             return;
           }
-          setCurrentPageIndex((current) => (current === null ? 0 : current + 1));
+          setCurrentPageIndex((current) =>
+            current === null ? 0 : current + 1,
+          );
           setVisibility(true);
         },
         Math.max(0, PAGE_DURATION - elapsed),
@@ -85,8 +87,6 @@ export default function useIntroCarousel(pagesCount: number) {
     elapsedRef.current = 0;
     exitFiredRef.current = false;
     pausedRef.current = false;
-    setPaused(false);
-    setVisibility(true);
     startSegment(currentPageIndex);
 
     return clearTimers;

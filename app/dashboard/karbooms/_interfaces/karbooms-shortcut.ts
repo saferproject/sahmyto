@@ -1,3 +1,5 @@
 import NavigationItem from "../../_interfaces/navigation-item";
 
-export default interface KarboomsShortcut extends NavigationItem {}
+type KarboomsShortcut = NavigationItem;
+
+export default KarboomsShortcut;

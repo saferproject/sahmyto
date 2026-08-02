@@ -1,4 +1,5 @@
 import Plate from "./plate";
 
-export default interface PlateProps extends Plate {
-}
+type PlateProps = Plate;
+
+export default PlateProps;

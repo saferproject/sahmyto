@@ -1,10 +1,7 @@
-import { ExpenseDrawerHeaderProps } from "../_types/expense-drawer-header-props";
-
-export default function ExpenseDrawerHeaderComponent({
-}: ExpenseDrawerHeaderProps) {
+export default function ExpenseDrawerHeaderComponent() {
   return (
     <div className="my-4 flex w-full items-center justify-center">
-      <h4 className="text-body font-bold text-lg">ثبت هزینه</h4>
+      <h4 className="text-body text-lg font-bold">ثبت هزینه</h4>
     </div>
   );
 }

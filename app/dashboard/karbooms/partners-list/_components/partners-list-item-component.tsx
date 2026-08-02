@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "motion/react";
 import { Badge, Button, Menu, MenuItem } from "@mui/material";
-import { useRef, useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { ProfileCircle } from "iconsax-reactjs";
 
 import PartnersListItemProps from "../_interfaces/partners-list-item-props";
@@ -15,16 +15,14 @@ export default function PartnersListItemComponent({
   item: { full_name, phone, avatar, share, status },
   index,
 }: PartnersListItemProps) {
-  const menuButton = useRef<HTMLButtonElement>(null);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
-  const [isOpen, setOpen] = useState(false);
-
-  const handleOpenMenu = () => {
-    setOpen(true);
+  const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchor(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
-    setOpen(false);
+    setMenuAnchor(null);
   };
 
   return (
@@ -72,12 +70,10 @@ export default function PartnersListItemComponent({
               <p className="text-body">{share} دانگ</p>
             </div>
           </div>
-          <Button ref={menuButton} onClick={handleOpenMenu}>
-            عملیات
-          </Button>
+          <Button onClick={handleOpenMenu}>عملیات</Button>
           <Menu
-            anchorEl={menuButton.current}
-            open={isOpen}
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
             onClose={handleCloseMenu}
           >
             <MenuItem onClick={() => {}}>ویرایش</MenuItem>

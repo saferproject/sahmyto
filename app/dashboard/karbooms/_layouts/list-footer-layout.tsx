@@ -1,5 +1,6 @@
 import { Fab } from "@mui/material";
 import { Add } from "iconsax-reactjs";
+
 import { ListFooterProps } from "../_types/list-footer-props";
 
 export default function ListFooterLayout({ onAdd }: ListFooterProps) {

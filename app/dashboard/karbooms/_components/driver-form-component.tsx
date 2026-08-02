@@ -28,7 +28,7 @@ import { DriverFormProps } from "../_types/driver-form-props";
 
 import parseNumber from "@/app/_utilities/parse-numbers";
 import BaseResponse from "@/app/_interfaces/base-response";
-import { DRIVER_FORM_INITIAL } from "../_constants/driver-form-initial";
+import { getDriverFormInitial } from "../_constants/driver-form-initial";
 
 export default function DriverFormComponent({
   onCancel,
@@ -50,7 +50,7 @@ export default function DriverFormComponent({
   const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
 
   const handleCancel = () => {
-    setValues(DRIVER_FORM_INITIAL);
+    setValues(getDriverFormInitial());
     onCancel();
   };
 
@@ -72,7 +72,7 @@ export default function DriverFormComponent({
       },
       {
         onSuccess: () => {
-          setValues(DRIVER_FORM_INITIAL);
+          setValues(getDriverFormInitial());
           onSuccess();
         },
         onError: (error) => {
@@ -194,7 +194,7 @@ export default function DriverFormComponent({
               sx={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                marginTop: '8px',
+                marginTop: "8px",
                 paddingTop: 0,
               }}
             >

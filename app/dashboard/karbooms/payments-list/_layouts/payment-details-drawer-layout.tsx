@@ -7,6 +7,7 @@ import { usePaymentListStore } from "../_providers/payments-list-store-provider"
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import ApprovalItemComponent from "../../_components/approval-item-component";
+import { PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 
 export default function PaymentDetailsDrawerLayout({
   isOpen,
@@ -16,9 +17,11 @@ export default function PaymentDetailsDrawerLayout({
   const {
     total_price,
     type,
+    description,
     date,
     status,
-    description,
+    receiver: { full_name: receiverName },
+    payer: { full_name: payerName },
     approvals,
     clearActivePayment,
   } = usePaymentListStore((state) => state);
@@ -60,8 +63,8 @@ export default function PaymentDetailsDrawerLayout({
               label="تاریخ"
               value={dayjs(date).format("YYYY/MM/DD")}
             />
-            <DetailItemComponent label="ثبت کننده" value={submitterName} />
-            <DetailItemComponent label="پرداخت کننده" value={submitterName} />
+            {/* <DetailItemComponent label="ثبت کننده" value={submitterName} /> */}
+            <DetailItemComponent label="پرداخت کننده" value={payerName} />
             <DetailItemComponent label="دریافت کننده" value={receiverName} />
             <DetailItemComponent
               label="وضعیت"

@@ -71,7 +71,7 @@ export function transformNumber(num: number): string {
 
   // تابع کمکی برای تبدیل اعداد سه‌رقمی به حروف فارسی
   function convertThreeDigits(n: number): string {
-    let result: string[] = [];
+    const result: string[] = [];
 
     // بررسی و افزودن مقدار صدگان
     if (n >= 100) {
@@ -98,7 +98,7 @@ export function transformNumber(num: number): string {
     return result.join(" و ");
   }
 
-  let result: string[] = [];
+  const result: string[] = [];
   let scale: number = 0;
 
   // پردازش عدد اصلی به بخش‌های سه‌رقمی و تبدیل هر بخش به حروف

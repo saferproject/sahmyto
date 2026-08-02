@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { More, User } from "iconsax-reactjs";
 import { motion } from "motion/react";
 import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
@@ -9,10 +9,10 @@ import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
 import { type DriverListItemProps } from "../_types/driver-list-item-props";
 
 import formatNumber from "@/app/_utilities/format-numbers";
-import formatPaymentType from "../_utilities/format-payment-type";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
+import { DRIVER_PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 
 export default function DriverListItemComponent({
   driver: {
@@ -27,16 +27,14 @@ export default function DriverListItemComponent({
   },
   index,
 }: DriverListItemProps) {
-  const menuButton = useRef<HTMLButtonElement>(null);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
-  const [isOpen, setOpen] = useState(false);
-
-  const handleOpenMenu = () => {
-    setOpen(true);
+  const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
+    setMenuAnchor(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
-    setOpen(false);
+    setMenuAnchor(null);
   };
 
   return (
@@ -84,7 +82,7 @@ export default function DriverListItemComponent({
             </div>
             <div className="flex w-full items-center justify-between">
               <p className="text-body text-sm font-semibold">
-                دستمزد {formatPaymentType(payment_type)}
+                دستمزد {DRIVER_PAYMENT_TYPES_FA[payment_type]}
               </p>
               <div className="flex items-center gap-2">
                 <p className="text-body font-semibold">
@@ -121,7 +119,6 @@ export default function DriverListItemComponent({
             </div>
           </div>
           <IconButton
-            ref={menuButton}
             onClick={handleOpenMenu}
             aria-label="عملیات"
             sx={{
@@ -133,8 +130,8 @@ export default function DriverListItemComponent({
             <More className="text-body" />
           </IconButton>
           <Menu
-            anchorEl={menuButton.current}
-            open={isOpen}
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
             onClose={handleCloseMenu}
           >
             <MenuItem onClick={() => {}}>ویرایش</MenuItem>

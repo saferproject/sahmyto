@@ -16,7 +16,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import { PartnerFormProps } from "../_types/partner-form-props";
 
-import { PARTNER_FORM_INITIAL } from "../_constants/partner-form-initial";
+import { getPartnerFormInitial } from "../_constants/partner-form-initial";
 import BaseResponse from "@/app/_interfaces/base-response";
 
 export default function PartnerFormComponent({
@@ -91,7 +91,7 @@ export default function PartnerFormComponent({
   };
 
   const handleCancel = () => {
-    setValues(PARTNER_FORM_INITIAL);
+    setValues(getPartnerFormInitial());
     onCancel();
   };
 
@@ -114,7 +114,7 @@ export default function PartnerFormComponent({
       },
       {
         onSuccess: () => {
-          setValues(PARTNER_FORM_INITIAL);
+          setValues(getPartnerFormInitial());
           onSuccess();
         },
         onError: (error) => {

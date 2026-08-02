@@ -94,7 +94,7 @@ export const theme = createTheme({
     MuiSelect: {
       defaultProps: {
         IconComponent: () => (
-          <ArrowDown2 size={24} className="text-body ml-2" />
+          <ArrowDown2 size={32} className="text-body ml-5" />
         ),
       },
     },

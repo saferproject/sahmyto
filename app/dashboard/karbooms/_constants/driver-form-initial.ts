@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { DriverFormType } from "../_schemas/driver-form-schema";
 
-export const DRIVER_FORM_INITIAL: DriverFormType = {
+export const getDriverFormInitial = (): DriverFormType => ({
   phone: "",
   first_name: "",
   last_name: "",
@@ -12,4 +12,4 @@ export const DRIVER_FORM_INITIAL: DriverFormType = {
   percentage_amount: null,
   description: null,
   payment_type: "monthly",
-};
+});

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import FormDrawerComponent from "@/app/_components/form-drawer-component";
 
@@ -27,16 +27,17 @@ export default function IncomeDrawerComponent({
   };
 
   const handleSuccess = () => {
-    onClose();
     setIncomeType(null);
+    onClose();
   };
 
-  useEffect(() => {
+  const handleClose = () => {
     setIncomeType(null);
-  }, [isOpen]);
+    onClose();
+  };
 
   return (
-    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={handleClose}>
       {incomeType ? (
         <>
           <IncomeDrawerHeaderComponent incomeType={incomeType} />
