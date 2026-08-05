@@ -131,51 +131,49 @@ export default function DriverFormComponent({
           required
         />
       </div>
-      <div className="flex w-full gap-4">
-        <Controller
-          control={control}
-          name="started_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ شروع"
-              format="YYYY/MM/DD"
-              views={["year", "month", "day"]}
-              slotProps={{
-                textField: {
-                  error: !!errors.started_at,
-                  helperText: errors.started_at?.message ?? "",
-                  fullWidth: true,
-                  required: true,
-                },
-              }}
-              disableFuture
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="ended_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ پایان"
-              format="YYYY/MM/DD"
-              views={["year", "month", "day"]}
-              slotProps={{
-                textField: {
-                  error: !!errors.ended_at,
-                  helperText: errors.ended_at?.message ?? "",
-                  fullWidth: true,
-                },
-              }}
-              disablePast
-            />
-          )}
-        />
-      </div>
+      <Controller
+        control={control}
+        name="started_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ شروع"
+            format="YYYY/MM/DD"
+            views={["year", "month", "day"]}
+            slotProps={{
+              textField: {
+                error: !!errors.started_at,
+                helperText: errors.started_at?.message ?? "",
+                fullWidth: true,
+                required: true,
+              },
+            }}
+            disableFuture
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="ended_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ پایان"
+            format="YYYY/MM/DD"
+            views={["year", "month", "day"]}
+            slotProps={{
+              textField: {
+                error: !!errors.ended_at,
+                helperText: errors.ended_at?.message ?? "",
+                fullWidth: true,
+              },
+            }}
+            disablePast
+          />
+        )}
+      />
       <Controller
         name="payment_type"
         control={control}

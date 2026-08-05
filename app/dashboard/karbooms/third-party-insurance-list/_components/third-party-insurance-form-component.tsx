@@ -90,7 +90,6 @@ export default function ThirdPartyInsuranceFormComponent({
         error={!!errors.insurance_code}
         helperText={errors.insurance_code?.message ?? ""}
       />
-      <div className="flex w-full gap-4">
         <Controller
           control={control}
           name="started_at"
@@ -127,7 +126,6 @@ export default function ThirdPartyInsuranceFormComponent({
             />
           )}
         />
-      </div>
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}
