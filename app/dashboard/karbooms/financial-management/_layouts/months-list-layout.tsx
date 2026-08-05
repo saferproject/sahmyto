@@ -35,7 +35,7 @@ export default function MonthListLayout({
     >
       <ul
         dir="ltr"
-        className="mt-4 flex w-full snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5 pb-4"
+        className="flex w-full min-h-23 snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5 pb-4"
       >
         {financialMonths?.data.map((financialMonth, index) => (
           <MonthListItemComponent
