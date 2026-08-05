@@ -16,6 +16,7 @@ import DescriptionInput from "@/app/_components/description-input";
 import InsuranceCompanyInput from "@/app/_components/insurance-company-input";
 
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import { Dayjs } from "dayjs";
 
 export default function BodyInsuranceFormComponent({
   isOpen,
@@ -26,10 +27,11 @@ export default function BodyInsuranceFormComponent({
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useBodyInsuranceForm();
 
-  const { description } = useWatch({
+  const { description, started_at } = useWatch({
     control,
   });
 
@@ -54,6 +56,14 @@ export default function BodyInsuranceFormComponent({
       ended_at: ended_at.toISOString().split("T")[0],
     });
   };
+
+  useEffect(() => {
+    if (started_at?.isValid) {
+      const startedAt = started_at as Dayjs;
+
+      setValue("ended_at", startedAt.year(startedAt.year() + 1));
+    }
+  }, [started_at]);
 
   useEffect(() => {
     if (createdBodyInsuracne) {
