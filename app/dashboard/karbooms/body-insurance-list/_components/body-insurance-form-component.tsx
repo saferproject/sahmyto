@@ -80,44 +80,42 @@ export default function BodyInsuranceFormComponent({
         error={!!errors.insurance_code}
         helperText={errors.insurance_code?.message ?? ""}
       />
-      <div className="flex w-full gap-4">
-        <Controller
-          control={control}
-          name="started_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ شروع"
-              format="YYYY/MM/DD"
-              slotProps={{
-                textField: {
-                  error: !!errors.started_at,
-                  helperText: errors.started_at?.message ?? "",
-                },
-              }}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="ended_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ پایان"
-              format="YYYY/MM/DD"
-              slotProps={{
-                textField: {
-                  error: !!errors.ended_at,
-                  helperText: errors.ended_at?.message ?? "",
-                },
-              }}
-            />
-          )}
-        />
-      </div>
+      <Controller
+        control={control}
+        name="started_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ شروع"
+            format="YYYY/MM/DD"
+            slotProps={{
+              textField: {
+                error: !!errors.started_at,
+                helperText: errors.started_at?.message ?? "",
+              },
+            }}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="ended_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ پایان"
+            format="YYYY/MM/DD"
+            slotProps={{
+              textField: {
+                error: !!errors.ended_at,
+                helperText: errors.ended_at?.message ?? "",
+              },
+            }}
+          />
+        )}
+      />
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}

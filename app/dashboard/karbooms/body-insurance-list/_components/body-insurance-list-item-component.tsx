@@ -35,7 +35,11 @@ export default function BodyInsuranceListItemComponent({
           label="مدت باقی مانده"
           value={
             status === "active" ? (
-              `${endedAt.diff(dayjs(), "days").toString()} روز`
+              startedAt.diff() > 0 ? (
+                `${(endedAt.diff(startedAt, "days") - 1).toString()} روز`
+              ) : (
+                `${(endedAt.diff(dayjs(), "days") - 1).toString()} روز`
+              )
             ) : (
               <span className="font-semibold text-red-500">پایان یافته</span>
             )
