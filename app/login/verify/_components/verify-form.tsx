@@ -1,12 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import OtpInput from "react-otp-input";
 
 import { useUserInfoStore } from "../../../_providers/user-info-provider";
 
 import useVerify from "../_hooks/use-verify-endpoint";
+import { clearPendingOtp } from "../_utilities/pending-otp-storage";
 
 export default function VerifyForm() {
   const router = useRouter();
@@ -14,8 +15,9 @@ export default function VerifyForm() {
   const { phone, setUser } = useUserInfoStore((state) => state);
 
   const { mutate } = useVerify();
+  const [otp, setOtp] = useState("");
 
-  const autoSubmit = async () => {
+  const autoSubmit = useCallback(() => {
     if (otp.length === 4)
       mutate(
         { code: otp, phone },
@@ -29,6 +31,7 @@ export default function VerifyForm() {
               JSON.stringify(response.data.user),
             );
             setUser(response.data.user);
+            clearPendingOtp();
 
             if (response.data.user.is_complete_profile)
               router.push("/dashboard/karbooms");
@@ -37,13 +40,11 @@ export default function VerifyForm() {
           onError: () => setOtp(""),
         },
       );
-  };
-
-  const [otp, setOtp] = useState("");
+  }, [mutate, otp, phone, router, setUser]);
 
   useEffect(() => {
     if (otp.length === 4) autoSubmit();
-  }, [otp]);
+  }, [autoSubmit, otp]);
 
   return (
     <div dir="ltr">

@@ -9,6 +9,10 @@ import { LoginFormType } from "./_schemas/login-schema";
 import useLoginUser from "./_hooks/login-user-endpoint";
 import { useUserInfoStore } from "../_providers/user-info-provider";
 import { useWatch } from "react-hook-form";
+import {
+  hasActivePendingOtp,
+  savePendingOtp,
+} from "./verify/_utilities/pending-otp-storage";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -19,7 +23,7 @@ export default function LoginPage() {
     formState: { errors },
   } = useLoginForm();
 
-  const {phone} = useWatch({control})
+  const { phone } = useWatch({ control });
 
   const { mutate, isPending } = useLoginUser();
 
@@ -27,9 +31,18 @@ export default function LoginPage() {
 
   const submit = (data: LoginFormType) => {
     setPhone(data.phone);
+
+    if (hasActivePendingOtp(data.phone)) {
+      router.push("/login/verify");
+      return;
+    }
+
     mutate(data, {
       onSuccess: (response) => {
-        if (response.data.type === "code") router.push("/login/verify");
+        if (response.data.type === "code") {
+          savePendingOtp(data.phone);
+          router.push("/login/verify");
+        }
       },
     });
   };
