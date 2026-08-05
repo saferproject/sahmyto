@@ -37,9 +37,9 @@ export default function ThirdPartyInsuranceListItemComponent({
           value={
             status === "active" ? (
               startedAt.diff() > 0 ? (
-                `${(endedAt.diff(startedAt, "days") - 1).toString()} روز`
+                `${Math.max(endedAt.diff(startedAt, "days") - 1).toString()} روز`
               ) : (
-                `${(endedAt.diff(dayjs(), "days") - 1).toString()} روز`
+                `${Math.max(0, endedAt.diff(dayjs(), "days") - 1).toString()} روز`
               )
             ) : (
               <span className="font-semibold text-red-500">پایان یافته</span>
