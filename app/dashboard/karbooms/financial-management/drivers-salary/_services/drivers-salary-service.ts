@@ -1,9 +1,10 @@
 import { fetchWithAuth } from "@/app/proxy";
 import { AddBonusPenaltyDriverBody } from "../_types/add-bonus-penalty-driver-body";
+import { DriverSalary } from "../_types/driver-salary";
 
 export const driversSalaryService = {
   getDriversSalaryEndpoint: (monthId: number) =>
-    fetchWithAuth<unknown[]>(`karboom/adjustments/adjustments/${monthId}`, {
+    fetchWithAuth<DriverSalary[]>(`karboom/adjustments/adjustments/${monthId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }),

@@ -1,39 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@mui/material";
-import { MoneyRecive } from "iconsax-reactjs";
 
 import FormDrawerComponent from "@/app/_components/form-drawer-component";
 import DriverTipFormComponent from "./driver-tip-form-component";
 
 import { DriverTipDrawerProps } from "../_types/driver-tip-drawer-props";
-import { BonusPenaltyType } from "../_types/bonus-penalty-type";
 import { BONUS_PENALTY_TYPE_FA } from "../_constants/bonus-penalty-type-fa";
 
 export default function DriverTipDrawerComponent({
   isOpen,
   driverId,
+  bonusPenaltyType,
   onOpen,
   onClose,
+  onSwitchType,
 }: DriverTipDrawerProps) {
-  const [bonusPenaltyType] = useState<BonusPenaltyType>("bonus");
-
   const handleSuccess = () => {
     onClose();
   };
 
   return (
     <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <div className="flex items-center gap-2">
-        <MoneyRecive size="32" className="text-primary" />
-        <h3>ثبت {BONUS_PENALTY_TYPE_FA[bonusPenaltyType]}</h3>
-      </div>
-      <div className="flex w-full items-center gap-2">
+      <h3 className="text-body font-semibold mb-4">ثبت {BONUS_PENALTY_TYPE_FA[bonusPenaltyType]}</h3>
+      <div className="mb-4 flex w-full items-center gap-2">
         <Button
           variant={bonusPenaltyType === "bonus" ? "contained" : "outlined"}
           size="large"
           color="success"
+          onClick={onSwitchType}
           fullWidth
         >
           ثبت انعام
@@ -42,6 +37,7 @@ export default function DriverTipDrawerComponent({
           variant={bonusPenaltyType === "penalty" ? "contained" : "outlined"}
           size="large"
           color="error"
+          onClick={onSwitchType}
           fullWidth
         >
           ثبت جریمه
