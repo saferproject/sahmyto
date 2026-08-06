@@ -36,7 +36,11 @@ export default function ThirdPartyInsuranceListItemComponent({
           label="مدت باقی مانده"
           value={
             status === "active" ? (
-              `${endedAt.diff(dayjs(), "days").toString()} روز`
+              startedAt.diff() > 0 ? (
+                `${Math.max(0, endedAt.diff(startedAt, "days") - 1).toString()} روز`
+              ) : (
+                `${Math.max(0, endedAt.diff(dayjs(), "days") - 1).toString()} روز`
+              )
             ) : (
               <span className="font-semibold text-red-500">پایان یافته</span>
             )
@@ -51,7 +55,7 @@ export default function ThirdPartyInsuranceListItemComponent({
           value={endedAt.format("YYYY/MM/DD")}
         />
         {description && (
-          <p className="bg-secondary-lightest text-body rounded-2xl p-4 text-sm mt-2">
+          <p className="bg-secondary-lightest text-body mt-2 rounded-2xl p-4 text-sm">
             <span className="font-semibold">توضیحات : </span>
             {description}
           </p>

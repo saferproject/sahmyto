@@ -235,7 +235,6 @@ export default function PartnerFormComponent({
           مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
         </p>
       </div>
-      <div className="flex w-full gap-4">
         <Controller
           control={control}
           name="started_at"
@@ -279,7 +278,6 @@ export default function PartnerFormComponent({
             />
           )}
         />
-      </div>
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}
