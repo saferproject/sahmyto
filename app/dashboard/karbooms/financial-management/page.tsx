@@ -100,7 +100,7 @@ export default function FinancialManagementPage() {
       icon: <Calendar size={24} className="text-primary" />,
       onConfirm: handleNavigateToDriversSalary,
       onClose: closeConfirmationDialog,
-      confirmButtonTitle: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
+      confirmButtonTitle: `بستن ماه ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
     });
   };
 
@@ -799,7 +799,7 @@ export default function FinancialManagementPage() {
             </li>
           </ul>
         ) : (
-          <ul className="flex flex-col gap-4">
+          <ul className="flex w-full flex-col gap-4">
             <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
               <div className="flex items-center gap-2">
                 <div className="relative text-green-500">
@@ -812,7 +812,7 @@ export default function FinancialManagementPage() {
                 <p className="text-body text-sm">{"امیر الله دادیان"}</p>
               </div>
               <div className="flex items-center gap-1">
-                <p>{formatNumber(123456789)}</p>
+                <p>{formatNumber(123_456_789)}</p>
                 <Add size="20" className="text-green-500" />
                 <ArrowDown2 size="16" className="text-body" />
               </div>
@@ -829,7 +829,7 @@ export default function FinancialManagementPage() {
                 <p className="text-body text-sm">{"امیر الله دادیان"}</p>
               </div>
               <div className="flex items-center gap-1">
-                <p>{formatNumber(987654321)}</p>
+                <p>{formatNumber(987_654_321)}</p>
                 <Minus size="20" className="text-red-500" />
                 <ArrowDown2 size="16" className="text-body" />
               </div>
@@ -839,7 +839,12 @@ export default function FinancialManagementPage() {
         <Button
           variant="contained"
           startIcon={<Lock1 size="20" className="text-white" />}
-          endIcon={<span className="text-xs!">اردیبهشت ماه</span>}
+          endIcon={
+            <span className="text-xs!">
+              {JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}{" "}
+              ماه
+            </span>
+          }
           sx={{
             marginTop: "8px",
             justifyContent: "space-between",
