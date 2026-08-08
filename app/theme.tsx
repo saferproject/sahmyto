@@ -103,5 +103,12 @@ export const theme = createTheme({
         popupIcon: <ArrowDown2 size={24} className="text-body ml-2" />,
       },
     },
+    MuiDrawer: {
+      styleOverrides: {
+        modal: {
+          backdropFilter: "blur(2px)",
+        },
+      },
+    },
   },
 });
