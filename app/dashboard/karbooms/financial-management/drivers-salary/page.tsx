@@ -43,8 +43,15 @@ export default function DriversSalaryPage() {
     setDriverTipDrawerOpen(false);
   };
 
-  const handleTipDriver = (id: number) => {
+  const handleAddBonus = (id: number) => {
     setSelectedDriver(id);
+    setBonusPenaltyType("bonus");
+    handleOpenDriverTip();
+  };
+
+  const handleAddPenalty = (id: number) => {
+    setSelectedDriver(id);
+    setBonusPenaltyType("penalty");
     handleOpenDriverTip();
   };
 
@@ -144,7 +151,7 @@ export default function DriversSalaryPage() {
                       variant="contained"
                       size="large"
                       color="success"
-                      onClick={() => handleTipDriver(id)}
+                      onClick={() => handleAddBonus(id)}
                       fullWidth
                     >
                       ثبت انعام
@@ -153,7 +160,7 @@ export default function DriversSalaryPage() {
                       variant="contained"
                       size="large"
                       color="error"
-                      onClick={() => handleTipDriver(id)}
+                      onClick={() => handleAddPenalty(id)}
                       fullWidth
                     >
                       ثبت جریمه
