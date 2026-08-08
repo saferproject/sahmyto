@@ -13,7 +13,7 @@ export default function PartnerFormDrawerComponent({
 }: PartnerFormDrawerProps) {
   return (
     <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <h2 className="text-body mb-5 text-lg font-bold">افزودن شریک</h2>
+      <h2 className="text-body mb-5 text-lg font-bold">افزودن مالک</h2>
       <PartnerFormComponent onCancel={onClose} onSuccess={onSuccess} />
     </FormDrawerComponent>
   );

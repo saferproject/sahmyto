@@ -112,7 +112,7 @@ export default function IncomeListItemComponent({
             </span>
             تاییدیه از
             <span className="font-bold underline">{approvals.length}</span>
-            شریک
+            مالک
           </p>
         </div>
         <div className="flex flex-col gap-1">

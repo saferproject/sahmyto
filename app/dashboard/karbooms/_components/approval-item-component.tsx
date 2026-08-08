@@ -22,7 +22,7 @@ export default function ApprovalItemComponent({
         <div className="flex items-center gap-2">
           <div className="border-primary flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border">
             {avatar ? (
-              <Image src={avatar} alt="عکس شریک" width={48} height={48} />
+              <Image src={avatar} alt="عکس مالک" width={48} height={48} />
             ) : (
               <User size={32} className="text-secondary" />
             )}

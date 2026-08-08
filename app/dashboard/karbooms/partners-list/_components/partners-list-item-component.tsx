@@ -55,7 +55,7 @@ export default function PartnersListItemComponent({
               {avatar ? (
                 <Image
                   src={avatar}
-                  alt="عکس شریک"
+                  alt="عکس مالک"
                   fill
                   className="object-cover"
                   sizes="48px"

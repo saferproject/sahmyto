@@ -13,11 +13,11 @@ export default function NO_MEMBER_ACTION_DIALOG_PROPS(
     icon: <Profile2User size={64} className="text-primary" />,
     title: "کاربوم عضو ندارد",
     description:
-      "برای ثبت درآمد ابتدا باید یک شریک یا راننده در کاربوم ثبت کنید",
+      "برای ثبت درآمد ابتدا باید یک مالک یا راننده در کاربوم ثبت کنید",
     actionButtons: (
       <div className="flex w-full flex-col gap-2">
         <Button variant="outlined" size="large" onClick={addPartnerFn}>
-          افزودن شریک
+          افزودن مالک
         </Button>
         <Button variant="outlined" size="large" onClick={addDriverFn}>
           افزودن راننده
