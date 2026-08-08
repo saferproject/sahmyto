@@ -7,7 +7,7 @@ export const INTRO_PAGES_CONTENTS: IntroPageContent[] = [
     id: 1,
     title: "حساب رسی دقیق شرکا",
     description:
-      "سهم هر شریک خودرو در پایان ماه به صورت اتوماتیک محاسبه می گردد",
+      "سهم هر مالک خودرو در پایان ماه به صورت اتوماتیک محاسبه می گردد",
     imageLink: IMAGES_BASE_URL + "intro-1.webp",
     imageWidth: 774,
     imageHeight: 562,
