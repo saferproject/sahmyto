@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/app/_schemas/zod-mini";
 import { Dayjs } from "dayjs";
 
 import { Member } from "../_types/member";
@@ -6,10 +6,12 @@ import { Member } from "../_types/member";
 const PaymentFormSchema = z.object({
   payer: z.custom<Member>(),
   reciever: z.custom<Member>(),
-  total_price: z.string().nullish(),
+  total_price: z.nullish(z.string()),
   date: z
     .custom<Dayjs>()
-    .refine((value) => value.diff() <= 0, "تاریخ نباید بعد از امروز باشد"),
+    .check(
+      z.refine((value) => value.diff() <= 0, "تاریخ نباید بعد از امروز باشد"),
+    ),
   type: z.union([
     z.literal("debit"),
     z.literal("sheba"),
@@ -17,7 +19,7 @@ const PaymentFormSchema = z.object({
     z.literal("cash"),
     z.literal("bridge"),
   ]),
-  description: z.string().nullable(),
+  description: z.nullable(z.string()),
 });
 
 export default PaymentFormSchema;
