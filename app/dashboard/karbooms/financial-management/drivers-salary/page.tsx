@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import { useState } from "react";
 import { Button } from "@mui/material";
-import { User } from "iconsax-reactjs";
+import { Calendar, User } from "iconsax-reactjs";
 
 import QueryState from "@/app/_components/query-state";
 import DriverTipDrawerComponent from "./_components/driver-tip-drawer-component";
@@ -20,6 +20,10 @@ import SelectedKarboomInfoComponent from "../../_components/selected-karboom-inf
 import organizeDriverSalary from "./_utilities/organize-driver-salary";
 import sumSalaryAmounts from "./_utilities/sum-salary-amounts";
 import ListHeaderLayout from "../../_layouts/list-header-layout";
+import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-months-fa";
+import { useConfirmationDialogStore } from "@/app/dashboard/_providers/confirmation-dialog-provider";
+import useCloseFinancialMonth from "../_hooks/use-close-financial-month-endpoint";
+import dayjs from "dayjs";
 
 export default function DriversSalaryPage() {
   const [isDriverTipDrawerOpen, setDriverTipDrawerOpen] = useState(false);
@@ -27,13 +31,25 @@ export default function DriversSalaryPage() {
   const [bonusPenaltyType, setBonusPenaltyType] =
     useState<BonusPenaltyType>("bonus");
 
-  const financialMonthId = useFinancialMonthStore((state) => state.id);
+  const { id: financialMonthId, ...selectedMonth } = useFinancialMonthStore(
+    (state) => state,
+  );
 
   const {
     data: DriversSalaries,
     isLoading: gettingDriversSalaries,
     isError: gettingDriversSalariesFailed,
   } = useGetDriversSalaryEndpoint(financialMonthId);
+
+  const { mutate: closeFinancialMonth, isPending: closingFinancialMonth } =
+    useCloseFinancialMonth();
+
+  const {
+    startPending: startPendingConfirmation,
+    stopPending: stopPendingConfirmation,
+    setDialog: setConfirmationDialog,
+    closeDialog: closeConfirmationDialog,
+  } = useConfirmationDialogStore((state) => state);
 
   const handleOpenDriverTip = () => {
     setDriverTipDrawerOpen(true);
@@ -59,6 +75,33 @@ export default function DriversSalaryPage() {
     setBonusPenaltyType((curValue) =>
       curValue === "bonus" ? "penalty" : "bonus",
     );
+  };
+
+  const handleCloseFinancialMonth = () => {
+    closeFinancialMonth(financialMonthId, {
+      onSuccess: () => {
+        closeConfirmationDialog();
+      },
+      onSettled: () => {
+        stopPendingConfirmation();
+      },
+    });
+    startPendingConfirmation();
+  };
+
+  const handleOpenConfirmationDialog = () => {
+    setConfirmationDialog({
+      isOpen: true,
+      isPending: false,
+      title: "بستن ماه مالی",
+      mainDiscription: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
+      extraDescription:
+        "درحین بستن و پس از بستن ماه مالی امکان تغییر درآمد و هزینه های این ماه وجود ندارد. از وارد کردن تمام درآمد ها و هزینه های این ماه اطمینان حاصل کنید و فرآیند را شروع کنید.",
+      icon: <Calendar size={24} className="text-primary" />,
+      onConfirm: handleCloseFinancialMonth,
+      onClose: closeConfirmationDialog,
+      confirmButtonTitle: `بستن ماه ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
+    });
   };
 
   const organizedDriverSalaries =
@@ -137,9 +180,11 @@ export default function DriversSalaryPage() {
                     />
                     <DetailItemComponent
                       label="جریمه"
-                      value={formatNumber(
-                        penaltyTotal === 0 ? 0 : -penaltyTotal,
-                      )}
+                      value={
+                        <span dir="ltr">
+                          {formatNumber(penaltyTotal === 0 ? 0 : -penaltyTotal)}
+                        </span>
+                      }
                     />
                     <DetailItemComponent
                       label="مجموع"
@@ -171,6 +216,9 @@ export default function DriversSalaryPage() {
             },
           )}
         </ul>
+        <Button variant="contained" onClick={handleOpenConfirmationDialog}>
+          تایید حقوق
+        </Button>
       </QueryState>
     </>
   );

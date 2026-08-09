@@ -21,6 +21,14 @@ export const financialManagmentService = {
         headers: { "Content-Type": "application/json" },
       },
     ),
+  closeFinancialMonth: (financialMonthId: number) =>
+    fetchWithAuth<unknown>(
+      `karboom/financials/closed/${financialMonthId}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      },
+    ),
   getFinancialMonthData: (monthId: number) =>
     fetchWithAuth<FinancialMonthData>(`karboom/financials/show/${monthId}`, {
       method: "GET",

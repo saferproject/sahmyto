@@ -1,5 +1,6 @@
 export default interface ConfirmationDialogProps {
   isOpen: boolean;
+  isPending: boolean;
   title: string;
   icon: React.ReactNode;
   mainDiscription: string;

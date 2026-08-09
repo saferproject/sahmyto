@@ -3,8 +3,8 @@ import { AddBonusPenaltyDriverBody } from "../_types/add-bonus-penalty-driver-bo
 import { DriverSalary } from "../_types/driver-salary";
 
 export const driversSalaryService = {
-  getDriversSalaryEndpoint: (monthId: number) =>
-    fetchWithAuth<DriverSalary[]>(`karboom/adjustments/adjustments/${monthId}`, {
+  getDriversSalary: (monthId: number) =>
+    fetchWithAuth<DriverSalary[]>(`karboom/adjustments/${monthId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     }),
@@ -14,7 +14,7 @@ export const driversSalaryService = {
     ...body
   }: AddBonusPenaltyDriverBody) =>
     fetchWithAuth<undefined>(
-      `karboom/adjustments/${financialMonthId}/drivers/${driverId}/adjustments`,
+      `karboom/adjustments/month/${financialMonthId}/driver/${driverId}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
