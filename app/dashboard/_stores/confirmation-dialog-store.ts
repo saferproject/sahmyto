@@ -11,6 +11,8 @@ export const createConfirmationDialogStore = (
     ...initState,
     openDialog: () => set((curValue) => ({ ...curValue, isOpen: true })),
     closeDialog: () => set((curValue) => ({ ...curValue, isOpen: false })),
+    startPending: () => set((curValue) => ({ ...curValue, isPending: true })),
+    stopPending: () => set((curValue) => ({ ...curValue, isPending: false })),
     setDialog: (props) => set(() => props),
   }));
 };

@@ -33,6 +33,8 @@ export default function DashboardHeaderDrawerComponent({
 
   const { avatar, full_name } = useUserInfoStore((state) => state);
   const {
+    startPending: startPendingConfirmation,
+    stopPending: stopPendingConfirmation,
     setDialog: setConfirmationDialog,
     closeDialog: closeConfirmationDialog,
   } = useConfirmationDialogStore((state) => state);
@@ -53,8 +55,10 @@ export default function DashboardHeaderDrawerComponent({
   };
 
   const handleLogout = () => {
+    startPendingConfirmation();
     logout(undefined, {
       onSuccess: () => {
+        stopPendingConfirmation();
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         router.push("/login");
@@ -65,6 +69,7 @@ export default function DashboardHeaderDrawerComponent({
   const handleConfirmLogout = () => {
     setConfirmationDialog({
       isOpen: true,
+      isPending: false,
       title: "خروج از حساب",
       icon: <Logout size="32" className="text-primary rotate-y-180" />,
       mainDiscription: "آیا می خواهید از حساب کاربریتان خارج شوید؟",
@@ -229,7 +234,7 @@ export default function DashboardHeaderDrawerComponent({
                       role="button"
                       tabIndex={0}
                       className={
-                        "flex items-center justify-between cursor-pointer py-4 " +
+                        "flex cursor-pointer items-center justify-between py-4 " +
                         (disabled ? "text-secondary" : "text-body")
                       }
                       onClick={() => handleNavigation(link, disabled)}

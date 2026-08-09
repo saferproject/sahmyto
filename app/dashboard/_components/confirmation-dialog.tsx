@@ -8,6 +8,7 @@ import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-pr
 export default function ConfirmationDialog() {
   const {
     isOpen,
+    isPending,
     title,
     icon,
     mainDiscription,
@@ -19,7 +20,7 @@ export default function ConfirmationDialog() {
   } = useConfirmationDialogStore((state) => state);
 
   return (
-    <Dialog open={isOpen} onClose={onClose} fullWidth>
+    <Dialog open={isOpen} onClose={isPending ? undefined : onClose} fullWidth>
       <div className="p-4">
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-2">
@@ -45,8 +46,10 @@ export default function ConfirmationDialog() {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose}>انصراف</Button>
-          <Button variant="contained" onClick={onConfirm}>
+          <Button onClick={onClose} disabled={isPending}>
+            انصراف
+          </Button>
+          <Button variant="contained" onClick={onConfirm} loading={isPending}>
             {confirmButtonTitle}
           </Button>
         </DialogActions>

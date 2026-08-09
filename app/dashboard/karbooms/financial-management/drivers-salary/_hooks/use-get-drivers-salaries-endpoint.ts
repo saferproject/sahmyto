@@ -6,6 +6,6 @@ export default function useGetDriversSalaryEndpoint(monthId: number) {
   return useQuery({
     queryKey: ["drivers-salary", monthId],
     queryFn: ({ queryKey }) =>
-      driversSalaryService.getDriversSalaryEndpoint(queryKey[1] as number),
+      driversSalaryService.getDriversSalary(queryKey[1] as number),
   });
 }
