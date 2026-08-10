@@ -217,7 +217,7 @@ export default function DriversSalaryPage() {
           )}
         </ul>
         <Button variant="contained" onClick={handleOpenConfirmationDialog}>
-          تایید حقوق
+          تایید حقوق رانندگان
         </Button>
       </QueryState>
     </>

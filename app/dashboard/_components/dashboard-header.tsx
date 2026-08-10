@@ -47,7 +47,7 @@ export default function DashboardHeader() {
   };
 
   const handleOpenRequestsMenu = (event: MouseEvent<HTMLButtonElement>) => {
-    if (requests?.data.length) setNotificationAnchor(event.currentTarget);
+    setNotificationAnchor(event.currentTarget);
   };
 
   const handleCloseRequestsMenu = () => {

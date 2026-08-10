@@ -36,6 +36,8 @@ import { useSnackbar } from "notistack";
 import QueryState from "@/app/_components/query-state";
 import useStartProcessingFinancialMonthEndpoint from "./_hooks/use-start-processing-financial-month-endpoint";
 import ListHeaderLayout from "../_layouts/list-header-layout";
+import useGetSettlementData from "./_hooks/use-get-settlement-data-endpoint";
+import SettlementDetailsDrawerLayout from "./_layouts/settlement-details-layout";
 
 export default function FinancialManagementPage() {
   const router = useRouter();
@@ -53,6 +55,8 @@ export default function FinancialManagementPage() {
     useState<Record<string, boolean> | null>(null);
   const [isExpenseRepairCategoriesOpen, setExpenseRepairCategoriesOpen] =
     useState<Record<string, boolean> | null>(null);
+  const [isSettlementDetailsDrawerOpen, setSettlementDetailsDrawerOpen] =
+    useState(false);
 
   const { setFinancialMonth: setSelectedMonth, ...selectedMonth } =
     useFinancialMonthStore((state) => state);
@@ -73,7 +77,19 @@ export default function FinancialManagementPage() {
     data: financialMonthData,
     isPending: gettingFinancialMonthData,
     isError: gettingFinancialMonthDataFailed,
-  } = useGetFinancialMonthDataEndpoint(selectedMonth.id, !!selectedMonth.id);
+  } = useGetFinancialMonthDataEndpoint(
+    selectedMonth.id,
+    !!selectedMonth.id || selectedMonth.status !== "open",
+  );
+
+  const {
+    data: settlementData,
+    isPending: gettingSettlementData,
+    isError: gettingSettlementDataFailed,
+  } = useGetSettlementData(
+    selectedMonth.id,
+    !!selectedMonth.id || selectedMonth.status !== "closed",
+  );
 
   const {
     startPending: startPendingConfirmation,
@@ -179,6 +195,14 @@ export default function FinancialManagementPage() {
     });
   };
 
+  const handleOpenSettlementDetailDrawer = () => {
+    setSettlementDetailsDrawerOpen(true);
+  }
+
+  const handleCloseSettlementDetailDrawer = () => {
+    setSettlementDetailsDrawerOpen(false);
+  };
+
   useEffect(() => {
     if (validatedMonth) handleOpenConfirmationDialog();
   }, [validatedMonth]);
@@ -248,9 +272,9 @@ export default function FinancialManagementPage() {
         onSelectMonth={handleSelectMonth}
       />
       <QueryState
-        isLoading={gettingFinancialMonthData}
-        isError={gettingFinancialMonthDataFailed}
-        isEmpty={!financialMonthData?.data}
+        isLoading={gettingFinancialMonthData || gettingSettlementData}
+        isError={gettingFinancialMonthDataFailed || gettingSettlementDataFailed}
+        isEmpty={!financialMonthData?.data || !settlementData?.data}
       >
         {selectedMonth?.status === "open" ? (
           <>
@@ -841,9 +865,17 @@ export default function FinancialManagementPage() {
           </div>
         ) : (
           <>
+            <SettlementDetailsDrawerLayout
+              isOpen={isSettlementDetailsDrawerOpen}
+              onOpen={handleOpenSettlementDetailDrawer}
+              onClose={handleCloseSettlementDetailDrawer}
+            />
             <MonthBalanceComponent balance={totalIncome - totalExpense} />
             <ul className="flex w-full flex-col gap-4">
-              <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
+              <li
+                className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2"
+                onClick={handleOpenSettlementDetailDrawer}
+              >
                 <div className="flex items-center gap-2">
                   <div className="relative text-green-500">
                     <Money size="24" variant="Broken" />
