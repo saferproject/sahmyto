@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import { YekanBakhFont } from "./_assets/fonts/fonts";
+import WebVitalsReporter from "./_components/web-vitals-reporter";
 
 export const metadata: Metadata = {
   title: "سهمیتو",
@@ -26,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" className={YekanBakhFont.variable} dir="rtl">
-      <body className="antialiased caret-body">{children}</body>
+      <body className="caret-body antialiased">
+        <WebVitalsReporter />
+        {children}
+      </body>
     </html>
   );
 }
