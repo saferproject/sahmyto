@@ -1,5 +1,5 @@
 import { EXPENSE_CATEGORY_TYPES } from "../_constants/expense-category-types";
-import useGetExpensesCategories from "../_hooks/get-expenses-categories-endpoint";
+import useGetExpensesCategoriesEndpoint from "../_hooks/use-get-expenses-categories-endpoint";
 import { ExpenseDrawerCategoryListProps } from "../_types/expense-drawer-category-list-props";
 import CategoryTypeComponent from "./category-type-component";
 
@@ -11,13 +11,11 @@ export default function ExpenseDrawerCategoryListComponent({
   onSelectCategoryType,
   onSelectCategory,
 }: ExpenseDrawerCategoryListProps) {
-  const { data } = useGetExpensesCategories(categoryType);
+  const { data } = useGetExpensesCategoriesEndpoint(categoryType);
 
   return (
     <div className="mb-8 flex w-full flex-col items-center gap-4 py-1">
-      <p className="text-body text-xs relative">
-        نوع هزینه را انتخاب کنید
-      </p>
+      <p className="text-body relative text-xs">نوع هزینه را انتخاب کنید</p>
       <div className="mb-4 flex w-full items-center justify-between gap-4">
         {EXPENSE_CATEGORY_TYPES.map(({ id, ...other }) => (
           <CategoryTypeComponent
@@ -28,9 +26,7 @@ export default function ExpenseDrawerCategoryListComponent({
           />
         ))}
       </div>
-      <p className="text-body text-xs relative">
-        دسته هزینه را انتخاب کنید
-      </p>
+      <p className="text-body relative text-xs">دسته هزینه را انتخاب کنید</p>
       <div className="grid w-full grid-cols-3 gap-2">
         {data?.data.map((expenseCategory) => (
           <ExpenseDrawerListItemComponent

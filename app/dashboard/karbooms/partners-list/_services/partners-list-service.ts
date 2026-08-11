@@ -4,10 +4,17 @@ import GetPartnersQueryParams from "../_interfaces/get-partners-query-params";
 import Partner from "../../_interfaces/partner";
 
 export const PartnersListService = {
-  getPartners: ({ karboom_id, ...other }: GetPartnersQueryParams) =>
+  getPartners: (
+    { karboom_id, ...other }: GetPartnersQueryParams,
+    signal?: AbortSignal,
+  ) =>
     fetchWithAuth<Partner[]>(
       `karboom/partners/${karboom_id}${createQueryParams<Omit<GetPartnersQueryParams, "karboom_id">>(other)}`,
-      { method: "GET", headers: { "Content-Type": "application/json" } },
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        signal,
+      },
     ),
   deletePartner: (partnerId: number) =>
     fetchWithAuth<void>(`karboom/partners/delete/${partnerId}`, {

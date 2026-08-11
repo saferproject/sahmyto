@@ -1,4 +1,5 @@
 import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ExpensesListService } from "../_services/expenses-list-service";
 import { RejectExpenseEndpointBody } from "../_types/reject-expense-endpoint-body";
@@ -8,7 +9,7 @@ export default function useRejectExpense() {
 
   return useMutation<
     BaseResponse<undefined>,
-    BaseResponse<undefined>,
+    ApiError,
     RejectExpenseEndpointBody
   >({
     mutationKey: ["reject-expense"],

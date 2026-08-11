@@ -7,8 +7,8 @@ export default function useGetDriversEndpoint(
 ) {
   return useQuery({
     queryKey: ["drivers", karboomId],
-    queryFn: ({ queryKey }) =>
-      DriversListService.getDrivers(Number(queryKey[1])),
+    queryFn: ({ queryKey, signal }) =>
+      DriversListService.getDrivers(Number(queryKey[1]), signal),
     enabled,
   });
 }

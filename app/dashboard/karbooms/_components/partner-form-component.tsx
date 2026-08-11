@@ -19,7 +19,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { PartnerFormProps } from "../_types/partner-form-props";
 
 import { getPartnerFormInitial } from "../_constants/partner-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 
 export default function PartnerFormComponent({
   formState,
@@ -39,7 +39,7 @@ export default function PartnerFormComponent({
 
   const { share_capital, share_decimal, description } = useWatch({ control });
 
-  const { id: karboom_id } = useKarboomsStore((state) => state);
+  const karboom_id = useKarboomsStore((state) => state.id);
 
   const { mutate: addPartner } = useAddPartner();
   const { mutate: editPartner } = useEditPartner();
@@ -126,10 +126,8 @@ export default function PartnerFormComponent({
   };
 
   const handleMutationError = (error: Error) => {
-    const err = error as unknown as BaseResponse;
-
-    if (err.errors)
-      Object.entries(err.errors).forEach(([field, errors]) =>
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
         setError(field as keyof PartnerFormType, {
           message: errors[0],
           type: "validate",

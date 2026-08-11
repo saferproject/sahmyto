@@ -5,7 +5,7 @@ import { driversSalaryService } from "../_services/drivers-salary-service";
 export default function useGetDriversSalaryEndpoint(monthId: number) {
   return useQuery({
     queryKey: ["drivers-salary", monthId],
-    queryFn: ({ queryKey }) =>
-      driversSalaryService.getDriversSalary(queryKey[1] as number),
+    queryFn: ({ queryKey, signal }) =>
+      driversSalaryService.getDriversSalary(queryKey[1] as number, signal),
   });
 }

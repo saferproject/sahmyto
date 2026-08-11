@@ -6,12 +6,15 @@ import GetPartnersQueryParams from "../_interfaces/get-partners-query-params";
 
 export default function useGetPartnersEndpoint(
   queryParams: GetPartnersQueryParams,
-  enabled: boolean = true
+  enabled: boolean = true,
 ) {
   return useQuery({
     queryKey: ["partners", queryParams],
-    queryFn: ({ queryKey }) =>
-      PartnersListService.getPartners(queryKey[1] as GetPartnersQueryParams),
+    queryFn: ({ queryKey, signal }) =>
+      PartnersListService.getPartners(
+        queryKey[1] as GetPartnersQueryParams,
+        signal,
+      ),
     enabled,
   });
 }

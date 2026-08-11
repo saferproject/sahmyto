@@ -4,12 +4,13 @@ import { Payment } from "../_types/payment";
 import { RejectPaymentBody } from "../_types/rehect-payment-body";
 
 export const paymentsListService = {
-  getPayments: async (karboomId: number) => {
+  getPayments: async (karboomId: number, signal?: AbortSignal) => {
     const response = await fetchWithAuth<Payment[]>(
       `karboom/payment/${karboomId}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        signal,
       },
     );
 

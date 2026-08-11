@@ -3,10 +3,11 @@ import { Income } from "../../_types/income";
 import { RejectIncomeBody } from "../_types/reject-income-body";
 
 export const IncomeListService = {
-  getIncomes: (karboomId: number) =>
+  getIncomes: (karboomId: number, signal?: AbortSignal) =>
     fetchWithAuth<Income[]>(`karboom/income/karboom/${karboomId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal,
     }),
   approveIncome: (incomeId: number) =>
     fetchWithAuth<undefined>(`karboom/income/accept/${incomeId}`, {

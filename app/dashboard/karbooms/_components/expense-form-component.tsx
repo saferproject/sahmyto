@@ -18,10 +18,10 @@ import { ExpenseFormType } from "../_schemas/expense-form-schema";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import PriceInputComponent from "@/app/_components/price-input-component";
-import useCreateExpenseEndpoint from "../_hooks/create-expense-endpoint";
+import useCreateExpenseEndpoint from "../_hooks/use-create-expense-endpoint";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 import { useEffect } from "react";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
@@ -90,10 +90,8 @@ export default function ExpenseFormComponent({
             setValues(EXPENSE_FORM_INITIAL);
           },
           onError(error) {
-            const err = error as unknown as BaseResponse;
-
-            if (err.errors)
-              Object.entries(err.errors).forEach(([field, errors]) =>
+            if (error instanceof ApiError && error.errors)
+              Object.entries(error.errors).forEach(([field, errors]) =>
                 setError(field as keyof ExpenseFormType, {
                   message: errors[0],
                   type: "validate",

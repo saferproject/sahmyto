@@ -18,8 +18,8 @@ import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
-import BaseResponse from "@/app/_interfaces/base-response";
-import useCreateIncomeEndpoint from "../_hooks/create-income-endpoint";
+import ApiError from "@/app/_errors/api-error";
+import useCreateIncomeEndpoint from "../_hooks/use-create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function IncomeFormComponent({
@@ -85,10 +85,8 @@ export default function IncomeFormComponent({
           setValues(INCOME_FORM_INITIAL);
         },
         onError(error) {
-          const err = error as unknown as BaseResponse;
-
-          if (err.errors)
-            Object.entries(err.errors).forEach(([field, errors]) =>
+          if (error instanceof ApiError && error.errors)
+            Object.entries(error.errors).forEach(([field, errors]) =>
               setError(field as keyof IncomeFormType, {
                 message: errors[0],
                 type: "validate",

@@ -30,7 +30,7 @@ import { DriverFormType } from "../_schemas/driver-form-schema";
 import { DriverFormProps } from "../_types/driver-form-props";
 
 import parseNumber from "@/app/_utilities/parse-numbers";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 import { getDriverFormInitial } from "../_constants/driver-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 
@@ -51,7 +51,7 @@ export default function DriverFormComponent({
 
   const { description, fixed_amount, service_amount } = useWatch({ control });
 
-  const { id: karboomId } = useKarboomsStore((state) => state);
+  const karboomId = useKarboomsStore((state) => state.id);
 
   const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
   const { mutate: editDriver, isPending: editingDriver } = useEditDriver();
@@ -87,10 +87,8 @@ export default function DriverFormComponent({
   };
 
   const handleMutationError = (error: Error) => {
-    const err = error as unknown as BaseResponse;
-
-    if (err.errors)
-      Object.entries(err.errors).forEach(([field, errors]) =>
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
         setError(field as keyof DriverFormType, {
           message: errors[0],
           type: "validate",
@@ -190,6 +188,11 @@ export default function DriverFormComponent({
                 helperText: errors.started_at?.message ?? "",
                 fullWidth: true,
                 required: true,
+                slotProps: {
+                  inputLabel: {
+                    shrink: true,
+                  },
+                },
               },
             }}
             disableFuture

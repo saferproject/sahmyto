@@ -10,19 +10,24 @@ import { CreateIncomeBody } from "../_types/create-income-body";
 import { Member } from "../_types/member";
 
 export const karboomService = {
-  getKarbooms: () => fetchWithAuth<Karboom[]>("karboom"),
+  getKarbooms: (signal?: AbortSignal) =>
+    fetchWithAuth<Karboom[]>("karboom", { signal }),
   createKarboom: (body: KarboomFormType) =>
     fetchWithAuth<Karboom>("karboom/store", {
       body: JSON.stringify(body),
       method: "POST",
       headers: { "Content-Type": "application/json" },
     }),
-  getExpensesCategories: (categoryType: ExpenseCategoryTypes) =>
+  getExpensesCategories: (
+    categoryType: ExpenseCategoryTypes,
+    signal?: AbortSignal,
+  ) =>
     fetchWithAuth<ExpenseCategory[]>(
       `karboom/expense/categories?type=${categoryType}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        signal,
       },
     ),
   createExpense: ({ karboom_id, ...other }: CreateExpenseBody) =>
@@ -37,9 +42,10 @@ export const karboomService = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(other),
     }),
-  getMembers: (karboom_id: number) =>
+  getMembers: (karboom_id: number, signal?: AbortSignal) =>
     fetchWithAuth<Member[]>(`karboom/members/${karboom_id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal,
     }),
 };
