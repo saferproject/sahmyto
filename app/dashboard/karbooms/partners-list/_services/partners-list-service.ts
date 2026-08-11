@@ -9,4 +9,9 @@ export const PartnersListService = {
       `karboom/partners/${karboom_id}${createQueryParams<Omit<GetPartnersQueryParams, "karboom_id">>(other)}`,
       { method: "GET", headers: { "Content-Type": "application/json" } },
     ),
+  deletePartner: (partnerId: number) =>
+    fetchWithAuth<void>(`karboom/partners/delete/${partnerId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }),
 };
