@@ -2,6 +2,7 @@ import ConfirmationDialogProps from "@/app/dashboard/_interfaces/confirmation-di
 
 export const CONFIRMATION_DIALOG_PROPS_DEFAULTS: ConfirmationDialogProps = {
   isOpen: false,
+  isPending: false,
   title: "",
   icon: <></>,
   mainDiscription: "",

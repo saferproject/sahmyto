@@ -16,6 +16,8 @@ import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-c
 import QueryState from "@/app/_components/query-state";
 import ListFooterLayout from "../_layouts/list-footer-layout";
 import ListHeaderLayout from "../_layouts/list-header-layout";
+import { FormStates } from "../../_types/form-states";
+import { Driver } from "./_types/driver";
 
 export default function DriverListPage() {
   const router = useRouter();
@@ -35,15 +37,27 @@ export default function DriverListPage() {
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);
+  const [driverFormState, setDriverFormState] = useState<FormStates>("ADD");
+  const [selectedDriver, setSelectedDriver] = useState<Driver>();
 
   const { data, isLoading, isError } = useGetDriversEndpoint(karboom_id);
 
   const handleOpenDriverForm = () => {
+    setDriverFormState("ADD");
+    setSelectedDriver(undefined);
+    setDriverFormDrawerOpen(true);
+  };
+
+  const handleEditDriver = (driver: Driver) => {
+    setDriverFormState("EDIT");
+    setSelectedDriver(driver);
     setDriverFormDrawerOpen(true);
   };
 
   const handleCloseDriverForm = () => {
     setDriverFormDrawerOpen(false);
+    setDriverFormState("ADD");
+    setSelectedDriver(undefined);
   };
 
   return (
@@ -55,9 +69,14 @@ export default function DriverListPage() {
         isError={isError}
         isEmpty={!data?.data.length}
       >
-        <DriversListComponent drivers={data?.data ?? []} />
+        <DriversListComponent
+          drivers={data?.data ?? []}
+          onEdit={handleEditDriver}
+        />
       </QueryState>
       <DriverFormDrawerComponent
+        formState={driverFormState}
+        driver={selectedDriver}
         isOpen={isDriverFormDrawerOpen}
         onOpen={handleOpenDriverForm}
         onClose={handleCloseDriverForm}

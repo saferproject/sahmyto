@@ -17,7 +17,7 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
     path: "/dashboard/karbooms/financial-management",
   },
   {
-    label: "مدیریت شرکا",
+    label: "مدیریت مالکین",
     icon: <Profile2User size="24" />,
     path: "/dashboard/karbooms/partners-list",
   },

@@ -13,6 +13,8 @@ import {
 import { Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+import { useEffect } from "react";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
@@ -21,6 +23,7 @@ import PriceInputComponent from "@/app/_components/price-input-component";
 
 import useDriverForm from "../_hooks/use-driver-form";
 import useAddDriver from "../_hooks/use-add-driver-endpoint";
+import useEditDriver from "../_hooks/use-edit-driver-endpoint";
 
 import { DriverFormType } from "../_schemas/driver-form-schema";
 
@@ -29,8 +32,11 @@ import { DriverFormProps } from "../_types/driver-form-props";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import BaseResponse from "@/app/_interfaces/base-response";
 import { getDriverFormInitial } from "../_constants/driver-form-initial";
+import formatNumber from "@/app/_utilities/format-numbers";
 
 export default function DriverFormComponent({
+  formState,
+  driver,
   onCancel,
   onSuccess,
 }: DriverFormProps) {
@@ -48,10 +54,48 @@ export default function DriverFormComponent({
   const { id: karboomId } = useKarboomsStore((state) => state);
 
   const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
+  const { mutate: editDriver, isPending: editingDriver } = useEditDriver();
+
+  useEffect(() => {
+    const initialValues = getDriverFormInitial();
+
+    if (formState === "EDIT" && driver) {
+      setValues({
+        ...initialValues,
+        phone: driver.phone,
+        first_name: driver.first_name,
+        last_name: driver.last_name,
+        started_at: dayjs(driver.started_at),
+        ended_at: driver.ended_at ? dayjs(driver.ended_at) : null,
+        fixed_amount: formatNumber(driver.fixed_amount),
+        service_amount: formatNumber(driver.service_amount),
+        percentage_amount: driver.percentage_amount,
+        description: driver.description,
+        payment_type: driver.payment_type,
+      });
+    } else setValues(initialValues);
+  }, [formState, driver, setValues]);
 
   const handleCancel = () => {
     setValues(getDriverFormInitial());
     onCancel();
+  };
+
+  const handleMutationSuccess = () => {
+    setValues(getDriverFormInitial());
+    onSuccess();
+  };
+
+  const handleMutationError = (error: Error) => {
+    const err = error as unknown as BaseResponse;
+
+    if (err.errors)
+      Object.entries(err.errors).forEach(([field, errors]) =>
+        setError(field as keyof DriverFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
   };
 
   const submit = ({
@@ -61,31 +105,30 @@ export default function DriverFormComponent({
     service_amount,
     ...other
   }: DriverFormType) => {
-    addDriver(
-      {
-        ...other,
-        service_amount: parseNumber(service_amount),
-        fixed_amount: parseNumber(fixed_amount),
-        karboom_id: karboomId,
-        started_at: started_at.toISOString().split("T")[0],
-        ended_at: ended_at?.toISOString().split("T")[0] ?? "",
-      },
-      {
-        onSuccess: () => {
-          setValues(getDriverFormInitial());
-          onSuccess();
-        },
-        onError: (error) => {
-          const err = error as unknown as BaseResponse;
+    const payload = {
+      ...other,
+      service_amount: parseNumber(service_amount),
+      fixed_amount: parseNumber(fixed_amount),
+      started_at: started_at.toISOString().split("T")[0],
+      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+    };
 
-          if (err.errors)
-            Object.entries(err.errors).forEach(([field, errors]) =>
-              setError(field as keyof DriverFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
+    if (formState === "EDIT" && driver) {
+      editDriver(
+        { ...payload, driver_id: driver.id },
+        {
+          onSuccess: handleMutationSuccess,
+          onError: handleMutationError,
         },
+      );
+      return;
+    }
+
+    addDriver(
+      { ...payload, karboom_id: karboomId },
+      {
+        onSuccess: handleMutationSuccess,
+        onError: handleMutationError,
       },
     );
   };
@@ -261,7 +304,7 @@ export default function DriverFormComponent({
         <Button
           variant="contained"
           type="submit"
-          loading={addingDriver}
+          loading={addingDriver || editingDriver}
           fullWidth
         >
           ثبت

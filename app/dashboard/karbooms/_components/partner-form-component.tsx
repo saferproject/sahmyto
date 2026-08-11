@@ -4,9 +4,11 @@ import { Button, IconButton, TextField } from "@mui/material";
 import { InfoCircle, Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useEffect } from "react";
 
 import usePartnerForm from "../_hooks/use-partner-form";
 import useAddPartner from "../_hooks/use-add-partner-endpoint";
+import useEditPartner from "../_hooks/use-edit-partner-endpoint";
 
 import DescriptionInput from "@/app/_components/description-input";
 
@@ -20,6 +22,8 @@ import { getPartnerFormInitial } from "../_constants/partner-form-initial";
 import BaseResponse from "@/app/_interfaces/base-response";
 
 export default function PartnerFormComponent({
+  formState,
+  partner,
   onCancel,
   onSuccess,
 }: PartnerFormProps) {
@@ -38,6 +42,27 @@ export default function PartnerFormComponent({
   const { id: karboom_id } = useKarboomsStore((state) => state);
 
   const { mutate: addPartner } = useAddPartner();
+  const { mutate: editPartner } = useEditPartner();
+
+  useEffect(() => {
+    const initialValues = getPartnerFormInitial();
+
+    if (formState === "EDIT" && partner) {
+      const [shareCapital, shareDecimal = "0"] = partner.share
+        .toString()
+        .split(".");
+
+      setValues({
+        ...initialValues,
+        phone: partner.phone,
+        first_name: partner.first_name,
+        last_name: partner.last_name,
+        share_capital: Number(shareCapital),
+        share_decimal: Number(shareDecimal),
+        description: partner.description,
+      });
+    } else setValues(initialValues);
+  }, [formState, partner, setValues]);
 
   const handleIncrementCapital = () => {
     if (share_capital !== undefined) {
@@ -95,6 +120,23 @@ export default function PartnerFormComponent({
     onCancel();
   };
 
+  const handleMutationSuccess = () => {
+    setValues(getPartnerFormInitial());
+    onSuccess();
+  };
+
+  const handleMutationError = (error: Error) => {
+    const err = error as unknown as BaseResponse;
+
+    if (err.errors)
+      Object.entries(err.errors).forEach(([field, errors]) =>
+        setError(field as keyof PartnerFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = ({
     started_at,
     ended_at,
@@ -104,30 +146,29 @@ export default function PartnerFormComponent({
   }: PartnerFormType) => {
     const share = Number(`${share_capital}.${share_decimal}`);
 
-    addPartner(
-      {
-        ...other,
-        share,
-        karboom_id,
-        started_at: started_at.toISOString().split("T")[0],
-        ended_at: ended_at?.toISOString().split("T")[0] ?? "",
-      },
-      {
-        onSuccess: () => {
-          setValues(getPartnerFormInitial());
-          onSuccess();
-        },
-        onError: (error) => {
-          const err = error as unknown as BaseResponse;
+    const payload = {
+      ...other,
+      share,
+      started_at: started_at.toISOString().split("T")[0],
+      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+    };
 
-          if (err.errors)
-            Object.entries(err.errors).forEach(([field, errors]) =>
-              setError(field as keyof PartnerFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
+    if (formState === "EDIT" && partner) {
+      editPartner(
+        { ...payload, partner_id: partner.id },
+        {
+          onSuccess: handleMutationSuccess,
+          onError: handleMutationError,
         },
+      );
+      return;
+    }
+
+    addPartner(
+      { ...payload, karboom_id },
+      {
+        onSuccess: handleMutationSuccess,
+        onError: handleMutationError,
       },
     );
   };
@@ -235,49 +276,49 @@ export default function PartnerFormComponent({
           مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
         </p>
       </div>
-        <Controller
-          control={control}
-          name="started_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ شروع"
-              format="YYYY/MM/DD"
-              views={["year", "month", "day"]}
-              slotProps={{
-                textField: {
-                  error: !!errors.started_at,
-                  helperText: errors.started_at?.message ?? "",
-                  fullWidth: true,
-                  required: true,
-                },
-              }}
-              disableFuture
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="ended_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ پایان"
-              format="YYYY/MM/DD"
-              views={["year", "month", "day"]}
-              slotProps={{
-                textField: {
-                  error: !!errors.ended_at,
-                  helperText: errors.ended_at?.message ?? "",
-                  fullWidth: true,
-                },
-              }}
-              disablePast
-            />
-          )}
-        />
+      <Controller
+        control={control}
+        name="started_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ شروع"
+            format="YYYY/MM/DD"
+            views={["year", "month", "day"]}
+            slotProps={{
+              textField: {
+                error: !!errors.started_at,
+                helperText: errors.started_at?.message ?? "",
+                fullWidth: true,
+                required: true,
+              },
+            }}
+            disableFuture
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="ended_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ پایان"
+            format="YYYY/MM/DD"
+            views={["year", "month", "day"]}
+            slotProps={{
+              textField: {
+                error: !!errors.ended_at,
+                helperText: errors.ended_at?.message ?? "",
+                fullWidth: true,
+              },
+            }}
+            disablePast
+          />
+        )}
+      />
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}

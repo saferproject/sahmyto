@@ -5,7 +5,7 @@ const IMAGES_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_ASSETS_URL;
 export const INTRO_PAGES_CONTENTS: IntroPageContent[] = [
   {
     id: 1,
-    title: "حساب رسی دقیق شرکا",
+    title: "حساب رسی دقیق مالکین",
     description:
       "سهم هر مالک خودرو در پایان ماه به صورت اتوماتیک محاسبه می گردد",
     imageLink: IMAGES_BASE_URL + "intro-1.webp",
@@ -14,9 +14,9 @@ export const INTRO_PAGES_CONTENTS: IntroPageContent[] = [
   },
   {
     id: 2,
-    title: "افزودن شرکا به ناوگان",
+    title: "افزودن مالکین به ناوگان",
     description:
-      "شرکا را با سهم های مشخص و مجزا به هر خودرو اضافه کنید تا نظارت و حساب رسی دقیق تری داشته باشید",
+      "مالکین را با سهم های مشخص و مجزا به هر خودرو اضافه کنید تا نظارت و حساب رسی دقیق تری داشته باشید",
     imageLink: IMAGES_BASE_URL + "intro-2.webp",
     imageWidth: 610,
     imageHeight: 747,

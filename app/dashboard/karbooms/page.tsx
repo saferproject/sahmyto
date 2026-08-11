@@ -76,12 +76,14 @@ export default function KarboomsPage() {
         onSuccess={handleKarboomFormSuccess}
       />
       <PartnerFormDrawerComponent
+        formState="ADD"
         isOpen={isPartnerFormDrawerOpen}
         onOpen={handleOpenPartnerFormDrawer}
         onClose={handleClosePartnerFormDrawer}
         onSuccess={handlePartnerFormSuccess}
       />
       <DriverFormDrawerComponent
+        formState="ADD"
         isOpen={isDriverFormDrawerOpen}
         onOpen={handleOpenDriverFormDrawer}
         onClose={handleCloseDriverFormDrawer}
