@@ -84,7 +84,7 @@ export default function IncomeDetailsDrawerLayout({
         </div>
       )}
       <div className="mt-4 w-full">
-        <h5 className="text-body">وضعیت تاییدیه شرکا</h5>
+        <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
         <ul className="mt-4 flex w-full flex-col gap-4">
           {approvals.map((approval) => (
             <ApprovalItemComponent key={approval.id} approval={approval} />

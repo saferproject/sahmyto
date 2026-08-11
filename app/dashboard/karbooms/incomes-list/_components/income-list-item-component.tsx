@@ -102,7 +102,7 @@ export default function IncomeListItemComponent({
           <p className="text-body text-sm font-semibold">{submitterName}</p>
         </div>
         <div className="flex basis-1/2 flex-col gap-1">
-          <p className="text-body-light text-xs">تایید شرکا</p>
+          <p className="text-body-light text-xs">تایید مالکین</p>
           <p className="text-body flex items-center gap-1 text-sm">
             <span className="font-bold underline">
               {

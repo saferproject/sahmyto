@@ -48,7 +48,7 @@ export default function PartnersListPage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست شرکا" />
+      <ListHeaderLayout title="لیست مالکین" />
       <SelectedKarboomInfoComponent />
       <QueryState
         isLoading={isLoading}
