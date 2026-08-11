@@ -12,7 +12,8 @@ import { clearPendingOtp } from "../_utilities/pending-otp-storage";
 export default function VerifyForm() {
   const router = useRouter();
 
-  const { phone, setUser } = useUserInfoStore((state) => state);
+  const phone = useUserInfoStore((state) => state.phone);
+  const setUser = useUserInfoStore((state) => state.setUser);
 
   const { mutate } = useVerify();
   const [otp, setOtp] = useState("");

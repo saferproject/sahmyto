@@ -25,14 +25,14 @@ export default function useRequireKarboomMembers() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { setDialog: setActionDialog, resetDialog: resetActionDialog } =
-    useActionDialogStore((state) => state);
+  const setActionDialog = useActionDialogStore((state) => state.setDialog);
+  const resetActionDialog = useActionDialogStore((state) => state.resetDialog);
 
   return async (karboomId: number, onHasMembers: () => void) => {
     try {
       const members = await queryClient.fetchQuery({
         queryKey: ["expenses-categories", karboomId],
-        queryFn: () => karboomService.getMembers(karboomId),
+        queryFn: ({ signal }) => karboomService.getMembers(karboomId, signal),
         staleTime: 0,
       });
 

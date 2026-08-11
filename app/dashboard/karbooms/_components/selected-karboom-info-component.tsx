@@ -16,7 +16,9 @@ export default function SelectedKarboomInfoComponent() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { id, name, plate } = useKarboomsStore((state) => state);
+  const id = useKarboomsStore((state) => state.id);
+  const name = useKarboomsStore((state) => state.name);
+  const plate = useKarboomsStore((state) => state.plate);
 
   useEffect(() => {
     if (!id) {

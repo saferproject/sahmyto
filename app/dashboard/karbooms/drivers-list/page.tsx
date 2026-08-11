@@ -23,7 +23,7 @@ export default function DriverListPage() {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { id: karboom_id } = useKarboomsStore((state) => state);
+  const karboom_id = useKarboomsStore((state) => state.id);
 
   useEffect(() => {
     if (!karboom_id) {

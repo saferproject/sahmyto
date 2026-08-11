@@ -9,7 +9,7 @@ export default function SettlementDetailsDrawerLayout({
   onOpen,
   onClose,
 }: SettlementDetailsDrawerProps) {
-  const {clearSettlement} = useSettlementStore((state) => state);
+  const clearSettlement = useSettlementStore((state) => state.clearSettlement);
 
   const handleClose = () => {
     clearSettlement();
@@ -40,14 +40,8 @@ export default function SettlementDetailsDrawerLayout({
           label="پرداختی به دیگران"
           value={formatNumber(45_000_000)}
         />
-        <DetailItemComponent
-          label="حقوق و حق سرویس"
-          value={formatNumber(0)}
-        />
-        <DetailItemComponent
-          label="جمع کل"
-          value={formatNumber(94_000_000)}
-        />
+        <DetailItemComponent label="حقوق و حق سرویس" value={formatNumber(0)} />
+        <DetailItemComponent label="جمع کل" value={formatNumber(94_000_000)} />
       </ul>
     </FormDrawerComponent>
   );
