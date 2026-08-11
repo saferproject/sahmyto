@@ -9,6 +9,7 @@ import { karboomService } from "../_services/karboom-service";
 import { useActionDialogStore } from "../../_providers/action-dialog-provider";
 
 import NO_MEMBER_ACTION_DIALOG_PROPS from "../_constants/no-member-action-dialog-props";
+import isValidQueryId from "@/app/_utilities/is-valid-query-id";
 
 /**
  * Income and expense both need a member to pay or receive, so before opening a
@@ -28,7 +29,12 @@ export default function useRequireKarboomMembers() {
   const setActionDialog = useActionDialogStore((state) => state.setDialog);
   const resetActionDialog = useActionDialogStore((state) => state.resetDialog);
 
-  return async (karboomId: number, onHasMembers: () => void) => {
+  return async (
+    karboomId: number | null | undefined,
+    onHasMembers: () => void,
+  ) => {
+    if (!isValidQueryId(karboomId)) return;
+
     try {
       const members = await queryClient.fetchQuery({
         queryKey: ["expenses-categories", karboomId],
