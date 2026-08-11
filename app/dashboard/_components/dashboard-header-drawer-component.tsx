@@ -144,6 +144,7 @@ export default function DashboardHeaderDrawerComponent({
         onSuccess={handleKarboomFormSuccess}
       />
       <PartnerFormDrawerComponent
+        formState="ADD"
         isOpen={isPartnerFormDrawerOpen}
         onOpen={handleOpenPartnerFormDrawer}
         onClose={handleClosePartnerFormDrawer}

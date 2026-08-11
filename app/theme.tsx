@@ -39,6 +39,9 @@ export const theme = createTheme({
       },
     },
     MuiInputLabel: {
+      defaultProps: {
+        shrink: true,
+      },
       styleOverrides: {
         root: {
           fontSize: "14px",
@@ -48,6 +51,13 @@ export const theme = createTheme({
       },
     },
     MuiTextField: {
+      defaultProps: {
+        slotProps: {
+          inputLabel: {
+            shrink: true,
+          },
+        },
+      },
       styleOverrides: {
         root: {
           borderRadius: 12,

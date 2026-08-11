@@ -8,6 +8,6 @@ export default interface Partner {
   last_name: string;
   full_name: string;
   phone: string;
-  share: number | null;
+  share: number;
   description: string;
 }

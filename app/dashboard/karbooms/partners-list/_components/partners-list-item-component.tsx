@@ -12,9 +12,12 @@ import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
 
 export default function PartnersListItemComponent({
-  item: { full_name, phone, avatar, share, status },
+  item,
   index,
+  onEdit,
 }: PartnersListItemProps) {
+  const { full_name, phone, avatar, share, status } = item;
+
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
@@ -23,6 +26,11 @@ export default function PartnersListItemComponent({
 
   const handleCloseMenu = () => {
     setMenuAnchor(null);
+  };
+
+  const handleEdit = () => {
+    handleCloseMenu();
+    onEdit(item);
   };
 
   return (
@@ -76,7 +84,7 @@ export default function PartnersListItemComponent({
             open={Boolean(menuAnchor)}
             onClose={handleCloseMenu}
           >
-            <MenuItem onClick={() => {}}>ویرایش</MenuItem>
+            <MenuItem onClick={handleEdit}>ویرایش</MenuItem>
             <MenuItem onClick={() => {}}>حذف</MenuItem>
           </Menu>
         </div>
