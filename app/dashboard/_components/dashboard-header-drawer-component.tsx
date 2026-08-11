@@ -151,6 +151,7 @@ export default function DashboardHeaderDrawerComponent({
         onSuccess={handlePartnerFormSuccess}
       />
       <DriverFormDrawerComponent
+        formState="ADD"
         isOpen={isDriverFormDrawerOpen}
         onOpen={handleOpenDriverFormDrawer}
         onClose={handleCloseDriverFormDrawer}

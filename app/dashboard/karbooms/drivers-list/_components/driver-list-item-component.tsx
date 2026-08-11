@@ -13,9 +13,14 @@ import formatNumber from "@/app/_utilities/format-numbers";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
 import { DRIVER_PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
+import useDeleteDriverEndpoint from "../_hooks/use-delete-driver-endpoint";
 
 export default function DriverListItemComponent({
-  driver: {
+  driver,
+  index,
+  onEdit,
+}: DriverListItemProps) {
+  const {
     avatar,
     full_name,
     phone,
@@ -24,9 +29,8 @@ export default function DriverListItemComponent({
     percentage_amount,
     payment_type,
     membership_status,
-  },
-  index,
-}: DriverListItemProps) {
+  } = driver;
+  const { mutate: deleteDriver } = useDeleteDriverEndpoint();
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
   const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
@@ -35,6 +39,16 @@ export default function DriverListItemComponent({
 
   const handleCloseMenu = () => {
     setMenuAnchor(null);
+  };
+
+  const handleEdit = () => {
+    handleCloseMenu();
+    onEdit(driver);
+  };
+
+  const handleDelete = () => {
+    handleCloseMenu();
+    deleteDriver(driver.id);
   };
 
   return (
@@ -134,8 +148,8 @@ export default function DriverListItemComponent({
             open={Boolean(menuAnchor)}
             onClose={handleCloseMenu}
           >
-            <MenuItem onClick={() => {}}>ویرایش</MenuItem>
-            <MenuItem onClick={() => {}}>حذف</MenuItem>
+            <MenuItem onClick={handleEdit}>ویرایش</MenuItem>
+            <MenuItem onClick={handleDelete}>حذف</MenuItem>
           </Menu>
         </div>
       </Badge>
