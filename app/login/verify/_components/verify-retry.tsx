@@ -3,7 +3,7 @@
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import useLoginUser from "../../_hooks/login-user-endpoint";
+import useLoginUserEndpoint from "../../_hooks/use-login-user-endpoint";
 
 import { useUserInfoStore } from "../../../_providers/user-info-provider";
 import PendingOtp from "../_interfaces/pending-otp";
@@ -21,7 +21,7 @@ export default function VerifyRetry({
   pendingOtp,
   onPendingOtpChange,
 }: VerifyRetryProps) {
-  const { phone } = useUserInfoStore((state) => state);
+  const phone = useUserInfoStore((state) => state.phone);
 
   const [time, setTime] = useState(() =>
     getRemainingSeconds(pendingOtp.expiresAt),
@@ -43,7 +43,7 @@ export default function VerifyRetry({
     };
   }, [pendingOtp.expiresAt]);
 
-  const { mutate, isPending } = useLoginUser();
+  const { mutate, isPending } = useLoginUserEndpoint();
 
   const handleRetry = () => {
     mutate(

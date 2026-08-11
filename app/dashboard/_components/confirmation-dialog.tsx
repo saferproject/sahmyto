@@ -4,6 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { InfoCircle } from "iconsax-reactjs";
 
 import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-provider";
+import { useShallow } from "zustand/react/shallow";
 
 export default function ConfirmationDialog() {
   const {
@@ -17,7 +18,33 @@ export default function ConfirmationDialog() {
     confirmButtonTitle = "تایید",
     onConfirm,
     onClose,
-  } = useConfirmationDialogStore((state) => state);
+  } = useConfirmationDialogStore(
+    useShallow(
+      ({
+        isOpen,
+        isPending,
+        title,
+        icon,
+        mainDiscription,
+        vector,
+        extraDescription,
+        confirmButtonTitle,
+        onConfirm,
+        onClose,
+      }) => ({
+        isOpen,
+        isPending,
+        title,
+        icon,
+        mainDiscription,
+        vector,
+        extraDescription,
+        confirmButtonTitle,
+        onConfirm,
+        onClose,
+      }),
+    ),
+  );
 
   return (
     <Dialog open={isOpen} onClose={isPending ? undefined : onClose} fullWidth>

@@ -10,7 +10,7 @@ import { User, DocumentUpload } from "iconsax-reactjs";
 export default function ProfilePictureComponent() {
   const router = useRouter();
 
-  const { avatar } = useUserInfoStore((state) => state);
+  const avatar = useUserInfoStore((state) => state.avatar);
 
   const handleNavigateToUploadProfileImage = () => {
     router.push("/dashboard/profile/profile-picture");

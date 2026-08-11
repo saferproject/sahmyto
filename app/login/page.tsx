@@ -6,7 +6,7 @@ import { Button, TextField } from "@mui/material";
 
 import useLoginForm from "./_hooks/use-login-form";
 import { LoginFormType } from "./_schemas/login-schema";
-import useLoginUser from "./_hooks/login-user-endpoint";
+import useLoginUserEndpoint from "./_hooks/use-login-user-endpoint";
 import { useUserInfoStore } from "../_providers/user-info-provider";
 import { useWatch } from "react-hook-form";
 import {
@@ -25,9 +25,9 @@ export default function LoginPage() {
 
   const { phone } = useWatch({ control });
 
-  const { mutate, isPending } = useLoginUser();
+  const { mutate, isPending } = useLoginUserEndpoint();
 
-  const { setPhone } = useUserInfoStore((state) => state);
+  const setPhone = useUserInfoStore((state) => state.setPhone);
 
   const submit = (data: LoginFormType) => {
     setPhone(data.phone);

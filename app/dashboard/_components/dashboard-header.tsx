@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
 import { Badge, IconButton } from "@mui/material";
 import { useState, type MouseEvent } from "react";
 import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
 
-import DashboardHeaderDrawerComponent from "./dashboard-header-drawer-component";
 import RequestsMenuComponent from "./notifications-menu-component";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
@@ -15,12 +15,18 @@ import useGetKarboomRequests from "../_hooks/use-get-karboom-requests-endpoint";
 import useAcceptKarboomRequest from "../_hooks/use-accept-karboom-request-endpoint";
 import useRejectKarboomRequest from "../_hooks/use-reject-karboom-request-endpoint";
 
+const DashboardHeaderDrawerComponent = dynamic(
+  () => import("./dashboard-header-drawer-component"),
+  { ssr: false },
+);
+
 export default function DashboardHeader() {
   const router = useRouter();
 
-  const { avatar } = useUserInfoStore((state) => state);
+  const avatar = useUserInfoStore((state) => state.avatar);
 
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [hasDrawerOpened, setHasDrawerOpened] = useState(false);
   const [mutatingRequest, setMutatingRequest] = useState<number | null>(null);
 
   const [notificationAnchor, setNotificationAnchor] =
@@ -39,6 +45,7 @@ export default function DashboardHeader() {
     useRejectKarboomRequest();
 
   const handleOpenDrawer = () => {
+    setHasDrawerOpened(true);
     setDrawerOpen(true);
   };
 
@@ -78,11 +85,13 @@ export default function DashboardHeader() {
 
   return (
     <header className="fixed top-4 z-50 w-full bg-transparent px-4">
-      <DashboardHeaderDrawerComponent
-        isOpen={isDrawerOpen}
-        onOpen={handleOpenDrawer}
-        onClose={handleCloseDrawer}
-      />
+      {hasDrawerOpened && (
+        <DashboardHeaderDrawerComponent
+          isOpen={isDrawerOpen}
+          onOpen={handleOpenDrawer}
+          onClose={handleCloseDrawer}
+        />
+      )}
       <RequestsMenuComponent
         anchorEl={notificationAnchor}
         isOpen={Boolean(notificationAnchor)}

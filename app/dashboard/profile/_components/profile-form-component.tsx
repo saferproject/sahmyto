@@ -17,13 +17,14 @@ import {
 import { ArrowDown2 } from "iconsax-reactjs";
 import { Controller } from "react-hook-form";
 
-import useProfileForm from "../_hooks/profile-form";
-import useCompleteProfile from "../_hooks/complete-profile-endpoint";
+import useProfileForm from "../_hooks/use-profile-form";
+import useCompleteProfileEndpoint from "../_hooks/use-complete-profile-endpoint";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 import { ProfileFormType } from "../_schemas/profile-schema";
 import { DatePicker } from "@mui/x-date-pickers";
+import { useShallow } from "zustand/react/shallow";
 
 export default function ProfileFormComponent() {
   const [isOptionalFieldsVisible, setOptionalFieldsVisibility] =
@@ -31,9 +32,19 @@ export default function ProfileFormComponent() {
 
   const router = useRouter();
 
-  const userInfoStore = useUserInfoStore((state) => state);
-
-  const { setUser, ...user } = userInfoStore;
+  const user = useUserInfoStore(
+    useShallow(
+      ({ phone, first_name, last_name, father_name, gender, email }) => ({
+        phone,
+        first_name,
+        last_name,
+        father_name,
+        gender,
+        email,
+      }),
+    ),
+  );
+  const setUser = useUserInfoStore((state) => state.setUser);
 
   const {
     register,
@@ -50,7 +61,7 @@ export default function ProfileFormComponent() {
     birthday: null,
   });
 
-  const { mutate } = useCompleteProfile();
+  const { mutate } = useCompleteProfileEndpoint();
 
   const submit = (data: ProfileFormType) => {
     mutate(data, {

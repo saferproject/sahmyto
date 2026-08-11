@@ -8,7 +8,7 @@ import { useUserInfoStore } from "../../../_providers/user-info-provider";
 export default function VerifyPhone() {
   const router = useRouter();
 
-  const { phone } = useUserInfoStore((state) => state);
+  const phone = useUserInfoStore((state) => state.phone);
 
   const handleEditPhone = () => {
     router.push("/login");
