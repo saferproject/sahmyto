@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 
@@ -20,6 +19,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import DescriptionInput from "@/app/_components/description-input";
 import PriceInputComponent from "@/app/_components/price-input-component";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 
 import useDriverForm from "../_hooks/use-driver-form";
 import useAddDriver from "../_hooks/use-add-driver-endpoint";
@@ -176,25 +176,13 @@ export default function DriverFormComponent({
         control={control}
         name="started_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-                slotProps: {
-                  inputLabel: {
-                    shrink: true,
-                  },
-                },
-              },
-            }}
+            error={!!errors.started_at}
+            helperText={errors.started_at?.message ?? ""}
+            required
             disableFuture
           />
         )}
@@ -203,19 +191,12 @@ export default function DriverFormComponent({
         control={control}
         name="ended_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-                fullWidth: true,
-              },
-            }}
+            error={!!errors.ended_at}
+            helperText={errors.ended_at?.message ?? ""}
             disablePast
           />
         )}

@@ -1,7 +1,7 @@
 import usePaymentForm from "../_hooks/use-payment-form";
 import { Controller, useWatch } from "react-hook-form";
 import PriceInputComponent from "@/app/_components/price-input-component";
-import { DatePicker } from "@mui/x-date-pickers";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 import DescriptionInput from "@/app/_components/description-input";
 import {
   Autocomplete,
@@ -206,20 +206,13 @@ export default function PaymentFormComponent({
         control={control}
         name="date"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.date,
-                helperText: errors.date?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.date}
+            helperText={errors.date?.message ?? ""}
+            required
             disableFuture
           />
         )}

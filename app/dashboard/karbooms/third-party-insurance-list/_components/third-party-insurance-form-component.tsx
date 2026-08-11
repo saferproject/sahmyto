@@ -1,13 +1,13 @@
 "use client";
 
 import { Button, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useEffect } from "react";
 import { Dayjs } from "dayjs";
 import { Controller, useWatch } from "react-hook-form";
 
 import InsuranceCompanyInput from "@/app/_components/insurance-company-input";
 import DescriptionInput from "@/app/_components/description-input";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 
 import { ThirdPartyInsuranceFormType } from "../_schemas/third-party-insurance-form-schema";
 
@@ -91,17 +91,12 @@ export default function ThirdPartyInsuranceFormComponent({
         control={control}
         name="started_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-              },
-            }}
+            error={!!errors.started_at}
+            helperText={errors.started_at?.message ?? ""}
           />
         )}
       />
@@ -109,17 +104,12 @@ export default function ThirdPartyInsuranceFormComponent({
         control={control}
         name="ended_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-              },
-            }}
+            error={!!errors.ended_at}
+            helperText={errors.ended_at?.message ?? ""}
           />
         )}
       />

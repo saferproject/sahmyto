@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Controller, useWatch } from "react-hook-form";
 import { Button, TextField } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers";
 
 import useBodyInsuranceForm from "../_hooks/use-body-insurance-form";
 import useAddBodyInsuranceEndpoint from "../_hooks/use-add-body-insurance-endpoint";
@@ -14,6 +13,7 @@ import { BODY_INSURANCE_FORM_INITIAL } from "../_constants/body-insurance-form-i
 
 import DescriptionInput from "@/app/_components/description-input";
 import InsuranceCompanyInput from "@/app/_components/insurance-company-input";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { Dayjs } from "dayjs";
@@ -91,17 +91,12 @@ export default function BodyInsuranceFormComponent({
         control={control}
         name="started_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-              },
-            }}
+            error={!!errors.started_at}
+            helperText={errors.started_at?.message ?? ""}
           />
         )}
       />
@@ -109,17 +104,12 @@ export default function BodyInsuranceFormComponent({
         control={control}
         name="ended_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-              },
-            }}
+            error={!!errors.ended_at}
+            helperText={errors.ended_at?.message ?? ""}
           />
         )}
       />

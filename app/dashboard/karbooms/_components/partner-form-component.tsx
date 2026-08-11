@@ -3,7 +3,6 @@
 import { Button, IconButton, TextField } from "@mui/material";
 import { InfoCircle, Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
 import { useEffect } from "react";
 
 import usePartnerForm from "../_hooks/use-partner-form";
@@ -11,6 +10,7 @@ import useAddPartner from "../_hooks/use-add-partner-endpoint";
 import useEditPartner from "../_hooks/use-edit-partner-endpoint";
 
 import DescriptionInput from "@/app/_components/description-input";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 
 import { PartnerFormType } from "../_schemas/partner-form-schema";
 
@@ -278,20 +278,13 @@ export default function PartnerFormComponent({
         control={control}
         name="started_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.started_at}
+            helperText={errors.started_at?.message ?? ""}
+            required
             disableFuture
           />
         )}
@@ -300,19 +293,12 @@ export default function PartnerFormComponent({
         control={control}
         name="ended_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-                fullWidth: true,
-              },
-            }}
+            error={!!errors.ended_at}
+            helperText={errors.ended_at?.message ?? ""}
             disablePast
           />
         )}

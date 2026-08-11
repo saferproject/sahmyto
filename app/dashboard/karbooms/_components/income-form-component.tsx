@@ -3,12 +3,12 @@
 import { Controller, useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { InfoCircle } from "iconsax-reactjs";
-import { DatePicker } from "@mui/x-date-pickers";
 import { Autocomplete, Button, TextField } from "@mui/material";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { IncomeFormType } from "../_schemas/income-form-schema";
 import DescriptionInput from "@/app/_components/description-input";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 import useIncomeForm from "../_hooks/use-income-form";
 import { IncomeDrawerFormProps } from "../_types/income-drawer-form-props";
 import { IncomeTypes } from "../_types/income-categories";
@@ -244,20 +244,13 @@ export default function IncomeFormComponent({
         control={control}
         name="started_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.started_at}
+            helperText={errors.started_at?.message ?? ""}
+            required
             disableFuture
           />
         )}
@@ -266,20 +259,13 @@ export default function IncomeFormComponent({
         control={control}
         name="ended_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.ended_at}
+            helperText={errors.ended_at?.message ?? ""}
+            required
             disableFuture
           />
         )}

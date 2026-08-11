@@ -2,7 +2,6 @@
 
 import { Autocomplete, Button, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { DatePicker } from "@mui/x-date-pickers";
 import { Controller, useWatch } from "react-hook-form";
 
 import useExpenseForm from "../_hooks/use-expense-form";
@@ -18,6 +17,7 @@ import { ExpenseFormType } from "../_schemas/expense-form-schema";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import PriceInputComponent from "@/app/_components/price-input-component";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 import useCreateExpenseEndpoint from "../_hooks/use-create-expense-endpoint";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
@@ -181,20 +181,13 @@ export default function ExpenseFormComponent({
         control={control}
         name="date"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.date,
-                helperText: errors.date?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.date}
+            helperText={errors.date?.message ?? ""}
+            required
             disableFuture
           />
         )}

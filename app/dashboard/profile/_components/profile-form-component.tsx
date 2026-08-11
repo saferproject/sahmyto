@@ -23,7 +23,7 @@ import useCompleteProfileEndpoint from "../_hooks/use-complete-profile-endpoint"
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 import { ProfileFormType } from "../_schemas/profile-schema";
-import { DatePicker } from "@mui/x-date-pickers";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 import { useShallow } from "zustand/react/shallow";
 
 export default function ProfileFormComponent() {
@@ -149,19 +149,12 @@ export default function ProfileFormComponent() {
               control={control}
               name="birthday"
               render={({ field }) => (
-                <DatePicker
+                <DatePickerComponent
                   {...field}
                   onChange={(value) => field.onChange(value)}
                   label="تاریخ تولد"
-                  format="YYYY/MM/DD"
-                  views={["year", "month", "day"]}
-                  slotProps={{
-                    textField: {
-                      error: !!errors.birthday,
-                      helperText: errors.birthday?.message ?? "",
-                      fullWidth: true,
-                    },
-                  }}
+                  error={!!errors.birthday}
+                  helperText={errors.birthday?.message ?? ""}
                   disableFuture
                 />
               )}
