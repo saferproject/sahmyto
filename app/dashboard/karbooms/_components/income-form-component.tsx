@@ -54,12 +54,8 @@ export default function IncomeFormComponent({
     isOpen && karboomId == selectedKarboomId,
   );
 
-  const {
-    mutate: createIncome,
-    isPending: creatingIncome,
-    isSuccess: createdIncome,
-    isError: creatingIncomeFailed,
-  } = useCreateIncomeEndpoint();
+  const { mutate: createIncome, isPending: creatingIncome } =
+    useCreateIncomeEndpoint();
 
   const submit = ({
     reciever,
@@ -70,6 +66,8 @@ export default function IncomeFormComponent({
     total_price,
     ...other
   }: IncomeFormType) => {
+    void image;
+
     createIncome(
       {
         ...other,
@@ -147,7 +145,7 @@ export default function IncomeFormComponent({
         "total_price",
         formatNumber(quantity * (parseNumber(unit_price) || 0)),
       );
-  }, [quantity, unit_price]);
+  }, [quantity, setValue, unit_price]);
 
   useEffect(() => {
     if (gotMembers) {
@@ -157,7 +155,7 @@ export default function IncomeFormComponent({
 
       if (currentMember) setValue("reciever", currentMember);
     }
-  }, [gotMembers, members]);
+  }, [gotMembers, members, setValue, userId]);
 
   return (
     <form

@@ -12,7 +12,6 @@ import Plate from "@/app/_components/plate";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
-import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
 import { useRouter } from "next/navigation";
 
 export default function KarboomListItemComponent(
@@ -75,7 +74,7 @@ export default function KarboomListItemComponent(
           plate.second_character &&
           plate.third_number &&
           plate.fourth_number && (
-            <div className="absolute left-4 top-3">
+            <div className="absolute top-3 left-4">
               <Plate {...plate} />
             </div>
           )}

@@ -13,7 +13,7 @@ import {
   Lock1,
   Calendar,
 } from "iconsax-reactjs";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 
@@ -61,17 +61,11 @@ export default function FinancialManagementPage() {
   const { setFinancialMonth: setSelectedMonth, ...selectedMonth } =
     useFinancialMonthStore((state) => state);
 
-  const {
-    mutate: validateMonth,
-    isPending: validatingMonth,
-    isSuccess: validatedMonth,
-  } = useValidateClosingFinancialMonthEndpoint();
+  const { mutate: validateMonth, isPending: validatingMonth } =
+    useValidateClosingFinancialMonthEndpoint();
 
-  const {
-    mutate: startProcessing,
-    isPending: startingProcessing,
-    isSuccess: startedProcessing,
-  } = useStartProcessingFinancialMonthEndpoint();
+  const { mutate: startProcessing } =
+    useStartProcessingFinancialMonthEndpoint();
 
   const {
     data: financialMonthData,
@@ -99,7 +93,10 @@ export default function FinancialManagementPage() {
   } = useConfirmationDialogStore((state) => state);
 
   const handleValidateMonth = () => {
-    if (selectedMonth) validateMonth(selectedMonth.id);
+    if (selectedMonth)
+      validateMonth(selectedMonth.id, {
+        onSuccess: handleOpenConfirmationDialog,
+      });
     else
       enqueueSnackbar({
         variant: "warning",
@@ -107,9 +104,12 @@ export default function FinancialManagementPage() {
       });
   };
 
-  const handleSelectMonth = (month: FinancialMonth) => {
-    setSelectedMonth(month);
-  };
+  const handleSelectMonth = useCallback(
+    (month: FinancialMonth) => {
+      setSelectedMonth(month);
+    },
+    [setSelectedMonth],
+  );
 
   const handleStartProcessingFinancialMonth = () => {
     startPendingConfirmation();
@@ -197,15 +197,11 @@ export default function FinancialManagementPage() {
 
   const handleOpenSettlementDetailDrawer = () => {
     setSettlementDetailsDrawerOpen(true);
-  }
+  };
 
   const handleCloseSettlementDetailDrawer = () => {
     setSettlementDetailsDrawerOpen(false);
   };
-
-  useEffect(() => {
-    if (validatedMonth) handleOpenConfirmationDialog();
-  }, [validatedMonth]);
 
   const totalIncome =
     financialMonthData?.data.incomes

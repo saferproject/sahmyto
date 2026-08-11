@@ -50,12 +50,8 @@ export default function PaymentFormComponent({
     isSuccess: gotMembers,
   } = useGetMembersEndpoint(karboomId, isOpen && !!karboomId);
 
-  const {
-    mutate: createExpense,
-    isPending: creatingExpense,
-    isSuccess: createdExpense,
-    isError: creatingExpenseFailed,
-  } = useAddPaymentEndpoint();
+  const { mutate: createExpense, isPending: creatingExpense } =
+    useAddPaymentEndpoint();
 
   const submit = ({
     payer,
@@ -101,7 +97,7 @@ export default function PaymentFormComponent({
 
       if (currentMember) setValue("payer", currentMember);
     }
-  }, [gotMembers, members]);
+  }, [gotMembers, members, setValue, userId]);
 
   return (
     <form

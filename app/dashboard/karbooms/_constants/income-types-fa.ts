@@ -5,5 +5,4 @@ export const INCOME_TYPES_FA: Record<IncomeTypes, string> = {
   hourly: "ساعتی",
   monthly: "ماهانه",
   services: "سرویس",
-  travel: "سفر",
 };

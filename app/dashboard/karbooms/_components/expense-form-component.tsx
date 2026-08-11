@@ -59,12 +59,8 @@ export default function ExpenseFormComponent({
     isOpen && selectedKarboomId === karboomId,
   );
 
-  const {
-    mutate: createExpense,
-    isPending: creatingExpense,
-    isSuccess: createdExpense,
-    isError: creatingExpenseFailed,
-  } = useCreateExpenseEndpoint();
+  const { mutate: createExpense, isPending: creatingExpense } =
+    useCreateExpenseEndpoint();
 
   const submit = ({
     payer,
@@ -74,6 +70,8 @@ export default function ExpenseFormComponent({
     wage_cost,
     ...other
   }: ExpenseFormType) => {
+    void image;
+
     if (selectedCategory)
       createExpense(
         {
@@ -119,7 +117,7 @@ export default function ExpenseFormComponent({
 
       if (currentMember) setValue("payer", currentMember);
     }
-  }, [gotMembers, members]);
+  }, [gotMembers, members, setValue, userId]);
 
   return (
     <form

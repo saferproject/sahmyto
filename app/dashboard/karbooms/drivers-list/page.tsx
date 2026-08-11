@@ -16,8 +16,8 @@ import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-c
 import QueryState from "@/app/_components/query-state";
 import ListFooterLayout from "../_layouts/list-footer-layout";
 import ListHeaderLayout from "../_layouts/list-header-layout";
-import { FormStates } from "../../_types/form-states";
-import { Driver } from "./_types/driver";
+import type { FormStates } from "../../_types/form-states";
+import type { Driver } from "./_types/driver";
 
 export default function DriverListPage() {
   const router = useRouter();

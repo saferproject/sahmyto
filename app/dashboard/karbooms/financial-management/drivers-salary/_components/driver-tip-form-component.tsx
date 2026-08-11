@@ -6,7 +6,6 @@ import { Button } from "@mui/material";
 import { useFinancialMonthStore } from "../../_providers/financial-managment-store-provider";
 
 import useDriverTipForm from "../_hooks/use-driver-tip-form";
-import useGetDriversSalaryEndpoint from "../_hooks/use-get-drivers-salaries-endpoint";
 
 import { DriverTipFormProps } from "../_types/driver-tip-form-props";
 import useAddBonusPenaltyDriverEndpoint from "../_hooks/use-add-bonus-penalty-driver-endpoint";
@@ -38,12 +37,8 @@ export default function DriverTipFormComponent({
 
   const financialMonthId = useFinancialMonthStore((state) => state.id);
 
-  const {
-    mutate: addBonusPenalty,
-    isPending: addingBonusPenalty,
-    isSuccess: addedBonusPenalty,
-    isError: adddingBonusPenaltyFailed,
-  } = useAddBonusPenaltyDriverEndpoint();
+  const { mutate: addBonusPenalty, isPending: addingBonusPenalty } =
+    useAddBonusPenaltyDriverEndpoint();
 
   const submit = ({ amount, ...other }: DriverTipFormType) => {
     addBonusPenalty(

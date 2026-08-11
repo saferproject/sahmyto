@@ -41,8 +41,7 @@ export default function DriversSalaryPage() {
     isError: gettingDriversSalariesFailed,
   } = useGetDriversSalaryEndpoint(financialMonthId);
 
-  const { mutate: closeFinancialMonth, isPending: closingFinancialMonth } =
-    useCloseFinancialMonth();
+  const { mutate: closeFinancialMonth } = useCloseFinancialMonth();
 
   const {
     startPending: startPendingConfirmation,

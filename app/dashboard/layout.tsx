@@ -5,7 +5,6 @@ import { SnackbarProvider } from "notistack";
 import DashboardLayoutProps from "./_interfaces/dashboard-layout-props";
 
 import DashboardHeader from "./_components/dashboard-header";
-import DashboardFooter from "./_components/dashboard-footer";
 
 import ThemeRegistry from "../theme-registry";
 
@@ -21,8 +20,6 @@ import ActionDialogComponent from "./_components/action-dialog-component";
 import ConfirmationDialog from "./_components/confirmation-dialog";
 
 import { ActionDialogStoreProvider } from "./_providers/action-dialog-provider";
-
-
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (

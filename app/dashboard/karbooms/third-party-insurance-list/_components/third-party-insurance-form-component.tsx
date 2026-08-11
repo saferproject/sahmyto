@@ -37,40 +37,37 @@ export default function ThirdPartyInsuranceFormComponent({
 
   const { description, started_at } = useWatch({ control });
 
-  const {
-      mutate: createIncome,
-      isPending: creatingIncome,
-      isSuccess: createdIncome,
-      isError: creatingIncomeFailed,
-    } = useAddThirdPartyInsuranceEndpoint();
+  const { mutate: createIncome, isPending: creatingIncome } =
+    useAddThirdPartyInsuranceEndpoint();
 
   const submit = ({
     started_at,
     ended_at,
     ...other
   }: ThirdPartyInsuranceFormType) => {
-    createIncome({
-      ...other,
-      karboom_id: karboomId,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at.toISOString().split("T")[0],
-    });
+    createIncome(
+      {
+        ...other,
+        karboom_id: karboomId,
+        started_at: started_at.toISOString().split("T")[0],
+        ended_at: ended_at.toISOString().split("T")[0],
+      },
+      {
+        onSuccess() {
+          reset(THIRD_PARTY_INSURANCE_FORM_INITIAL);
+          onSuccess();
+        },
+      },
+    );
   };
 
   useEffect(() => {
     if (started_at?.isValid) {
       const startedAt = started_at as Dayjs;
-      
+
       setValue("ended_at", startedAt.year(startedAt.year() + 1));
     }
-  }, [started_at]);
-
-  useEffect(() => {
-    if (createdIncome) {
-      reset(THIRD_PARTY_INSURANCE_FORM_INITIAL);
-      onSuccess();
-    }
-  }, [createdIncome]);
+  }, [setValue, started_at]);
 
   return (
     <form
@@ -90,42 +87,42 @@ export default function ThirdPartyInsuranceFormComponent({
         error={!!errors.insurance_code}
         helperText={errors.insurance_code?.message ?? ""}
       />
-        <Controller
-          control={control}
-          name="started_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ شروع"
-              format="YYYY/MM/DD"
-              slotProps={{
-                textField: {
-                  error: !!errors.started_at,
-                  helperText: errors.started_at?.message ?? "",
-                },
-              }}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          name="ended_at"
-          render={({ field }) => (
-            <DatePicker
-              {...field}
-              onChange={(value) => field.onChange(value)}
-              label="تاریخ پایان"
-              format="YYYY/MM/DD"
-              slotProps={{
-                textField: {
-                  error: !!errors.ended_at,
-                  helperText: errors.ended_at?.message ?? "",
-                },
-              }}
-            />
-          )}
-        />
+      <Controller
+        control={control}
+        name="started_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ شروع"
+            format="YYYY/MM/DD"
+            slotProps={{
+              textField: {
+                error: !!errors.started_at,
+                helperText: errors.started_at?.message ?? "",
+              },
+            }}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="ended_at"
+        render={({ field }) => (
+          <DatePicker
+            {...field}
+            onChange={(value) => field.onChange(value)}
+            label="تاریخ پایان"
+            format="YYYY/MM/DD"
+            slotProps={{
+              textField: {
+                error: !!errors.ended_at,
+                helperText: errors.ended_at?.message ?? "",
+              },
+            }}
+          />
+        )}
+      />
       <DescriptionInput
         register={register("description")}
         currentlength={description?.length ?? 0}

@@ -37,24 +37,28 @@ export default function BodyInsuranceFormComponent({
 
   const karboomId = useKarboomsStore((state) => state.id);
 
-  const {
-    mutate: createBodyInsurance,
-    isPending: creatingBodyInsurance,
-    isSuccess: createdBodyInsuracne,
-    isError: creatingBodyInsuranceFailed,
-  } = useAddBodyInsuranceEndpoint();
+  const { mutate: createBodyInsurance, isPending: creatingBodyInsurance } =
+    useAddBodyInsuranceEndpoint();
 
   const submit = ({
     started_at,
     ended_at,
     ...other
   }: BodyInsuranceFormType) => {
-    createBodyInsurance({
-      ...other,
-      karboomId,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at.toISOString().split("T")[0],
-    });
+    createBodyInsurance(
+      {
+        ...other,
+        karboomId,
+        started_at: started_at.toISOString().split("T")[0],
+        ended_at: ended_at.toISOString().split("T")[0],
+      },
+      {
+        onSuccess() {
+          onSuccess();
+          reset(BODY_INSURANCE_FORM_INITIAL);
+        },
+      },
+    );
   };
 
   useEffect(() => {
@@ -63,14 +67,7 @@ export default function BodyInsuranceFormComponent({
 
       setValue("ended_at", startedAt.year(startedAt.year() + 1));
     }
-  }, [started_at]);
-
-  useEffect(() => {
-    if (createdBodyInsuracne) {
-      onSuccess();
-      reset(BODY_INSURANCE_FORM_INITIAL);
-    }
-  }, [createdBodyInsuracne]);
+  }, [setValue, started_at]);
 
   return (
     <form

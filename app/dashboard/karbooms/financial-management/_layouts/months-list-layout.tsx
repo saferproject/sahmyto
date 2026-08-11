@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 
@@ -25,7 +25,7 @@ export default function MonthListLayout({
 
   useEffect(() => {
     if (gotFinancialMonths) onSelectMonth(financialMonths.data[0]);
-  }, [gotFinancialMonths, financialMonths]);
+  }, [gotFinancialMonths, financialMonths, onSelectMonth]);
 
   return (
     <QueryState
@@ -35,7 +35,7 @@ export default function MonthListLayout({
     >
       <ul
         dir="ltr"
-        className="flex w-full min-h-23 snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5"
+        className="flex min-h-23 w-full snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5"
       >
         {financialMonths?.data.map((financialMonth, index) => (
           <MonthListItemComponent
