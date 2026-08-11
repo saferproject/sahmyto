@@ -7,6 +7,7 @@ import { useState, type MouseEvent } from "react";
 import { ProfileCircle } from "iconsax-reactjs";
 
 import PartnersListItemProps from "../_interfaces/partners-list-item-props";
+import useDeletePartnerEndpoint from "../_hooks/use-delete-partner-endpoint";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
@@ -17,6 +18,7 @@ export default function PartnersListItemComponent({
   onEdit,
 }: PartnersListItemProps) {
   const { full_name, phone, avatar, share, status } = item;
+  const { mutate: deletePartner } = useDeletePartnerEndpoint();
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
@@ -31,6 +33,11 @@ export default function PartnersListItemComponent({
   const handleEdit = () => {
     handleCloseMenu();
     onEdit(item);
+  };
+
+  const handleDelete = () => {
+    handleCloseMenu();
+    deletePartner(item.id);
   };
 
   return (
@@ -85,7 +92,7 @@ export default function PartnersListItemComponent({
             onClose={handleCloseMenu}
           >
             <MenuItem onClick={handleEdit}>ویرایش</MenuItem>
-            <MenuItem onClick={() => {}}>حذف</MenuItem>
+            <MenuItem onClick={handleDelete}>حذف</MenuItem>
           </Menu>
         </div>
       </Badge>
