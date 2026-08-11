@@ -9,6 +9,8 @@ export type Driver = {
   last_name: string;
   full_name: string;
   phone: string;
+  started_at: string;
+  ended_at: string | null;
   fixed_amount: number;
   service_amount: number;
   percentage_amount: number;

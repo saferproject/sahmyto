@@ -83,6 +83,7 @@ export default function KarboomsPage() {
         onSuccess={handlePartnerFormSuccess}
       />
       <DriverFormDrawerComponent
+        formState="ADD"
         isOpen={isDriverFormDrawerOpen}
         onOpen={handleOpenDriverFormDrawer}
         onClose={handleCloseDriverFormDrawer}

@@ -6,4 +6,9 @@ export const DriversListService = {
     fetchWithAuth<Driver[]>(`karboom/drivers/${karboomId}?`, {
       method: "GET",
     }),
+  deleteDriver: (driverId: number) =>
+    fetchWithAuth<void>(`karboom/drivers/delete/${driverId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    }),
 };
