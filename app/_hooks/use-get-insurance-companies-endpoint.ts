@@ -4,7 +4,7 @@ import { appService } from "../_services/app-service";
 export default function useGetInsuranceCompaniesEndpoint(enabled: boolean) {
   return useQuery({
     queryKey: ["insurance-companies"],
-    queryFn: appService.getInsuranceCompanies,
+    queryFn: ({ signal }) => appService.getInsuranceCompanies(signal),
     enabled,
   });
 }

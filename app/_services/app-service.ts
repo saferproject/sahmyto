@@ -2,9 +2,10 @@ import { fetchWithAuth } from "@/app/proxy";
 import InsuranceCompany from "../_interfaces/insurance-company";
 
 export const appService = {
-  getInsuranceCompanies: () =>
+  getInsuranceCompanies: (signal?: AbortSignal) =>
     fetchWithAuth<InsuranceCompany[]>("insurance/companies", {
       method: "GET",
-      headers: {"Content-Type": "application/json"}
+      headers: { "Content-Type": "application/json" },
+      signal,
     }),
 };

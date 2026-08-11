@@ -4,7 +4,7 @@ import { IncomeListService } from "../_services/incomes-list-service";
 export default function useGetIncomes(karboomId: number) {
   return useQuery({
     queryKey: ["incomes", karboomId],
-    queryFn: ({ queryKey }) =>
-      IncomeListService.getIncomes(queryKey[1] as number),
+    queryFn: ({ queryKey, signal }) =>
+      IncomeListService.getIncomes(queryKey[1] as number, signal),
   });
 }

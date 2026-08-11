@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 
 import { RejectIncomeEndpointBody } from "../_types/reject-income-endpoint-body";
 
@@ -11,7 +12,7 @@ export default function useRejectIncome() {
 
   return useMutation<
     BaseResponse<undefined>,
-    BaseResponse<undefined>,
+    ApiError,
     RejectIncomeEndpointBody
   >({
     mutationKey: ["reject-income"],

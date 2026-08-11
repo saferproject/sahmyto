@@ -4,9 +4,10 @@ import { financialManagmentService } from "../_services/financial-management-ser
 export default function useGetFinancialMonthsEndpoint(karboomId: number) {
   return useQuery({
     queryKey: ["financial-months", karboomId],
-    queryFn: ({ queryKey }) =>
+    queryFn: ({ queryKey, signal }) =>
       financialManagmentService.getFinancialManagmentMonths(
         queryKey[1] as number,
+        signal,
       ),
   });
 }

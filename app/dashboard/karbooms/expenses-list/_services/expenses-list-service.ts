@@ -3,10 +3,11 @@ import { RejectExpenseBody } from "../_types/reject-expense-body";
 import { Expense } from "../../_types/expense";
 
 export const ExpensesListService = {
-  getExpenses: (karboomId: number) =>
+  getExpenses: (karboomId: number, signal?: AbortSignal) =>
     fetchWithAuth<Expense[]>(`karboom/expense/karboom/${karboomId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal,
     }),
   approveExpense: (expenseId: number) =>
     fetchWithAuth<undefined>(`karboom/expense/accept/${expenseId}`, {

@@ -4,10 +4,11 @@ import { FinancialMonthData } from "../_types/financial-month-data";
 import { SettlementData } from "../_types/settlement-data";
 
 export const financialManagmentService = {
-  getFinancialManagmentMonths: (karboomId: number) =>
+  getFinancialManagmentMonths: (karboomId: number, signal?: AbortSignal) =>
     fetchWithAuth<FinancialMonth[]>(`karboom/financials/months/${karboomId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal,
     }),
   validateClosingFinancialMonth: (financialMonthId: number) =>
     fetchWithAuth<unknown>(`karboom/financials/validate/${financialMonthId}`, {
@@ -23,20 +24,20 @@ export const financialManagmentService = {
       },
     ),
   closeFinancialMonth: (financialMonthId: number) =>
-    fetchWithAuth<unknown>(
-      `karboom/financials/closed/${financialMonthId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-      },
-    ),
-  getFinancialMonthData: (monthId: number) =>
+    fetchWithAuth<unknown>(`karboom/financials/closed/${financialMonthId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    }),
+  getFinancialMonthData: (monthId: number, signal?: AbortSignal) =>
     fetchWithAuth<FinancialMonthData>(`karboom/financials/show/${monthId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal,
     }),
-  getSettlementData: (monthId: number) => fetchWithAuth<SettlementData>(`karboom/financials/settlement/${monthId}`, {
+  getSettlementData: (monthId: number, signal?: AbortSignal) =>
+    fetchWithAuth<SettlementData>(`karboom/financials/settlement/${monthId}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-    })
+      signal,
+    }),
 };

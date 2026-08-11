@@ -12,7 +12,8 @@ export default function useGetProfileInfo({
 }: UseGetProfileInfoOptions = {}) {
   return useQuery({
     queryKey: ["profile"],
-    queryFn: () => dashboardService.getProfileInfo({ redirectOnUnauthorized }),
+    queryFn: ({ signal }) =>
+      dashboardService.getProfileInfo({ redirectOnUnauthorized, signal }),
     enabled,
   });
 }

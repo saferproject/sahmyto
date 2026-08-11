@@ -12,7 +12,8 @@ export default function useGetMembersEndpoint(
 ) {
   return useQuery<BaseResponse<Member[]>>({
     queryKey: ["expenses-categories", karboomId],
-    queryFn: ({ queryKey }) => karboomService.getMembers(queryKey[1] as number),
+    queryFn: ({ queryKey, signal }) =>
+      karboomService.getMembers(queryKey[1] as number, signal),
     enabled,
   });
 }

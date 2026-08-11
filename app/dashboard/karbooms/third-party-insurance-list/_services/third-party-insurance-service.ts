@@ -3,10 +3,11 @@ import ThirdPartyInsuranceBodyType from "../_types/add-third-party-insurance-bod
 import { ThirdPartyInsurance } from "../_types/third-party-insurance";
 
 export const thirdPartyInsuranceService = {
-  getThirdPartyInsurances: (id: number) =>
+  getThirdPartyInsurances: (id: number, signal?: AbortSignal) =>
     fetchWithAuth<ThirdPartyInsurance[]>(`insurance/third-party/${id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal,
     }),
   addThirdPartyInsurance: ({
     karboom_id,

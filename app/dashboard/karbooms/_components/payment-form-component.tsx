@@ -22,7 +22,7 @@ import useAddPaymentEndpoint from "../_hooks/use-add-payment-endpoint";
 import { PaymentFormType } from "../_schemas/payment-form-schema";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { PAYMENT_FORM_INITIAL } from "../_constants/payment-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 import { PAYMENT_TYPES_FA } from "../payments-list/_constants/payment-types-fa";
 
 export default function PaymentFormComponent({
@@ -75,10 +75,8 @@ export default function PaymentFormComponent({
           setValues(PAYMENT_FORM_INITIAL);
         },
         onError(error) {
-          const err = error as unknown as BaseResponse;
-
-          if (err.errors)
-            Object.entries(err.errors).forEach(([field, errors]) =>
+          if (error instanceof ApiError && error.errors)
+            Object.entries(error.errors).forEach(([field, errors]) =>
               setError(field as keyof PaymentFormType, {
                 message: errors[0],
                 type: "validate",
