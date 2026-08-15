@@ -18,40 +18,58 @@ import ListFooterLayout from "../_layouts/list-footer-layout";
 import ListHeaderLayout from "../_layouts/list-header-layout";
 import type { FormStates } from "../../_types/form-states";
 import type { Driver } from "./_types/driver";
+import { useShallow } from "zustand/react/shallow";
 
 export default function DriverListPage() {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const karboom_id = useKarboomsStore((state) => state.id);
+  const { karboomId, karboomRoles } = useKarboomsStore(
+    useShallow(({ id: karboomId, roles: karboomRoles }) => ({
+      karboomId,
+      karboomRoles,
+    })),
+  );
 
   useEffect(() => {
-    if (!karboom_id) {
+    if (!karboomId) {
       enqueueSnackbar({
         variant: "warning",
         message: "کاربومی انتخاب نشده است",
       });
       router.replace("/dashboard/karbooms");
     }
-  }, [karboom_id, enqueueSnackbar, router]);
+  }, [karboomId, enqueueSnackbar, router]);
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);
   const [driverFormState, setDriverFormState] = useState<FormStates>("ADD");
   const [selectedDriver, setSelectedDriver] = useState<Driver>();
 
-  const { data, isLoading, isError } = useGetDriversEndpoint(karboom_id);
+  const { data, isLoading, isError } = useGetDriversEndpoint(karboomId);
 
   const handleOpenDriverForm = () => {
-    setDriverFormState("ADD");
-    setSelectedDriver(undefined);
-    setDriverFormDrawerOpen(true);
+    if (karboomRoles.includes("owner")) {
+      setDriverFormState("ADD");
+      setSelectedDriver(undefined);
+      setDriverFormDrawerOpen(true);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم می تواند راننده دعوت کند",
+      });
   };
 
   const handleEditDriver = (driver: Driver) => {
-    setDriverFormState("EDIT");
-    setSelectedDriver(driver);
-    setDriverFormDrawerOpen(true);
+    if (karboomRoles.includes("owner")) {
+      setDriverFormState("EDIT");
+      setSelectedDriver(driver);
+      setDriverFormDrawerOpen(true);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم می تواند راننده ویرایش کند",
+      });
   };
 
   const handleCloseDriverForm = () => {

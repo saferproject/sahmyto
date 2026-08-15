@@ -14,6 +14,8 @@ import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
 import { DRIVER_PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 import useDeleteDriverEndpoint from "../_hooks/use-delete-driver-endpoint";
+import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import { useSnackbar } from "notistack";
 
 export default function DriverListItemComponent({
   driver,
@@ -30,8 +32,14 @@ export default function DriverListItemComponent({
     payment_type,
     membership_status,
   } = driver;
-  const { mutate: deleteDriver } = useDeleteDriverEndpoint();
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+
+  const { mutate: deleteDriver } = useDeleteDriverEndpoint();
+
+  const karboomRoles = useKarboomsStore((state) => state.roles);
 
   const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setMenuAnchor(event.currentTarget);
@@ -47,8 +55,14 @@ export default function DriverListItemComponent({
   };
 
   const handleDelete = () => {
-    handleCloseMenu();
-    deleteDriver(driver.id);
+    if (karboomRoles.includes("owner")) {
+      handleCloseMenu();
+      deleteDriver(driver.id);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم میتواند راننده حذف کند",
+      });
   };
 
   return (

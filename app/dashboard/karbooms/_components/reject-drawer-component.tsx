@@ -12,6 +12,7 @@ import { RejectFormType } from "../_schemas/reject-form-schema";
 
 export default function RejectDrawerComponent({
   isOpen,
+  isLoading,
   title,
   onOpen,
   onClose,
@@ -47,11 +48,18 @@ export default function RejectDrawerComponent({
             variant="outlined"
             color="secondary"
             onClick={onClose}
+            disabled={isLoading}
             fullWidth
           >
             انصراف
           </Button>
-          <Button type="submit" variant="contained" color="error" fullWidth>
+          <Button
+            type="submit"
+            variant="contained"
+            color="error"
+            loading={isLoading}
+            fullWidth
+          >
             رد {title}
           </Button>
         </div>

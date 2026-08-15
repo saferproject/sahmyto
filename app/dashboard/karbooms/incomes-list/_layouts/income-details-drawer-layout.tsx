@@ -44,7 +44,11 @@ export default function IncomeDetailsDrawerLayout({
   const { mutate: approveIncome } = useApproveIncome();
 
   const handleApprove = () => {
-    approveIncome(id);
+    approveIncome(id, {
+      onSuccess: () => {
+        handleClose();
+      },
+    });
   };
 
   const handleClose = () => {
@@ -69,8 +73,8 @@ export default function IncomeDetailsDrawerLayout({
           label="تاریخ / زمان پایان"
           value={dayjs(ended_at).format("YYYY/MM/DD")}
         />
-        <DetailItemComponent label="دریافت کننده" value={receiverName} />
         <DetailItemComponent label="ثبت کننده" value={submitterName} />
+        <DetailItemComponent label="دریافت کننده" value={receiverName} />
         <DetailItemComponent
           label="وضعیت"
           value={ACTIVITY_STATUS_FA[status]}
@@ -101,7 +105,7 @@ export default function IncomeDetailsDrawerLayout({
             <Button
               variant="outlined"
               color="error"
-              size="small"
+              size="large"
               onClick={() => onRejectIncome(id)}
               fullWidth
             >
@@ -110,7 +114,7 @@ export default function IncomeDetailsDrawerLayout({
             <Button
               variant="outlined"
               color="success"
-              size="small"
+              size="large"
               onClick={handleApprove}
               fullWidth
             >
