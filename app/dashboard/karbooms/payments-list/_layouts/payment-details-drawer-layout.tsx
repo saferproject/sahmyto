@@ -6,7 +6,6 @@ import formatNumber from "@/app/_utilities/format-numbers";
 import { usePaymentListStore } from "../_providers/payments-list-store-provider";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
-import ApprovalItemComponent from "../../_components/approval-item-component";
 import { PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
@@ -25,14 +24,13 @@ export default function PaymentDetailsDrawerLayout({
     description,
     date,
     status,
-    receiver: { full_name: receiverName },
+    receiver: { id: receiverId, full_name: receiverName },
     payer: { full_name: payerName },
-    approvals,
+    user: { full_name: submitterName },
     clearActivePayment,
   } = usePaymentListStore((state) => state);
 
   const loggedInUserId = useUserInfoStore((state) => state.id);
-  const userKarboomRoles = useKarboomsStore((state) => state.roles);
 
   const { mutate: approvePayment } = useApprovePaymentEndpoint();
 
@@ -66,7 +64,7 @@ export default function PaymentDetailsDrawerLayout({
       <div className="relative flex max-h-[90dvh] w-full flex-col px-8 py-12">
         <div className="bg-secondary-light absolute top-6 left-1/2 h-1 w-16 -translate-x-1/2 rounded-full"></div>
         <div className="flex min-h-0 w-full flex-1 flex-col items-center overflow-y-auto">
-          <h4 className="text-body mt-4 font-semibold">جزئیات درآمد</h4>
+          <h4 className="text-body mt-4 font-semibold">جزئیات دریافتی پرداختی</h4>
           <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
             <DetailItemComponent
               label="مبلغ"
@@ -77,7 +75,7 @@ export default function PaymentDetailsDrawerLayout({
               label="تاریخ"
               value={dayjs(date).format("YYYY/MM/DD")}
             />
-            {/* <DetailItemComponent label="ثبت کننده" value={submitterName} /> */}
+            <DetailItemComponent label="ثبت کننده" value={submitterName} />
             <DetailItemComponent label="پرداخت کننده" value={payerName} />
             <DetailItemComponent label="دریافت کننده" value={receiverName} />
             <DetailItemComponent
@@ -92,42 +90,28 @@ export default function PaymentDetailsDrawerLayout({
               <p className="text-body text-sm">{description}</p>
             </div>
           )}
-          <div className="mt-4 w-full">
-            <h5 className="text-body">وضعیت تاییدیه</h5>
-            <ul className="mt-4 flex w-full flex-col gap-4">
-              {approvals.map((approval) => (
-                <ApprovalItemComponent key={approval.id} approval={approval} />
-              ))}
-            </ul>
-          </div>
-          {status === "pending" &&
-            userKarboomRoles.includes("partner") &&
-            !approvals.find(
-              (approval) =>
-                approval.user.id == loggedInUserId &&
-                approval.status !== "pending",
-            ) && (
-              <div className="flex w-full items-center gap-4 py-2">
-                <Button
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  onClick={onReject}
-                  fullWidth
-                >
-                  رد
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="success"
-                  size="small"
-                  onClick={handleApprove}
-                  fullWidth
-                >
-                  تایید
-                </Button>
-              </div>
-            )}
+          {status === "pending" && receiverId == loggedInUserId && (
+            <div className="flex w-full items-center gap-4 py-2">
+              <Button
+                variant="outlined"
+                color="error"
+                size="small"
+                onClick={onReject}
+                fullWidth
+              >
+                رد
+              </Button>
+              <Button
+                variant="outlined"
+                color="success"
+                size="small"
+                onClick={handleApprove}
+                fullWidth
+              >
+                تایید
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </SwipeableDrawer>

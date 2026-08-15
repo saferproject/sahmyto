@@ -17,7 +17,7 @@ export default function PaymentsListPage() {
 
   const selectedPaymentId = usePaymentListStore((state) => state.id);
 
-  const { mutate: rejectPayment } = useRejectPaymentEndpoint();
+  const { mutate: rejectPayment, isPending: rejectingPayment } = useRejectPaymentEndpoint();
 
   const handleOpenPaymentFormDrawer = () => {
     setPaymentFormDrawerOpen(true);
@@ -62,6 +62,7 @@ export default function PaymentsListPage() {
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        isLoading={rejectingPayment}
         title="دریافتی"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}

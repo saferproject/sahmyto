@@ -1,1 +1,1 @@
-export type KarboomRoles = "partner" | "driver" | "supervisor"; 
+export type KarboomRoles = "partner" | "driver" | "supervisor" | "owner";

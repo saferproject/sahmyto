@@ -16,24 +16,32 @@ import ListFooterLayout from "../_layouts/list-footer-layout";
 import ListHeaderLayout from "../_layouts/list-header-layout";
 import { FormStates } from "../../_types/form-states";
 import Partner from "../_interfaces/partner";
+import { useShallow } from "zustand/react/shallow";
 
 export default function PartnersListPage() {
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const karboom_id = useKarboomsStore((state) => state.id);
+  const { karboomId, karboomRoles } = useKarboomsStore(
+    useShallow(({ id: karboomId, roles: karboomRoles }) => ({
+      karboomId,
+      karboomRoles,
+    })),
+  );
 
   useEffect(() => {
-    if (!karboom_id) {
+    if (!karboomId) {
       enqueueSnackbar({
         variant: "warning",
         message: "کاربومی انتخاب نشده است",
       });
       router.replace("/dashboard/karbooms");
     }
-  }, [karboom_id, enqueueSnackbar, router]);
+  }, [karboomId, enqueueSnackbar, router]);
 
-  const { data, isLoading, isError } = useGetPartnersEndpoint({ karboom_id });
+  const { data, isLoading, isError } = useGetPartnersEndpoint({
+    karboom_id: karboomId,
+  });
 
   const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] =
     useState<boolean>(false);
@@ -41,15 +49,27 @@ export default function PartnersListPage() {
   const [selectedPartner, setSelectedPartner] = useState<Partner>();
 
   const handleOpenPartnerForm = () => {
-    setPartnerFormState("ADD");
-    setSelectedPartner(undefined);
-    setPartnerFormDrawerOpen(true);
+    if (karboomRoles.includes("owner")) {
+      setPartnerFormState("ADD");
+      setSelectedPartner(undefined);
+      setPartnerFormDrawerOpen(true);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم می تواند مالک دعوت کند",
+      });
   };
 
   const handleEditPartner = (partner: Partner) => {
-    setPartnerFormState("EDIT");
-    setSelectedPartner(partner);
-    setPartnerFormDrawerOpen(true);
+    if (karboomRoles.includes("owner")) {
+      setPartnerFormState("EDIT");
+      setSelectedPartner(partner);
+      setPartnerFormDrawerOpen(true);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم می تواند مالک ویرایش کند",
+      });
   };
 
   const handleClosePartnerForm = () => {

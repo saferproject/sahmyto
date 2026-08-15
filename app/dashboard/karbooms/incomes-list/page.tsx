@@ -27,7 +27,7 @@ export default function IncomesListPage() {
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
 
-  const { mutate } = useRejectIncome();
+  const { mutate: rejectIncome, isPending: rejectingIncome } = useRejectIncome();
 
   const handleOpenIncomeDtailsDrawer = () => {
     setIncomeDetailsDrawerOpen(true);
@@ -60,12 +60,13 @@ export default function IncomesListPage() {
 
   const handleSubmitReject = (data: RejectFormType) => {
     if (selectedIncome)
-      mutate(
+      rejectIncome(
         { ...data, incomeId: selectedIncome },
         {
           onSuccess: () => {
             setSelectedIncome(null);
             handleCloseRejectDrawer();
+            handleCloseIncomeDtailsDrawer();
           },
         },
       );
@@ -87,6 +88,7 @@ export default function IncomesListPage() {
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        isLoading={rejectingIncome}
         title="درآمد"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}

@@ -27,7 +27,7 @@ export default function ExpensesListPage() {
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
 
-  const { mutate } = useRejectExpense();
+  const { mutate: rejectExpense, isPending: rejectingExpense } = useRejectExpense();
 
   const handleOpenExpenseDtailsDrawer = () => {
     setExpenseDetailsDrawerOpen(true);
@@ -52,7 +52,7 @@ export default function ExpensesListPage() {
 
   const handleSubmitReject = (data: RejectFormType) => {
     if (selectedExpense)
-      mutate(
+      rejectExpense(
         { ...data, expenseId: selectedExpense },
         {
           onSuccess: () => {
@@ -88,6 +88,7 @@ export default function ExpensesListPage() {
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        isLoading={rejectingExpense}
         title="هزینه"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}

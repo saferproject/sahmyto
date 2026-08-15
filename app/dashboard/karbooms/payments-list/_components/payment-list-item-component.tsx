@@ -21,7 +21,17 @@ export default function PaymentListItemComponent({
   onShowDetails,
   onReject,
 }: PaymentListItemProps) {
-  const { id, approvals, total_price, date, type, status } = payment;
+  const {
+    id,
+    approvals,
+    total_price,
+    date,
+    type,
+    status,
+    user: { first_name: submitterName },
+    payer: { full_name: payerName },
+    receiver: { id: receiverId, full_name: receiverName },
+  } = payment;
 
   const loggedInUserId = useUserInfoStore((state) => state.id);
 
@@ -68,17 +78,15 @@ export default function PaymentListItemComponent({
         </div>
         <div className="bg-secondary-lightest z-10 flex flex-col items-center gap-2 p-1">
           <p className="text-secondary text-xs">پرداخت کننده</p>
-          <p className="text-body text-sm font-semibold">{"میکائیل نوبخت"}</p>
+          <p className="text-body text-sm font-semibold">{payerName}</p>
         </div>
         <div className="bg-secondary-lightest z-10 flex flex-col items-center gap-2 p-1">
           <p className="text-secondary text-xs">دریافت کننده</p>
-          <p className="text-body text-sm font-semibold">
-            {"امیر الله دادیان"}
-          </p>
+          <p className="text-body text-sm font-semibold">{receiverName}</p>
         </div>
       </div>
       <div className="flex w-full flex-col gap-2 px-4 py-2">
-        <DetailItemComponent label="ثبت کننده" value={"میکائیل نوبخت"} />
+        <DetailItemComponent label="ثبت کننده" value={submitterName} />
         <DetailItemComponent
           label="تاریخ"
           value={dayjs(date).format("YYYY/MM/DD")}
@@ -98,33 +106,28 @@ export default function PaymentListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" &&
-        userKarboomRoles.includes("partner") &&
-        !approvals.find(
-          (approval) =>
-            approval.user.id == loggedInUserId && approval.status !== "pending",
-        ) && (
-          <div className="flex items-center gap-4 px-4 py-2">
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={handleReject}
-              fullWidth
-            >
-              رد
-            </Button>
-            <Button
-              variant="outlined"
-              color="success"
-              size="small"
-              onClick={handleApprove}
-              fullWidth
-            >
-              تایید
-            </Button>
-          </div>
-        )}
+      {status === "pending" && receiverId == loggedInUserId && (
+        <div className="flex items-center gap-4 px-4 py-2">
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={handleReject}
+            fullWidth
+          >
+            رد
+          </Button>
+          <Button
+            variant="outlined"
+            color="success"
+            size="small"
+            onClick={handleApprove}
+            fullWidth
+          >
+            تایید
+          </Button>
+        </div>
+      )}
     </motion.li>
   );
 }
