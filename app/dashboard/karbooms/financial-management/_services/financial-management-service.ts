@@ -35,9 +35,12 @@ export const financialManagmentService = {
       signal,
     }),
   getSettlementData: (monthId: number, signal?: AbortSignal) =>
-    fetchWithAuth<SettlementData>(`karboom/financials/settlement/${monthId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      signal,
-    }),
+    fetchWithAuth<SettlementData>(
+      `karboom/financials/settlement/${monthId}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        signal,
+      },
+    ),
 };

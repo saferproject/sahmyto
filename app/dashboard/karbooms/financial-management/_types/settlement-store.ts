@@ -1,4 +1,4 @@
-import { SettlementData } from "./settlement-data";
 import { SettlementStoreActions } from "./settlement-store-actions";
+import { SettlementStoreData } from "./settlement-store-data";
 
-export type SettlementStore = SettlementData & SettlementStoreActions;
+export type SettlementStore = SettlementStoreData & SettlementStoreActions;

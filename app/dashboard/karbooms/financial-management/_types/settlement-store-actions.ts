@@ -1,6 +1,6 @@
-import { SettlementData } from "./settlement-data";
+import { SettlementStoreData } from "./settlement-store-data";
 
 export type SettlementStoreActions = {
-  setSettlement: (settlement: SettlementData) => void;
+  setSettlement: (settlement: SettlementStoreData) => void;
   clearSettlement: () => void;
 };

@@ -34,6 +34,7 @@ import createFinancialMonthSummary from "./_utilities/create-financial-month-sum
 import { useShallow } from "zustand/react/shallow";
 import { useSettlementStore } from "./_providers/settlement-store-provider";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import { SettlementStoreData } from "./_types/settlement-store-data";
 
 export default function FinancialManagementPage() {
   const router = useRouter();
@@ -82,6 +83,7 @@ export default function FinancialManagementPage() {
     selectedMonth.id,
     !!selectedMonth.id && selectedMonth.status === "open",
   );
+
   const {
     data: settlementData,
     isPending: gettingSettlementData,
@@ -94,12 +96,15 @@ export default function FinancialManagementPage() {
   const startPendingConfirmation = useConfirmationDialogStore(
     (state) => state.startPending,
   );
+
   const stopPendingConfirmation = useConfirmationDialogStore(
     (state) => state.stopPending,
   );
+
   const setConfirmationDialog = useConfirmationDialogStore(
     (state) => state.setDialog,
   );
+
   const closeConfirmationDialog = useConfirmationDialogStore(
     (state) => state.closeDialog,
   );
@@ -155,6 +160,11 @@ export default function FinancialManagementPage() {
     setSettlementDetailsDrawerOpen(false);
   };
 
+  const handleMemberClick = (member: SettlementStoreData) => {
+    setSettlement(member);
+    handleOpenSettlementDetailDrawer();
+  };
+
   return (
     <>
       <ListHeaderLayout title="مدیریت ماه مالی" />
@@ -185,7 +195,7 @@ export default function FinancialManagementPage() {
             variant="contained"
             onClick={handleNavigateToDriversSalary}
             sx={{ marginTop: "16px" }}
-            disabled={!karboomRoles.includes('owner')}
+            disabled={!karboomRoles.includes("owner")}
           >
             بررسی حقوق رانندگان
           </Button>
@@ -205,43 +215,47 @@ export default function FinancialManagementPage() {
             balance={summary.totalIncome - summary.totalExpense}
           />
           <ul className="flex w-full flex-col gap-4">
-            <li
-              className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2"
-              onClick={handleOpenSettlementDetailDrawer}
-            >
-              <div className="flex items-center gap-2">
-                <div className="relative text-green-500">
-                  <Money size="24" variant="Broken" />
-                  <ArrowCircleUp2
-                    size="16"
-                    className="absolute -right-5 bottom-0"
-                  />
+            {settlementData?.data.members.map((member) => (
+              <li
+                key={member.id}
+                className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2"
+                onClick={() => handleMemberClick(member)}
+              >
+                <div className="flex items-center gap-2">
+                  <div
+                    className={
+                      "relative " +
+                      (member.status === "creditor"
+                        ? "text-green-500"
+                        : "text-red-500")
+                    }
+                  >
+                    <Money size="24" variant="Broken" />
+                    {member.status === "creditor" ? (
+                      <ArrowCircleUp2
+                        size="16"
+                        className="absolute -right-5 bottom-0"
+                      />
+                    ) : (
+                      <ArrowCircleDown2
+                        size="16"
+                        className="absolute -right-5 bottom-0"
+                      />
+                    )}
+                  </div>
+                  <p className="text-body text-sm">{member.name}</p>
                 </div>
-                <p className="text-body text-sm">{"امیر الله دادیان"}</p>
-              </div>
-              <div className="flex items-center gap-1">
-                <p>{formatNumber(123_456_789)}</p>
-                <Add size="20" className="text-green-500" />
-                <ArrowDown2 size="16" className="text-body" />
-              </div>
-            </li>
-            <li className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2">
-              <div className="flex items-center gap-2">
-                <div className="relative text-red-500">
-                  <Money size="24" variant="Broken" />
-                  <ArrowCircleDown2
-                    size="16"
-                    className="absolute -right-5 bottom-0"
-                  />
+                <div className="flex items-center gap-1">
+                  <p>{formatNumber(member.total)}</p>
+                  {member.status === "creditor" ? (
+                    <Add size="20" className="text-green-500" />
+                  ) : (
+                    <Minus size="20" className="text-red-500" />
+                  )}
+                  <ArrowDown2 size="16" className="text-body" />
                 </div>
-                <p className="text-body text-sm">{"امیر الله دادیان"}</p>
-              </div>
-              <div className="flex items-center gap-1">
-                <p>{formatNumber(987_654_321)}</p>
-                <Minus size="20" className="text-red-500" />
-                <ArrowDown2 size="16" className="text-body" />
-              </div>
-            </li>
+              </li>
+            ))}
           </ul>
         </QueryState>
       )}
