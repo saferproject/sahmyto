@@ -19,7 +19,12 @@ export type SettlementMember = {
   is_driver: boolean;
 };
 
-type SettlementGroup<T> = {
+export type SettlementGroupResponse<T> = {
+  [index: number]: T;
+  total: number;
+};
+
+export type SettlementGroup<T> = {
   total: number;
   items: T[];
 };
@@ -29,7 +34,7 @@ type SettlementBalanceItem = {
   amount: number;
 };
 
-type SettlementExpense = Pick<
+type SettlementExpenseResponse = Pick<
   Expense,
   "id" | "unit_price" | "wage_cost" | "type" | "description" | "date"
 > & {
@@ -39,16 +44,28 @@ type SettlementExpense = Pick<
   payer: SettlementParticipant;
 };
 
-type SettlementExpenseCategory = {
+type SettlementExpense = SettlementExpenseResponse & {
+  category_name: ExpenseCategory["name"];
+};
+
+export type SettlementExpenseCategoryResponse = {
   category: Pick<ExpenseCategory, "id" | "name" | "type" | "status">;
-  expenses: SettlementExpense[];
+  expenses: SettlementExpenseResponse[];
   total: number;
+};
+
+export type SettlementExpenseCategory = Omit<
+  SettlementExpenseCategoryResponse,
+  "expenses"
+> & {
+  expenses: SettlementExpense[];
 };
 
 type SettlementPayment = Pick<
   Payment,
   "id" | "total_price" | "type" | "description"
 > & {
+  created_at: string;
   payer: SettlementParticipant;
   receiver: SettlementParticipant;
   registered_by: SettlementParticipant;
@@ -91,6 +108,35 @@ export type SettlementBreakdown = {
   service_fee: SettlementGroup<unknown>;
 };
 
+export type SettlementBreakdownResponse = {
+  previous_settlement: SettlementGroupResponse<unknown>;
+  profit_loss: SettlementGroupResponse<SettlementBalanceItem>;
+  expenses_issued: SettlementGroupResponse<SettlementExpenseCategoryResponse>;
+  expenses_paid: SettlementGroupResponse<SettlementExpenseCategoryResponse>;
+  payments_received: SettlementGroupResponse<SettlementPayment>;
+  payments_made: SettlementGroupResponse<SettlementPayment>;
+  payments_registered: SettlementGroupResponse<SettlementPayment>;
+  incomes_received: SettlementGroupResponse<SettlementIncome>;
+  salary: SettlementGroupResponse<SettlementSalary>;
+  service_fee: SettlementGroupResponse<unknown>;
+};
+
+export type SettlementMemberData = SettlementMember & {
+  id: number;
+  opening_balance: number;
+  share: number;
+  salary: number;
+  service_fee: number;
+  income_held: number;
+  expense_credit: number;
+  payments_in: number;
+  payments_out: number;
+  balance: number;
+  total: number;
+  status: "creditor" | "debtor" | "settled";
+  breakdown: SettlementBreakdown;
+};
+
 export type SettlementData = {
   total_income: Karboom["income"];
   total_expense: Karboom["expense"];
@@ -103,21 +149,13 @@ export type SettlementData = {
   net: number;
   total_credit: number;
   total_debt: number;
+  members: SettlementMemberData[];
+};
+
+export type SettlementDataResponse = Omit<SettlementData, "members"> & {
   members: Array<
-    SettlementMember & {
-      id: number;
-      opening_balance: number;
-      share: number;
-      salary: number;
-      service_fee: number;
-      income_held: number;
-      expense_credit: number;
-      payments_in: number;
-      payments_out: number;
-      balance: number;
-      total: number;
-      status: "creditor" | "debtor" | "settled";
-      breakdown: SettlementBreakdown;
+    Omit<SettlementMemberData, "breakdown"> & {
+      breakdown: SettlementBreakdownResponse;
     }
   >;
 };

@@ -14,7 +14,7 @@ export default function MonthBalanceComponent({ balance }: MonthBalanceProps) {
         <p>تراز دوره</p>
       </div>
       <div className="flex items-center gap-4">
-        <p>{formatNumber(balance)}</p>
+        <p dir="ltr">{formatNumber(balance)}</p>
         <Image
           src="/images/toman-secondary.webp"
           alt="تومان"

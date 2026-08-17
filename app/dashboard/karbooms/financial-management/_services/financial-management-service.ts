@@ -1,7 +1,7 @@
 import { fetchWithAuth } from "@/app/proxy";
 import { FinancialMonth } from "../_types/financial-month";
 import { FinancialMonthData } from "../_types/financial-month-data";
-import { SettlementData } from "../_types/settlement-data";
+import type { SettlementDataResponse } from "../_types/settlement-data";
 
 export const financialManagmentService = {
   getFinancialManagmentMonths: (karboomId: number, signal?: AbortSignal) =>
@@ -35,7 +35,7 @@ export const financialManagmentService = {
       signal,
     }),
   getSettlementData: (monthId: number, signal?: AbortSignal) =>
-    fetchWithAuth<SettlementData>(
+    fetchWithAuth<SettlementDataResponse>(
       `karboom/financials/settlement/${monthId}`,
       {
         method: "GET",

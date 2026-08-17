@@ -211,9 +211,7 @@ export default function FinancialManagementPage() {
             onOpen={handleOpenSettlementDetailDrawer}
             onClose={handleCloseSettlementDetailDrawer}
           />
-          <MonthBalanceComponent
-            balance={summary.totalIncome - summary.totalExpense}
-          />
+          <MonthBalanceComponent balance={settlementData?.data.net ?? 0} />
           <ul className="flex w-full flex-col gap-4">
             {settlementData?.data.members.map((member) => (
               <li
