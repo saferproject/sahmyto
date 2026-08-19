@@ -45,6 +45,11 @@ export default function KarboomListItemComponent(
     router.push("/dashboard/karbooms/payments-list");
   };
 
+  const handleNavigateToActivitiesList = () => {
+    setActiveKarboom(karboom);
+    router.push("/dashboard/karbooms/activities-list");
+  };
+
   return (
     <motion.li
       initial={{ scale: 0.7, opacity: 0 }}
@@ -117,9 +122,9 @@ export default function KarboomListItemComponent(
             variant="outlined"
             color="secondary"
             className="text-body!"
-            // onClick={onCreateMaintenance}
+            onClick={handleNavigateToActivitiesList}
           >
-            تعمیرات
+            فعالیت ها
           </Button>
           <Button
             variant="outlined"

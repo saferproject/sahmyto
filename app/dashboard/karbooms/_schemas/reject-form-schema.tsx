@@ -1,7 +1,7 @@
 import { z } from "@/app/_schemas/zod-mini";
 
 const RejectFormSchema = z.object({
-  reject_reason: z.nullable(z.string()),
+  reject_reason: z.string(),
 });
 
 export default RejectFormSchema;

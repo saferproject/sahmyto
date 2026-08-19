@@ -30,6 +30,7 @@ export default function SettlementDetailsDrawerLayout({
     expenses_paid,
     payments_received,
     payments_made,
+    salaries,
   } = useSettlementStore(
     useShallow(
       ({
@@ -49,6 +50,7 @@ export default function SettlementDetailsDrawerLayout({
           expenses_paid,
           payments_received,
           payments_made,
+          salary: salaries,
         },
       }) => ({
         clearSettlement,
@@ -66,6 +68,7 @@ export default function SettlementDetailsDrawerLayout({
         expenses_paid,
         payments_received,
         payments_made,
+        salaries,
       }),
     ),
   );
@@ -81,7 +84,7 @@ export default function SettlementDetailsDrawerLayout({
       <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
         {/* NOTE Incomes */}
         <li className="relative w-full">
-          <div className="border-secondary-lightest flex w-full items-center justify-between rounded-2xl border px-4 py-2">
+          <div className="border-secondary-lightest flex w-full items-center justify-between rounded-2xl border p-4">
             <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <ArrowDown2 size="16" />
@@ -131,7 +134,7 @@ export default function SettlementDetailsDrawerLayout({
         </li>
         {/* NOTE Expenses */}
         <li className="relative w-full">
-          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border px-4 py-2">
+          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border p-4">
             <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <ArrowDown2 size="16" />
@@ -181,7 +184,7 @@ export default function SettlementDetailsDrawerLayout({
         </li>
         {/* NOTE Received */}
         <li className="relative w-full">
-          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border px-4 py-2">
+          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border p-4">
             <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <ArrowDown2 size="16" />
@@ -229,7 +232,7 @@ export default function SettlementDetailsDrawerLayout({
         </li>
         {/* NOTE Paid */}
         <li className="relative w-full">
-          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border px-4 py-2">
+          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border p-4">
             <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <ArrowDown2 size="16" />
@@ -276,27 +279,55 @@ export default function SettlementDetailsDrawerLayout({
           </ul>
         </li>
         {/* NOTE Salary */}
-        <li className="border-secondary-lightest relative flex w-full items-center justify-between rounded-2xl border px-4 py-2">
-          <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
-          <div className="z-10 flex items-center gap-1 bg-white px-1">
-            <ArrowDown2 size="16" />
-            <p className="text-body">کل حقوق</p>
+        <li className="relative w-full">
+          <div className="border-secondary-lightest flex items-center justify-between rounded-2xl border p-4">
+            <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
+            <div className="z-10 flex items-center gap-1 bg-white px-1">
+              <ArrowDown2 size="16" />
+              <p className="text-body">کل حقوق</p>
+            </div>
+            <div className="z-10 flex items-center gap-1 bg-white px-1">
+              <p className="text-body">
+                {formatNumber(Math.abs(salary + service_fee))}
+              </p>
+              <Add size="16" className="text-green-500" />
+              <Image
+                src="/images/toman-secondary.webp"
+                alt="Toman"
+                width={16}
+                height={16}
+              />
+            </div>
           </div>
-          <div className="z-10 flex items-center gap-1 bg-white px-1">
-            <p className="text-body">
-              {formatNumber(Math.abs(salary + service_fee))}
-            </p>
-            <Add size="16" className="text-green-500" />
-            <Image
-              src="/images/toman-secondary.webp"
-              alt="Toman"
-              width={16}
-              height={16}
-            />
-          </div>
+          <ul className="mt-2 flex flex-col gap-2">
+            {salaries.items.map(({ id, amount, effect_amount, type }) => (
+              <li key={id} className="relative w-full">
+                <div className="bg-secondary-lightest border-secondary-lighter relative flex w-full items-center justify-between overflow-hidden rounded-2xl border p-4">
+                  <div className="bg-secondary-lighter absolute -top-16 -right-24 h-96 w-96 rounded-full"></div>
+                  <div className="flex flex-col">
+                    <div className="z-10 flex items-center gap-2">
+                      <p dir="ltr" className="text-body text-lg font-semibold">
+                        {formatNumber(effect_amount)}
+                      </p>
+                      <Image
+                        src="/images/toman-primary.webp"
+                        alt="تومان"
+                        width={24}
+                        height={24}
+                      />
+                    </div>
+                    <p className="text-body z-10 text-xs">{formatNumber(amount)}</p>
+                  </div>
+                  <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
+                    {type === "salary" ? "حقوق" : type === 'bonus' ? "پاداش" : "جریمه"}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
         </li>
         {/* NOTE Profit or Loss */}
-        <li className="border-secondary-lightest relative flex w-full items-center justify-between rounded-2xl border px-4 py-2">
+        <li className="border-secondary-lightest relative flex w-full items-center justify-between rounded-2xl border p-4">
           <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
           <div className="z-10 flex items-center gap-1 bg-white px-1">
             <div className="size-4"></div>
@@ -318,7 +349,7 @@ export default function SettlementDetailsDrawerLayout({
           </div>
         </li>
         {/* NOTE Total */}
-        <li className="border-secondary-lightest relative flex w-full items-center justify-between rounded-2xl border px-4 py-2 text-lg font-bold">
+        <li className="border-secondary-lightest relative flex w-full items-center justify-between rounded-2xl border p-4 text-lg font-bold">
           <div className="border-secondary absolute w-8/10 border-b border-dashed"></div>
           <div className="z-10 flex items-center gap-1 bg-white px-1">
             <div className="size-4"></div>

@@ -16,6 +16,8 @@ import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-pr
 import { User, ArrowLeft2, Logout, Add } from "iconsax-reactjs";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
+import PartnerListDrawerComponent from "../karbooms/_components/partner-list-drawer-component";
+import DriverListDrawerComponent from "../karbooms/_components/driver-list-drawer-component";
 
 const KarboomFormDrawerComponent = dynamic(
   () => import("../karbooms/_components/karboom-form-drawer-component"),
@@ -39,12 +41,16 @@ export default function DashboardHeaderDrawerComponent({
   const { enqueueSnackbar } = useSnackbar();
 
   const [isKarboomFormDrawerOpen, setkarboomFormDrawerOpen] = useState(false);
+  const [isPartnerListDrawerOpen, setPartnerListDrawerOpen] = useState(false);
   const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] = useState(false);
+  const [isDriverListDrawerOpen, setDriverListDrawerOpen] = useState(false);
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] = useState(false);
   const [loadedDrawers, setLoadedDrawers] = useState({
     karboom: false,
-    partner: false,
-    driver: false,
+    partnerList: false,
+    partnerForm: false,
+    driverList: false,
+    driverForm: false,
   });
 
   const avatar = useUserInfoStore((state) => state.avatar);
@@ -110,8 +116,22 @@ export default function DashboardHeaderDrawerComponent({
     setkarboomFormDrawerOpen(false);
   };
 
+  const handleOpenPartnerListDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, partnerList: true }));
+    setPartnerListDrawerOpen(true);
+  };
+
+  const handleClosePartnerListDrawer = () => {
+    setPartnerListDrawerOpen(false);
+  };
+
+  const handleSkipPartnerListDrawer = () => {
+    setPartnerListDrawerOpen(false);
+    handleOpenDriverListDrawer();
+  };
+
   const handleOpenPartnerFormDrawer = () => {
-    setLoadedDrawers((current) => ({ ...current, partner: true }));
+    setLoadedDrawers((current) => ({ ...current, partnerForm: true }));
     setPartnerFormDrawerOpen(true);
   };
 
@@ -119,8 +139,17 @@ export default function DashboardHeaderDrawerComponent({
     setPartnerFormDrawerOpen(false);
   };
 
+  const handleOpenDriverListDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, driverList: true }));
+    setDriverListDrawerOpen(true);
+  };
+
+  const handleCloseDriverListDrawer = () => {
+    setDriverListDrawerOpen(false);
+  };
+
   const handleOpenDriverFormDrawer = () => {
-    setLoadedDrawers((current) => ({ ...current, driver: true }));
+    setLoadedDrawers((current) => ({ ...current, driverForm: true }));
     setDriverFormDrawerOpen(true);
   };
 
@@ -130,17 +159,7 @@ export default function DashboardHeaderDrawerComponent({
 
   const handleKarboomFormSuccess = () => {
     handleCloseKarboomFormDrawer();
-    handleOpenPartnerFormDrawer();
-  };
-
-  const handlePartnerFormSuccess = () => {
-    handleClosePartnerFormDrawer();
-    handleOpenDriverFormDrawer();
-  };
-
-  const handleDriverFormSuccess = () => {
-    handleCloseDriverFormDrawer();
-    handleNavigation("/dashboard/karbooms", false);
+    handleOpenPartnerListDrawer();
   };
 
   return (
@@ -171,22 +190,19 @@ export default function DashboardHeaderDrawerComponent({
           onSuccess={handleKarboomFormSuccess}
         />
       )}
-      {loadedDrawers.partner && (
-        <PartnerFormDrawerComponent
-          formState="ADD"
-          isOpen={isPartnerFormDrawerOpen}
-          onOpen={handleOpenPartnerFormDrawer}
-          onClose={handleClosePartnerFormDrawer}
-          onSuccess={handlePartnerFormSuccess}
+      {loadedDrawers.partnerList && (
+        <PartnerListDrawerComponent
+          isOpen={isPartnerListDrawerOpen}
+          onOpen={handleOpenPartnerListDrawer}
+          onClose={handleClosePartnerListDrawer}
+          onSkip={handleSkipPartnerListDrawer}
         />
       )}
-      {loadedDrawers.driver && (
-        <DriverFormDrawerComponent
-          formState="ADD"
-          isOpen={isDriverFormDrawerOpen}
-          onOpen={handleOpenDriverFormDrawer}
-          onClose={handleCloseDriverFormDrawer}
-          onSuccess={handleDriverFormSuccess}
+      {loadedDrawers.driverList && (
+        <DriverListDrawerComponent
+          isOpen={isDriverListDrawerOpen}
+          onOpen={handleOpenDriverListDrawer}
+          onClose={handleCloseDriverListDrawer}
         />
       )}
       <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-[50px] bg-white p-8 shadow-lg">

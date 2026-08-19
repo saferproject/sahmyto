@@ -216,7 +216,7 @@ export default function FinancialManagementPage() {
             {settlementData?.data.members.map((member) => (
               <li
                 key={member.id}
-                className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-2"
+                className="border-secondary-light flex items-center justify-between rounded-2xl border px-6 py-4"
                 onClick={() => handleMemberClick(member)}
               >
                 <div className="flex items-center gap-2">

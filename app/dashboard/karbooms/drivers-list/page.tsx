@@ -1,8 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useSnackbar } from "notistack";
 
@@ -21,7 +20,6 @@ import type { Driver } from "./_types/driver";
 import { useShallow } from "zustand/react/shallow";
 
 export default function DriverListPage() {
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const { karboomId, karboomRoles } = useKarboomsStore(
@@ -30,16 +28,6 @@ export default function DriverListPage() {
       karboomRoles,
     })),
   );
-
-  useEffect(() => {
-    if (!karboomId) {
-      enqueueSnackbar({
-        variant: "warning",
-        message: "کاربومی انتخاب نشده است",
-      });
-      router.replace("/dashboard/karbooms");
-    }
-  }, [karboomId, enqueueSnackbar, router]);
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);

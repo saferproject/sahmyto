@@ -3,7 +3,7 @@
 import { Button, IconButton, TextField } from "@mui/material";
 import { InfoCircle, Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import usePartnerForm from "../_hooks/use-partner-form";
 import useAddPartner from "../_hooks/use-add-partner-endpoint";
@@ -27,6 +27,9 @@ export default function PartnerFormComponent({
   onCancel,
   onSuccess,
 }: PartnerFormProps) {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
   const {
     register,
     control,
@@ -34,6 +37,7 @@ export default function PartnerFormComponent({
     handleSubmit,
     setError,
     setValues,
+    watch,
     formState: { errors },
   } = usePartnerForm();
 
@@ -65,12 +69,13 @@ export default function PartnerFormComponent({
   }, [formState, partner, setValues]);
 
   const handleIncrementCapital = () => {
-    if (share_capital !== undefined) {
-      if (share_capital < 5) setValue("share_capital", share_capital + 1);
-      else if (share_capital == 5) {
+    if (watch("share_capital") !== undefined) {
+      if (watch("share_capital") < 5)
+        setValue("share_capital", watch("share_capital") + 1);
+      else if (watch("share_capital") == 5) {
         setValue("share_capital", 6);
         setValue("share_decimal", 0);
-      } else if (share_capital == 6) {
+      } else if (watch("share_capital") == 6) {
         setValue("share_capital", 1);
         setValue("share_decimal", 0);
       }
@@ -78,9 +83,10 @@ export default function PartnerFormComponent({
   };
 
   const handleDecrementCapital = () => {
-    if (share_capital !== undefined) {
-      if (share_capital >= 1) setValue("share_capital", share_capital - 1);
-      else if (share_capital == 0) {
+    if (watch("share_capital") !== undefined) {
+      if (watch("share_capital") >= 1)
+        setValue("share_capital", watch("share_capital") - 1);
+      else if (watch("share_capital") == 0) {
         setValue("share_capital", 6);
         setValue("share_decimal", 0);
       }
@@ -89,29 +95,81 @@ export default function PartnerFormComponent({
 
   const handleIncrementDecimal = () => {
     if (
-      share_decimal !== undefined &&
-      share_capital !== undefined &&
-      share_capital < 6
+      watch("share_decimal") !== undefined &&
+      watch("share_capital") !== undefined &&
+      watch("share_capital") < 6
     ) {
-      if (share_decimal < 99) setValue("share_decimal", share_decimal + 1);
-      else if (share_capital !== undefined && share_capital <= 5) {
+      if (watch("share_decimal") < 99)
+        setValue("share_decimal", watch("share_decimal") + 1);
+      else if (
+        watch("share_capital") !== undefined &&
+        watch("share_capital") <= 5
+      ) {
         setValue("share_decimal", 0);
-        setValue("share_capital", share_capital + 1);
+        setValue("share_capital", watch("share_capital") + 1);
       }
+    }
+  };
+
+  const handleRapidIncrementDecimal = () => {
+    if (!timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        if (!intervalRef.current)
+          intervalRef.current = setInterval(() => {
+            handleIncrementDecimal();
+          }, 50);
+      }, 200);
+  };
+
+  const handleStopRapidIncrementDecimal = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
   };
 
   const handleDecrementDecimal = () => {
     if (
-      share_decimal !== undefined &&
-      share_capital !== undefined &&
-      share_capital >= 0
+      watch("share_decimal") !== undefined &&
+      watch("share_capital") !== undefined &&
+      watch("share_capital") >= 0
     ) {
-      if (share_decimal > 1) setValue("share_decimal", share_decimal - 1);
-      else if (share_capital !== undefined && share_capital >= 1) {
+      if (watch("share_decimal") > 1)
+        setValue("share_decimal", watch("share_decimal") - 1);
+      else if (
+        watch("share_capital") !== undefined &&
+        watch("share_capital") >= 1
+      ) {
         setValue("share_decimal", 99);
-        setValue("share_capital", share_capital - 1);
+        setValue("share_capital", watch("share_capital") - 1);
       }
+    }
+  };
+
+  const handleRapidDecrementDecimal = () => {
+    if (!timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        if (!intervalRef.current)
+          intervalRef.current = setInterval(() => {
+            handleDecrementDecimal();
+          }, 50);
+      }, 200);
+  };
+
+  const handleStopRapidDecrementDecimal = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
   };
 
@@ -171,6 +229,10 @@ export default function PartnerFormComponent({
     );
   };
 
+  const handlePreventContextMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <form
       className="flex w-full flex-col gap-4"
@@ -216,45 +278,50 @@ export default function PartnerFormComponent({
         <div className="flex flex-col gap-2">
           <button
             type="button"
-            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded"
+            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
             onClick={handleIncrementDecimal}
+            onTouchStart={handleRapidIncrementDecimal}
+            onTouchEnd={handleStopRapidIncrementDecimal}
+            onMouseDown={handleRapidIncrementDecimal}
+            onMouseUp={handleStopRapidIncrementDecimal}
+            onContextMenu={handlePreventContextMenu}
           >
             +
           </button>
           <button
             type="button"
-            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded"
+            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
             onClick={handleDecrementDecimal}
+            onTouchStart={handleRapidDecrementDecimal}
+            onTouchEnd={handleStopRapidDecrementDecimal}
+            onMouseDown={handleRapidDecrementDecimal}
+            onMouseUp={handleStopRapidDecrementDecimal}
+            onContextMenu={handlePreventContextMenu}
           >
             -
           </button>
         </div>
         <div className="relative">
-          <input
-            {...register("share_decimal")}
-            type="number"
+          <p
             id="share-decimal"
             className="text-body absolute -right-4 bottom-0 w-8 text-center"
-            placeholder="__"
-            min={0}
-            max={100}
-          />
+          >
+            {share_decimal}
+          </p>
           <span className="text-body text-5xl font-extralight">/</span>
-          <input
-            {...register("share_capital")}
-            type="number"
+          <p
             id="share-capital"
             className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
-            placeholder="_"
-            min={0}
-            max={6}
-          />
+          >
+            {share_capital}
+          </p>
         </div>
         <div className="flex flex-col gap-2">
           <button
             type="button"
             className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
             onClick={handleIncrementCapital}
+            onContextMenu={handlePreventContextMenu}
           >
             +
           </button>
@@ -262,6 +329,7 @@ export default function PartnerFormComponent({
             type="button"
             className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
             onClick={handleDecrementCapital}
+            onContextMenu={handlePreventContextMenu}
           >
             -
           </button>
