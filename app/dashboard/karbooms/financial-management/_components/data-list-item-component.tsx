@@ -1,7 +1,7 @@
-import formatNumber from "@/app/_utilities/format-numbers";
 import { ArrowDown2 } from "iconsax-reactjs";
-import Image from "next/image";
 import { useState } from "react";
+
+import PriceWithUnit from "@/app/_components/price-with-unit-component";
 
 type DataListItemProps = {
   title: string;
@@ -31,12 +31,10 @@ export default function DataListItemComponent({
       >
         <p>{title}</p>
         <div className="flex items-center gap-4">
-          <p>{formatNumber(value)}</p>
-          <Image
-            src="/images/toman-secondary.webp"
-            alt="تومان"
-            width={24}
-            height={24}
+          <PriceWithUnit
+            value={value}
+            variant="secondary"
+            valueClassName="text-body"
           />
           <ArrowDown2
             size="24"

@@ -1,15 +1,9 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { Driver } from "../_types/driver";
 
 export const DriversListService = {
   getDrivers: (karboomId: number, signal?: AbortSignal) =>
-    fetchWithAuth<Driver[]>(`karboom/drivers/${karboomId}?`, {
-      method: "GET",
-      signal,
-    }),
+    http.get<Driver[]>(`karboom/drivers/${karboomId}?`, { signal }),
   deleteDriver: (driverId: number) =>
-    fetchWithAuth<void>(`karboom/drivers/delete/${driverId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.delete<void>(`karboom/drivers/delete/${driverId}`),
 };

@@ -1,6 +1,7 @@
 import { Key, Lock } from "iconsax-reactjs";
 import dayjs from "dayjs";
-import { motion } from "motion/react";
+
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
 
 import { MonthListItemProps } from "../_types/month-list-item-props";
 
@@ -18,11 +19,8 @@ export default function MonthListItemComponent({
   const selectedMonthId = selectedMonth?.id ?? 0;
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
       className={
         "relative flex min-w-28 snap-start snap-always flex-col items-center gap-1 rounded-2xl px-4 py-2 transition-all " +
         (selectedMonthId === id
@@ -50,6 +48,6 @@ export default function MonthListItemComponent({
         {JALALI_CALENDAR_MONTHS_FA[formattedDate.month()]}
       </p>
       <p className="text-xs">{formattedDate.year()}</p>
-    </motion.li>
+    </AnimatedListItem>
   );
 }

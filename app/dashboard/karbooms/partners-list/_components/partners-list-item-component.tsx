@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "motion/react";
 import { Badge, Button, Menu, MenuItem } from "@mui/material";
 import { useState, type MouseEvent } from "react";
 import { ProfileCircle } from "iconsax-reactjs";
 
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
 import PartnersListItemProps from "../_interfaces/partners-list-item-props";
 import useDeletePartnerEndpoint from "../_hooks/use-delete-partner-endpoint";
 
@@ -54,11 +54,9 @@ export default function PartnersListItemComponent({
   };
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: status === "pending" ? 0.6 : 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
+      dimmed={status === "pending"}
       className="border-secondary-light w-full overflow-visible rounded-2xl border p-2"
     >
       <Badge
@@ -109,6 +107,6 @@ export default function PartnersListItemComponent({
           </Menu>
         </div>
       </Badge>
-    </motion.li>
+    </AnimatedListItem>
   );
 }

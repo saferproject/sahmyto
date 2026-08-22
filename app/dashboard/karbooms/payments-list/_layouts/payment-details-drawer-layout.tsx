@@ -1,7 +1,7 @@
 import { Button, SwipeableDrawer } from "@mui/material";
 import { PaymentDetailsDrawerProps } from "../_types/payment-details-drawer-props";
 import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
-import dayjs from "dayjs";
+import formatDate from "@/app/_utilities/format-dates";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { usePaymentListStore } from "../_providers/payments-list-store-provider";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
@@ -73,7 +73,7 @@ export default function PaymentDetailsDrawerLayout({
             <DetailItemComponent label="نوع" value={PAYMENT_TYPES_FA[type]} />
             <DetailItemComponent
               label="تاریخ"
-              value={dayjs(date).format("YYYY/MM/DD")}
+              value={formatDate(date)}
             />
             <DetailItemComponent label="ثبت کننده" value={submitterName} />
             <DetailItemComponent label="پرداخت کننده" value={payerName} />

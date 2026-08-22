@@ -7,7 +7,7 @@ import { IncomeDetailsDrawerProps } from "../_types/income-details-drawer-props"
 import { useIncomeListStore } from "../_providers/income-list-store-provider";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
-import dayjs from "dayjs";
+import formatDate from "@/app/_utilities/format-dates";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import DetailItemComponent from "../_components/income-detail-item-component";
@@ -67,11 +67,11 @@ export default function IncomeDetailsDrawerLayout({
         <DetailItemComponent label="نوع کارکرد" value={INCOME_TYPES_FA[type]} />
         <DetailItemComponent
           label="تاریخ / زمان شروع"
-          value={dayjs(started_at).format("YYYY/MM/DD")}
+          value={formatDate(started_at)}
         />
         <DetailItemComponent
           label="تاریخ / زمان پایان"
-          value={dayjs(ended_at).format("YYYY/MM/DD")}
+          value={formatDate(ended_at)}
         />
         <DetailItemComponent label="ثبت کننده" value={submitterName} />
         <DetailItemComponent label="دریافت کننده" value={receiverName} />

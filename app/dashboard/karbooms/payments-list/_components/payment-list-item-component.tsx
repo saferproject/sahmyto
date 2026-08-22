@@ -1,15 +1,14 @@
-import Image from "next/image";
-
-import { motion } from "motion/react";
 import { Button } from "@mui/material";
+
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
+import PriceWithUnit from "@/app/_components/price-with-unit-component";
+import formatDate from "@/app/_utilities/format-dates";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { PaymentListItemProps } from "../_types/payment-list-item-props";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { usePaymentListStore } from "../_providers/payments-list-store-provider";
 import useApprovePaymentEndpoint from "../_hooks/use-approve-payment-endpoint";
-import formatNumber from "@/app/_utilities/format-numbers";
-import dayjs from "dayjs";
 import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
 import { PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
@@ -58,22 +57,18 @@ export default function PaymentListItemComponent({
   };
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
       className="border-secondary-lighter w-full rounded-2xl border"
     >
       <div className="bg-secondary-lightest relative flex w-full items-center justify-between rounded-2xl p-4">
         <div className="border-body absolute top-1/2 left-1/2 w-8/10 -translate-x-1/2 border-t border-dashed"></div>
         <div className="absolute top-1/4 left-1/2 flex -translate-x-1/2 items-center gap-2">
-          <p className="text-body text-sm">{formatNumber(total_price)}</p>
-          <Image
-            src="/images/toman-secondary.webp"
-            alt="تومان"
-            width={16}
-            height={16}
+          <PriceWithUnit
+            value={total_price}
+            variant="secondary"
+            size={16}
+            valueClassName="text-body text-sm"
           />
         </div>
         <div className="bg-secondary-lightest z-10 flex flex-col items-center gap-2 p-1">
@@ -89,7 +84,7 @@ export default function PaymentListItemComponent({
         <DetailItemComponent label="ثبت کننده" value={submitterName} />
         <DetailItemComponent
           label="تاریخ"
-          value={dayjs(date).format("YYYY/MM/DD")}
+          value={formatDate(date)}
         />
         <DetailItemComponent label="روش واریز" value={PAYMENT_TYPES_FA[type]} />
         <DetailItemComponent
@@ -128,6 +123,6 @@ export default function PaymentListItemComponent({
           </Button>
         </div>
       )}
-    </motion.li>
+    </AnimatedListItem>
   );
 }

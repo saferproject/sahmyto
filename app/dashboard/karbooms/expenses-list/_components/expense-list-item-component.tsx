@@ -1,12 +1,10 @@
 "use client";
 
-import Image from "next/image";
-
-import dayjs from "dayjs";
 import { Button } from "@mui/material";
-import { motion } from "motion/react";
 
-import formatNumber from "@/app/_utilities/format-numbers";
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
+import PriceWithUnit from "@/app/_components/price-with-unit-component";
+import formatDate from "@/app/_utilities/format-dates";
 
 import { ExpenseListItemProps } from "../_types/expense-list-item-props";
 
@@ -55,26 +53,13 @@ export default function ExpenseListItemComponent({
   };
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
       className="border-secondary-lighter w-full rounded-2xl border"
     >
       <div className="bg-secondary-lightest border-secondary-lighter relative flex w-full items-center justify-between overflow-hidden rounded-2xl border p-4">
         <div className="bg-secondary-lighter absolute -top-16 -right-24 h-96 w-96 rounded-full"></div>
-        <div className="z-10 flex items-center gap-2">
-          <p className="text-body text-lg font-semibold">
-            {formatNumber(unit_price + wage_cost)}
-          </p>
-          <Image
-            src="/images/toman-primary.webp"
-            alt="تومان"
-            width={24}
-            height={24}
-          />
-        </div>
+        <PriceWithUnit value={unit_price + wage_cost} className="z-10" />
         <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
           {category}
         </p>
@@ -83,13 +68,13 @@ export default function ExpenseListItemComponent({
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">تاریخ هزینه</p>
           <p className="text-body text-sm font-semibold">
-            {dayjs(date).format("YYYY/MM/DD")}
+            {formatDate(date)}
           </p>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">تاریخ تسویه</p>
           <p className="text-body text-sm font-semibold">
-            {dayjs(date).format("YYYY/MM/DD")}
+            {formatDate(date)}
           </p>
         </div>
         <div className="flex flex-col gap-1">
@@ -160,6 +145,6 @@ export default function ExpenseListItemComponent({
             </Button>
           </div>
         )}
-    </motion.li>
+    </AnimatedListItem>
   );
 }

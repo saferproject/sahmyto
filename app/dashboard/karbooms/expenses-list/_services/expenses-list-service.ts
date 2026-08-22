@@ -1,23 +1,12 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { RejectExpenseBody } from "../_types/reject-expense-body";
 import { Expense } from "../../_types/expense";
 
 export const ExpensesListService = {
   getExpenses: (karboomId: number, signal?: AbortSignal) =>
-    fetchWithAuth<Expense[]>(`karboom/expense/karboom/${karboomId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      signal,
-    }),
+    http.get<Expense[]>(`karboom/expense/karboom/${karboomId}`, { signal }),
   approveExpense: (expenseId: number) =>
-    fetchWithAuth<undefined>(`karboom/expense/accept/${expenseId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/expense/accept/${expenseId}`),
   rejectExpense: (expenseId: number, body: RejectExpenseBody) =>
-    fetchWithAuth<undefined>(`karboom/expense/reject/${expenseId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
+    http.post<undefined>(`karboom/expense/reject/${expenseId}`, { body }),
 };

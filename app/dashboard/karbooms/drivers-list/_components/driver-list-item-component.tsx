@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useState, type MouseEvent } from "react";
 import { More, User } from "iconsax-reactjs";
-import { motion } from "motion/react";
 import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
 
 import { type DriverListItemProps } from "../_types/driver-list-item-props";
 
-import formatNumber from "@/app/_utilities/format-numbers";
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
+import PriceWithUnit from "@/app/_components/price-with-unit-component";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
@@ -66,11 +66,9 @@ export default function DriverListItemComponent({
   };
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: membership_status === "pending" ? 0.6 : 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
+      dimmed={membership_status === "pending"}
       className="relative overflow-visible"
     >
       <Badge
@@ -112,31 +110,19 @@ export default function DriverListItemComponent({
               <p className="text-body text-sm font-semibold">
                 دستمزد {DRIVER_PAYMENT_TYPES_FA[payment_type]}
               </p>
-              <div className="flex items-center gap-2">
-                <p className="text-body font-semibold">
-                  {formatNumber(fixed_amount)}
-                </p>
-                <Image
-                  src="/images/toman-primary.webp"
-                  alt="تومان"
-                  width={20}
-                  height={20}
-                />
-              </div>
+              <PriceWithUnit
+                value={fixed_amount}
+                size={20}
+                valueClassName="text-body font-semibold"
+              />
             </div>
             <div className="flex w-full items-center justify-between">
               <p className="text-body text-sm font-semibold">دستمزد سرویسی</p>
-              <div className="flex items-center gap-2">
-                <p className="text-body font-semibold">
-                  {formatNumber(service_amount)}
-                </p>
-                <Image
-                  src="/images/toman-primary.webp"
-                  alt="تومان"
-                  width={20}
-                  height={20}
-                />
-              </div>
+              <PriceWithUnit
+                value={service_amount}
+                size={20}
+                valueClassName="text-body font-semibold"
+              />
             </div>
             <div className="flex w-full items-center justify-between">
               <p className="text-body text-sm font-semibold">دستمزد درصدی</p>
@@ -167,6 +153,6 @@ export default function DriverListItemComponent({
           </Menu>
         </div>
       </Badge>
-    </motion.li>
+    </AnimatedListItem>
   );
 }

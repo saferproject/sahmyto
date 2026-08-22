@@ -6,7 +6,7 @@ import { useSettlementStore } from "../_providers/settlement-store-provider";
 import { SettlementDetailsDrawerProps } from "../_types/settlement-details-drawer-props";
 import { useShallow } from "zustand/react/shallow";
 import { Add, ArrowDown2, Minus } from "iconsax-reactjs";
-import dayjs from "dayjs";
+import formatDate from "@/app/_utilities/format-dates";
 import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
 
 export default function SettlementDetailsDrawerLayout({
@@ -120,7 +120,7 @@ export default function SettlementDetailsDrawerLayout({
                         />
                       </div>
                       <p className="text-body z-10 text-xs">
-                        {dayjs(started_at).format("YYYY/MM/DD")}
+                        {formatDate(started_at)}
                       </p>
                     </div>
                     <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
@@ -171,7 +171,7 @@ export default function SettlementDetailsDrawerLayout({
                         />
                       </div>
                       <p className="text-body z-10 text-xs">
-                        {dayjs(date).format("YYYY/MM/DD")}
+                        {formatDate(date)}
                       </p>
                     </div>
                     <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
@@ -222,7 +222,7 @@ export default function SettlementDetailsDrawerLayout({
                       <p className="text-body z-10 text-xs">{payerName}</p>
                     </div>
                     <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
-                      {dayjs(created_at).format("YYYY/MM/DD")}
+                      {formatDate(created_at)}
                     </p>
                   </div>
                 </li>
@@ -270,7 +270,7 @@ export default function SettlementDetailsDrawerLayout({
                       <p className="text-body z-10 text-xs">{payerName}</p>
                     </div>
                     <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
-                      {dayjs(created_at).format("YYYY/MM/DD")}
+                      {formatDate(created_at)}
                     </p>
                   </div>
                 </li>

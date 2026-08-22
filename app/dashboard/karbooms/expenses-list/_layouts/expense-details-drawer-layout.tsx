@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import formatDate from "@/app/_utilities/format-dates";
 
 import FormDrawerComponent from "@/app/_components/form-drawer-component";
 import { ExpenseDetailsDrawerProps } from "../_types/expense-details-drawer-props";
@@ -72,7 +72,7 @@ export default function ExpenseDetailsDrawerLayout({
         <DetailItemComponent label="دسته هزینه" value={category} />
         <DetailItemComponent
           label="تاریخ"
-          value={dayjs(date).format("YYYY/MM/DD")}
+          value={formatDate(date)}
         />
         <DetailItemComponent label="پرداخت کننده" value={receiverName ?? ""} />
         <DetailItemComponent label="ثبت کننده" value={submitterName ?? ""} />
