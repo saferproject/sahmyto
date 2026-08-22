@@ -1,6 +1,6 @@
 import useListQuery from "@/app/_hooks/use-list-query";
 
-import { financialManagmentService } from "../_services/financial-management-service";
+import { financialManagementService } from "../_services/financial-management-service";
 import normalizeSettlementData from "../_utilities/normalize-settlement-data";
 
 export default function useGetSettlementData(
@@ -10,7 +10,7 @@ export default function useGetSettlementData(
   return useListQuery(
     ["settlement-data", monthId],
     async (id, signal) => {
-      const response = await financialManagmentService.getSettlementData(
+      const response = await financialManagementService.getSettlementData(
         id,
         signal,
       );

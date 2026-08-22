@@ -18,16 +18,27 @@ export default function MonthListItemComponent({
   const formattedDate = dayjs(date);
   const selectedMonthId = selectedMonth?.id ?? 0;
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onSelectMonth(financialMonth);
+    }
+  };
+
   return (
     <AnimatedListItem
       index={index}
+      role="button"
+      tabIndex={0}
+      ariaPressed={selectedMonthId === id}
       className={
-        "relative flex min-w-28 snap-start snap-always flex-col items-center gap-1 rounded-2xl px-4 py-2 transition-all " +
+        "relative flex min-w-28 cursor-pointer snap-start snap-always flex-col items-center gap-1 rounded-2xl px-4 py-2 transition-all " +
         (selectedMonthId === id
           ? "bg-primary text-white shadow-lg"
           : "border-body text-body border border-dashed bg-white")
       }
       onClick={() => onSelectMonth(financialMonth)}
+      onKeyDown={handleKeyDown}
     >
       <span className="absolute -top-5 left-1/2 flex -translate-x-1/2 items-center justify-between rounded-full bg-white p-1 shadow-lg">
         {status === "open" ? (

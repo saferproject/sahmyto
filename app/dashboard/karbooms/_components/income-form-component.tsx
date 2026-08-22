@@ -51,7 +51,7 @@ export default function IncomeFormComponent({
     isSuccess: gotMembers,
   } = useGetMembersEndpoint(
     karboomId,
-    isOpen && karboomId == selectedKarboomId,
+    isOpen && karboomId === selectedKarboomId,
   );
 
   const { mutate: createIncome, isPending: creatingIncome } =

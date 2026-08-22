@@ -1,7 +1,7 @@
 import { http } from "@/app/_services/http";
 import { AddPaymentBody } from "../_types/add-payment-body";
 import { Payment } from "../_types/payment";
-import { RejectPaymentBody } from "../_types/rehect-payment-body";
+import { RejectPaymentBody } from "../_types/reject-payment-body";
 
 export const paymentsListService = {
   getPayments: async (karboomId: number, signal?: AbortSignal) => {

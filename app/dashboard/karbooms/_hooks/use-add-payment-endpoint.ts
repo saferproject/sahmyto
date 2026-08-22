@@ -4,7 +4,7 @@ import { paymentsListService } from "../payments-list/_services/payments-list-se
 
 export default function useAddPayment() {
   return useInvalidatingMutation({
-    mutationKey: ["app-payment"],
+    mutationKey: ["add-payment"],
     mutationFn: paymentsListService.addPayment,
     invalidateQueries: [["payments"]],
   });

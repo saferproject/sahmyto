@@ -3,7 +3,7 @@ import createQueryParams from "@/app/_utilities/create-query-params";
 import GetPartnersQueryParams from "../_interfaces/get-partners-query-params";
 import Partner from "../../_interfaces/partner";
 
-export const PartnersListService = {
+export const partnersListService = {
   getPartners: (
     { karboom_id, ...other }: GetPartnersQueryParams,
     signal?: AbortSignal,

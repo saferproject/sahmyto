@@ -18,7 +18,7 @@ export default function useCanApprove(
     userKarboomRoles.includes("partner") &&
     !approvals.some(
       (approval) =>
-        approval.user.id == loggedInUserId && approval.status !== "pending",
+        approval.user.id === loggedInUserId && approval.status !== "pending",
     )
   );
 }

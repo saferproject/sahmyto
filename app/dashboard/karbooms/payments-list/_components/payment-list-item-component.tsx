@@ -98,7 +98,7 @@ export default function PaymentListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" && receiverId == loggedInUserId && (
+      {status === "pending" && receiverId === loggedInUserId && (
         <div className="flex items-center gap-4 px-4 py-2">
           <Button
             variant="outlined"

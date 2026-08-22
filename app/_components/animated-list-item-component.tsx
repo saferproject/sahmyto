@@ -1,13 +1,17 @@
 "use client";
 
 import { motion } from "motion/react";
-import type { MouseEventHandler, ReactNode } from "react";
+import type { KeyboardEventHandler, MouseEventHandler, ReactNode } from "react";
 
 interface AnimatedListItemProps {
   index: number;
   className?: string;
   dimmed?: boolean;
   onClick?: MouseEventHandler<HTMLLIElement>;
+  role?: string;
+  tabIndex?: number;
+  ariaPressed?: boolean;
+  onKeyDown?: KeyboardEventHandler<HTMLLIElement>;
   children?: ReactNode;
 }
 
@@ -16,6 +20,10 @@ export default function AnimatedListItem({
   className,
   dimmed = false,
   onClick,
+  role,
+  tabIndex,
+  ariaPressed,
+  onKeyDown,
   children,
 }: AnimatedListItemProps) {
   return (
@@ -26,6 +34,10 @@ export default function AnimatedListItem({
       transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
       className={className}
       onClick={onClick}
+      role={role}
+      tabIndex={tabIndex}
+      aria-pressed={ariaPressed}
+      onKeyDown={onKeyDown}
     >
       {children}
     </motion.li>

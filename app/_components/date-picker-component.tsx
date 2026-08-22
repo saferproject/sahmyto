@@ -1,41 +1,17 @@
 "use client";
 
-import { DatePicker, type DatePickerProps } from "@mui/x-date-pickers";
-import type { ReactNode } from "react";
+import dynamic from "next/dynamic";
 
-interface DatePickerComponentProps extends Omit<
-  DatePickerProps,
-  "format" | "slotProps" | "views"
-> {
-  error?: boolean;
-  helperText?: ReactNode;
-  required?: boolean;
-}
+// The MUI date pickers (plus jalaliday/dayjs locale data) are one of the
+// heaviest chunks in the bundle; only a few forms need them, so load on demand.
+const DatePickerComponent = dynamic(
+  () => import("./date-picker-impl-component"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="bg-secondary-lightest h-14 w-full animate-pulse rounded-lg" />
+    ),
+  },
+);
 
-export default function DatePickerComponent({
-  error = false,
-  helperText = "",
-  required = false,
-  ...props
-}: DatePickerComponentProps) {
-  return (
-    <DatePicker
-      {...props}
-      format="YYYY/MM/DD"
-      views={["year", "month", "day"]}
-      slotProps={{
-        textField: {
-          error,
-          helperText,
-          fullWidth: true,
-          required,
-          slotProps: {
-            inputLabel: {
-              shrink: true,
-            },
-          },
-        },
-      }}
-    />
-  );
-}
+export default DatePickerComponent;

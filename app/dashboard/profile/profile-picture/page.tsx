@@ -1,17 +1,23 @@
 "use client";
 
 import { Button } from "@mui/material";
+import dynamic from "next/dynamic";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import Cropper, { Area } from "react-easy-crop";
+import { Area } from "react-easy-crop";
 import { UserSquare } from "iconsax-reactjs";
 import { useRouter } from "next/navigation";
-import imageComperssor from "browser-image-compression";
 
 import convertFileToDataURL from "./_utilities/convert-file-to-dataURL";
 import { cropImage } from "./_utilities/crop-image";
 import convertDataURLtoFile from "./_utilities/convert-dataURL-to-file";
 
 import useUploadProfileImageEndpoint from "./_hooks/use-upload-profile-image-endpoint";
+
+// react-easy-crop is only needed on this page; keep it out of the shared bundle.
+const Cropper = dynamic(() => import("./_components/cropper-component"), {
+  ssr: false,
+  loading: () => <div className="size-full animate-pulse bg-white/10" />,
+});
 
 export default function ProfilePicturePage() {
   const fileInput = useRef<HTMLInputElement>(null);
@@ -37,6 +43,9 @@ export default function ProfilePicturePage() {
 
   const handleUploadImage = async () => {
     if (!croppedImage) return;
+
+    const { default: imageComperssor } =
+      await import("browser-image-compression");
 
     const imageFile = await imageComperssor(
       convertDataURLtoFile(croppedImage, "profile-image"),
@@ -81,16 +90,9 @@ export default function ProfilePicturePage() {
           image={image}
           crop={crop}
           zoom={zoom}
-          aspect={1 / 1}
           onCropChange={setCrop}
           onCropComplete={handleCrop}
           onZoomChange={setZoom}
-          cropShape="round"
-          showGrid={false}
-          style={{
-            cropAreaStyle: { color: "#ffffff70" },
-            containerStyle: { backgroundColor: "#000", borderRadius: "16px" },
-          }}
         />
       </div>
       <div className="flex flex-1 flex-col justify-between gap-4 pt-6">

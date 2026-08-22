@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { CircularProgress } from "@mui/material";
 import useGetProfileInfo from "../_hooks/use-get-profile-info-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import {
+  clearAuthSession,
+  markAuthSession,
+} from "@/app/_utilities/auth-session";
 
 export function AuthenticationGuard({
   children,
@@ -20,7 +24,23 @@ export function AuthenticationGuard({
     const token = localStorage.getItem("token");
     const user = localStorage.getItem("user");
 
-    if (!token || !user) router.replace("/login");
+    if (!token || !user) {
+      clearAuthSession();
+      router.replace("/login");
+    } else {
+      markAuthSession();
+    }
+  }, [router]);
+
+  // Log out this tab when the session is cleared in another tab.
+  useEffect(() => {
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === "token" && !event.newValue) router.replace("/login");
+    };
+
+    window.addEventListener("storage", handleStorage);
+
+    return () => window.removeEventListener("storage", handleStorage);
   }, [router]);
 
   useEffect(() => {

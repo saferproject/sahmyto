@@ -25,8 +25,10 @@ export default function DataListItemComponent({
         (isDetailsOpen ? "max-h-1000" : "max-h-14.5")
       }
     >
-      <div
-        className="border-secondary flex w-full items-center justify-between rounded-2xl border bg-white p-4"
+      <button
+        type="button"
+        aria-expanded={isDetailsOpen}
+        className="border-secondary flex w-full cursor-pointer items-center justify-between rounded-2xl border bg-white p-4 text-start"
         onClick={handleToggleDetails}
       >
         <p>{title}</p>
@@ -43,7 +45,7 @@ export default function DataListItemComponent({
             }
           />
         </div>
-      </div>
+      </button>
     </li>
   );
 }

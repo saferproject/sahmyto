@@ -3,7 +3,7 @@ import { FinancialMonth } from "../_types/financial-month";
 import { FinancialMonthData } from "../_types/financial-month-data";
 import type { SettlementDataResponse } from "../_types/settlement-data";
 
-export const financialManagmentService = {
+export const financialManagementService = {
   getFinancialManagmentMonths: (karboomId: number, signal?: AbortSignal) =>
     http.get<FinancialMonth[]>(`karboom/financials/months/${karboomId}`, {
       signal,

@@ -23,7 +23,7 @@ interface EntityDetailsDrawerProps {
   onClose: () => void;
   children: ReactNode;
   description?: string | null;
-  approvals: Approval[];
+  approvals?: Approval[];
   approveConfig?: ApproveRejectConfig;
 }
 
@@ -42,14 +42,16 @@ export default function EntityDetailsDrawerComponent({
       <h4 className="text-body mt-4 font-semibold">{title}</h4>
       {children}
       {description && <DescriptionBlockComponent description={description} />}
-      <div className="mt-4 w-full">
-        <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
-        <ul className="mt-4 flex w-full flex-col gap-4">
-          {approvals.map((approval) => (
-            <ApprovalItemComponent key={approval.id} approval={approval} />
-          ))}
-        </ul>
-      </div>
+      {approvals && (
+        <div className="mt-4 w-full">
+          <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
+          <ul className="mt-4 flex w-full flex-col gap-4">
+            {approvals.map((approval) => (
+              <ApprovalItemComponent key={approval.id} approval={approval} />
+            ))}
+          </ul>
+        </div>
+      )}
       {approveConfig?.canApprove && (
         <div className="flex w-full items-center gap-4 py-2">
           <Button

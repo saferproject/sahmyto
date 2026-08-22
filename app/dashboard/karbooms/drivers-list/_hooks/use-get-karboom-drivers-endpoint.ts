@@ -1,6 +1,6 @@
 import useListQuery from "@/app/_hooks/use-list-query";
 
-import { DriversListService } from "../_services/drivers-list-service";
+import { driversListService } from "../_services/drivers-list-service";
 
 export default function useGetDriversEndpoint(
   karboomId: number | null | undefined,
@@ -8,7 +8,7 @@ export default function useGetDriversEndpoint(
 ) {
   return useListQuery(
     ["drivers", karboomId],
-    DriversListService.getDrivers,
+    driversListService.getDrivers,
     karboomId,
     enabled,
   );

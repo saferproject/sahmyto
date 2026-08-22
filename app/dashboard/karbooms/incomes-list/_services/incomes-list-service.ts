@@ -2,7 +2,7 @@ import { http } from "@/app/_services/http";
 import { Income } from "../../_types/income";
 import { RejectIncomeBody } from "../_types/reject-income-body";
 
-export const IncomeListService = {
+export const incomeListService = {
   getIncomes: (karboomId: number, signal?: AbortSignal) =>
     http.get<Income[]>(`karboom/income/karboom/${karboomId}`, { signal }),
   approveIncome: (incomeId: number) =>

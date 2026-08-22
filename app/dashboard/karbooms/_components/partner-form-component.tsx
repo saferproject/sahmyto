@@ -72,10 +72,10 @@ export default function PartnerFormComponent({
     if (watch("share_capital") !== undefined) {
       if (watch("share_capital") < 5)
         setValue("share_capital", watch("share_capital") + 1);
-      else if (watch("share_capital") == 5) {
+      else if (watch("share_capital") === 5) {
         setValue("share_capital", 6);
         setValue("share_decimal", 0);
-      } else if (watch("share_capital") == 6) {
+      } else if (watch("share_capital") === 6) {
         setValue("share_capital", 1);
         setValue("share_decimal", 0);
       }
@@ -86,7 +86,7 @@ export default function PartnerFormComponent({
     if (watch("share_capital") !== undefined) {
       if (watch("share_capital") >= 1)
         setValue("share_capital", watch("share_capital") - 1);
-      else if (watch("share_capital") == 0) {
+      else if (watch("share_capital") === 0) {
         setValue("share_capital", 6);
         setValue("share_decimal", 0);
       }

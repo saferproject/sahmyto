@@ -1,11 +1,11 @@
 import useListQuery from "@/app/_hooks/use-list-query";
 
-import { ExpensesListService } from "../_services/expenses-list-service";
+import { expensesListService } from "../_services/expenses-list-service";
 
 export default function useGetExpenses(karboomId: number | null | undefined) {
   return useListQuery(
     ["expenses", karboomId],
-    ExpensesListService.getExpenses,
+    expensesListService.getExpenses,
     karboomId,
   );
 }

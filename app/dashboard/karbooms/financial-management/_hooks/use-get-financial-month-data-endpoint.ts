@@ -1,6 +1,6 @@
 import useListQuery from "@/app/_hooks/use-list-query";
 
-import { financialManagmentService } from "../_services/financial-management-service";
+import { financialManagementService } from "../_services/financial-management-service";
 
 export default function useGetFinancialMonthDataEndpoint(
   monthId: number | null | undefined,
@@ -8,7 +8,7 @@ export default function useGetFinancialMonthDataEndpoint(
 ) {
   return useListQuery(
     ["financial-month-data", monthId],
-    financialManagmentService.getFinancialMonthData,
+    financialManagementService.getFinancialMonthData,
     monthId,
     enabled,
   );

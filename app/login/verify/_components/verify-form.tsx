@@ -6,6 +6,8 @@ import OtpInput from "react-otp-input";
 
 import { useUserInfoStore } from "../../../_providers/user-info-provider";
 
+import { markAuthSession } from "@/app/_utilities/auth-session";
+
 import useVerify from "../_hooks/use-verify-endpoint";
 import { clearPendingOtp } from "../_utilities/pending-otp-storage";
 
@@ -31,6 +33,7 @@ export default function VerifyForm() {
               "user",
               JSON.stringify(response.data.user),
             );
+            markAuthSession();
             setUser(response.data.user);
             clearPendingOtp();
 

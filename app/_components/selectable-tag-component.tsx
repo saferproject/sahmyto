@@ -40,14 +40,16 @@ export default function SelectableTagComponent({
   };
 
   return (
-    <div
+    <button
+      type="button"
+      aria-pressed={selected}
       className={
-        `${VARIANT_CLASSES[variant]} ` +
+        `${VARIANT_CLASSES[variant]} cursor-pointer ` +
         (selected ? selectedClasses[variant] : unselectedClasses[variant])
       }
       onClick={onSelect}
     >
       {label}
-    </div>
+    </button>
   );
 }

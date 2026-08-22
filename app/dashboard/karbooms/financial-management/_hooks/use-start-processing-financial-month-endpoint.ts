@@ -1,11 +1,11 @@
 import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
-import { financialManagmentService } from "../_services/financial-management-service";
+import { financialManagementService } from "../_services/financial-management-service";
 
 export default function useStartProcessingFinancialMonthEndpoint() {
   return useInvalidatingMutation({
     mutationKey: ["start-processing-financial-month"],
-    mutationFn: financialManagmentService.startProcessingFinancialMonth,
+    mutationFn: financialManagementService.startProcessingFinancialMonth,
     invalidateQueries: [["financial-months"]],
   });
 }

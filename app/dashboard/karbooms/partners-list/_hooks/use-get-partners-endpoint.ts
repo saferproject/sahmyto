@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { PartnersListService } from "../_services/partners-list-service";
+import { partnersListService } from "../_services/partners-list-service";
 
 import GetPartnersQueryParams from "../_interfaces/get-partners-query-params";
 import isValidQueryId from "@/app/_utilities/is-valid-query-id";
@@ -12,7 +12,7 @@ export default function useGetPartnersEndpoint(
   return useQuery({
     queryKey: ["partners", queryParams],
     queryFn: ({ queryKey, signal }) =>
-      PartnersListService.getPartners(
+      partnersListService.getPartners(
         queryKey[1] as GetPartnersQueryParams,
         signal,
       ),
