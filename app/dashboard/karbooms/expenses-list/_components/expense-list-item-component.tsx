@@ -13,8 +13,7 @@ import { useExpenseListStore } from "../_providers/expense-list-store-provider";
 import useApproveExpense from "../_hooks/use-approve-expense";
 import useCanApprove from "../../_hooks/use-can-approve";
 
-import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
-import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
+import StatusChipComponent from "../../_components/status-chip-component";
 
 export default function ExpenseListItemComponent({
   expense,
@@ -100,11 +99,7 @@ export default function ExpenseListItemComponent({
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">وضعیت</p>
-          <p
-            className={`text-sm font-semibold ${ACTIVITY_STATUS_TEXT_COLORS[status]}`}
-          >
-            {ACTIVITY_STATUS_FA[status]}
-          </p>
+          <StatusChipComponent status={status} />
         </div>
       </div>
       <div className="w-full px-4 py-2">

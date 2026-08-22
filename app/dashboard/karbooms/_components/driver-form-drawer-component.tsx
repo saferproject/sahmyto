@@ -1,6 +1,6 @@
 "use client";
 
-import FormDrawerComponent from "@/app/_components/form-drawer-component";
+import FormDrawerWithTitleComponent from "@/app/_components/form-drawer-with-title-component";
 
 import DriverFormComponent from "./driver-form-component";
 
@@ -15,16 +15,18 @@ export default function DriverFormDrawerComponent({
   onSuccess,
 }: DriverFormDrawerProps) {
   return (
-    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <h2 className="text-body mb-5 text-lg font-bold">
-        {formState === "ADD" ? "افزودن راننده" : "ویرایش راننده"}
-      </h2>
+    <FormDrawerWithTitleComponent
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      title={formState === "ADD" ? "افزودن راننده" : "ویرایش راننده"}
+    >
       <DriverFormComponent
         formState={formState}
         driver={driver}
         onCancel={onClose}
         onSuccess={onSuccess}
       />
-    </FormDrawerComponent>
+    </FormDrawerWithTitleComponent>
   );
 }

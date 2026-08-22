@@ -1,6 +1,6 @@
 "use client";
 
-import FormDrawerComponent from "@/app/_components/form-drawer-component";
+import FormDrawerWithTitleComponent from "@/app/_components/form-drawer-with-title-component";
 
 import KarboomFormComponent from "./karboom-form-component";
 import { KarboomFormDrawerProps } from "../_types/karboom-form-drawer-props";
@@ -12,9 +12,13 @@ export default function KarboomFormDrawerComponent({
   onSuccess,
 }: KarboomFormDrawerProps) {
   return (
-    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <h4 className="text-body mb-5 text-lg font-bold">ایجاد کاربوم</h4>
+    <FormDrawerWithTitleComponent
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      title="ایجاد کاربوم"
+    >
       <KarboomFormComponent onCancel={onClose} onSuccess={onSuccess} />
-    </FormDrawerComponent>
+    </FormDrawerWithTitleComponent>
   );
 }

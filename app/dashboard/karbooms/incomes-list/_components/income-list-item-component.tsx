@@ -7,8 +7,7 @@ import PriceWithUnit from "@/app/_components/price-with-unit-component";
 import formatDate from "@/app/_utilities/format-dates";
 
 import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
-import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
+import StatusChipComponent from "../../_components/status-chip-component";
 
 import { IncomeListItemProps } from "../_types/income-list-item-props";
 
@@ -100,11 +99,7 @@ export default function IncomeListItemComponent({
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">وضعیت</p>
-          <p
-            className={`text-sm font-semibold ${ACTIVITY_STATUS_TEXT_COLORS[status]}`}
-          >
-            {ACTIVITY_STATUS_FA[status]}
-          </p>
+          <StatusChipComponent status={status} />
         </div>
       </div>
       <div className="w-full px-4 py-2">

@@ -8,7 +8,7 @@ interface AnimatedListItemProps {
   className?: string;
   dimmed?: boolean;
   onClick?: MouseEventHandler<HTMLLIElement>;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export default function AnimatedListItem({

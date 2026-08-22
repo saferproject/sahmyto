@@ -1,5 +1,5 @@
-import { Dayjs } from "dayjs";
 import { z } from "@/app/_schemas/zod-mini";
+import { dayjsField, imageField } from "@/app/_schemas/field-presets";
 
 import { Member } from "../_types/member";
 
@@ -15,10 +15,10 @@ const IncomeFormSchema = z
       .check(z.refine((value) => value !== null, "تعداد الزامی است")),
     unit_price: z.string(),
     total_price: z.readonly(z.nullable(z.string())),
-    started_at: z.custom<Dayjs>(),
-    ended_at: z.custom<Dayjs>(),
+    started_at: dayjsField,
+    ended_at: dayjsField,
     description: z.nullable(z.string()),
-    image: z.nullish(z.file().check(z.mime(["image/jpeg", "image/png"]))),
+    image: z.nullish(imageField),
   })
   .check(
     z.superRefine(({ started_at, ended_at }, ctx) => {
