@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
 import { PartnersListService } from "../_services/partners-list-service";
 
 export default function useDeletePartnerEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["delete-partner"],
     mutationFn: PartnersListService.deletePartner,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["partners"] });
-    },
+    invalidateQueries: [["partners"]],
   });
 }

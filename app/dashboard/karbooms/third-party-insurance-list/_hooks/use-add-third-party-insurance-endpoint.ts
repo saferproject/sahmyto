@@ -1,14 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { thirdPartyInsuranceService } from "../_services/third-party-insurance-service";
 
 export default function useAddThirdPartyInsurance() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["third-party-insurances"],
     mutationFn: thirdPartyInsuranceService.addThirdPartyInsurance,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["third-party-insurances"] });
-    },
+    invalidateQueries: [["third-party-insurances"]],
   });
 }

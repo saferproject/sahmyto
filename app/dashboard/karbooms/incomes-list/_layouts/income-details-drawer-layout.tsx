@@ -10,12 +10,12 @@ import { INCOME_TYPES_FA } from "../../_constants/income-types-fa";
 import formatDate from "@/app/_utilities/format-dates";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import DetailItemComponent from "../_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 import ApprovalItemComponent from "../../_components/approval-item-component";
 import { Button } from "@mui/material";
-import { useUserInfoStore } from "@/app/_providers/user-info-provider";
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import useApproveIncome from "../_hooks/use-approve-income";
+import useCanApprove from "../../_hooks/use-can-approve";
+import DescriptionBlock from "../../_components/description-block-component";
 
 export default function IncomeDetailsDrawerLayout({
   isOpen,
@@ -38,8 +38,7 @@ export default function IncomeDetailsDrawerLayout({
     clearActiveIncome,
   } = useIncomeListStore((state) => state);
 
-  const loggedInUserId = useUserInfoStore((state) => state.id);
-  const userKarboomRoles = useKarboomsStore((state) => state.roles);
+  const canApprove = useCanApprove(approvals, status);
 
   const { mutate: approveIncome } = useApproveIncome();
 
@@ -81,12 +80,7 @@ export default function IncomeDetailsDrawerLayout({
           valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
         />
       </ul>
-      {description && (
-        <div className="border-secondary mt-4 flex w-full flex-col gap-2 rounded-2xl border border-dashed p-2">
-          <p className="text-body-light text-sm">توضیحات ثبت کننده</p>
-          <p className="text-body text-sm">{description}</p>
-        </div>
-      )}
+      {description && <DescriptionBlock description={description} />}
       <div className="mt-4 w-full">
         <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
         <ul className="mt-4 flex w-full flex-col gap-4">
@@ -95,12 +89,7 @@ export default function IncomeDetailsDrawerLayout({
           ))}
         </ul>
       </div>
-      {status === "pending" &&
-        userKarboomRoles.includes("partner") &&
-        !approvals.find(
-          (approval) =>
-            approval.user.id == loggedInUserId && approval.status !== "pending",
-        ) && (
+      {canApprove && (
           <div className="flex w-full items-center gap-4 py-2">
             <Button
               variant="outlined"

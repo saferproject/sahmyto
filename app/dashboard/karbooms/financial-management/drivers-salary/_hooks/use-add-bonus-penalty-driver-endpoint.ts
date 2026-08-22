@@ -1,14 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { driversSalaryService } from "../_services/drivers-salary-service";
 
 export default function useAddBonusPenaltyDriverEndpoint() {
-  const useQuery = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["add-bonus-penalty-driver"],
     mutationFn: driversSalaryService.addBonusOrPenaltyForDriver,
-    onSuccess: () => {
-      useQuery.invalidateQueries({ queryKey: ["drivers-salary"] });
-    }
+    invalidateQueries: [["drivers-salary"]],
   });
 }

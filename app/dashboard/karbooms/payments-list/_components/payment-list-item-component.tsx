@@ -9,7 +9,7 @@ import { PaymentListItemProps } from "../_types/payment-list-item-props";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { usePaymentListStore } from "../_providers/payments-list-store-provider";
 import useApprovePaymentEndpoint from "../_hooks/use-approve-payment-endpoint";
-import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 import { PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";

@@ -1,17 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import useListQuery from "@/app/_hooks/use-list-query";
+
 import { financialManagmentService } from "../_services/financial-management-service";
-import isValidQueryId from "@/app/_utilities/is-valid-query-id";
 import normalizeSettlementData from "../_utilities/normalize-settlement-data";
 
 export default function useGetSettlementData(
   monthId: number | null | undefined,
   enabled: boolean,
 ) {
-  return useQuery({
-    queryKey: ["settlement-data", monthId],
-    queryFn: async ({ queryKey, signal }) => {
+  return useListQuery(
+    ["settlement-data", monthId],
+    async (id, signal) => {
       const response = await financialManagmentService.getSettlementData(
-        queryKey[1] as number,
+        id,
         signal,
       );
 
@@ -20,6 +20,7 @@ export default function useGetSettlementData(
         data: normalizeSettlementData(response.data),
       };
     },
-    enabled: enabled && isValidQueryId(monthId),
-  });
+    monthId,
+    enabled,
+  );
 }

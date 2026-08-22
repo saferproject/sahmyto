@@ -7,15 +7,15 @@ import { useExpenseListStore } from "../_providers/expense-list-store-provider";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 
-import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import ApprovalItemComponent from "../../_components/approval-item-component";
+import DescriptionBlock from "../../_components/description-block-component";
 import { Button } from "@mui/material";
-import { useUserInfoStore } from "@/app/_providers/user-info-provider";
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import useApproveExpense from "../_hooks/use-approve-expense";
+import useCanApprove from "../../_hooks/use-can-approve";
 
 export default function ExpenseDetailsDrawerLayout({
   isOpen,
@@ -38,8 +38,7 @@ export default function ExpenseDetailsDrawerLayout({
     clearActiveExpense,
   } = useExpenseListStore((state) => state);
 
-  const loggedInUserId = useUserInfoStore((state) => state.id);
-  const activeKarboomRoles = useKarboomsStore((state) => state.roles);
+  const canApprove = useCanApprove(approvals, status);
 
   const { mutate: approveExpense } = useApproveExpense();
 
@@ -82,12 +81,7 @@ export default function ExpenseDetailsDrawerLayout({
           valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
         />
       </ul>
-      {description && (
-        <div className="border-secondary mt-4 flex w-full flex-col gap-2 rounded-2xl border border-dashed p-2">
-          <p className="text-body-light text-sm">توضیحات ثبت کننده</p>
-          <p className="text-body text-sm">{description}</p>
-        </div>
-      )}
+      {description && <DescriptionBlock description={description} />}
       <div className="mt-4 w-full">
         <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
         <ul className="mt-4 flex w-full flex-col gap-4">
@@ -96,12 +90,7 @@ export default function ExpenseDetailsDrawerLayout({
           ))}
         </ul>
       </div>
-      {status === "pending" &&
-        activeKarboomRoles.includes("partner") &&
-        !approvals.find(
-          (approval) =>
-            approval.user.id == loggedInUserId && approval.status !== "pending",
-        ) && (
+      {canApprove && (
           <div className="flex w-full items-center gap-4 py-2">
             <Button
               variant="outlined"

@@ -1,4 +1,4 @@
-import { DetailItemProps } from "../_types/income-detail-item-props";
+import { DetailItemProps } from "./detail-item-props";
 
 export default function DetailItemComponent({
   label,

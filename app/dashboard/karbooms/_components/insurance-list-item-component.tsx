@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 import AnimatedListItem from "@/app/_components/animated-list-item-component";
-import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 
 interface InsuranceListItemProps {
   insurance: {

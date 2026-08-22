@@ -11,11 +11,10 @@ import { ExpenseListItemProps } from "../_types/expense-list-item-props";
 import { useExpenseListStore } from "../_providers/expense-list-store-provider";
 
 import useApproveExpense from "../_hooks/use-approve-expense";
+import useCanApprove from "../../_hooks/use-can-approve";
 
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
-import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function ExpenseListItemComponent({
   expense,
@@ -35,11 +34,11 @@ export default function ExpenseListItemComponent({
     approvals,
   } = expense;
 
-  const loggedInUserId = useUserInfoStore((state) => state.id);
-  const activeKarboomRoles = useKarboomsStore((state) => state.roles);
   const setActiveExpense = useExpenseListStore(
     (state) => state.setActiveExpense,
   );
+
+  const canApprove = useCanApprove(approvals, status);
 
   const { mutate: approveExpense } = useApproveExpense();
 
@@ -118,12 +117,7 @@ export default function ExpenseListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" &&
-        activeKarboomRoles.includes("partner") &&
-        !approvals.find(
-          (approval) =>
-            approval.user.id == loggedInUserId && approval.status !== "pending",
-        ) && (
+      {canApprove && (
           <div className="flex items-center gap-4 px-4 py-2">
             <Button
               variant="outlined"

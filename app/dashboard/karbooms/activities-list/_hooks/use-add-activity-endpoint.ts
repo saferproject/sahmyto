@@ -1,14 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { activityFormService } from "../../_services/activity-form-service";
 
 export default function useAddActivityEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["add-activity"],
     mutationFn: activityFormService.addActivity,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["activities"] });
-    },
+    invalidateQueries: [["activities"]],
   });
 }

@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { dashboardService } from "../_services/dashboard-service";
 
 export default function useAcceptKarboomRequest() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["accept-request"],
     mutationFn: dashboardService.acceptKarboomRequest,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["requests"] });
-      queryClient.invalidateQueries({ queryKey: ["karbooms"] });
-    },
+    invalidateQueries: [["requests"], ["karbooms"]],
   });
 }

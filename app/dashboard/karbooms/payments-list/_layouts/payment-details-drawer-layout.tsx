@@ -1,6 +1,6 @@
 import { Button, SwipeableDrawer } from "@mui/material";
 import { PaymentDetailsDrawerProps } from "../_types/payment-details-drawer-props";
-import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 import formatDate from "@/app/_utilities/format-dates";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { usePaymentListStore } from "../_providers/payments-list-store-provider";
@@ -10,6 +10,7 @@ import { PAYMENT_TYPES_FA } from "../_constants/payment-types-fa";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import useApprovePaymentEndpoint from "../_hooks/use-approve-payment-endpoint";
+import DescriptionBlock from "../../_components/description-block-component";
 
 export default function PaymentDetailsDrawerLayout({
   isOpen,
@@ -84,12 +85,7 @@ export default function PaymentDetailsDrawerLayout({
               valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
             />
           </ul>
-          {description && (
-            <div className="border-secondary mt-4 flex w-full flex-col gap-2 rounded-2xl border border-dashed p-2">
-              <p className="text-body-light text-sm">توضیحات ثبت کننده</p>
-              <p className="text-body text-sm">{description}</p>
-            </div>
-          )}
+          {description && <DescriptionBlock description={description} />}
           {status === "pending" && receiverId == loggedInUserId && (
             <div className="flex w-full items-center gap-4 py-2">
               <Button

@@ -1,0 +1,27 @@
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  useForm,
+  type DefaultValues,
+  type Resolver,
+  type UseFormProps,
+} from "react-hook-form";
+
+interface UseZodFormOptions<TValues>
+  extends Omit<UseFormProps<TValues>, "resolver"> {
+  schema: Parameters<typeof zodResolver>[0];
+  defaultValues?: DefaultValues<TValues>;
+}
+
+export default function useZodForm<TValues>({
+  schema,
+  defaultValues,
+  ...formOptions
+}: UseZodFormOptions<TValues>) {
+  return useForm<TValues>({
+    ...formOptions,
+    resolver: zodResolver(schema) as Resolver<TValues>,
+    defaultValues,
+  });
+}

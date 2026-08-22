@@ -13,10 +13,9 @@ import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors"
 import { IncomeListItemProps } from "../_types/income-list-item-props";
 
 import useApproveIncome from "../_hooks/use-approve-income";
+import useCanApprove from "../../_hooks/use-can-approve";
 
 import { useIncomeListStore } from "../_providers/income-list-store-provider";
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
-import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function IncomeListItemComponent({
   income,
@@ -37,11 +36,9 @@ export default function IncomeListItemComponent({
     approvals,
   } = income;
 
-  const loggedInUserId = useUserInfoStore((state) => state.id);
-
-  const userKarboomRoles = useKarboomsStore((state) => state.roles);
-
   const setActiveIncome = useIncomeListStore((state) => state.setActiveIncome);
+
+  const canApprove = useCanApprove(approvals, status);
 
   const { mutate: approveIncome } = useApproveIncome();
 
@@ -120,12 +117,7 @@ export default function IncomeListItemComponent({
           نمایش جزئیات
         </Button>
       </div>
-      {status === "pending" &&
-        userKarboomRoles.includes("partner") &&
-        !approvals.find(
-          (approval) =>
-            approval.user.id == loggedInUserId && approval.status !== "pending",
-        ) && (
+      {canApprove && (
           <div className="flex items-center gap-4 px-4 py-2">
             <Button
               variant="outlined"

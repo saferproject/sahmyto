@@ -1,14 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { financialManagmentService } from "../_services/financial-management-service";
 
 export default function useStartProcessingFinancialMonthEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["start-processing-financial-month"],
     mutationFn: financialManagmentService.startProcessingFinancialMonth,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["financial-months"] });
-    },
+    invalidateQueries: [["financial-months"]],
   });
 }
