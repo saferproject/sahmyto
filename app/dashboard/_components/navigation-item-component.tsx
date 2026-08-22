@@ -7,7 +7,7 @@ export default function NavigationItemComponent({
   title,
   icon,
   path,
-  disabled
+  disabled,
 }: NavigationItemProps) {
   const currentPath = usePathname();
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function NavigationItemComponent({
 
   const handleNavigation = (path: string) => {
     if (!disabled) router.push(path);
-    else enqueueSnackbar({variant: 'info', message: 'صفحه درحال توسعه است'})
+    else enqueueSnackbar({ variant: "info", message: "صفحه درحال توسعه است" });
   };
 
   return (
@@ -30,7 +30,11 @@ export default function NavigationItemComponent({
       title={title}
       className={
         "flex items-center gap-2 rounded-full px-4 py-2 " +
-        (disabled ? "text-secondary" : isActive ? "bg-primary-light text-body" : "text-body")
+        (disabled
+          ? "text-secondary"
+          : isActive
+            ? "bg-primary-light text-body"
+            : "text-body")
       }
       onClick={() => handleNavigation(path)}
     >

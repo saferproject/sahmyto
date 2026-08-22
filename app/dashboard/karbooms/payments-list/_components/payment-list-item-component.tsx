@@ -82,10 +82,7 @@ export default function PaymentListItemComponent({
       </div>
       <div className="flex w-full flex-col gap-2 px-4 py-2">
         <DetailItemComponent label="ثبت کننده" value={submitterName} />
-        <DetailItemComponent
-          label="تاریخ"
-          value={formatDate(date)}
-        />
+        <DetailItemComponent label="تاریخ" value={formatDate(date)} />
         <DetailItemComponent label="روش واریز" value={PAYMENT_TYPES_FA[type]} />
         <DetailItemComponent
           label="وضعیت"

@@ -5,7 +5,5 @@ export default function BodyInsuranceListItemComponent({
   bodyInsurance,
   index,
 }: BodyInsuranceListItemProps) {
-  return (
-    <InsuranceListItemComponent insurance={bodyInsurance} index={index} />
-  );
+  return <InsuranceListItemComponent insurance={bodyInsurance} index={index} />;
 }

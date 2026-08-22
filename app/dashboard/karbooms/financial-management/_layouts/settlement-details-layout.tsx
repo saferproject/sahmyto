@@ -316,10 +316,16 @@ export default function SettlementDetailsDrawerLayout({
                         height={24}
                       />
                     </div>
-                    <p className="text-body z-10 text-xs">{formatNumber(amount)}</p>
+                    <p className="text-body z-10 text-xs">
+                      {formatNumber(amount)}
+                    </p>
                   </div>
                   <p className="bg-primary z-10 flex overflow-hidden rounded-2xl px-4 py-2 text-white">
-                    {type === "salary" ? "حقوق" : type === 'bonus' ? "پاداش" : "جریمه"}
+                    {type === "salary"
+                      ? "حقوق"
+                      : type === "bonus"
+                        ? "پاداش"
+                        : "جریمه"}
                   </p>
                 </div>
               </li>

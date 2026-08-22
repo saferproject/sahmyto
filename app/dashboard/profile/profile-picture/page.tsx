@@ -100,8 +100,8 @@ export default function ProfilePicturePage() {
             <UserSquare size="32" className="text-body" />
           </div>
           <p className="text-body-light mt-4 text-sm">
-            سایز عکس میبایست کمتر از 512 کیلوبایت باشد فرمت تصاویر
-            میبایست با فرمت png و یا jpg باشد
+            سایز عکس میبایست کمتر از 512 کیلوبایت باشد فرمت تصاویر میبایست با
+            فرمت png و یا jpg باشد
           </p>
         </div>
         <div className="flex w-full flex-col gap-4">

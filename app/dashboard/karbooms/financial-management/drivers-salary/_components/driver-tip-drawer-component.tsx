@@ -22,7 +22,9 @@ export default function DriverTipDrawerComponent({
 
   return (
     <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <h3 className="text-body font-semibold mb-4">ثبت {BONUS_PENALTY_TYPE_FA[bonusPenaltyType]}</h3>
+      <h3 className="text-body mb-4 font-semibold">
+        ثبت {BONUS_PENALTY_TYPE_FA[bonusPenaltyType]}
+      </h3>
       <div className="mb-4 flex w-full items-center gap-2">
         <Button
           variant={bonusPenaltyType === "bonus" ? "contained" : "outlined"}

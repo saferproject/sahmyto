@@ -44,7 +44,7 @@ export default function DashboardBannerComponent() {
         سهمیتو، حساب جاده‌ت همیشه رو به راهه!
       </h2>
       <h3 className="text-body absolute top-2/4 left-1/2 -translate-x-1/2 text-[clamp(0.7rem,3.6vw,0.795rem)] text-nowrap">
-        جاده رو برو، حساب باما  !
+        جاده رو برو، حساب باما !
       </h3>
       <CloseCircle size={20} className="absolute top-0 -right-1" />
     </div>

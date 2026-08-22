@@ -94,7 +94,7 @@ export default function PartnerListDrawerComponent({
         variant="outlined"
         onClick={onSkip}
         sx={{
-          marginTop: '8px',
+          marginTop: "8px",
         }}
         fullWidth
       >

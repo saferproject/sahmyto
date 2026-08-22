@@ -14,7 +14,7 @@ export default function MonthListItemComponent({
   index,
 }: MonthListItemProps) {
   const { id, date, status } = financialMonth;
-  
+
   const formattedDate = dayjs(date);
   const selectedMonthId = selectedMonth?.id ?? 0;
 

@@ -1,6 +1,7 @@
+"use client";
+
 import formatDate from "@/app/_utilities/format-dates";
 
-import FormDrawerComponent from "@/app/_components/form-drawer-component";
 import { ExpenseDetailsDrawerProps } from "../_types/expense-details-drawer-props";
 
 import { useExpenseListStore } from "../_providers/expense-list-store-provider";
@@ -10,12 +11,10 @@ import formatNumber from "@/app/_utilities/format-numbers";
 import DetailItemComponent from "@/app/_components/detail-item-component";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
-import { ACTIVITY_STATUS_TEXT_COLORS } from "../../incomes-list/_constants/income-status-colors";
-import ApprovalItemComponent from "../../_components/approval-item-component";
-import DescriptionBlock from "../../_components/description-block-component";
-import { Button } from "@mui/material";
+import { ACTIVITY_STATUS_TEXT_COLORS } from "../../_constants/activity-status-colors";
 import useApproveExpense from "../_hooks/use-approve-expense";
 import useCanApprove from "../../_hooks/use-can-approve";
+import EntityDetailsDrawerComponent from "../../_components/entity-details-drawer-component";
 
 export default function ExpenseDetailsDrawerLayout({
   isOpen,
@@ -52,8 +51,19 @@ export default function ExpenseDetailsDrawerLayout({
   };
 
   return (
-    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={handleClose}>
-      <h4 className="text-body mt-4 font-semibold">جزئیات هزینه</h4>
+    <EntityDetailsDrawerComponent
+      title="جزئیات هزینه"
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={handleClose}
+      description={description}
+      approvals={approvals}
+      approveConfig={{
+        canApprove,
+        onApprove: handleApprove,
+        onReject: () => onRejectExpense(id),
+      }}
+    >
       <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
         <DetailItemComponent
           label="مبلغ"
@@ -69,10 +79,7 @@ export default function ExpenseDetailsDrawerLayout({
           </>
         )}
         <DetailItemComponent label="دسته هزینه" value={category} />
-        <DetailItemComponent
-          label="تاریخ"
-          value={formatDate(date)}
-        />
+        <DetailItemComponent label="تاریخ" value={formatDate(date)} />
         <DetailItemComponent label="پرداخت کننده" value={receiverName ?? ""} />
         <DetailItemComponent label="ثبت کننده" value={submitterName ?? ""} />
         <DetailItemComponent
@@ -81,37 +88,6 @@ export default function ExpenseDetailsDrawerLayout({
           valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
         />
       </ul>
-      {description && <DescriptionBlock description={description} />}
-      <div className="mt-4 w-full">
-        <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
-        <ul className="mt-4 flex w-full flex-col gap-4">
-          {approvals.map((approval) => (
-            <ApprovalItemComponent key={approval.id} approval={approval} />
-          ))}
-        </ul>
-      </div>
-      {canApprove && (
-          <div className="flex w-full items-center gap-4 py-2">
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={() => onRejectExpense(id)}
-              fullWidth
-            >
-              رد
-            </Button>
-            <Button
-              variant="outlined"
-              color="success"
-              size="small"
-              onClick={handleApprove}
-              fullWidth
-            >
-              تایید
-            </Button>
-          </div>
-        )}
-    </FormDrawerComponent>
+    </EntityDetailsDrawerComponent>
   );
 }

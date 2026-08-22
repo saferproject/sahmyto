@@ -27,7 +27,8 @@ export default function IncomesListPage() {
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
 
-  const { mutate: rejectIncome, isPending: rejectingIncome } = useRejectIncome();
+  const { mutate: rejectIncome, isPending: rejectingIncome } =
+    useRejectIncome();
 
   const handleOpenIncomeDtailsDrawer = () => {
     setIncomeDetailsDrawerOpen(true);

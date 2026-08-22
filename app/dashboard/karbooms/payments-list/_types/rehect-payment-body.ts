@@ -1,4 +1,4 @@
 export type RejectPaymentBody = {
-  paymentId: number
+  paymentId: number;
   reject_reason: string | null;
 };

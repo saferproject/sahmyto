@@ -1,4 +1,7 @@
-export default function convertDataURLtoFile(dataUrl: string, fileName: string): File {
+export default function convertDataURLtoFile(
+  dataUrl: string,
+  fileName: string,
+): File {
   const matches = dataUrl.match(/^data:(.+);base64,(.+)$/);
 
   if (!matches) {

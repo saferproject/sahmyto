@@ -113,27 +113,27 @@ export default function IncomeListItemComponent({
         </Button>
       </div>
       {canApprove && (
-          <div className="flex items-center gap-4 px-4 py-2">
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={() => onRejectIncome(id)}
-              fullWidth
-            >
-              رد
-            </Button>
-            <Button
-              variant="outlined"
-              color="success"
-              size="small"
-              onClick={handleApprove}
-              fullWidth
-            >
-              تایید
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center gap-4 px-4 py-2">
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={() => onRejectIncome(id)}
+            fullWidth
+          >
+            رد
+          </Button>
+          <Button
+            variant="outlined"
+            color="success"
+            size="small"
+            onClick={handleApprove}
+            fullWidth
+          >
+            تایید
+          </Button>
+        </div>
+      )}
     </AnimatedListItem>
   );
 }

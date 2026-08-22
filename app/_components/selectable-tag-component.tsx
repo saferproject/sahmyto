@@ -5,13 +5,15 @@ interface SelectableTagProps {
   variant?: "pill" | "tile" | "dashed";
 }
 
-const VARIANT_CLASSES: Record<NonNullable<SelectableTagProps["variant"]>, string> =
-  {
-    pill: "grow rounded-full border px-4 py-2 text-center text-sm",
-    tile: "grow rounded-lg border px-8 py-2 text-center",
-    dashed:
-      "min-w-20 w-full rounded-lg border border-dashed p-2 text-center text-sm font-semibold",
-  };
+const VARIANT_CLASSES: Record<
+  NonNullable<SelectableTagProps["variant"]>,
+  string
+> = {
+  pill: "grow rounded-full border px-4 py-2 text-center text-sm",
+  tile: "grow rounded-lg border px-8 py-2 text-center",
+  dashed:
+    "min-w-20 w-full rounded-lg border border-dashed p-2 text-center text-sm font-semibold",
+};
 
 export default function SelectableTagComponent({
   label,

@@ -65,15 +65,11 @@ export default function ExpenseListItemComponent({
       <div className="grid w-full grid-cols-2 gap-y-4 px-4 py-2">
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">تاریخ هزینه</p>
-          <p className="text-body text-sm font-semibold">
-            {formatDate(date)}
-          </p>
+          <p className="text-body text-sm font-semibold">{formatDate(date)}</p>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">تاریخ تسویه</p>
-          <p className="text-body text-sm font-semibold">
-            {formatDate(date)}
-          </p>
+          <p className="text-body text-sm font-semibold">{formatDate(date)}</p>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">ثبت کننده</p>
@@ -113,27 +109,27 @@ export default function ExpenseListItemComponent({
         </Button>
       </div>
       {canApprove && (
-          <div className="flex items-center gap-4 px-4 py-2">
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={() => onRejectExpense(id)}
-              fullWidth
-            >
-              رد
-            </Button>
-            <Button
-              variant="outlined"
-              color="success"
-              size="small"
-              onClick={handleApprove}
-              fullWidth
-            >
-              تایید
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center gap-4 px-4 py-2">
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={() => onRejectExpense(id)}
+            fullWidth
+          >
+            رد
+          </Button>
+          <Button
+            variant="outlined"
+            color="success"
+            size="small"
+            onClick={handleApprove}
+            fullWidth
+          >
+            تایید
+          </Button>
+        </div>
+      )}
     </AnimatedListItem>
   );
 }

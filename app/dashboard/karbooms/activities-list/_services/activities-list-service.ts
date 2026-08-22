@@ -4,6 +4,5 @@ import { Activity } from "../_types/activity";
 export const activitiesListService = {
   getActivities: (karboomId: number, signal?: AbortSignal) =>
     http.get<Activity[]>(``, { signal }),
-  deleteActivity: (activityId: number) =>
-    http.delete<undefined>(``),
+  deleteActivity: (activityId: number) => http.delete<undefined>(``),
 };

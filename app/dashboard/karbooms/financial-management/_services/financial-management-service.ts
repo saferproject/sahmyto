@@ -19,7 +19,10 @@ export const financialManagmentService = {
       signal,
     }),
   getSettlementData: (monthId: number, signal?: AbortSignal) =>
-    http.get<SettlementDataResponse>(`karboom/financials/settlement/${monthId}`, {
-      signal,
-    }),
+    http.get<SettlementDataResponse>(
+      `karboom/financials/settlement/${monthId}`,
+      {
+        signal,
+      },
+    ),
 };

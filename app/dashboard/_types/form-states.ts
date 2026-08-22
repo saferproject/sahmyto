@@ -1,1 +1,1 @@
-export type FormStates = 'ADD' | 'EDIT';
+export type FormStates = "ADD" | "EDIT";

@@ -1,7 +1,5 @@
 "use client";
 
-import FormDrawerComponent from "@/app/_components/form-drawer-component";
-
 import { IncomeDetailsDrawerProps } from "../_types/income-details-drawer-props";
 
 import { useIncomeListStore } from "../_providers/income-list-store-provider";
@@ -11,11 +9,9 @@ import formatDate from "@/app/_utilities/format-dates";
 import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import DetailItemComponent from "@/app/_components/detail-item-component";
-import ApprovalItemComponent from "../../_components/approval-item-component";
-import { Button } from "@mui/material";
 import useApproveIncome from "../_hooks/use-approve-income";
 import useCanApprove from "../../_hooks/use-can-approve";
-import DescriptionBlock from "../../_components/description-block-component";
+import EntityDetailsDrawerComponent from "../../_components/entity-details-drawer-component";
 
 export default function IncomeDetailsDrawerLayout({
   isOpen,
@@ -56,8 +52,20 @@ export default function IncomeDetailsDrawerLayout({
   };
 
   return (
-    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={handleClose}>
-      <h4 className="text-body mt-4 font-semibold">جزئیات درآمد</h4>
+    <EntityDetailsDrawerComponent
+      title="جزئیات درآمد"
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={handleClose}
+      description={description}
+      approvals={approvals}
+      approveConfig={{
+        canApprove,
+        onApprove: handleApprove,
+        onReject: () => onRejectIncome(id),
+        buttonSize: "large",
+      }}
+    >
       <ul className="mt-4 flex w-full flex-col gap-4 text-sm">
         <DetailItemComponent
           label="مبلغ"
@@ -80,37 +88,6 @@ export default function IncomeDetailsDrawerLayout({
           valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
         />
       </ul>
-      {description && <DescriptionBlock description={description} />}
-      <div className="mt-4 w-full">
-        <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
-        <ul className="mt-4 flex w-full flex-col gap-4">
-          {approvals.map((approval) => (
-            <ApprovalItemComponent key={approval.id} approval={approval} />
-          ))}
-        </ul>
-      </div>
-      {canApprove && (
-          <div className="flex w-full items-center gap-4 py-2">
-            <Button
-              variant="outlined"
-              color="error"
-              size="large"
-              onClick={() => onRejectIncome(id)}
-              fullWidth
-            >
-              رد
-            </Button>
-            <Button
-              variant="outlined"
-              color="success"
-              size="large"
-              onClick={handleApprove}
-              fullWidth
-            >
-              تایید
-            </Button>
-          </div>
-        )}
-    </FormDrawerComponent>
+    </EntityDetailsDrawerComponent>
   );
 }

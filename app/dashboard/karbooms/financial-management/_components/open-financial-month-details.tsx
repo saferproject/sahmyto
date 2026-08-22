@@ -293,7 +293,7 @@ export default function OpenFinancialMonthDetails({
         sx={{ marginTop: "8px", justifyContent: "space-between" }}
         onClick={handleValidateMonth}
         loading={validatingMonth}
-        disabled={!karboomRoles.includes('owner')}
+        disabled={!karboomRoles.includes("owner")}
       >
         بستن ماه مالی
       </Button>

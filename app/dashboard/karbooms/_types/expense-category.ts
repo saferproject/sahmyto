@@ -5,5 +5,5 @@ export type ExpenseCategory = {
   id: number;
   name: string;
   type: ExpenseCategoryTypes;
-  status: Status
-}
+  status: Status;
+};

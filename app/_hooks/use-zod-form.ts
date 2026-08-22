@@ -9,8 +9,10 @@ import {
   type UseFormProps,
 } from "react-hook-form";
 
-interface UseZodFormOptions<TValues extends FieldValues>
-  extends Omit<UseFormProps<TValues>, "resolver"> {
+interface UseZodFormOptions<TValues extends FieldValues> extends Omit<
+  UseFormProps<TValues>,
+  "resolver"
+> {
   schema: Parameters<typeof zodResolver>[0];
   defaultValues?: DefaultValues<TValues>;
 }
