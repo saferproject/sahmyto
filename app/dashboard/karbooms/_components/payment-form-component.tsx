@@ -23,6 +23,7 @@ import { PaymentFormType } from "../_schemas/payment-form-schema";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { PAYMENT_FORM_INITIAL } from "../_constants/payment-form-initial";
 import ApiError from "@/app/_errors/api-error";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 import { PAYMENT_TYPES_FA } from "../payments-list/_constants/payment-types-fa";
 
 export default function PaymentFormComponent({
@@ -67,7 +68,7 @@ export default function PaymentFormComponent({
         payer_id: payer.member.id,
         receiver_id: reciever.member.id,
         karboomId: karboomId,
-        date: date.toISOString().split("T")[0],
+        date: formatGregorianDate(date),
       },
       {
         onSuccess() {

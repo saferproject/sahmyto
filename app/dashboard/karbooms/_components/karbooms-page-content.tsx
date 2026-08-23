@@ -14,12 +14,12 @@ const KarboomFormDrawerComponent = dynamic(
   () => import("./karboom-form-drawer-component"),
   { ssr: false },
 );
-const PartnerFormDrawerComponent = dynamic(
-  () => import("./partner-form-drawer-component"),
+const PartnerListDrawerComponent = dynamic(
+  () => import("./partner-list-drawer-component"),
   { ssr: false },
 );
-const DriverFormDrawerComponent = dynamic(
-  () => import("./driver-form-drawer-component"),
+const DriverListDrawerComponent = dynamic(
+  () => import("./driver-list-drawer-component"),
   { ssr: false },
 );
 
@@ -27,12 +27,12 @@ export default function KarboomsPageContent() {
   const [loadedDrawers, setLoadedDrawers] = useState({
     actions: false,
     karboom: false,
-    partner: false,
-    driver: false,
+    partnerList: false,
+    driverList: false,
   });
   const [isKarboomFormDrawerOpen, setKarboomFormDrawerOpen] = useState(false);
-  const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] = useState(false);
-  const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] = useState(false);
+  const [isPartnerListDrawerOpen, setPartnerListDrawerOpen] = useState(false);
+  const [isDriverListDrawerOpen, setDriverListDrawerOpen] = useState(false);
 
   const isActionsDrawerOpen = useKarboomsStore(
     (state) => state.isActionsDrawerOpen,
@@ -63,32 +63,32 @@ export default function KarboomsPageContent() {
     setKarboomFormDrawerOpen(false);
   };
 
-  const handleOpenPartnerFormDrawer = () => {
-    setLoadedDrawers((current) => ({ ...current, partner: true }));
-    setPartnerFormDrawerOpen(true);
+  const handleOpenPartnerListDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, partnerList: true }));
+    setPartnerListDrawerOpen(true);
   };
 
-  const handleClosePartnerFormDrawer = () => {
-    setPartnerFormDrawerOpen(false);
+  const handleClosePartnerListDrawer = () => {
+    setPartnerListDrawerOpen(false);
   };
 
-  const handleOpenDriverFormDrawer = () => {
-    setLoadedDrawers((current) => ({ ...current, driver: true }));
-    setDriverFormDrawerOpen(true);
+  const handleSkipPartnerListDrawer = () => {
+    handleClosePartnerListDrawer();
+    handleOpenDriverListDrawer();
   };
 
-  const handleCloseDriverFormDrawer = () => {
-    setDriverFormDrawerOpen(false);
+  const handleOpenDriverListDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, driverList: true }));
+    setDriverListDrawerOpen(true);
+  };
+
+  const handleCloseDriverListDrawer = () => {
+    setDriverListDrawerOpen(false);
   };
 
   const handleKarboomFormSuccess = () => {
     handleCloseKarboomFormDrawer();
-    handleOpenPartnerFormDrawer();
-  };
-
-  const handlePartnerFormSuccess = () => {
-    handleClosePartnerFormDrawer();
-    handleOpenDriverFormDrawer();
+    handleOpenPartnerListDrawer();
   };
 
   return (
@@ -109,22 +109,19 @@ export default function KarboomsPageContent() {
           onSuccess={handleKarboomFormSuccess}
         />
       )}
-      {loadedDrawers.partner && (
-        <PartnerFormDrawerComponent
-          formState="ADD"
-          isOpen={isPartnerFormDrawerOpen}
-          onOpen={handleOpenPartnerFormDrawer}
-          onClose={handleClosePartnerFormDrawer}
-          onSuccess={handlePartnerFormSuccess}
+      {loadedDrawers.partnerList && (
+        <PartnerListDrawerComponent
+          isOpen={isPartnerListDrawerOpen}
+          onOpen={handleOpenPartnerListDrawer}
+          onClose={handleClosePartnerListDrawer}
+          onSkip={handleSkipPartnerListDrawer}
         />
       )}
-      {loadedDrawers.driver && (
-        <DriverFormDrawerComponent
-          formState="ADD"
-          isOpen={isDriverFormDrawerOpen}
-          onOpen={handleOpenDriverFormDrawer}
-          onClose={handleCloseDriverFormDrawer}
-          onSuccess={handleCloseDriverFormDrawer}
+      {loadedDrawers.driverList && (
+        <DriverListDrawerComponent
+          isOpen={isDriverListDrawerOpen}
+          onOpen={handleOpenDriverListDrawer}
+          onClose={handleCloseDriverListDrawer}
         />
       )}
     </>

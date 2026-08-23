@@ -20,6 +20,7 @@ import { PartnerFormProps } from "../_types/partner-form-props";
 
 import { getPartnerFormInitial } from "../_constants/partner-form-initial";
 import ApiError from "@/app/_errors/api-error";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 export default function PartnerFormComponent({
   formState,
@@ -205,8 +206,8 @@ export default function PartnerFormComponent({
     const payload = {
       ...other,
       share,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+      started_at: formatGregorianDate(started_at),
+      ended_at: ended_at ? formatGregorianDate(ended_at) : "",
     };
 
     if (formState === "EDIT" && partner) {

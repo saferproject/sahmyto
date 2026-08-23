@@ -21,6 +21,7 @@ import parseNumber from "@/app/_utilities/parse-numbers";
 import ApiError from "@/app/_errors/api-error";
 import useCreateIncomeEndpoint from "../_hooks/use-create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 export default function IncomeFormComponent({
   isOpen,
@@ -76,8 +77,8 @@ export default function IncomeFormComponent({
         type: incomeType,
         receiver_id: reciever.member.id,
         karboom_id: karboomId,
-        started_at: started_at.toISOString().split("T")[0],
-        ended_at: ended_at.toISOString().split("T")[0],
+        started_at: formatGregorianDate(started_at),
+        ended_at: formatGregorianDate(ended_at),
       },
       {
         onSuccess() {

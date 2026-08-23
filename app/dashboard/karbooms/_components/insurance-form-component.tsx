@@ -8,6 +8,7 @@ import type { Dayjs } from "dayjs";
 import DatePickerComponent from "@/app/_components/date-picker-component";
 import DescriptionInput from "@/app/_components/description-input";
 import InsuranceCompanyInput from "@/app/_components/insurance-company-input";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 import useZodForm from "@/app/_hooks/use-zod-form";
 
@@ -61,8 +62,8 @@ export default function InsuranceFormComponent({
       {
         ...other,
         [karboomIdKey]: karboomId,
-        started_at: started_at.toISOString().split("T")[0],
-        ended_at: ended_at.toISOString().split("T")[0],
+        started_at: formatGregorianDate(started_at),
+        ended_at: formatGregorianDate(ended_at),
       },
       {
         onSuccess() {

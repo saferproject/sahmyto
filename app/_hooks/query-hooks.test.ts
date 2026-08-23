@@ -1,0 +1,92 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const useQueryMock = vi.hoisted(() => vi.fn((options) => options));
+const useMutationMock = vi.hoisted(() => vi.fn((options) => options));
+const invalidateQueriesMock = vi.hoisted(() => vi.fn());
+const useQueryClientMock = vi.hoisted(() =>
+  vi.fn(() => ({ invalidateQueries: invalidateQueriesMock })),
+);
+
+vi.mock("@tanstack/react-query", () => ({
+  useQuery: useQueryMock,
+  useMutation: useMutationMock,
+  useQueryClient: useQueryClientMock,
+}));
+
+import useInvalidatingMutation from "./use-invalidating-mutation";
+import useListQuery from "./use-list-query";
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+describe("useListQuery", () => {
+  it.each([
+    [1, true, true],
+    [1, false, false],
+    [0, true, false],
+    [-1, true, false],
+    [1.5, true, false],
+    [null, true, false],
+    [undefined, true, false],
+  ] as const)(
+    "derives enabled=%s from id=%s and caller enabled=%s",
+    (id, callerEnabled, expected) => {
+      useListQuery(["items", id], vi.fn(), id, callerEnabled);
+
+      expect(useQueryMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          queryKey: ["items", id],
+          enabled: expected,
+        }),
+      );
+    },
+  );
+
+  it("passes the id from the query key and the abort signal to the service", async () => {
+    const response = { data: ["one"], message: "ok" };
+    const queryFn = vi.fn().mockResolvedValue(response);
+    const signal = new AbortController().signal;
+    useListQuery(["items", 17], queryFn, 17);
+    const options = useQueryMock.mock.calls[0][0];
+
+    await expect(
+      options.queryFn({ queryKey: ["items", 17], signal }),
+    ).resolves.toBe(response);
+    expect(queryFn).toHaveBeenCalledWith(17, signal);
+  });
+});
+
+describe("useInvalidatingMutation", () => {
+  it("forwards mutation configuration and invalidates every related query", () => {
+    const mutationFn = vi.fn();
+    useInvalidatingMutation({
+      mutationKey: ["create-item"],
+      mutationFn,
+      invalidateQueries: [["items"], ["summary", 17]],
+    });
+    const options = useMutationMock.mock.calls[0][0];
+
+    expect(options).toEqual(
+      expect.objectContaining({ mutationKey: ["create-item"], mutationFn }),
+    );
+    options.onSuccess();
+    expect(invalidateQueriesMock).toHaveBeenNthCalledWith(1, {
+      queryKey: ["items"],
+    });
+    expect(invalidateQueriesMock).toHaveBeenNthCalledWith(2, {
+      queryKey: ["summary", 17],
+    });
+  });
+
+  it("does not invalidate unrelated queries when no keys are configured", () => {
+    useInvalidatingMutation({
+      mutationKey: ["standalone"],
+      mutationFn: vi.fn(),
+    });
+
+    useMutationMock.mock.calls[0][0].onSuccess();
+
+    expect(invalidateQueriesMock).not.toHaveBeenCalled();
+  });
+});

@@ -15,13 +15,13 @@ import BaseResponse from "./_interfaces/base-response";
 
 const DEFAULT_ERROR_MESSAGE = "عملیات با خطا مواجه شد";
 
-function getErrorMessage(error: unknown) {
+export function getErrorMessage(error: unknown) {
   if (!(error instanceof ApiError)) return DEFAULT_ERROR_MESSAGE;
 
   return error.errors?.error?.[0] || error.message || DEFAULT_ERROR_MESSAGE;
 }
 
-function shouldRetryQuery(failureCount: number, error: unknown) {
+export function shouldRetryQuery(failureCount: number, error: unknown) {
   if (failureCount >= 2 || !(error instanceof ApiError)) return false;
 
   return (

@@ -24,6 +24,7 @@ import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
 import ApiError from "@/app/_errors/api-error";
 import { useEffect } from "react";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 export default function ExpenseFormComponent({
   isOpen,
@@ -82,7 +83,7 @@ export default function ExpenseFormComponent({
           category_id: selectedCategory,
           karboom_id: karboomId,
           type: categoryType,
-          date: date.toISOString().split("T")[0],
+          date: formatGregorianDate(date),
         },
         {
           onSuccess() {

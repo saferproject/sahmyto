@@ -33,6 +33,7 @@ import parseNumber from "@/app/_utilities/parse-numbers";
 import ApiError from "@/app/_errors/api-error";
 import { getDriverFormInitial } from "../_constants/driver-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 export default function DriverFormComponent({
   formState,
@@ -107,8 +108,8 @@ export default function DriverFormComponent({
       ...other,
       service_amount: parseNumber(service_amount),
       fixed_amount: parseNumber(fixed_amount),
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+      started_at: formatGregorianDate(started_at),
+      ended_at: ended_at ? formatGregorianDate(ended_at) : "",
     };
 
     if (formState === "EDIT" && driver) {

@@ -6,6 +6,7 @@ import DatePickerComponent from "@/app/_components/date-picker-component";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import DescriptionInput from "@/app/_components/description-input";
 import { Button } from "@mui/material";
+import dayjs from "dayjs";
 import { useEffect } from "react";
 import { ActivityFormProps } from "../_types/activity-form-props";
 import useActivityForm from "../_hooks/use-activity-form";
@@ -14,6 +15,7 @@ import ApiError from "@/app/_errors/api-error";
 import { ActivityFormType } from "../_schemas/activity-form-schema";
 import useAddActivityEndpoint from "../_hooks/use-add-activity-endpoint";
 import useEditActivityEndpoint from "../_hooks/use-edit-activity-endpoint";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 export default function ActivityFormComponent({
   formState,
@@ -45,6 +47,8 @@ export default function ActivityFormComponent({
     if (formState === "EDIT" && activity) {
       setValues({
         ...initialValues,
+        date: dayjs(activity.date),
+        description: activity.description,
       });
     } else setValues(initialValues);
   }, [formState, activity, setValues]);
@@ -69,9 +73,10 @@ export default function ActivityFormComponent({
       );
   };
 
-  const submit = ({ ...other }: ActivityFormType) => {
+  const submit = ({ date, ...other }: ActivityFormType) => {
     const payload = {
       ...other,
+      date: formatGregorianDate(date),
     };
 
     if (formState === "EDIT" && activity) {
