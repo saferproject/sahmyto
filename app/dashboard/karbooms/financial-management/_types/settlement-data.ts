@@ -19,11 +19,6 @@ export type SettlementMember = {
   is_driver: boolean;
 };
 
-export type SettlementGroupResponse<T> = {
-  [index: number]: T;
-  total: number;
-};
-
 export type SettlementGroup<T> = {
   total: number;
   items: T[];
@@ -109,16 +104,16 @@ export type SettlementBreakdown = {
 };
 
 export type SettlementBreakdownResponse = {
-  previous_settlement: SettlementGroupResponse<unknown>;
-  profit_loss: SettlementGroupResponse<SettlementBalanceItem>;
-  expenses_issued: SettlementGroupResponse<SettlementExpenseCategoryResponse>;
-  expenses_paid: SettlementGroupResponse<SettlementExpenseCategoryResponse>;
-  payments_received: SettlementGroupResponse<SettlementPayment>;
-  payments_made: SettlementGroupResponse<SettlementPayment>;
-  payments_registered: SettlementGroupResponse<SettlementPayment>;
-  incomes_received: SettlementGroupResponse<SettlementIncome>;
-  salary: SettlementGroupResponse<SettlementSalary>;
-  service_fee: SettlementGroupResponse<unknown>;
+  previous_settlement: SettlementGroup<unknown>;
+  profit_loss: SettlementGroup<SettlementBalanceItem>;
+  expenses_issued: SettlementGroup<SettlementExpenseCategoryResponse>;
+  expenses_paid: SettlementGroup<SettlementExpenseCategoryResponse>;
+  payments_received: SettlementGroup<SettlementPayment>;
+  payments_made: SettlementGroup<SettlementPayment>;
+  payments_registered: SettlementGroup<SettlementPayment>;
+  incomes_received: SettlementGroup<SettlementIncome>;
+  salary: SettlementGroup<SettlementSalary>;
+  service_fee: SettlementGroup<unknown>;
 };
 
 export type SettlementMemberData = SettlementMember & {

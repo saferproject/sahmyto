@@ -4,28 +4,17 @@ import normalizeSettlementData from "./normalize-settlement-data";
 import type {
   SettlementBreakdownResponse,
   SettlementDataResponse,
-  SettlementExpenseCategoryResponse,
 } from "../_types/settlement-data";
 
 function buildGroup<T>(items: T[], total: number) {
-  return Object.assign(
-    {},
-    ...items.map((item, index) => ({ [index]: item })),
-    { total },
-  );
+  return { items, total };
 }
 
 function emptyBreakdown(): SettlementBreakdownResponse {
-  const emptyExpense: SettlementExpenseCategoryResponse = {
-    category: { id: 0, name: "", type: "daily", status: "active" },
-    expenses: [],
-    total: 0,
-  };
-
   return {
     previous_settlement: buildGroup([], 0),
     profit_loss: buildGroup([], 0),
-    expenses_issued: buildGroup([emptyExpense], 0),
+    expenses_issued: buildGroup([], 0),
     expenses_paid: buildGroup([], 0),
     payments_received: buildGroup([], 0),
     payments_made: buildGroup([], 0),
@@ -73,7 +62,7 @@ function buildResponse(): SettlementDataResponse {
 }
 
 describe("normalizeSettlementData", () => {
-  it("converts numeric-keyed groups into items arrays with totals", () => {
+  it("preserves response item arrays and totals", () => {
     const response = buildResponse();
     response.members[0].breakdown.previous_settlement = buildGroup(
       ["c", "a", "b"],

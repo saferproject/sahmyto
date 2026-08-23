@@ -24,8 +24,11 @@ import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-mont
 import { useConfirmationDialogStore } from "@/app/dashboard/_providers/confirmation-dialog-provider";
 import useCloseFinancialMonth from "../_hooks/use-close-financial-month-endpoint";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 
 export default function DriversSalaryPage() {
+  const router = useRouter();
+
   const [isDriverTipDrawerOpen, setDriverTipDrawerOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<number | null>(null);
   const [bonusPenaltyType, setBonusPenaltyType] =
@@ -85,6 +88,7 @@ export default function DriversSalaryPage() {
     closeFinancialMonth(financialMonthId, {
       onSuccess: () => {
         closeConfirmationDialog();
+        router.push("/dashboard/karbooms/financial-management");
       },
       onSettled: () => {
         stopPendingConfirmation();
