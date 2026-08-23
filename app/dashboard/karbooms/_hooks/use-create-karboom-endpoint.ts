@@ -1,18 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { karboomService } from "../_services/karboom-service";
-import BaseResponse from "@/app/_interfaces/base-response";
-import ApiError from "@/app/_errors/api-error";
 import { KarboomFormType } from "../_schemas/karboom-form-schema";
-import Karboom from "@/app/_interfaces/karboom";
 
 export default function useCreateKarboomEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation<BaseResponse<Karboom>, ApiError, KarboomFormType>({
+  return useInvalidatingMutation({
     mutationKey: ["create-karboom"],
-    mutationFn: karboomService.createKarboom,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["karbooms"] });
-    },
+    mutationFn: (body: KarboomFormType) => karboomService.createKarboom(body),
+    invalidateQueries: [["karbooms"]],
   });
 }

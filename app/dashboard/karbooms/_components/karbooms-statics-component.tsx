@@ -10,10 +10,7 @@ export default function KarboomsStatics() {
       <div className="flex w-2/3 flex-col justify-between gap-8">
         <div className="flex w-full items-center justify-between">
           <h2 className="text-xs">رشد درآمد امروز</h2>
-          <p
-            dir="ltr"
-            className="text-heading font-bold"
-          >
+          <p dir="ltr" className="text-heading font-bold">
             {"14"}%
           </p>
         </div>

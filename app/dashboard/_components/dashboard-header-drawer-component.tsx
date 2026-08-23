@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import DashboardHeaderDrawerProps from "../_interfaces/dashboard-header-drawer-props";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { clearAuthSession } from "@/app/_utilities/auth-session";
 
 import { DRAWER_MENU_ITEMS } from "../_constants/drawer-menu-items";
 import useUserLogout from "../_hooks/use-user-logout-endpoint";
@@ -90,6 +91,7 @@ export default function DashboardHeaderDrawerComponent({
         stopPendingConfirmation();
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        clearAuthSession();
         router.push("/login");
       },
     });

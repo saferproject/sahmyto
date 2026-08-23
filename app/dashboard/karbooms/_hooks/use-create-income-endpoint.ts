@@ -1,19 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { karboomService } from "../_services/karboom-service";
 
 export default function useCreateIncomeEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["create-income"],
     mutationFn: karboomService.createIncome,
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["incomes"],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["financial-month-data"],
-      });
-    },
+    invalidateQueries: [["incomes"], ["financial-month-data"]],
   });
 }

@@ -37,9 +37,12 @@ export default function QueryState({
     );
 
   if (isError)
-    return errorFallback ?? <CenteredMessageComponent text="خطا در دریافت اطلاعات" />;
+    return (
+      errorFallback ?? <CenteredMessageComponent text="خطا در دریافت اطلاعات" />
+    );
 
-  if (isEmpty) return emptyFallback ?? <CenteredMessageComponent text="موردی یافت نشد" />;
+  if (isEmpty)
+    return emptyFallback ?? <CenteredMessageComponent text="موردی یافت نشد" />;
 
   return children;
 }

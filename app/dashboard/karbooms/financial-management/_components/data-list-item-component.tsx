@@ -1,7 +1,7 @@
-import formatNumber from "@/app/_utilities/format-numbers";
 import { ArrowDown2 } from "iconsax-reactjs";
-import Image from "next/image";
 import { useState } from "react";
+
+import PriceWithUnit from "@/app/_components/price-with-unit-component";
 
 type DataListItemProps = {
   title: string;
@@ -25,18 +25,18 @@ export default function DataListItemComponent({
         (isDetailsOpen ? "max-h-1000" : "max-h-14.5")
       }
     >
-      <div
-        className="border-secondary flex w-full items-center justify-between rounded-2xl border bg-white p-4"
+      <button
+        type="button"
+        aria-expanded={isDetailsOpen}
+        className="border-secondary flex w-full cursor-pointer items-center justify-between rounded-2xl border bg-white p-4 text-start"
         onClick={handleToggleDetails}
       >
         <p>{title}</p>
         <div className="flex items-center gap-4">
-          <p>{formatNumber(value)}</p>
-          <Image
-            src="/images/toman-secondary.webp"
-            alt="تومان"
-            width={24}
-            height={24}
+          <PriceWithUnit
+            value={value}
+            variant="secondary"
+            valueClassName="text-body"
           />
           <ArrowDown2
             size="24"
@@ -45,7 +45,7 @@ export default function DataListItemComponent({
             }
           />
         </div>
-      </div>
+      </button>
     </li>
   );
 }

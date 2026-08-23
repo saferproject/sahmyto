@@ -1,12 +1,8 @@
 import User from "@/app/_interfaces/user";
+import { http } from "@/app/_services/http";
 import { ProfileFormType } from "../_schemas/profile-schema";
-import { fetchWithAuth } from "@/app/proxy";
 
-export const loginService = {
+export const profileService = {
   completeProfile: (body: ProfileFormType) =>
-    fetchWithAuth<User>("user/updateProfile", {
-      body: JSON.stringify(body),
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.put<User>("user/updateProfile", { body }),
 };

@@ -1,5 +1,6 @@
 import ApiError from "./_errors/api-error";
 import BaseResponse, { type ApiFieldErrors } from "./_interfaces/base-response";
+import { clearAuthSession } from "./_utilities/auth-session";
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 15_000;
 const AUTH_STORAGE_KEYS = ["token", "user"] as const;
@@ -93,6 +94,7 @@ function normalizeSuccessResponse<ResponseType>(
 
 function clearAuthStorage() {
   AUTH_STORAGE_KEYS.forEach((key) => window.localStorage.removeItem(key));
+  clearAuthSession();
 }
 
 export async function fetchWithAuth<ResponseType>(

@@ -27,7 +27,8 @@ export default function ExpensesListPage() {
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
 
-  const { mutate: rejectExpense, isPending: rejectingExpense } = useRejectExpense();
+  const { mutate: rejectExpense, isPending: rejectingExpense } =
+    useRejectExpense();
 
   const handleOpenExpenseDtailsDrawer = () => {
     setExpenseDetailsDrawerOpen(true);

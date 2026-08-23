@@ -1,6 +1,7 @@
 import { useSnackbar } from "notistack";
 import { useState, type MouseEvent } from "react";
-import { motion } from "motion/react";
+
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
 import useDeleteActivityEndpoint from "../_hooks/use-delete-activity-endpoint";
 import { ActivityListItemProps } from "../_types/activity-list-item-props";
 
@@ -9,8 +10,6 @@ export default function ActivityListItemComponent({
   index,
   onEdit,
 }: ActivityListItemProps) {
-  const {} = activity;
-
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
   const { mutate: deleteActivity } = useDeleteActivityEndpoint();
@@ -34,12 +33,9 @@ export default function ActivityListItemComponent({
   };
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: membership_status === "pending" ? 0.6 : 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
       className="relative overflow-visible"
-    ></motion.li>
+    ></AnimatedListItem>
   );
 }

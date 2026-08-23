@@ -1,18 +1,12 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import AddPartnerEndpointBody from "../_types/add-partner-endpoint-body";
 import EditPartnerEndpointBody from "../_types/edit-partner-endpoint-body";
 
 export const partnerFormService = {
   addPartner: ({ karboom_id, ...other }: AddPartnerEndpointBody) =>
-    fetchWithAuth<undefined>(`karboom/partners/store/${karboom_id}`, {
-      body: JSON.stringify(other),
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    http.post<undefined>(`karboom/partners/store/${karboom_id}`, {
+      body: other,
     }),
   editPartner: ({ partner_id, ...other }: EditPartnerEndpointBody) =>
-    fetchWithAuth<undefined>(`karboom/partners/edit/${partner_id}`, {
-      body: JSON.stringify(other),
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.put<undefined>(`karboom/partners/edit/${partner_id}`, { body: other }),
 };

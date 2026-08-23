@@ -1,3 +1,3 @@
 export type MonthBalanceProps = {
-  balance: number
-}
+  balance: number;
+};

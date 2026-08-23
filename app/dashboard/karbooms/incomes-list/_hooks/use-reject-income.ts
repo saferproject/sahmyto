@@ -1,25 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import BaseResponse from "@/app/_interfaces/base-response";
-import ApiError from "@/app/_errors/api-error";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
 import { RejectIncomeEndpointBody } from "../_types/reject-income-endpoint-body";
 
-import { IncomeListService } from "../_services/incomes-list-service";
+import { incomeListService } from "../_services/incomes-list-service";
 
 export default function useRejectIncome() {
-  const queryClient = useQueryClient();
-
-  return useMutation<
-    BaseResponse<undefined>,
-    ApiError,
-    RejectIncomeEndpointBody
-  >({
+  return useInvalidatingMutation({
     mutationKey: ["reject-income"],
-    mutationFn: ({ incomeId, ...other }) =>
-      IncomeListService.rejectIncome(incomeId, other),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["incomes"] });
-    },
+    mutationFn: ({ incomeId, ...other }: RejectIncomeEndpointBody) =>
+      incomeListService.rejectIncome(incomeId, other),
+    invalidateQueries: [["incomes"]],
   });
 }

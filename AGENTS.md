@@ -23,7 +23,7 @@ Name React components and types in PascalCase, hooks with `use-`, and other file
 
 ## Testing Guidelines
 
-No automated test framework or coverage threshold is currently configured. Before submitting changes, run `pnpm lint` and `pnpm build`, then manually exercise affected routes and responsive states. If adding tests, colocate them with the feature using `*.test.ts` or `*.test.tsx`, and add the corresponding `test` script and framework configuration to `package.json`.
+Unit tests run with Vitest via `pnpm test` (config in `vitest.config.mts`). Colocate tests with the code they cover using `*.test.ts` or `*.test.tsx`, and prefer covering pure utilities and hooks. Before submitting changes, run `pnpm lint`, `pnpm test`, and `pnpm build`, then manually exercise affected routes and responsive states.
 
 ## Commit & Pull Request Guidelines
 

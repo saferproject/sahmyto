@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
-import { DriversListService } from "../_services/drivers-list-service";
+import { driversListService } from "../_services/drivers-list-service";
 
 export default function useDeleteDriverEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["delete-driver"],
-    mutationFn: DriversListService.deleteDriver,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["drivers"] });
-    },
+    mutationFn: driversListService.deleteDriver,
+    invalidateQueries: [["drivers"]],
   });
 }

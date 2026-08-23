@@ -1,15 +1,8 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { Activity } from "../_types/activity";
 
 export const activitiesListService = {
   getActivities: (karboomId: number, signal?: AbortSignal) =>
-    fetchWithAuth<Activity[]>(``, {
-      method: "GET",
-      signal,
-    }),
-  deleteActivity: (activityId: number) =>
-    fetchWithAuth<undefined>(``, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.get<Activity[]>(``, { signal }),
+  deleteActivity: (activityId: number) => http.delete<undefined>(``),
 };

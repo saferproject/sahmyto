@@ -1,5 +1,5 @@
 import User from "@/app/_interfaces/user";
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { KarboomRequest } from "../_types/karboom-request";
 
 interface GetProfileInfoOptions {
@@ -12,31 +12,12 @@ export const dashboardService = {
     redirectOnUnauthorized = true,
     signal,
   }: GetProfileInfoOptions = {}) =>
-    fetchWithAuth<User>("user/profile", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      redirectOnUnauthorized,
-      signal,
-    }),
-  userLogout: () =>
-    fetchWithAuth<undefined>("user/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.get<User>("user/profile", { signal, redirectOnUnauthorized }),
+  userLogout: () => http.post<undefined>("user/logout"),
   getKarboomRequests: (signal?: AbortSignal) =>
-    fetchWithAuth<KarboomRequest[]>("karboom/requests", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      signal,
-    }),
+    http.get<KarboomRequest[]>("karboom/requests", { signal }),
   acceptKarboomRequest: (requestId: number) =>
-    fetchWithAuth<undefined>(`karboom/requests/accept/${requestId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/requests/accept/${requestId}`),
   rejectKarboomRequest: (requestId: number) =>
-    fetchWithAuth<undefined>(`karboom/requests/reject/${requestId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/requests/reject/${requestId}`),
 };

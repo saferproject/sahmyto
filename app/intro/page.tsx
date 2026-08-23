@@ -70,7 +70,7 @@ export default function IntroLayout() {
   return (
     <div
       {...bind()}
-      className="flex h-dvh w-full flex-col touch-none select-none"
+      className="flex h-dvh w-full touch-none flex-col select-none"
     >
       <AnimatePresence>
         {isVisible && (

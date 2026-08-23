@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import useListQuery from "@/app/_hooks/use-list-query";
+
 import { activitiesListService } from "../_services/activities-list-service";
 
 export default function useGetActivitiesEndpoint(karboomId: number) {
-  return useQuery({
-    queryKey: ["activities", karboomId],
-    queryFn: ({ signal }) =>
-      activitiesListService.getActivities(karboomId, signal),
-  });
+  return useListQuery(
+    ["activities", karboomId],
+    activitiesListService.getActivities,
+    karboomId,
+  );
 }

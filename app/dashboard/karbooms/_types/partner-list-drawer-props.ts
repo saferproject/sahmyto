@@ -3,4 +3,4 @@ export type PartnerListDrawerProps = {
   onOpen: () => void;
   onClose: () => void;
   onSkip: () => void;
-}
+};

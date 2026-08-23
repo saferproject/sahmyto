@@ -7,5 +7,5 @@ export const PROFILE_FORM_DEFAULTS: ProfileFormType = {
   birthday: null,
   email: null,
   father_name: null,
-  gender: 'male',
+  gender: "male",
 };

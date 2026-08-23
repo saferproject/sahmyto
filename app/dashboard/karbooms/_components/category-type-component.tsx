@@ -1,3 +1,5 @@
+import SelectableTagComponent from "@/app/_components/selectable-tag-component";
+
 import { CategoryTypeProps } from "../_types/category-type-props";
 
 export default function CategoryTypeComponent({
@@ -7,16 +9,11 @@ export default function CategoryTypeComponent({
   onSelectCategoryType,
 }: CategoryTypeProps) {
   return (
-    <p
-      className={
-        "grow rounded-lg border px-8 py-2 text-center " +
-        (category === selectedCategoryType
-          ? "bg-primary border-primary text-white shadow-lg"
-          : "border-secondary-light bg-secondary-lightest text-body")
-      }
-      onClick={() => onSelectCategoryType(category)}
-    >
-      {label}
-    </p>
+    <SelectableTagComponent
+      label={label}
+      selected={category === selectedCategoryType}
+      onSelect={() => onSelectCategoryType(category)}
+      variant="tile"
+    />
   );
 }

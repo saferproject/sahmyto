@@ -1,14 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { activitiesListService } from "../_services/activities-list-service";
 
 export default function useDeleteActivityEndpoint() {
-  const queryClient = useQueryClient();
-  
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["delete-activity"],
     mutationFn: activitiesListService.deleteActivity,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["activities"] });
-    },
+    invalidateQueries: [["activities"]],
   });
 }

@@ -1,9 +1,4 @@
-import QueryState from "@/app/_components/query-state";
-import { AnimatePresence } from "motion/react";
-
-import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
-
-import ListFooterLayout from "../../_layouts/list-footer-layout";
+"use client";
 
 import useGetPaymentsEndpoint from "../_hooks/use-get-payments-endpoint";
 
@@ -12,6 +7,7 @@ import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { PaymentsListProps } from "../_types/payments-list-props";
 import PaymentListItemComponent from "../_components/payment-list-item-component";
 import ListHeaderLayout from "../../_layouts/list-header-layout";
+import EntityListLayout from "../../_layouts/entity-list-layout";
 
 export default function PaymentsListLayout({
   onOpenForm,
@@ -27,29 +23,21 @@ export default function PaymentsListLayout({
   } = useGetPaymentsEndpoint(karboomId);
 
   return (
-    <>
-      <ListHeaderLayout title="لیست دریافتی و پرداختی ها" />
-      <SelectedKarboomInfoComponent />
-      <QueryState
-        isLoading={gettingPayments}
-        isError={gettingPaymentsFailed}
-        isEmpty={!payments?.data.length}
-      >
-        <ul className="flex w-full flex-col gap-4">
-          <AnimatePresence>
-            {payments?.data.map((payment, index) => (
-              <PaymentListItemComponent
-                key={payment.id}
-                payment={payment}
-                index={index}
-                onReject={onOpenReject}
-                onShowDetails={onOpenDetails}
-              />
-            ))}
-          </AnimatePresence>
-        </ul>
-      </QueryState>
-      <ListFooterLayout onAdd={onOpenForm} />
-    </>
+    <EntityListLayout
+      items={payments?.data}
+      isLoading={gettingPayments}
+      isError={gettingPaymentsFailed}
+      onAdd={onOpenForm}
+      header={<ListHeaderLayout title="لیست دریافتی و پرداختی ها" />}
+      renderItem={(payment, index) => (
+        <PaymentListItemComponent
+          key={payment.id}
+          payment={payment}
+          index={index}
+          onReject={onOpenReject}
+          onShowDetails={onOpenDetails}
+        />
+      )}
+    />
   );
 }

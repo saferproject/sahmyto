@@ -8,7 +8,7 @@ import { Calendar, User } from "iconsax-reactjs";
 
 import QueryState from "@/app/_components/query-state";
 import DriverTipDrawerComponent from "./_components/driver-tip-drawer-component";
-import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 

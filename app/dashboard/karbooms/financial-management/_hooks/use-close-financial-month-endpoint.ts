@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { financialManagmentService } from "../_services/financial-management-service";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
+import { financialManagementService } from "../_services/financial-management-service";
 
 export default function useCloseFinancialMonth() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["close-financial-month"],
-    mutationFn: financialManagmentService.closeFinancialMonth,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["financial-month-data"] });
-      queryClient.invalidateQueries({ queryKey: ["financial-months"] });
-    },
+    mutationFn: financialManagementService.closeFinancialMonth,
+    invalidateQueries: [["financial-month-data"], ["financial-months"]],
   });
 }

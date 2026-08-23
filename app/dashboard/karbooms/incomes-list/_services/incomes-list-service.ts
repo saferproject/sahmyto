@@ -1,23 +1,12 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { Income } from "../../_types/income";
 import { RejectIncomeBody } from "../_types/reject-income-body";
 
-export const IncomeListService = {
+export const incomeListService = {
   getIncomes: (karboomId: number, signal?: AbortSignal) =>
-    fetchWithAuth<Income[]>(`karboom/income/karboom/${karboomId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      signal,
-    }),
+    http.get<Income[]>(`karboom/income/karboom/${karboomId}`, { signal }),
   approveIncome: (incomeId: number) =>
-    fetchWithAuth<undefined>(`karboom/income/accept/${incomeId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/income/accept/${incomeId}`),
   rejectIncome: (incomeId: number, body: RejectIncomeBody) =>
-    fetchWithAuth<undefined>(`karboom/income/reject/${incomeId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
+    http.post<undefined>(`karboom/income/reject/${incomeId}`, { body }),
 };

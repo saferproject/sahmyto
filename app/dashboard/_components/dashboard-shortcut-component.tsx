@@ -1,7 +1,11 @@
 import { ArrowLeft2 } from "iconsax-reactjs";
 import DashboardShortcutProps from "../_interfaces/dashboard-shortcut-props";
 
-export default function DashboardShortcut({ title, icon, onClick }: DashboardShortcutProps) {
+export default function DashboardShortcut({
+  title,
+  icon,
+  onClick,
+}: DashboardShortcutProps) {
   return (
     <div
       className="relative flex basis-1/2 items-center justify-between rounded-xl bg-gray-100 px-4 py-8"

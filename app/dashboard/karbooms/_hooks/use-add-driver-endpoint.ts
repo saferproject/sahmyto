@@ -1,16 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
 import { driverFormService } from "../_services/driver-form-service";
 
 export default function useAddDriver() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["add-driver"],
     mutationFn: driverFormService.addDriver,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["drivers"] });
-      queryClient.invalidateQueries({ queryKey: ["members"] });
-    },
+    invalidateQueries: [["drivers"], ["members"]],
   });
 }
