@@ -11,7 +11,8 @@ import EntityListLayout from "../../_layouts/entity-list-layout";
 
 export default function IncomesListLayout({
   onShowDetails,
-  onRejectIncome,
+  onSettle,
+  onReject,
   onOpenIncomeForm,
 }: IncomeListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
@@ -30,7 +31,8 @@ export default function IncomesListLayout({
           income={income}
           index={index}
           onShowDetails={onShowDetails}
-          onRejectIncome={onRejectIncome}
+          onSettle={onSettle}
+          onReject={onReject}
         />
       )}
     />

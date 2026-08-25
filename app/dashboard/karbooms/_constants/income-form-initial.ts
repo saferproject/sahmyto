@@ -1,25 +1,15 @@
 import dayjs from "dayjs";
 import { IncomeFormInput } from "../_schemas/income-form-schema";
+import { USER_DEFAULTS } from "../../_constants/user-defaults";
 
 export const INCOME_FORM_INITIAL: IncomeFormInput = {
+  is_settled: true,
+  settlement_date: null,
   reciever: {
     member: {
       id: 0,
     },
-    user: {
-      avatar: null,
-      first_name: "",
-      full_name: "",
-      id: 0,
-      last_name: "",
-      phone: "",
-      bio: null,
-      email: null,
-      father_name: "",
-      gender: "female",
-      is_complete_profile: false,
-      status: "active",
-    },
+    user: USER_DEFAULTS,
   },
   quantity: null,
   unit_price: "",

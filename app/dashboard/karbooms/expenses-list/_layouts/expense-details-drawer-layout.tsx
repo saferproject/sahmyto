@@ -24,14 +24,16 @@ export default function ExpenseDetailsDrawerLayout({
 }: ExpenseDetailsDrawerProps) {
   const {
     id,
+    is_settled,
     unit_price,
     wage_cost,
     category,
     type,
+    settlement_date,
     date,
     status,
     description,
-    payer: { full_name: receiverName },
+    payer,
     sender: { full_name: submitterName },
     approvals,
     clearActiveExpense,
@@ -56,6 +58,7 @@ export default function ExpenseDetailsDrawerLayout({
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={handleClose}
+      isSettled={is_settled}
       description={description}
       approvals={approvals}
       approveConfig={{
@@ -80,12 +83,21 @@ export default function ExpenseDetailsDrawerLayout({
         )}
         <DetailItemComponent label="دسته هزینه" value={category} />
         <DetailItemComponent label="تاریخ" value={formatDate(date)} />
-        <DetailItemComponent label="پرداخت کننده" value={receiverName ?? ""} />
+        <DetailItemComponent
+          label="تاریخ تسویه"
+          value={settlement_date ? formatDate(settlement_date) : "ندارد"}
+        />
+        <DetailItemComponent
+          label="پرداخت کننده"
+          value={payer ? payer.full_name : "ندارد"}
+        />
         <DetailItemComponent label="ثبت کننده" value={submitterName ?? ""} />
         <DetailItemComponent
           label="وضعیت"
-          value={ACTIVITY_STATUS_FA[status]}
-          valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
+          value={is_settled ? ACTIVITY_STATUS_FA[status] : "تسویه نشده"}
+          valueColor={
+            is_settled ? ACTIVITY_STATUS_TEXT_COLORS[status] : "text-yellow-500"
+          }
         />
       </ul>
     </EntityDetailsDrawerComponent>

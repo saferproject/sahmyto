@@ -1,5 +1,6 @@
 export type ExpenseListProps = {
   onShowDetails: () => void;
-  onRejectExpense: (expenseId: number) => void;
+  onSettle: (expenseId: number) => void;
+  onReject: (expenseId: number) => void;
   onOpenExpenseForm: () => void;
 };

@@ -4,5 +4,6 @@ export type ExpenseListItemProps = {
   expense: Expense;
   index: number;
   onShowDetails: () => void;
-  onRejectExpense: (expenseId: number) => void;
+  onSettle: (expenseId: number) => void;
+  onReject: (expenseId: number) => void;
 };

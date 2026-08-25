@@ -45,10 +45,18 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           fontSize: "14px",
-          marginTop: "6px",
           color: "oklch(30.262% 0.10854 266.981)",
         },
       },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        root: {
+          color: "oklch(30.262% 0.10854 266.981)",
+          fontSize: "14px",
+          margin: 0,
+        }
+      }
     },
     MuiTextField: {
       defaultProps: {

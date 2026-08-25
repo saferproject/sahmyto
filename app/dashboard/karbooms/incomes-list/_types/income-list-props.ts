@@ -1,5 +1,6 @@
 export type IncomeListProps = {
   onShowDetails: () => void;
-  onRejectIncome: (incomeId: number) => void;
+  onSettle: (incomeId: number) => void;
+  onReject: (incomeId: number) => void;
   onOpenIncomeForm: () => void;
 };

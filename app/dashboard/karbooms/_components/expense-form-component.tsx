@@ -1,6 +1,6 @@
 "use client";
 
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Controller, useWatch } from "react-hook-form";
 
@@ -46,19 +46,17 @@ export default function ExpenseFormComponent({
     formState: { errors },
   } = useExpenseForm();
 
-  const { description, unit_price, wage_cost } = useWatch({ control });
+  const { description, unit_price, wage_cost, is_settled } = useWatch({
+    control,
+  });
 
   const userId = useUserInfoStore((state) => state.id);
-  const selectedKarboomId = useKarboomsStore((state) => state.id);
 
   const {
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
-  } = useGetMembersEndpoint(
-    karboomId,
-    isOpen && selectedKarboomId === karboomId,
-  );
+  } = useGetMembersEndpoint(karboomId, isOpen);
 
   const { mutate: createExpense, isPending: creatingExpense } =
     useCreateExpenseEndpoint();
@@ -74,6 +72,7 @@ export default function ExpenseFormComponent({
   };
 
   const submit = ({
+    settlement_date,
     payer,
     date,
     image,
@@ -92,6 +91,9 @@ export default function ExpenseFormComponent({
           payer_id: payer.member.id,
           category_id: selectedCategory,
           karboom_id: karboomId,
+          settlement_date: settlement_date
+            ? formatGregorianDate(settlement_date)
+            : null,
           type: categoryType,
           date: formatGregorianDate(date),
         },
@@ -131,38 +133,78 @@ export default function ExpenseFormComponent({
       </p>
       <Controller
         control={control}
-        name="payer"
-        rules={{ required: true }}
+        name="is_settled"
         render={({ field }) => (
-          <Autocomplete<Member>
-            {...field}
-            loading={gettingMembers}
-            options={members?.data ?? []}
-            onChange={(_event, value) => field.onChange(value)}
-            filterOptions={(option, { inputValue }) =>
-              option.filter(({ user: { full_name } }) =>
-                full_name?.includes(inputValue),
-              )
-            }
-            getOptionLabel={(option) => option.user.full_name ?? ""}
-            getOptionKey={(option) => option.member.id}
-            isOptionEqualToValue={(option, value) =>
-              option.member.id === value?.member.id
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="پرداخت کننده"
-                error={!!errors.payer}
-                helperText={errors.payer?.message ?? ""}
-                fullWidth
-                required
+          <FormControlLabel
+            label="تسویه شده"
+            control={
+              <Checkbox
+                {...field}
+                checked={field.value}
+                slotProps={{
+                  input: { "aria-label": "controlled" },
+                }}
               />
-            )}
-            fullWidth
+            }
+            sx={{
+              width: "100%",
+              display: "flex",
+            }}
           />
         )}
       />
+      {is_settled && (
+        <>
+          <Controller
+            control={control}
+            name="settlement_date"
+            render={({ field }) => (
+              <DatePickerComponent
+                {...field}
+                onChange={(value) => field.onChange(value)}
+                label="تاریخ تسویه"
+                error={!!errors.settlement_date}
+                helperText={errors.settlement_date?.message ?? ""}
+                disableFuture
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="payer"
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Autocomplete<Member>
+                {...field}
+                loading={gettingMembers}
+                options={members?.data ?? []}
+                onChange={(_event, value) => field.onChange(value)}
+                filterOptions={(option, { inputValue }) =>
+                  option.filter(({ user: { full_name } }) =>
+                    full_name?.includes(inputValue),
+                  )
+                }
+                getOptionLabel={(option) => option.user.full_name ?? ""}
+                getOptionKey={(option) => option.member.id}
+                isOptionEqualToValue={(option, value) =>
+                  option.member.id === value?.member.id
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="پرداخت کننده"
+                    error={!!errors.payer}
+                    helperText={errors.payer?.message ?? ""}
+                    fullWidth
+                    required
+                  />
+                )}
+                fullWidth
+              />
+            )}
+          />
+        </>
+      )}
       <PriceInputComponent
         register={register("unit_price")}
         value={unit_price}

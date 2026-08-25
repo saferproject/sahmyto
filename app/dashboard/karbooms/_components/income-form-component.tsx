@@ -3,7 +3,13 @@
 import { Controller, useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { InfoCircle } from "iconsax-reactjs";
-import { Autocomplete, Button, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from "@mui/material";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { IncomeFormType } from "../_schemas/income-form-schema";
@@ -39,21 +45,18 @@ export default function IncomeFormComponent({
     formState: { errors },
   } = useIncomeForm();
 
-  const { description, quantity, unit_price, total_price } = useWatch({
-    control,
-  });
+  const { description, quantity, unit_price, total_price, is_settled } =
+    useWatch({
+      control,
+    });
 
   const userId = useUserInfoStore((state) => state.id);
-  const selectedKarboomId = useKarboomsStore((state) => state.id);
 
   const {
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
-  } = useGetMembersEndpoint(
-    karboomId,
-    isOpen && karboomId === selectedKarboomId,
-  );
+  } = useGetMembersEndpoint(karboomId, isOpen);
 
   const { mutate: createIncome, isPending: creatingIncome } =
     useCreateIncomeEndpoint();
@@ -69,6 +72,7 @@ export default function IncomeFormComponent({
   };
 
   const submit = ({
+    settlement_date,
     reciever,
     started_at,
     ended_at,
@@ -87,6 +91,9 @@ export default function IncomeFormComponent({
         type: incomeType,
         receiver_id: reciever.member.id,
         karboom_id: karboomId,
+        settlement_date: settlement_date
+          ? formatGregorianDate(settlement_date)
+          : null,
         started_at: formatGregorianDate(started_at),
         ended_at: formatGregorianDate(ended_at),
       },
@@ -168,37 +175,77 @@ export default function IncomeFormComponent({
       </p>
       <Controller
         control={control}
-        name="reciever"
+        name="is_settled"
         render={({ field }) => (
-          <Autocomplete<Member>
-            {...field}
-            loading={gettingMembers}
-            options={members?.data ?? []}
-            onChange={(_event, value) => field.onChange(value)}
-            filterOptions={(option, { inputValue }) =>
-              option.filter(({ user: { full_name } }) =>
-                full_name?.includes(inputValue),
-              )
-            }
-            getOptionLabel={(option) => option.user.full_name ?? ""}
-            getOptionKey={(option) => option.member.id}
-            isOptionEqualToValue={(option, value) =>
-              option.member.id === value?.member.id
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="دریافت کننده"
-                error={!!errors.reciever}
-                helperText={errors.reciever?.message ?? ""}
-                fullWidth
-                required
+          <FormControlLabel
+            label="تسویه شده"
+            control={
+              <Checkbox
+                {...field}
+                checked={field.value}
+                slotProps={{
+                  input: { "aria-label": "controlled" },
+                }}
               />
-            )}
-            fullWidth
+            }
+            sx={{
+              width: "100%",
+              display: "flex",
+            }}
           />
         )}
       />
+      {is_settled && (
+        <>
+          <Controller
+            control={control}
+            name="settlement_date"
+            render={({ field }) => (
+              <DatePickerComponent
+                {...field}
+                onChange={(value) => field.onChange(value)}
+                label="تاریخ تسویه"
+                error={!!errors.settlement_date}
+                helperText={errors.settlement_date?.message ?? ""}
+                disableFuture
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="reciever"
+            render={({ field }) => (
+              <Autocomplete<Member>
+                {...field}
+                loading={gettingMembers}
+                options={members?.data ?? []}
+                onChange={(_event, value) => field.onChange(value)}
+                filterOptions={(option, { inputValue }) =>
+                  option.filter(({ user: { full_name } }) =>
+                    full_name?.includes(inputValue),
+                  )
+                }
+                getOptionLabel={(option) => option.user.full_name ?? ""}
+                getOptionKey={(option) => option.member.id}
+                isOptionEqualToValue={(option, value) =>
+                  option.member.id === value?.member.id
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="دریافت کننده"
+                    error={!!errors.reciever}
+                    helperText={errors.reciever?.message ?? ""}
+                    fullWidth
+                    required
+                  />
+                )}
+                fullWidth
+              />
+            )}
+          />
+        </>
+      )}
       <TextField
         {...register("quantity", { valueAsNumber: true })}
         label={quantityInputSettings[incomeType].label}

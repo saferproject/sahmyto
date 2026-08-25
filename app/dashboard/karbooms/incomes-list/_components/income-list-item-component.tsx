@@ -20,17 +20,19 @@ export default function IncomeListItemComponent({
   income,
   index,
   onShowDetails,
-  onRejectIncome,
+  onSettle,
+  onReject,
 }: IncomeListItemProps) {
   const {
     id,
+    is_settled,
     unit_price,
     quantity,
     type,
     started_at,
     ended_at,
     status,
-    receiver: { full_name: receiverName },
+    receiver,
     sender: { full_name: submitterName },
     approvals,
   } = income;
@@ -81,7 +83,9 @@ export default function IncomeListItemComponent({
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">دریافت کننده</p>
-          <p className="text-body text-sm font-semibold">{receiverName}</p>
+          <p className="text-body text-sm font-semibold">
+            {receiver ? receiver.full_name : "ندارد"}
+          </p>
         </div>
         <div className="flex basis-1/2 flex-col gap-1">
           <p className="text-body-light text-xs">تایید مالکین</p>
@@ -99,10 +103,14 @@ export default function IncomeListItemComponent({
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-body-light text-xs">وضعیت</p>
-          <StatusChipComponent status={status} />
+          {is_settled ? (
+            <StatusChipComponent status={status} />
+          ) : (
+            <span className="text-yellow-500">تسویه نشده</span>
+          )}
         </div>
       </div>
-      <div className="w-full px-4 py-2">
+      <div className="flex w-full items-center gap-2 px-4 py-2">
         <Button
           variant="contained"
           size="small"
@@ -111,14 +119,24 @@ export default function IncomeListItemComponent({
         >
           نمایش جزئیات
         </Button>
+        {!is_settled && (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => onSettle(id)}
+            fullWidth
+          >
+            ثبت تسویه
+          </Button>
+        )}
       </div>
-      {canApprove && (
+      {canApprove && is_settled && (
         <div className="flex items-center gap-4 px-4 py-2">
           <Button
             variant="outlined"
             color="error"
             size="small"
-            onClick={() => onRejectIncome(id)}
+            onClick={() => onReject(id)}
             fullWidth
           >
             رد

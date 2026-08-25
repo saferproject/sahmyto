@@ -9,7 +9,8 @@ import EntityListLayout from "../../_layouts/entity-list-layout";
 
 export default function ExpenseListLayout({
   onShowDetails,
-  onRejectExpense,
+  onSettle,
+  onReject,
   onOpenExpenseForm,
 }: ExpenseListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
@@ -28,7 +29,8 @@ export default function ExpenseListLayout({
           expense={expense}
           index={index}
           onShowDetails={onShowDetails}
-          onRejectExpense={onRejectExpense}
+          onSettle={onSettle}
+          onReject={onReject}
         />
       )}
     />

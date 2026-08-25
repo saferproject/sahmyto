@@ -22,6 +22,7 @@ interface EntityDetailsDrawerProps {
   onOpen: () => void;
   onClose: () => void;
   children: ReactNode;
+  isSettled?: boolean;
   description?: string | null;
   approvals?: Approval[];
   approveConfig?: ApproveRejectConfig;
@@ -33,6 +34,7 @@ export default function EntityDetailsDrawerComponent({
   onOpen,
   onClose,
   children,
+  isSettled,
   description,
   approvals,
   approveConfig,
@@ -42,7 +44,7 @@ export default function EntityDetailsDrawerComponent({
       <h4 className="text-body mt-4 font-semibold">{title}</h4>
       {children}
       {description && <DescriptionBlockComponent description={description} />}
-      {approvals && (
+      {approvals && isSettled && (
         <div className="mt-4 w-full">
           <h5 className="text-body">وضعیت تاییدیه مالکین</h5>
           <ul className="mt-4 flex w-full flex-col gap-4">
@@ -52,7 +54,7 @@ export default function EntityDetailsDrawerComponent({
           </ul>
         </div>
       )}
-      {approveConfig?.canApprove && (
+      {approveConfig?.canApprove && isSettled && (
         <div className="flex w-full items-center gap-4 py-2">
           <Button
             variant="outlined"

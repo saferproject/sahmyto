@@ -5,6 +5,8 @@ import { Member } from "../_types/member";
 
 const ExpenseFormSchema = z
   .object({
+    is_settled: z.boolean("وضعیت تسویه الزامی است"),
+    settlement_date: z.nullable(dayjsField),
     payer: z.custom<Member>(),
     unit_price: z.nullable(z.string()),
     wage_cost: z.nullable(z.string()),

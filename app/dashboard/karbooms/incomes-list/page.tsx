@@ -15,6 +15,10 @@ import IncomeDrawerComponent from "../_components/income-drawer-component";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
 import ListHeaderLayout from "../_layouts/list-header-layout";
+import SettlementDrawerComponent from "../_components/settlement-drawer-component";
+import { SettlementFormType } from "../_schemas/settlement-form-schema";
+import useSettleIncome from "./_hooks/use-settle-income";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 
 export default function IncomesListPage() {
   const [isIncomeDetailsDrawerOpen, setIncomeDetailsDrawerOpen] =
@@ -22,10 +26,14 @@ export default function IncomesListPage() {
   const [isRejectDrawerOpen, setRejectDrawerOpen] = useState<boolean>(false);
   const [isIncomeFormDrawerOpen, setIncomeFormDrawerOpen] =
     useState<boolean>(false);
+  const [isSettlementDrawerOpen, setSettlementDrawerOpen] =
+    useState<boolean>(false);
   const [selectedIncome, setSelectedIncome] = useState<number | null>(null);
 
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
+
+  const { mutate: settleIncome, isPending: settlingIncome } = useSettleIncome();
 
   const { mutate: rejectIncome, isPending: rejectingIncome } =
     useRejectIncome();
@@ -36,6 +44,14 @@ export default function IncomesListPage() {
 
   const handleCloseIncomeDtailsDrawer = () => {
     setIncomeDetailsDrawerOpen(false);
+  };
+
+  const handleOpenSettlementDrawer = () => {
+    setSettlementDrawerOpen(true);
+  };
+
+  const handleCloseSettlementDrawer = () => {
+    setSettlementDrawerOpen(false);
   };
 
   const handleOpenRejectDrawer = () => {
@@ -52,6 +68,35 @@ export default function IncomesListPage() {
 
   const handleCloseIncomeForm = () => {
     setIncomeFormDrawerOpen(false);
+  };
+
+  const handleSettleIncome = (incomeId: number) => {
+    setSelectedIncome(incomeId);
+    handleOpenSettlementDrawer();
+  };
+
+  const handleSubmitSettlement = ({
+    member,
+    settlement_date,
+    description
+  }: SettlementFormType) => {
+    if (selectedIncome) {
+      settleIncome(
+        {
+          incomeId: selectedIncome,
+          receiver_id: member.member.id,
+          settlement_date: formatGregorianDate(settlement_date),
+          description
+        },
+        {
+          onSuccess: () => {
+            setSelectedIncome(null);
+            handleCloseSettlementDrawer();
+            handleCloseIncomeDtailsDrawer();
+          },
+        },
+      );
+    }
   };
 
   const handleRejectIncome = (incomeId: number) => {
@@ -78,7 +123,8 @@ export default function IncomesListPage() {
       <ListHeaderLayout title="لیست درآمد ها" />
       <IncomesListLayout
         onShowDetails={handleOpenIncomeDtailsDrawer}
-        onRejectIncome={handleRejectIncome}
+        onSettle={handleSettleIncome}
+        onReject={handleRejectIncome}
         onOpenIncomeForm={handleOpenIncomeForm}
       />
       <IncomeDetailsDrawerLayout
@@ -86,6 +132,15 @@ export default function IncomesListPage() {
         onOpen={handleOpenIncomeDtailsDrawer}
         onClose={handleCloseIncomeDtailsDrawer}
         onRejectIncome={handleRejectIncome}
+      />
+      <SettlementDrawerComponent
+        memberTitle="دریافت کننده"
+        title="ثبت تسویه درآمد"
+        isOpen={isSettlementDrawerOpen}
+        isLoading={settlingIncome}
+        onOpen={handleOpenSettlementDrawer}
+        onClose={handleCloseSettlementDrawer}
+        onSubmit={handleSubmitSettlement}
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}

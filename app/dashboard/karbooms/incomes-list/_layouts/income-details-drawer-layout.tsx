@@ -21,14 +21,16 @@ export default function IncomeDetailsDrawerLayout({
 }: IncomeDetailsDrawerProps) {
   const {
     id,
+    is_settled,
     unit_price,
     quantity,
     type,
+    settlement_date,
     started_at,
     ended_at,
     status,
     description,
-    receiver: { full_name: receiverName },
+    receiver,
     sender: { full_name: submitterName },
     approvals,
     clearActiveIncome,
@@ -57,6 +59,7 @@ export default function IncomeDetailsDrawerLayout({
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={handleClose}
+      isSettled={is_settled}
       description={description}
       approvals={approvals}
       approveConfig={{
@@ -80,12 +83,19 @@ export default function IncomeDetailsDrawerLayout({
           label="تاریخ / زمان پایان"
           value={formatDate(ended_at)}
         />
+        <DetailItemComponent
+          label="تاریخ تسویه"
+          value={settlement_date ? formatDate(settlement_date) : "ندارد"}
+        />
         <DetailItemComponent label="ثبت کننده" value={submitterName} />
-        <DetailItemComponent label="دریافت کننده" value={receiverName} />
+        <DetailItemComponent
+          label="دریافت کننده"
+          value={receiver ? receiver.full_name : "ندارد"}
+        />
         <DetailItemComponent
           label="وضعیت"
-          value={ACTIVITY_STATUS_FA[status]}
-          valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
+          value={is_settled ? ACTIVITY_STATUS_FA[status] : "تسویه نشده"}
+          valueColor={is_settled ? ACTIVITY_STATUS_TEXT_COLORS[status] : 'text-yellow-500'}
         />
       </ul>
     </EntityDetailsDrawerComponent>

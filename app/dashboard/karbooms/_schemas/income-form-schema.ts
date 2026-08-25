@@ -5,6 +5,8 @@ import { Member } from "../_types/member";
 
 const IncomeFormSchema = z
   .object({
+    is_settled: z.boolean('وضعیت تسویه الزامی است'),
+    settlement_date: z.nullable(dayjsField),
     reciever: z.custom<Member>(),
     quantity: z
       .nullable(
