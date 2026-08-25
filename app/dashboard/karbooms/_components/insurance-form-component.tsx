@@ -17,13 +17,14 @@ import InsuranceFormSchema, {
   type InsuranceFormType,
 } from "../_schemas/insurance-form-schema";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
+import ApiError from "@/app/_errors/api-error";
 
 type KarboomIdKey = "karboomId" | "karboom_id";
 
 interface InsuranceMutation {
   mutate: (
     body: Record<string, unknown>,
-    options?: { onSuccess: () => void },
+    options?: { onSuccess: () => void; onError: (error: Error) => void },
   ) => void;
   isPending: boolean;
 }
@@ -46,6 +47,7 @@ export default function InsuranceFormComponent({
     control,
     handleSubmit,
     reset,
+    setError,
     setValue,
     formState: { errors },
   } = useZodForm<InsuranceFormType>({
@@ -56,6 +58,16 @@ export default function InsuranceFormComponent({
   const { description, started_at } = useWatch({ control });
 
   const karboomId = useKarboomsStore((state) => state.id);
+
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof InsuranceFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
 
   const submit = ({ started_at, ended_at, ...other }: InsuranceFormType) => {
     mutation.mutate(
@@ -70,6 +82,7 @@ export default function InsuranceFormComponent({
           onSuccess();
           reset(INSURANCE_FORM_INITIAL);
         },
+        onError: handleMutationError,
       },
     );
   };
@@ -93,7 +106,12 @@ export default function InsuranceFormComponent({
         error={!!errors.insurance_number}
         helperText={errors.insurance_number?.message ?? ""}
       />
-      <InsuranceCompanyInput control={control} enableGettingData={isOpen} />
+      <InsuranceCompanyInput
+        control={control}
+        enableGettingData={isOpen}
+        error={!!errors.insurance_company_id}
+        helperText={errors.insurance_company_id?.message ?? ""}
+      />
       <TextField
         {...register("insurance_code")}
         label="کد یکتای بیمه"

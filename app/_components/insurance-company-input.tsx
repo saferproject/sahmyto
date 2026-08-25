@@ -1,5 +1,11 @@
 import { Controller } from "react-hook-form";
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 import InsuranceCompanyInputProps from "../_interfaces/insurance-company-input-props";
 import useGetInsuranceCompaniesEndpoint from "../_hooks/use-get-insurance-companies-endpoint";
@@ -7,6 +13,8 @@ import useGetInsuranceCompaniesEndpoint from "../_hooks/use-get-insurance-compan
 export default function InsuranceCompanyInput({
   control,
   enableGettingData,
+  error,
+  helperText,
 }: InsuranceCompanyInputProps) {
   const { data } = useGetInsuranceCompaniesEndpoint(enableGettingData);
 
@@ -15,7 +23,7 @@ export default function InsuranceCompanyInput({
       control={control}
       name="insurance_company_id"
       render={({ field }) => (
-        <FormControl fullWidth>
+        <FormControl error={error} fullWidth>
           <InputLabel id="insurance-company-id-label">شرکت بیمه</InputLabel>
           <Select
             {...field}
@@ -32,6 +40,7 @@ export default function InsuranceCompanyInput({
               </MenuItem>
             ))}
           </Select>
+          <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
       )}
     />

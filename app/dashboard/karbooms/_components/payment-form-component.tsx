@@ -54,6 +54,16 @@ export default function PaymentFormComponent({
   const { mutate: createExpense, isPending: creatingExpense } =
     useAddPaymentEndpoint();
 
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof PaymentFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = ({
     payer,
     reciever,
@@ -75,15 +85,7 @@ export default function PaymentFormComponent({
           onSuccess();
           setValues(PAYMENT_FORM_INITIAL);
         },
-        onError(error) {
-          if (error instanceof ApiError && error.errors)
-            Object.entries(error.errors).forEach(([field, errors]) =>
-              setError(field as keyof PaymentFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
-        },
+        onError: handleMutationError,
       },
     );
   };

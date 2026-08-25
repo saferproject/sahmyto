@@ -63,6 +63,16 @@ export default function ExpenseFormComponent({
   const { mutate: createExpense, isPending: creatingExpense } =
     useCreateExpenseEndpoint();
 
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof ExpenseFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = ({
     payer,
     date,
@@ -90,15 +100,7 @@ export default function ExpenseFormComponent({
             onSuccess();
             setValues(EXPENSE_FORM_INITIAL);
           },
-          onError(error) {
-            if (error instanceof ApiError && error.errors)
-              Object.entries(error.errors).forEach(([field, errors]) =>
-                setError(field as keyof ExpenseFormType, {
-                  message: errors[0],
-                  type: "validate",
-                }),
-              );
-          },
+          onError: handleMutationError,
         },
       );
     else

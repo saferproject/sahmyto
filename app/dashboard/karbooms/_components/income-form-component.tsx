@@ -58,6 +58,16 @@ export default function IncomeFormComponent({
   const { mutate: createIncome, isPending: creatingIncome } =
     useCreateIncomeEndpoint();
 
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof IncomeFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = ({
     reciever,
     started_at,
@@ -85,15 +95,7 @@ export default function IncomeFormComponent({
           onSuccess();
           setValues(INCOME_FORM_INITIAL);
         },
-        onError(error) {
-          if (error instanceof ApiError && error.errors)
-            Object.entries(error.errors).forEach(([field, errors]) =>
-              setError(field as keyof IncomeFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
-        },
+        onError: handleMutationError,
       },
     );
   };

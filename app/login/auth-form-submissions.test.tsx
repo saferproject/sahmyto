@@ -14,6 +14,7 @@ const formMocks = vi.hoisted(() => ({
         submit(formMocks.values);
       },
   ),
+  setError: vi.fn(),
   formState: { errors: {} },
 }));
 const loginMutationMock = vi.hoisted(() => vi.fn());
@@ -30,6 +31,7 @@ vi.mock("@mui/material", () => ({
   AccordionSummary: "div",
   Button: "button",
   FormControl: "div",
+  FormHelperText: "span",
   FormControlLabel: "label",
   Radio: "input",
   RadioGroup: "div",
@@ -82,6 +84,7 @@ vi.mock("@/app/_providers/user-info-provider", () => ({
 }));
 
 import LoginPage from "./page";
+import ApiError from "@/app/_errors/api-error";
 import ProfileFormComponent from "@/app/dashboard/profile/_components/profile-form-component";
 
 function submitForm(container: HTMLElement) {
@@ -161,5 +164,32 @@ describe("profile form submission", () => {
     profileMutationMock.mock.calls[0][1].onSuccess({ data: user });
     expect(setUserMock).toHaveBeenCalledWith(user);
     expect(routerPushMock).toHaveBeenCalledWith("/dashboard");
+  });
+
+  it("shows API validation messages on matching profile controls", () => {
+    formMocks.values = {
+      phone: "09123456789",
+      first_name: "Ali",
+      last_name: "Ahmadi",
+      father_name: null,
+      gender: "male",
+      email: null,
+      birthday: null,
+    };
+    const { container } = render(<ProfileFormComponent />);
+
+    submitForm(container);
+    profileMutationMock.mock.calls[0][1].onError(
+      new ApiError({
+        status: 422,
+        message: "Invalid input",
+        errors: { first_name: ["First name is invalid"] },
+      }),
+    );
+
+    expect(formMocks.setError).toHaveBeenCalledWith("first_name", {
+      message: "First name is invalid",
+      type: "validate",
+    });
   });
 });

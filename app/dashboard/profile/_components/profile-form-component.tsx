@@ -10,6 +10,7 @@ import {
   AccordionDetails,
   Button,
   FormControl,
+  FormHelperText,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -25,6 +26,7 @@ import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { ProfileFormType } from "../_schemas/profile-schema";
 import DatePickerComponent from "@/app/_components/date-picker-component";
 import { useShallow } from "zustand/react/shallow";
+import ApiError from "@/app/_errors/api-error";
 
 export default function ProfileFormComponent() {
   const [isOptionalFieldsVisible, setOptionalFieldsVisibility] =
@@ -50,6 +52,7 @@ export default function ProfileFormComponent() {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors },
   } = useProfileForm({
     phone: user.phone,
@@ -63,12 +66,23 @@ export default function ProfileFormComponent() {
 
   const { mutate } = useCompleteProfileEndpoint();
 
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof ProfileFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = (data: ProfileFormType) => {
     mutate(data, {
       onSuccess: (response) => {
         setUser(response.data);
         router.push("/dashboard");
       },
+      onError: handleMutationError,
     });
   };
 
@@ -88,6 +102,8 @@ export default function ProfileFormComponent() {
           inputLabel: { shrink: true },
         }}
         disabled
+        error={!!errors.phone}
+        helperText={errors.phone?.message ?? ""}
         required
         fullWidth
       />
@@ -99,6 +115,8 @@ export default function ProfileFormComponent() {
             inputLabel: { shrink: true },
           }}
           required
+          error={!!errors.first_name}
+          helperText={errors.first_name?.message ?? ""}
           fullWidth
         />
         <TextField
@@ -108,6 +126,8 @@ export default function ProfileFormComponent() {
             inputLabel: { shrink: true },
           }}
           required
+          error={!!errors.last_name}
+          helperText={errors.last_name?.message ?? ""}
           fullWidth
         />
       </div>
@@ -115,7 +135,7 @@ export default function ProfileFormComponent() {
         name="gender"
         control={control}
         render={({ field }) => (
-          <FormControl required>
+          <FormControl error={!!errors.gender} required>
             <RadioGroup
               {...field}
               onChange={(event) => field.onChange(event.target.value)}
@@ -133,6 +153,7 @@ export default function ProfileFormComponent() {
                 />
               </div>
             </RadioGroup>
+            <FormHelperText>{errors.gender?.message ?? ""}</FormHelperText>
           </FormControl>
         )}
       />
@@ -159,8 +180,19 @@ export default function ProfileFormComponent() {
                 />
               )}
             />
-            <TextField {...register("father_name")} label="نام پدر" />
-            <TextField {...register("email")} label="ایمیل" type="email" />
+            <TextField
+              {...register("father_name")}
+              label="نام پدر"
+              error={!!errors.father_name}
+              helperText={errors.father_name?.message ?? ""}
+            />
+            <TextField
+              {...register("email")}
+              label="ایمیل"
+              type="email"
+              error={!!errors.email}
+              helperText={errors.email?.message ?? ""}
+            />
           </div>
         </AccordionDetails>
       </Accordion>

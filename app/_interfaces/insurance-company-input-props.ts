@@ -5,4 +5,6 @@ import { ThirdPartyInsuranceFormType } from "../dashboard/karbooms/third-party-i
 export default interface InsuranceCompanyInputProps {
   control: Control<ThirdPartyInsuranceFormType>;
   enableGettingData: boolean;
+  error?: boolean;
+  helperText?: string;
 }

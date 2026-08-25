@@ -18,7 +18,10 @@ export default function BodyInsuranceFormComponent({
       mutation={{
         mutate: mutate as (
           body: Record<string, unknown>,
-          options?: { onSuccess: () => void },
+          options?: {
+            onSuccess: () => void;
+            onError: (error: Error) => void;
+          },
         ) => void,
         isPending,
       }}

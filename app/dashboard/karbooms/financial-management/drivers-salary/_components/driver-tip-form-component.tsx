@@ -40,6 +40,16 @@ export default function DriverTipFormComponent({
   const { mutate: addBonusPenalty, isPending: addingBonusPenalty } =
     useAddBonusPenaltyDriverEndpoint();
 
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof DriverTipFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = ({ amount, ...other }: DriverTipFormType) => {
     addBonusPenalty(
       {
@@ -54,15 +64,7 @@ export default function DriverTipFormComponent({
           onSuccess();
           setValues(DRIVER_TIP_FORM_DEFAULTS);
         },
-        onError(error) {
-          if (error instanceof ApiError && error.errors)
-            Object.entries(error.errors).forEach(([field, errors]) =>
-              setError(field as keyof DriverTipFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
-        },
+        onError: handleMutationError,
       },
     );
   };

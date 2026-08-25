@@ -38,6 +38,16 @@ export default function KarboomFormComponent({
   const { mutate: createKarboom, isPending: creatingKarboom } =
     useCreateKarboomEndpoint();
 
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof KarboomFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
+
   const submit = (data: KarboomFormType) => {
     createKarboom(data, {
       onSuccess: (response) => {
@@ -45,15 +55,7 @@ export default function KarboomFormComponent({
         setValues(KARBOOM_FORM_INITIAL);
         onSuccess();
       },
-      onError: (error) => {
-        if (error instanceof ApiError && error.errors)
-          Object.entries(error.errors).forEach(([field, errors]) =>
-            setError(field as keyof KarboomFormType, {
-              message: errors[0],
-              type: "validate",
-            }),
-          );
-      },
+      onError: handleMutationError,
     });
   };
 

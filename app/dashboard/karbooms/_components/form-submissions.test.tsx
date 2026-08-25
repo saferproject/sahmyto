@@ -295,6 +295,31 @@ describe("driver form submission", () => {
       expect.any(Object),
     );
   });
+
+  it("shows the first API validation message on its matching control", () => {
+    formMocks.values = driverValues;
+    const { container } = render(
+      <DriverFormComponent
+        formState="ADD"
+        onCancel={vi.fn()}
+        onSuccess={vi.fn()}
+      />,
+    );
+
+    submitForm(container);
+    mutations.addDriver.mock.calls[0][1].onError(
+      new ApiError({
+        status: 422,
+        message: "Invalid input",
+        errors: { fixed_amount: ["Fixed amount must be at least 1"] },
+      }),
+    );
+
+    expect(formMocks.setError).toHaveBeenCalledWith("fixed_amount", {
+      message: "Fixed amount must be at least 1",
+      type: "validate",
+    });
+  });
 });
 
 describe("partner form submission", () => {
@@ -429,6 +454,40 @@ describe("karboom, insurance, and driver-adjustment submissions", () => {
       expect(formMocks.reset).toHaveBeenCalled();
     },
   );
+
+  it("shows insurance API validation messages on matching controls", () => {
+    formMocks.values = {
+      insurance_company_id: 3,
+      insurance_number: "INS-1",
+      insurance_code: "CODE-1",
+      started_at: dayjs("2026-01-02"),
+      ended_at: dayjs("2027-01-02"),
+      description: null,
+    };
+    const mutate = vi.fn();
+    const { container } = render(
+      <InsuranceFormComponent
+        isOpen
+        onSuccess={vi.fn()}
+        karboomIdKey="karboom_id"
+        mutation={{ mutate, isPending: false }}
+      />,
+    );
+
+    submitForm(container);
+    mutate.mock.calls[0][1].onError(
+      new ApiError({
+        status: 422,
+        message: "Invalid input",
+        errors: { insurance_number: ["Insurance number is invalid"] },
+      }),
+    );
+
+    expect(formMocks.setError).toHaveBeenCalledWith("insurance_number", {
+      message: "Insurance number is invalid",
+      type: "validate",
+    });
+  });
 
   it("converts adjustment amounts and attaches month and driver ids", () => {
     formMocks.values = { amount: "۱,۵۰۰", description: "Great work" };
