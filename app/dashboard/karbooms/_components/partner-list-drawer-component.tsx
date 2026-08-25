@@ -5,7 +5,6 @@ import { PartnerListDrawerProps } from "../_types/partner-list-drawer-props";
 import PartnersListComponent from "../partners-list/_components/partners-list-component";
 import QueryState from "@/app/_components/query-state";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
-import { useShallow } from "zustand/react/shallow";
 import useGetPartnersEndpoint from "../partners-list/_hooks/use-get-partners-endpoint";
 import ListFooterLayout from "../_layouts/list-footer-layout";
 import PartnerFormDrawerComponent from "./partner-form-drawer-component";

@@ -11,7 +11,6 @@ import {
   TextField,
 } from "@mui/material";
 
-import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { IncomeFormType } from "../_schemas/income-form-schema";
 import DescriptionInput from "@/app/_components/description-input";
 import DatePickerComponent from "@/app/_components/date-picker-component";

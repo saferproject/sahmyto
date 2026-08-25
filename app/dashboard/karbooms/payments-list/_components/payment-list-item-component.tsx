@@ -6,7 +6,6 @@ import formatDate from "@/app/_utilities/format-dates";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { PaymentListItemProps } from "../_types/payment-list-item-props";
-import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import { usePaymentListStore } from "../_providers/payments-list-store-provider";
 import useApprovePaymentEndpoint from "../_hooks/use-approve-payment-endpoint";
 import DetailItemComponent from "@/app/_components/detail-item-component";
@@ -22,7 +21,6 @@ export default function PaymentListItemComponent({
 }: PaymentListItemProps) {
   const {
     id,
-    approvals,
     total_price,
     date,
     type,
@@ -33,8 +31,6 @@ export default function PaymentListItemComponent({
   } = payment;
 
   const loggedInUserId = useUserInfoStore((state) => state.id);
-
-  const userKarboomRoles = useKarboomsStore((state) => state.roles);
 
   const setActivePayment = usePaymentListStore(
     (state) => state.setActivePayment,

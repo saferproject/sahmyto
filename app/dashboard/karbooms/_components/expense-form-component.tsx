@@ -20,8 +20,6 @@ import DescriptionInput from "@/app/_components/description-input";
 
 import { ExpenseFormType } from "../_schemas/expense-form-schema";
 
-import { useKarboomsStore } from "../_providers/karbooms-store-provider";
-
 import PriceInputComponent from "@/app/_components/price-input-component";
 import DatePickerComponent from "@/app/_components/date-picker-component";
 import useCreateExpenseEndpoint from "../_hooks/use-create-expense-endpoint";

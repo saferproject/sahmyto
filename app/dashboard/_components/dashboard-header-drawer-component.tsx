@@ -24,15 +24,6 @@ const KarboomFormDrawerComponent = dynamic(
   () => import("../karbooms/_components/karboom-form-drawer-component"),
   { ssr: false },
 );
-const PartnerFormDrawerComponent = dynamic(
-  () => import("../karbooms/_components/partner-form-drawer-component"),
-  { ssr: false },
-);
-const DriverFormDrawerComponent = dynamic(
-  () => import("../karbooms/_components/driver-form-drawer-component"),
-  { ssr: false },
-);
-
 export default function DashboardHeaderDrawerComponent({
   isOpen,
   onOpen,
@@ -43,15 +34,11 @@ export default function DashboardHeaderDrawerComponent({
 
   const [isKarboomFormDrawerOpen, setkarboomFormDrawerOpen] = useState(false);
   const [isPartnerListDrawerOpen, setPartnerListDrawerOpen] = useState(false);
-  const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] = useState(false);
   const [isDriverListDrawerOpen, setDriverListDrawerOpen] = useState(false);
-  const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] = useState(false);
   const [loadedDrawers, setLoadedDrawers] = useState({
     karboom: false,
     partnerList: false,
-    partnerForm: false,
     driverList: false,
-    driverForm: false,
   });
 
   const avatar = useUserInfoStore((state) => state.avatar);
@@ -132,15 +119,6 @@ export default function DashboardHeaderDrawerComponent({
     handleOpenDriverListDrawer();
   };
 
-  const handleOpenPartnerFormDrawer = () => {
-    setLoadedDrawers((current) => ({ ...current, partnerForm: true }));
-    setPartnerFormDrawerOpen(true);
-  };
-
-  const handleClosePartnerFormDrawer = () => {
-    setPartnerFormDrawerOpen(false);
-  };
-
   const handleOpenDriverListDrawer = () => {
     setLoadedDrawers((current) => ({ ...current, driverList: true }));
     setDriverListDrawerOpen(true);
@@ -148,15 +126,6 @@ export default function DashboardHeaderDrawerComponent({
 
   const handleCloseDriverListDrawer = () => {
     setDriverListDrawerOpen(false);
-  };
-
-  const handleOpenDriverFormDrawer = () => {
-    setLoadedDrawers((current) => ({ ...current, driverForm: true }));
-    setDriverFormDrawerOpen(true);
-  };
-
-  const handleCloseDriverFormDrawer = () => {
-    setDriverFormDrawerOpen(false);
   };
 
   const handleKarboomFormSuccess = () => {

@@ -25,7 +25,6 @@ import OpenFinancialMonthDetails from "./_components/open-financial-month-detail
 import useGetFinancialMonthDataEndpoint from "./_hooks/use-get-financial-month-data-endpoint";
 import useGetSettlementData from "./_hooks/use-get-settlement-data-endpoint";
 import useStartProcessingFinancialMonthEndpoint from "./_hooks/use-start-processing-financial-month-endpoint";
-import useValidateClosingFinancialMonthEndpoint from "./_hooks/use-validate-closing-financial-month-endpoint";
 import MonthListLayout from "./_layouts/months-list-layout";
 import SettlementDetailsDrawerLayout from "./_layouts/settlement-details-layout";
 import { useFinancialMonthStore } from "./_providers/financial-managment-store-provider";
