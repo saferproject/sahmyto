@@ -28,6 +28,7 @@ import ApiError from "@/app/_errors/api-error";
 import useCreateIncomeEndpoint from "../_hooks/use-create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import dayjs from "dayjs";
 
 export default function IncomeFormComponent({
   isOpen,
@@ -146,6 +147,11 @@ export default function IncomeFormComponent({
       label: "مبلغ برای هر سرویس",
     },
   };
+
+  useEffect(() => {
+    if (is_settled) setValue("settlement_date", dayjs());
+    else setValue("settlement_date", null);
+  }, [is_settled, setValue]);
 
   useEffect(() => {
     if (quantity && unit_price)

@@ -1,6 +1,12 @@
 "use client";
 
-import { Autocomplete, Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Controller, useWatch } from "react-hook-form";
 
@@ -25,6 +31,7 @@ import ApiError from "@/app/_errors/api-error";
 import { useEffect } from "react";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import dayjs from "dayjs";
 
 export default function ExpenseFormComponent({
   isOpen,
@@ -111,6 +118,11 @@ export default function ExpenseFormComponent({
         variant: "warning",
       });
   };
+
+  useEffect(() => {
+    if (is_settled) setValue("settlement_date", dayjs());
+    else setValue("settlement_date", null);
+  }, [is_settled, setValue]);
 
   useEffect(() => {
     if (gotMembers) {
