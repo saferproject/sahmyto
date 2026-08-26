@@ -4,6 +4,7 @@ import {
   Button,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   IconButton,
   Radio,
@@ -104,9 +105,10 @@ export default function DriverFormComponent({
   };
 
   const handleContactSelect = (contact: Contact) => {
-    setValues({
+    setValues((currentValues) => ({
+      ...currentValues,
       ...contact,
-    });
+    }));
     handleCloseContactsDrawer();
   };
 
@@ -166,7 +168,11 @@ export default function DriverFormComponent({
         (contact) => contact.phone === phone,
       );
 
-      if (existingContact) setValues({ ...existingContact });
+      if (existingContact)
+        setValues((currentValues) => ({
+          ...currentValues,
+          ...existingContact,
+        }));
       else handleOpenContactsDrawer();
     }
   }, [phone, gettingContacts, gotContacts, contacts]);
@@ -258,7 +264,7 @@ export default function DriverFormComponent({
           name="payment_type"
           control={control}
           render={({ field }) => (
-            <FormControl required>
+            <FormControl error={!!errors.payment_type} required>
               <FormLabel
                 sx={{
                   fontSize: "14px",
@@ -287,6 +293,9 @@ export default function DriverFormComponent({
                   control={<Radio />}
                 />
               </RadioGroup>
+              {errors.payment_type && (
+                <FormHelperText>{errors.payment_type.message}</FormHelperText>
+              )}
             </FormControl>
           )}
         />

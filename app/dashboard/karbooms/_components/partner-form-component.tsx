@@ -3,7 +3,7 @@
 import { Button, IconButton, TextField } from "@mui/material";
 import { InfoCircle, Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import usePartnerForm from "../_hooks/use-partner-form";
 import useAddPartner from "../_hooks/use-add-partner-endpoint";
@@ -21,6 +21,8 @@ import { PartnerFormProps } from "../_types/partner-form-props";
 import { getPartnerFormInitial } from "../_constants/partner-form-initial";
 import ApiError from "@/app/_errors/api-error";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import ContactListDrawerComponent from "./contact-list-drawer-component";
+import { Contact } from "../../contacts/_types/contact";
 
 export default function PartnerFormComponent({
   formState,
@@ -30,6 +32,8 @@ export default function PartnerFormComponent({
 }: PartnerFormProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [isContactListDrawerOpen, setContactListDrawerOpen] = useState(false);
 
   const {
     register,
@@ -179,6 +183,22 @@ export default function PartnerFormComponent({
     onCancel();
   };
 
+  const handleOpenContactsDrawer = () => {
+    setContactListDrawerOpen(true);
+  };
+
+  const handleCloseContactsDrawer = () => {
+    setContactListDrawerOpen(false);
+  };
+
+  const handleContactSelect = (contact: Contact) => {
+    setValues((currentValues) => ({
+      ...currentValues,
+      ...contact,
+    }));
+    handleCloseContactsDrawer();
+  };
+
   const handleMutationSuccess = () => {
     setValues(getPartnerFormInitial());
     onSuccess();
@@ -235,163 +255,177 @@ export default function PartnerFormComponent({
   };
 
   return (
-    <form
-      className="flex w-full flex-col gap-4"
-      onSubmit={handleSubmit(submit)}
-    >
-      <TextField
-        {...register("phone")}
-        type="tel"
-        label="شماره تماس"
-        error={!!errors.phone}
-        helperText={errors.phone?.message ?? ""}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <IconButton>
-                <Book1 size={24} className="text-primary rotate-y-180" />
-              </IconButton>
-            ),
-          },
-        }}
-        required
+    <>
+      <ContactListDrawerComponent
+        isOpen={isContactListDrawerOpen}
+        onOpen={handleOpenContactsDrawer}
+        onClose={handleCloseContactsDrawer}
+        onSelect={handleContactSelect}
       />
-      <div className="flex items-center gap-4">
+      <form
+        className="flex w-full flex-col gap-4"
+        onSubmit={handleSubmit(submit)}
+      >
         <TextField
-          {...register("first_name")}
-          label="نام"
-          error={!!errors.first_name}
-          helperText={errors.first_name?.message ?? ""}
-          fullWidth
+          {...register("phone")}
+          type="tel"
+          label="شماره تماس"
+          error={!!errors.phone}
+          helperText={errors.phone?.message ?? ""}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <IconButton>
+                  <Book1
+                    size={24}
+                    className="text-primary rotate-y-180"
+                    onClick={handleOpenContactsDrawer}
+                  />
+                </IconButton>
+              ),
+            },
+          }}
           required
         />
-        <TextField
-          {...register("last_name")}
-          label="نام خانوادگی"
-          error={!!errors.last_name}
-          helperText={errors.last_name?.message ?? ""}
-          fullWidth
-          required
-        />
-      </div>
-      <div className="border-secondary-light flex w-full items-center justify-between rounded-2xl border p-4">
-        <span className="text-body">مقدار سهم</span>
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
-            onClick={handleIncrementDecimal}
-            onTouchStart={handleRapidIncrementDecimal}
-            onTouchEnd={handleStopRapidIncrementDecimal}
-            onMouseDown={handleRapidIncrementDecimal}
-            onMouseUp={handleStopRapidIncrementDecimal}
-            onContextMenu={handlePreventContextMenu}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
-            onClick={handleDecrementDecimal}
-            onTouchStart={handleRapidDecrementDecimal}
-            onTouchEnd={handleStopRapidDecrementDecimal}
-            onMouseDown={handleRapidDecrementDecimal}
-            onMouseUp={handleStopRapidDecrementDecimal}
-            onContextMenu={handlePreventContextMenu}
-          >
-            -
-          </button>
-        </div>
-        <div className="relative">
-          <p
-            id="share-decimal"
-            className="text-body absolute -right-4 bottom-0 w-8 text-center"
-          >
-            {share_decimal}
-          </p>
-          <span className="text-body text-5xl font-extralight">/</span>
-          <p
-            id="share-capital"
-            className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
-          >
-            {share_capital}
-          </p>
-        </div>
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
-            onClick={handleIncrementCapital}
-            onContextMenu={handlePreventContextMenu}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
-            onClick={handleDecrementCapital}
-            onContextMenu={handlePreventContextMenu}
-          >
-            -
-          </button>
-        </div>
-        <span className="text-body-light text-sm">دانگ</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <InfoCircle variant="Broken" size={20} className="text-body-light" />
-        <p className="text-body-light text-xs">
-          مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
-        </p>
-      </div>
-      <Controller
-        control={control}
-        name="started_at"
-        render={({ field }) => (
-          <DatePickerComponent
-            {...field}
-            onChange={(value) => field.onChange(value)}
-            label="تاریخ شروع"
-            error={!!errors.started_at}
-            helperText={errors.started_at?.message ?? ""}
+        <div className="flex items-center gap-4">
+          <TextField
+            {...register("first_name")}
+            label="نام"
+            error={!!errors.first_name}
+            helperText={errors.first_name?.message ?? ""}
+            fullWidth
             required
-            disableFuture
+            disabled
           />
-        )}
-      />
-      <Controller
-        control={control}
-        name="ended_at"
-        render={({ field }) => (
-          <DatePickerComponent
-            {...field}
-            onChange={(value) => field.onChange(value)}
-            label="تاریخ پایان"
-            error={!!errors.ended_at}
-            helperText={errors.ended_at?.message ?? ""}
-            disablePast
+          <TextField
+            {...register("last_name")}
+            label="نام خانوادگی"
+            error={!!errors.last_name}
+            helperText={errors.last_name?.message ?? ""}
+            fullWidth
+            required
+            disabled
           />
-        )}
-      />
-      <DescriptionInput
-        register={register("description")}
-        currentlength={description?.length ?? 0}
-        error={!!errors.description}
-        helperText={errors.description?.message ?? ""}
-      />
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outlined"
-          color="primary"
-          type="button"
-          onClick={handleCancel}
-          fullWidth
-        >
-          انصراف
-        </Button>
-        <Button variant="contained" type="submit" fullWidth>
-          ثبت
-        </Button>
-      </div>
-    </form>
+        </div>
+        <div className="border-secondary-light flex w-full items-center justify-between rounded-2xl border p-4">
+          <span className="text-body">مقدار سهم</span>
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
+              onClick={handleIncrementDecimal}
+              onTouchStart={handleRapidIncrementDecimal}
+              onTouchEnd={handleStopRapidIncrementDecimal}
+              onMouseDown={handleRapidIncrementDecimal}
+              onMouseUp={handleStopRapidIncrementDecimal}
+              onContextMenu={handlePreventContextMenu}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
+              onClick={handleDecrementDecimal}
+              onTouchStart={handleRapidDecrementDecimal}
+              onTouchEnd={handleStopRapidDecrementDecimal}
+              onMouseDown={handleRapidDecrementDecimal}
+              onMouseUp={handleStopRapidDecrementDecimal}
+              onContextMenu={handlePreventContextMenu}
+            >
+              -
+            </button>
+          </div>
+          <div className="relative">
+            <p
+              id="share-decimal"
+              className="text-body absolute -right-4 bottom-0 w-8 text-center"
+            >
+              {share_decimal}
+            </p>
+            <span className="text-body text-5xl font-extralight">/</span>
+            <p
+              id="share-capital"
+              className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
+            >
+              {share_capital}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
+              onClick={handleIncrementCapital}
+              onContextMenu={handlePreventContextMenu}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
+              onClick={handleDecrementCapital}
+              onContextMenu={handlePreventContextMenu}
+            >
+              -
+            </button>
+          </div>
+          <span className="text-body-light text-sm">دانگ</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <InfoCircle variant="Broken" size={20} className="text-body-light" />
+          <p className="text-body-light text-xs">
+            مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
+          </p>
+        </div>
+        <Controller
+          control={control}
+          name="started_at"
+          render={({ field }) => (
+            <DatePickerComponent
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ شروع"
+              error={!!errors.started_at}
+              helperText={errors.started_at?.message ?? ""}
+              required
+              disableFuture
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="ended_at"
+          render={({ field }) => (
+            <DatePickerComponent
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ پایان"
+              error={!!errors.ended_at}
+              helperText={errors.ended_at?.message ?? ""}
+              disablePast
+            />
+          )}
+        />
+        <DescriptionInput
+          register={register("description")}
+          currentlength={description?.length ?? 0}
+          error={!!errors.description}
+          helperText={errors.description?.message ?? ""}
+        />
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outlined"
+            color="primary"
+            type="button"
+            onClick={handleCancel}
+            fullWidth
+          >
+            انصراف
+          </Button>
+          <Button variant="contained" type="submit" fullWidth>
+            ثبت
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }
