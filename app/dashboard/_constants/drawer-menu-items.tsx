@@ -22,7 +22,7 @@ export const DRAWER_MENU_ITEMS: DrawerMenuItem[] = [
     title: "مخاطبین",
     icon: <Book1 size={24} />,
     link: "/dashboard/contacts",
-    disabled: true,
+    disabled: false,
   },
   {
     id: 4,

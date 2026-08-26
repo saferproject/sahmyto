@@ -36,14 +36,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <ReactQueryProvider>
                 <AuthenticationGuard>
                   <KarboomsStoreProvider>
-                    <div className="flex h-dvh w-full flex-col justify-between">
-                      <ConfirmationDialog />
-                      <ActionDialogComponent />
-                      <DashboardHeader />
-                      <main className="flex min-h-0 w-full flex-1 flex-col items-center overflow-x-visible overflow-y-auto px-4">
-                        {children}
-                      </main>
-                    </div>
+                    <ConfirmationDialog />
+                    <ActionDialogComponent />
+                    <DashboardHeader />
+                    <main className="flex size-full h-dvh min-h-0 flex-1 flex-col gap-4 overflow-x-visible overflow-y-auto px-4 pt-26 pb-20">
+                      {children}
+                    </main>
                   </KarboomsStoreProvider>
                 </AuthenticationGuard>
               </ReactQueryProvider>

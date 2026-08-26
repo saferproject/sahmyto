@@ -13,7 +13,7 @@ import {
 import { Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
 import dayjs from "dayjs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
@@ -34,6 +34,9 @@ import ApiError from "@/app/_errors/api-error";
 import { getDriverFormInitial } from "../_constants/driver-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import ContactListDrawerComponent from "./contact-list-drawer-component";
+import { Contact } from "../../contacts/_types/contact";
+import useGetContacts from "../../contacts/_hooks/use-get-contacts";
 
 export default function DriverFormComponent({
   formState,
@@ -41,6 +44,8 @@ export default function DriverFormComponent({
   onCancel,
   onSuccess,
 }: DriverFormProps) {
+  const [isContactListDrawerOpen, setContactListDrawerOpen] = useState(false);
+
   const {
     register,
     control,
@@ -50,9 +55,17 @@ export default function DriverFormComponent({
     formState: { errors },
   } = useDriverForm();
 
-  const { description, fixed_amount, service_amount } = useWatch({ control });
+  const { description, fixed_amount, service_amount, phone } = useWatch({
+    control,
+  });
 
   const karboomId = useKarboomsStore((state) => state.id);
+
+  const {
+    data: contacts,
+    isLoading: gettingContacts,
+    isSuccess: gotContacts,
+  } = useGetContacts();
 
   const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
   const { mutate: editDriver, isPending: editingDriver } = useEditDriver();
@@ -80,6 +93,21 @@ export default function DriverFormComponent({
   const handleCancel = () => {
     setValues(getDriverFormInitial());
     onCancel();
+  };
+
+  const handleOpenContactsDrawer = () => {
+    setContactListDrawerOpen(true);
+  };
+
+  const handleCloseContactsDrawer = () => {
+    setContactListDrawerOpen(false);
+  };
+
+  const handleContactSelect = (contact: Contact) => {
+    setValues({
+      ...contact,
+    });
+    handleCloseContactsDrawer();
   };
 
   const handleMutationSuccess = () => {
@@ -132,169 +160,194 @@ export default function DriverFormComponent({
     );
   };
 
+  useEffect(() => {
+    if (!gettingContacts && phone?.length === 11 && gotContacts) {
+      const existingContact = contacts.data.find(
+        (contact) => contact.phone === phone,
+      );
+
+      if (existingContact) setValues({ ...existingContact });
+      else handleOpenContactsDrawer();
+    }
+  }, [phone, gettingContacts, gotContacts, contacts]);
+
   return (
-    <form
-      className="flex w-full flex-col gap-4"
-      onSubmit={handleSubmit(submit)}
-    >
-      <TextField
-        {...register("phone")}
-        type="tel"
-        inputMode="tel"
-        label="شماره تماس"
-        error={!!errors.phone}
-        helperText={errors.phone?.message ?? ""}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <IconButton>
-                <Book1 size={24} className="text-primary rotate-y-180" />
-              </IconButton>
-            ),
-          },
-        }}
-        required
+    <>
+      <ContactListDrawerComponent
+        isOpen={isContactListDrawerOpen}
+        onOpen={handleOpenContactsDrawer}
+        onClose={handleCloseContactsDrawer}
+        onSelect={handleContactSelect}
       />
-      <div className="flex items-center gap-4">
+      <form
+        className="flex w-full flex-col gap-4"
+        onSubmit={handleSubmit(submit)}
+      >
         <TextField
-          {...register("first_name")}
-          label="نام"
-          error={!!errors.first_name}
-          helperText={errors.first_name?.message ?? ""}
-          fullWidth
+          {...register("phone")}
+          type="tel"
+          inputMode="tel"
+          label="شماره تماس"
+          error={!!errors.phone}
+          helperText={errors.phone?.message ?? ""}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <IconButton>
+                  <Book1
+                    size={24}
+                    className="text-primary rotate-y-180"
+                    onClick={handleOpenContactsDrawer}
+                  />
+                </IconButton>
+              ),
+            },
+          }}
           required
         />
-        <TextField
-          {...register("last_name")}
-          label="نام خانوادگی"
-          error={!!errors.last_name}
-          helperText={errors.last_name?.message ?? ""}
-          fullWidth
-          required
-        />
-      </div>
-      <Controller
-        control={control}
-        name="started_at"
-        render={({ field }) => (
-          <DatePickerComponent
-            {...field}
-            onChange={(value) => field.onChange(value)}
-            label="تاریخ شروع"
-            error={!!errors.started_at}
-            helperText={errors.started_at?.message ?? ""}
+        <div className="flex items-center gap-4">
+          <TextField
+            {...register("first_name")}
+            label="نام"
+            error={!!errors.first_name}
+            helperText={errors.first_name?.message ?? ""}
+            fullWidth
             required
-            disableFuture
+            disabled
           />
-        )}
-      />
-      <Controller
-        control={control}
-        name="ended_at"
-        render={({ field }) => (
-          <DatePickerComponent
-            {...field}
-            onChange={(value) => field.onChange(value)}
-            label="تاریخ پایان"
-            error={!!errors.ended_at}
-            helperText={errors.ended_at?.message ?? ""}
-            disablePast
+          <TextField
+            {...register("last_name")}
+            label="نام خانوادگی"
+            error={!!errors.last_name}
+            helperText={errors.last_name?.message ?? ""}
+            fullWidth
+            required
+            disabled
           />
-        )}
-      />
-      <Controller
-        name="payment_type"
-        control={control}
-        render={({ field }) => (
-          <FormControl required>
-            <FormLabel
-              sx={{
-                fontSize: "14px",
-              }}
-            >
-              دستمزد این راننده در چه بازه زمانی پرداخت می شود؟
-            </FormLabel>
-            <RadioGroup
+        </div>
+        <Controller
+          control={control}
+          name="started_at"
+          render={({ field }) => (
+            <DatePickerComponent
               {...field}
-              onChange={(event) => field.onChange(event.target.value)}
-              sx={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: "8px",
-                paddingTop: 0,
-              }}
-            >
-              <FormControlLabel
-                value={"monthly"}
-                label="به صورت ماهانه"
-                control={<Radio />}
-              />
-              <FormControlLabel
-                value={"daily"}
-                label="به صورت روزانه"
-                control={<Radio />}
-              />
-            </RadioGroup>
-          </FormControl>
-        )}
-      />
-      <PriceInputComponent
-        register={register("fixed_amount")}
-        value={fixed_amount}
-        label="دستمزد ثابت"
-        error={!!errors.fixed_amount}
-        helperText={errors.fixed_amount?.message ?? ""}
-      />
-      <PriceInputComponent
-        register={register("service_amount")}
-        value={service_amount}
-        label="دستمزد سرویسی"
-        error={!!errors.service_amount}
-        helperText={errors.service_amount?.message ?? ""}
-      />
-      <TextField
-        {...register("percentage_amount", { valueAsNumber: true })}
-        type="number"
-        label="دستمزد درصدی"
-        error={!!errors.percentage_amount}
-        helperText={errors.percentage_amount?.message ?? ""}
-        slotProps={{
-          htmlInput: {
-            min: 0,
-            max: 100,
-          },
-          input: {
-            endAdornment: (
-              <span className="text-body text-lg font-bold">%</span>
-            ),
-          },
-        }}
-      />
-      <DescriptionInput
-        register={register("description")}
-        currentlength={description?.length ?? 0}
-        error={!!errors.description}
-        helperText={errors.description?.message ?? ""}
-      />
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outlined"
-          color="primary"
-          type="button"
-          onClick={handleCancel}
-          fullWidth
-        >
-          انصراف
-        </Button>
-        <Button
-          variant="contained"
-          type="submit"
-          loading={addingDriver || editingDriver}
-          fullWidth
-        >
-          ثبت
-        </Button>
-      </div>
-    </form>
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ شروع"
+              error={!!errors.started_at}
+              helperText={errors.started_at?.message ?? ""}
+              required
+              disableFuture
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="ended_at"
+          render={({ field }) => (
+            <DatePickerComponent
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ پایان"
+              error={!!errors.ended_at}
+              helperText={errors.ended_at?.message ?? ""}
+              disablePast
+            />
+          )}
+        />
+        <Controller
+          name="payment_type"
+          control={control}
+          render={({ field }) => (
+            <FormControl required>
+              <FormLabel
+                sx={{
+                  fontSize: "14px",
+                }}
+              >
+                دستمزد این راننده در چه بازه زمانی پرداخت می شود؟
+              </FormLabel>
+              <RadioGroup
+                {...field}
+                onChange={(event) => field.onChange(event.target.value)}
+                sx={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: "8px",
+                  paddingTop: 0,
+                }}
+              >
+                <FormControlLabel
+                  value={"monthly"}
+                  label="به صورت ماهانه"
+                  control={<Radio />}
+                />
+                <FormControlLabel
+                  value={"daily"}
+                  label="به صورت روزانه"
+                  control={<Radio />}
+                />
+              </RadioGroup>
+            </FormControl>
+          )}
+        />
+        <PriceInputComponent
+          register={register("fixed_amount")}
+          value={fixed_amount}
+          label="دستمزد ثابت"
+          error={!!errors.fixed_amount}
+          helperText={errors.fixed_amount?.message ?? ""}
+        />
+        <PriceInputComponent
+          register={register("service_amount")}
+          value={service_amount}
+          label="دستمزد سرویسی"
+          error={!!errors.service_amount}
+          helperText={errors.service_amount?.message ?? ""}
+        />
+        <TextField
+          {...register("percentage_amount", { valueAsNumber: true })}
+          type="number"
+          label="دستمزد درصدی"
+          error={!!errors.percentage_amount}
+          helperText={errors.percentage_amount?.message ?? ""}
+          slotProps={{
+            htmlInput: {
+              min: 0,
+              max: 100,
+            },
+            input: {
+              endAdornment: (
+                <span className="text-body text-lg font-bold">%</span>
+              ),
+            },
+          }}
+        />
+        <DescriptionInput
+          register={register("description")}
+          currentlength={description?.length ?? 0}
+          error={!!errors.description}
+          helperText={errors.description?.message ?? ""}
+        />
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outlined"
+            color="primary"
+            type="button"
+            onClick={handleCancel}
+            fullWidth
+          >
+            انصراف
+          </Button>
+          <Button
+            variant="contained"
+            type="submit"
+            loading={addingDriver || editingDriver}
+            fullWidth
+          >
+            ثبت
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }

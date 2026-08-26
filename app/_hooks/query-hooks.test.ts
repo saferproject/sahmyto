@@ -55,6 +55,20 @@ describe("useListQuery", () => {
     ).resolves.toBe(response);
     expect(queryFn).toHaveBeenCalledWith(17, signal);
   });
+
+  it("supports list services that do not require an id", async () => {
+    const response = { data: ["one"], message: "ok" };
+    const queryFn = vi.fn().mockResolvedValue(response);
+    const signal = new AbortController().signal;
+    useListQuery(["items"], queryFn);
+    const options = useQueryMock.mock.calls[0][0];
+
+    await expect(
+      options.queryFn({ queryKey: ["items"], signal }),
+    ).resolves.toBe(response);
+    expect(queryFn).toHaveBeenCalledWith(signal);
+    expect(options.enabled).toBe(true);
+  });
 });
 
 describe("useInvalidatingMutation", () => {
