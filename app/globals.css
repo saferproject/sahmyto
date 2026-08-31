@@ -9,6 +9,7 @@
   --color-secondary-lighter: oklch(92% 0.01066 248.164);
   --color-secondary-light: oklch(86.708% 0.01066 248.164);
   --color-secondary: oklch(83.064% 0.03287 239.54);
+  --color-secondary-dark: oklch(75% 0.03287 239.54);
 
   --color-heading-light: oklch(89.667% 0.06522 57.765);
   --color-heading: oklch(65.261% 0.18336 45.726);

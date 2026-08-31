@@ -1,4 +1,4 @@
-import { Book1, Sms, Truck, VideoPlay, Wallet } from "iconsax-reactjs";
+import { Book1, Mobile, Sms, Truck, VideoPlay, Wallet } from "iconsax-reactjs";
 
 import DrawerMenuItem from "../_interfaces/drawer-menu-item";
 
@@ -37,5 +37,12 @@ export const DRAWER_MENU_ITEMS: DrawerMenuItem[] = [
     icon: <Sms size={24} />,
     link: "/dashboard/notifications",
     disabled: true,
+  },
+  {
+    id: 6,
+    title: "نشست ها",
+    icon: <Mobile size={24} />,
+    link: "/dashboard/sessions",
+    disabled: false,
   },
 ];

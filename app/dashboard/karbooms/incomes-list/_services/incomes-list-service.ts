@@ -9,7 +9,7 @@ export const incomeListService = {
     http.get<Income[]>(
       addPaginationQuery(`karboom/income/karboom/${karboomId}`, page),
       { signal },
-    ),
+    ),                    
   settleIncome: ({ incomeId, ...body }: SettleIncomeBody) =>
     http.post<undefined>(`karboom/income/settle/${incomeId}`, { body }),
   approveIncome: (incomeId: number) =>
