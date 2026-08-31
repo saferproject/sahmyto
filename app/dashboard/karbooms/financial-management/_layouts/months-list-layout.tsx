@@ -9,6 +9,7 @@ import useGetFinancialMonthsEndpoint from "../_hooks/use-get-financial-managemen
 import QueryState from "@/app/_components/query-state";
 
 import { MonthListProps } from "../_types/month-list-props";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function MonthListLayout({
   selectedMonth,
@@ -21,11 +22,18 @@ export default function MonthListLayout({
     isSuccess: gotFinancialMonths,
     isError: gettingFinancialMonthsFailed,
     isLoading: gettingFinancialMonths,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetFinancialMonthsEndpoint(karboomId);
 
   useEffect(() => {
-    if (gotFinancialMonths) onSelectMonth(financialMonths.data[0]);
-  }, [gotFinancialMonths, financialMonths, onSelectMonth]);
+    const firstMonth = financialMonths?.data[0];
+
+    if (gotFinancialMonths && !selectedMonth && firstMonth) {
+      onSelectMonth(firstMonth);
+    }
+  }, [gotFinancialMonths, financialMonths, onSelectMonth, selectedMonth]);
 
   return (
     <QueryState
@@ -46,6 +54,13 @@ export default function MonthListLayout({
             index={index}
           />
         ))}
+        <li className="shrink-0">
+          <InfiniteScrollTrigger
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        </li>
       </ul>
     </QueryState>
   );

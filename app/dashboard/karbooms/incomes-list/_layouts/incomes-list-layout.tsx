@@ -17,13 +17,23 @@ export default function IncomesListLayout({
 }: IncomeListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
-  const { data: incomes, isLoading, isError } = useGetIncomes(karboomId);
+  const {
+    data: incomes,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetIncomes(karboomId);
 
   return (
     <EntityListLayout
       items={incomes?.data}
       isLoading={isLoading}
       isError={isError}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
       onAdd={onOpenIncomeForm}
       renderItem={(income, index) => (
         <IncomeListItemComponent

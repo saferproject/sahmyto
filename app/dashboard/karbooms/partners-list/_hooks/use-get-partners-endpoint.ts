@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import useInfiniteListQuery from "@/app/_hooks/use-infinite-list-query";
 
 import { partnersListService } from "../_services/partners-list-service";
 
@@ -9,12 +9,13 @@ export default function useGetPartnersEndpoint(
   queryParams: GetPartnersQueryParams,
   enabled: boolean = true,
 ) {
-  return useQuery({
+  return useInfiniteListQuery({
     queryKey: ["partners", queryParams],
-    queryFn: ({ queryKey, signal }) =>
+    queryFn: (page, signal, queryKey) =>
       partnersListService.getPartners(
         queryKey[1] as GetPartnersQueryParams,
         signal,
+        page,
       ),
     enabled: enabled && isValidQueryId(queryParams.karboom_id),
   });

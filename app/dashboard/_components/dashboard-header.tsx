@@ -36,6 +36,9 @@ export default function DashboardHeader() {
     data: requests,
     isLoading: requestsLoading,
     isError: requestsError,
+    hasNextPage: hasNextRequestsPage,
+    isFetchingNextPage: isFetchingNextRequestsPage,
+    fetchNextPage: fetchNextRequestsPage,
   } = useGetKarboomRequests();
 
   const { mutate: acceptRequest, isPending: requestIsAccepting } =
@@ -104,6 +107,9 @@ export default function DashboardHeader() {
         mutatingRequest={mutatingRequest}
         requestIsAccepting={requestIsAccepting}
         requestIsRejecting={requestIsRejecting}
+        hasNextPage={hasNextRequestsPage}
+        isFetchingNextPage={isFetchingNextRequestsPage}
+        fetchNextPage={fetchNextRequestsPage}
       />
       <div className="bg-secondary-lightest/60 flex items-center justify-between rounded-full p-3 shadow-lg backdrop-blur-sm">
         <IconButton onClick={handleOpenDrawer} aria-label="باز کردن منو">

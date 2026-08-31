@@ -16,11 +16,24 @@ interface CapturedMutationOptions {
   invalidateQueries?: unknown;
 }
 
+interface CapturedInfiniteOptions {
+  queryKey: readonly unknown[];
+  enabled?: boolean;
+  queryFn: (
+    page: number,
+    signal: AbortSignal,
+    queryKey: readonly unknown[],
+  ) => unknown;
+}
+
 const useListQueryMock = vi.hoisted(() =>
   vi.fn((...args: unknown[]) => {
     void args;
     return { type: "list" };
   }),
+);
+const useInfiniteListQueryMock = vi.hoisted(() =>
+  vi.fn((options: CapturedInfiniteOptions) => options),
 );
 const useInvalidatingMutationMock = vi.hoisted(() =>
   vi.fn((options: CapturedMutationOptions) => {
@@ -43,6 +56,9 @@ const useMutationMock = vi.hoisted(() =>
 
 vi.mock("@/app/_hooks/use-list-query", () => ({
   default: useListQueryMock,
+}));
+vi.mock("@/app/_hooks/use-infinite-list-query", () => ({
+  default: useInfiniteListQueryMock,
 }));
 vi.mock("@/app/_hooks/use-invalidating-mutation", () => ({
   default: useInvalidatingMutationMock,
@@ -150,34 +166,6 @@ describe("list endpoint hook adapters", () => {
       args: [["activities", 12], activitiesListService.getActivities, 12],
     },
     {
-      name: "body insurance",
-      invoke: () => useGetBodyInsurancesEndpoint(12),
-      args: [
-        ["body-insurances", 12],
-        bodyInsuranceService.getBodyInsurances,
-        12,
-      ],
-    },
-    {
-      name: "drivers with caller enablement",
-      invoke: () => useGetDriversEndpoint(12, false),
-      args: [["drivers", 12], driversListService.getDrivers, 12, false],
-    },
-    {
-      name: "expenses",
-      invoke: () => useGetExpenses(12),
-      args: [["expenses", 12], expensesListService.getExpenses, 12],
-    },
-    {
-      name: "financial months",
-      invoke: () => useGetFinancialMonthsEndpoint(12),
-      args: [
-        ["financial-months", 12],
-        financialManagementService.getFinancialManagmentMonths,
-        12,
-      ],
-    },
-    {
       name: "financial month data with caller enablement",
       invoke: () => useGetFinancialMonthDataEndpoint(41, false),
       args: [
@@ -187,35 +175,51 @@ describe("list endpoint hook adapters", () => {
         false,
       ],
     },
-    {
-      name: "driver salaries",
-      invoke: () => useGetDriversSalaryEndpoint(41),
-      args: [["drivers-salary", 41], driversSalaryService.getDriversSalary, 41],
-    },
-    {
-      name: "incomes",
-      invoke: () => useGetIncomes(12),
-      args: [["incomes", 12], incomeListService.getIncomes, 12],
-    },
-    {
-      name: "payments",
-      invoke: () => useGetPaymentsEndpoint(12),
-      args: [["payments", 12], paymentsListService.getPayments, 12],
-    },
-    {
-      name: "third-party insurance",
-      invoke: () => useGetThirdPartyInsurancesEndpoint(12),
-      args: [
-        ["third-party-insurances", 12],
-        thirdPartyInsuranceService.getThirdPartyInsurances,
-        12,
-      ],
-    },
   ])("configures $name", ({ invoke, args }) => {
     invoke();
 
     expect(useListQueryMock).toHaveBeenCalledWith(...args);
   });
+
+  it.each([
+    [
+      "body insurance",
+      () => useGetBodyInsurancesEndpoint(12),
+      ["body-insurances", 12],
+      true,
+    ],
+    ["drivers", () => useGetDriversEndpoint(12, false), ["drivers", 12], false],
+    ["expenses", () => useGetExpenses(12), ["expenses", 12], true],
+    [
+      "financial months",
+      () => useGetFinancialMonthsEndpoint(12),
+      ["financial-months", 12],
+      true,
+    ],
+    [
+      "driver salaries",
+      () => useGetDriversSalaryEndpoint(41),
+      ["drivers-salary", 41],
+      true,
+    ],
+    ["incomes", () => useGetIncomes(12), ["incomes", 12], true],
+    ["payments", () => useGetPaymentsEndpoint(12), ["payments", 12], true],
+    [
+      "third-party insurance",
+      () => useGetThirdPartyInsurancesEndpoint(12),
+      ["third-party-insurances", 12],
+      true,
+    ],
+  ] as const)(
+    "configures infinite %s queries",
+    (_name, invoke, queryKey, enabled) => {
+      invoke();
+
+      expect(useInfiniteListQueryMock).toHaveBeenCalledWith(
+        expect.objectContaining({ queryKey, enabled }),
+      );
+    },
+  );
 
   it("normalizes settlement data before returning it", async () => {
     const response = { data: { members: [] }, message: "ok" };
@@ -588,13 +592,13 @@ describe("direct React Query endpoint hooks", () => {
       .spyOn(appService, "getInsuranceCompanies")
       .mockResolvedValue({} as never);
     useGetInsuranceCompaniesEndpoint(false);
-    const options = useQueryMock.mock.calls[0][0];
+    const options = useInfiniteListQueryMock.mock.calls[0][0];
     const signal = new AbortController().signal;
 
     expect(options.queryKey).toEqual(["insurance-companies"]);
     expect(options.enabled).toBe(false);
-    await options.queryFn({ signal });
-    expect(serviceMock).toHaveBeenCalledWith(signal);
+    await options.queryFn(2, signal, options.queryKey);
+    expect(serviceMock).toHaveBeenCalledWith(signal, 2);
   });
 
   it("loads profile data with default and explicit options", async () => {
@@ -650,12 +654,12 @@ describe("direct React Query endpoint hooks", () => {
               .spyOn(karboomService, "getKarbooms")
               .mockResolvedValue({} as never);
       useHook();
-      const options = useQueryMock.mock.calls[0][0];
+      const options = useInfiniteListQueryMock.mock.calls[0][0];
       const signal = new AbortController().signal;
 
       expect(options.queryKey).toEqual(queryKey);
-      await options.queryFn({ signal });
-      expect(serviceMock).toHaveBeenCalledWith(signal);
+      await options.queryFn(2, signal, options.queryKey);
+      expect(serviceMock).toHaveBeenCalledWith(signal, 2);
     },
   );
 
@@ -664,12 +668,12 @@ describe("direct React Query endpoint hooks", () => {
       .spyOn(karboomService, "getExpensesCategories")
       .mockResolvedValue({} as never);
     useGetExpensesCategoriesEndpoint("repair");
-    const options = useQueryMock.mock.calls[0][0];
+    const options = useInfiniteListQueryMock.mock.calls[0][0];
     const signal = new AbortController().signal;
 
     expect(options.queryKey).toEqual(["expenses-categories", "repair"]);
-    await options.queryFn({ queryKey: options.queryKey, signal });
-    expect(serviceMock).toHaveBeenCalledWith("repair", signal);
+    await options.queryFn(2, signal, options.queryKey);
+    expect(serviceMock).toHaveBeenCalledWith("repair", signal, 2);
   });
 
   it.each([
@@ -683,13 +687,13 @@ describe("direct React Query endpoint hooks", () => {
         .spyOn(karboomService, "getMembers")
         .mockResolvedValue({} as never);
       useGetMembersEndpoint(karboomId, enabled);
-      const options = useQueryMock.mock.calls[0][0];
+      const options = useInfiniteListQueryMock.mock.calls[0][0];
       const signal = new AbortController().signal;
 
       expect(options.queryKey).toEqual(["members", karboomId]);
       expect(options.enabled).toBe(expectedEnabled);
-      await options.queryFn({ queryKey: options.queryKey, signal });
-      expect(serviceMock).toHaveBeenCalledWith(karboomId, signal);
+      await options.queryFn(2, signal, options.queryKey);
+      expect(serviceMock).toHaveBeenCalledWith(karboomId, signal, 2);
       vi.clearAllMocks();
     },
   );
@@ -706,13 +710,13 @@ describe("direct React Query endpoint hooks", () => {
         .mockResolvedValue({} as never);
       const queryParams = { karboom_id: karboomId };
       useGetPartnersEndpoint(queryParams, enabled);
-      const options = useQueryMock.mock.calls[0][0];
+      const options = useInfiniteListQueryMock.mock.calls[0][0];
       const signal = new AbortController().signal;
 
       expect(options.queryKey).toEqual(["partners", queryParams]);
       expect(options.enabled).toBe(expectedEnabled);
-      await options.queryFn({ queryKey: options.queryKey, signal });
-      expect(serviceMock).toHaveBeenCalledWith(queryParams, signal);
+      await options.queryFn(2, signal, options.queryKey);
+      expect(serviceMock).toHaveBeenCalledWith(queryParams, signal, 2);
       vi.clearAllMocks();
     },
   );

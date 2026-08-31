@@ -1,7 +1,10 @@
-import useListQuery from "@/app/_hooks/use-list-query";
+import useInfiniteListQuery from "@/app/_hooks/use-infinite-list-query";
 
 import { contactsService } from "../_services/contacts-service";
 
 export default function useGetContacts() {
-  return useListQuery(["contacts"], contactsService.getContacts);
+  return useInfiniteListQuery({
+    queryKey: ["contacts"],
+    queryFn: (page, signal) => contactsService.getContacts(signal, page),
+  });
 }

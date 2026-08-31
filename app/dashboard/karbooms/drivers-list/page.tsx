@@ -17,6 +17,7 @@ import ListHeaderLayout from "../_layouts/list-header-layout";
 import type { FormStates } from "../../_types/form-states";
 import type { Driver } from "./_types/driver";
 import { useShallow } from "zustand/react/shallow";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function DriverListPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -33,7 +34,14 @@ export default function DriverListPage() {
   const [driverFormState, setDriverFormState] = useState<FormStates>("ADD");
   const [selectedDriver, setSelectedDriver] = useState<Driver>();
 
-  const { data, isLoading, isError } = useGetDriversEndpoint(karboomId);
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetDriversEndpoint(karboomId);
 
   const handleOpenDriverForm = () => {
     if (karboomRoles.includes("owner")) {
@@ -77,6 +85,11 @@ export default function DriverListPage() {
         <DriversListComponent
           drivers={data?.data ?? []}
           onEdit={handleEditDriver}
+        />
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
         />
       </QueryState>
       <DriverFormDrawerComponent

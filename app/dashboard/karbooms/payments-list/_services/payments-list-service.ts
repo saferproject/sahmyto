@@ -2,12 +2,18 @@ import { http } from "@/app/_services/http";
 import { AddPaymentBody } from "../_types/add-payment-body";
 import { Payment } from "../_types/payment";
 import { RejectPaymentBody } from "../_types/reject-payment-body";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const paymentsListService = {
-  getPayments: async (karboomId: number, signal?: AbortSignal) => {
-    const response = await http.get<Payment[]>(`karboom/payment/${karboomId}`, {
-      signal,
-    });
+  getPayments: async (
+    karboomId: number,
+    signal?: AbortSignal,
+    page: number = 1,
+  ) => {
+    const response = await http.get<Payment[]>(
+      addPaginationQuery(`karboom/payment/${karboomId}`, page),
+      { signal },
+    );
 
     return {
       ...response,

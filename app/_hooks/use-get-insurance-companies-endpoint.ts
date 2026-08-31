@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import useInfiniteListQuery from "./use-infinite-list-query";
 import { appService } from "../_services/app-service";
 
 export default function useGetInsuranceCompaniesEndpoint(enabled: boolean) {
-  return useQuery({
+  return useInfiniteListQuery({
     queryKey: ["insurance-companies"],
-    queryFn: ({ signal }) => appService.getInsuranceCompanies(signal),
+    queryFn: (page, signal) => appService.getInsuranceCompanies(signal, page),
     enabled,
   });
 }

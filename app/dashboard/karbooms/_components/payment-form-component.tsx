@@ -25,6 +25,7 @@ import { PAYMENT_FORM_INITIAL } from "../_constants/payment-form-initial";
 import ApiError from "@/app/_errors/api-error";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
 import { PAYMENT_TYPES_FA } from "../payments-list/_constants/payment-types-fa";
+import loadNextPageOnScroll from "@/app/_utilities/load-next-page-on-scroll";
 
 export default function PaymentFormComponent({
   isOpen,
@@ -40,7 +41,7 @@ export default function PaymentFormComponent({
     formState: { errors },
   } = usePaymentForm();
 
-  const { description, total_price } = useWatch({ control });
+  const { description, total_price, payer } = useWatch({ control });
 
   const userId = useUserInfoStore((state) => state.id);
   const karboomId = useKarboomsStore((state) => state.id);
@@ -49,6 +50,9 @@ export default function PaymentFormComponent({
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetMembersEndpoint(karboomId, isOpen && !!karboomId);
 
   const { mutate: createExpense, isPending: creatingExpense } =
@@ -91,14 +95,14 @@ export default function PaymentFormComponent({
   };
 
   useEffect(() => {
-    if (gotMembers) {
+    if (gotMembers && !payer?.member?.id) {
       const currentMember = members.data.find(
         (member) => member.user.id === userId,
       );
 
       if (currentMember) setValue("payer", currentMember);
     }
-  }, [gotMembers, members, setValue, userId]);
+  }, [gotMembers, members, payer, setValue, userId]);
 
   return (
     <form
@@ -114,6 +118,16 @@ export default function PaymentFormComponent({
             {...field}
             loading={gettingMembers}
             options={members?.data ?? []}
+            slotProps={{
+              listbox: {
+                onScroll: (event) =>
+                  loadNextPageOnScroll(event.currentTarget, {
+                    hasNextPage,
+                    isFetchingNextPage,
+                    fetchNextPage,
+                  }),
+              },
+            }}
             onChange={(_event, value) => field.onChange(value)}
             filterOptions={(option, { inputValue }) =>
               option.filter(({ user: { full_name } }) =>
@@ -148,6 +162,16 @@ export default function PaymentFormComponent({
             {...field}
             loading={gettingMembers}
             options={members?.data ?? []}
+            slotProps={{
+              listbox: {
+                onScroll: (event) =>
+                  loadNextPageOnScroll(event.currentTarget, {
+                    hasNextPage,
+                    isFetchingNextPage,
+                    fetchNextPage,
+                  }),
+              },
+            }}
             onChange={(_event, value) => field.onChange(value)}
             filterOptions={(option, { inputValue }) =>
               option.filter(({ user: { full_name } }) =>

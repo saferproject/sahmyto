@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import type { ReactNode } from "react";
 
 import QueryState from "@/app/_components/query-state";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-component";
 import ListFooterLayout from "./list-footer-layout";
@@ -15,6 +16,9 @@ interface EntityListLayoutProps<T> {
   renderItem: (item: T, index: number) => ReactNode;
   onAdd: () => void;
   header?: ReactNode;
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  fetchNextPage?: () => unknown;
 }
 
 export default function EntityListLayout<T>({
@@ -24,6 +28,9 @@ export default function EntityListLayout<T>({
   renderItem,
   onAdd,
   header,
+  hasNextPage,
+  isFetchingNextPage = false,
+  fetchNextPage,
 }: EntityListLayoutProps<T>) {
   return (
     <>
@@ -39,6 +46,13 @@ export default function EntityListLayout<T>({
             {items?.map((item, index) => renderItem(item, index))}
           </AnimatePresence>
         </ul>
+        {fetchNextPage && (
+          <InfiniteScrollTrigger
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        )}
       </QueryState>
       <ListFooterLayout onAdd={onAdd} />
     </>

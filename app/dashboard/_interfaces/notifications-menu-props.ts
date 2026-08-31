@@ -12,4 +12,7 @@ export default interface NotificationsMenuProps {
   mutatingRequest: number | null;
   requestIsAccepting: boolean;
   requestIsRejecting: boolean;
+  hasNextPage: boolean | undefined;
+  isFetchingNextPage: boolean;
+  fetchNextPage: () => unknown;
 }

@@ -61,7 +61,7 @@ describe("application and authentication service contracts", () => {
       name: "loads insurance companies with cancellation support",
       invoke: () => appService.getInsuranceCompanies(signal),
       method: "get",
-      args: ["insurance/companies", { signal }],
+      args: ["insurance/companies?paginate=1&page=1", { signal }],
     },
     {
       name: "logs a user in",
@@ -104,7 +104,7 @@ describe("application and authentication service contracts", () => {
       name: "loads collaboration requests",
       invoke: () => dashboardService.getKarboomRequests(signal),
       method: "get",
-      args: ["karboom/requests", { signal }],
+      args: ["karboom/requests?paginate=1&page=1", { signal }],
     },
     {
       name: "accepts a collaboration request",
@@ -234,25 +234,28 @@ describe("karboom read and lookup service contracts", () => {
       name: "loads karbooms",
       invoke: () => karboomService.getKarbooms(signal),
       method: "get",
-      args: ["karboom", { signal }],
+      args: ["karboom?paginate=1&page=1", { signal }],
     },
     {
       name: "loads expense categories by type",
       invoke: () => karboomService.getExpensesCategories("repair", signal),
       method: "get",
-      args: ["karboom/expense/categories?type=repair", { signal }],
+      args: [
+        "karboom/expense/categories?type=repair&paginate=1&page=1",
+        { signal },
+      ],
     },
     {
       name: "loads members",
       invoke: () => karboomService.getMembers(12, signal),
       method: "get",
-      args: ["karboom/members/12", { signal }],
+      args: ["karboom/members/12?paginate=1&page=1", { signal }],
     },
     {
       name: "loads drivers",
       invoke: () => driversListService.getDrivers(12, signal),
       method: "get",
-      args: ["karboom/drivers/12?", { signal }],
+      args: ["karboom/drivers/12?paginate=1&page=1", { signal }],
     },
     {
       name: "deletes a driver",
@@ -268,7 +271,10 @@ describe("karboom read and lookup service contracts", () => {
           signal,
         ),
       method: "get",
-      args: ["karboom/partners/12?name=Ali%20Reza", { signal }],
+      args: [
+        "karboom/partners/12?name=Ali%20Reza&paginate=1&page=1",
+        { signal },
+      ],
     },
     {
       name: "deletes a partner",
@@ -291,7 +297,7 @@ describe("income, expense, and payment service contracts", () => {
       name: "loads incomes",
       invoke: () => incomeListService.getIncomes(12, signal),
       method: "get",
-      args: ["karboom/income/karboom/12", { signal }],
+      args: ["karboom/income/karboom/12?paginate=1&page=1", { signal }],
     },
     {
       name: "approves an income",
@@ -309,7 +315,7 @@ describe("income, expense, and payment service contracts", () => {
       name: "loads expenses",
       invoke: () => expensesListService.getExpenses(12, signal),
       method: "get",
-      args: ["karboom/expense/karboom/12", { signal }],
+      args: ["karboom/expense/karboom/12?paginate=1&page=1", { signal }],
     },
     {
       name: "approves an expense",
@@ -367,9 +373,10 @@ describe("income, expense, and payment service contracts", () => {
 
     const response = await paymentsListService.getPayments(12, signal);
 
-    expect(httpMocks.get).toHaveBeenCalledWith("karboom/payment/12", {
-      signal,
-    });
+    expect(httpMocks.get).toHaveBeenCalledWith(
+      "karboom/payment/12?paginate=1&page=1",
+      { signal },
+    );
     expect(response).toEqual({
       data: [
         { id: 1, approvals: [] },
@@ -386,7 +393,7 @@ describe("insurance service contracts", () => {
       name: "loads body-insurance policies",
       invoke: () => bodyInsuranceService.getBodyInsurances(12, signal),
       method: "get",
-      args: ["insurance/body/12", { signal }],
+      args: ["insurance/body/12?paginate=1&page=1", { signal }],
     },
     {
       name: "adds body insurance without leaking its path id into the body",
@@ -403,7 +410,7 @@ describe("insurance service contracts", () => {
       invoke: () =>
         thirdPartyInsuranceService.getThirdPartyInsurances(12, signal),
       method: "get",
-      args: ["insurance/third-party/12", { signal }],
+      args: ["insurance/third-party/12?paginate=1&page=1", { signal }],
     },
     {
       name: "adds third-party insurance without leaking its path id",
@@ -432,7 +439,7 @@ describe("financial-management service contracts", () => {
       invoke: () =>
         financialManagementService.getFinancialManagmentMonths(12, signal),
       method: "get",
-      args: ["karboom/financials/months/12", { signal }],
+      args: ["karboom/financials/months/12?paginate=1&page=1", { signal }],
     },
     {
       name: "validates month closing",
@@ -471,7 +478,7 @@ describe("financial-management service contracts", () => {
       name: "loads driver salaries",
       invoke: () => driversSalaryService.getDriversSalary(41, signal),
       method: "get",
-      args: ["karboom/adjustments/41", { signal }],
+      args: ["karboom/adjustments/41?paginate=1&page=1", { signal }],
     },
     {
       name: "adds a driver adjustment with ids in the path only",

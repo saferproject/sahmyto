@@ -23,6 +23,7 @@ import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
+import loadNextPageOnScroll from "@/app/_utilities/load-next-page-on-scroll";
 import ApiError from "@/app/_errors/api-error";
 import useCreateIncomeEndpoint from "../_hooks/use-create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
@@ -45,10 +46,16 @@ export default function IncomeFormComponent({
     formState: { errors },
   } = useIncomeForm();
 
-  const { description, quantity, unit_price, total_price, is_settled } =
-    useWatch({
-      control,
-    });
+  const {
+    description,
+    quantity,
+    unit_price,
+    total_price,
+    is_settled,
+    reciever,
+  } = useWatch({
+    control,
+  });
 
   const userId = useUserInfoStore((state) => state.id);
 
@@ -56,6 +63,9 @@ export default function IncomeFormComponent({
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetMembersEndpoint(karboomId, isOpen);
 
   const { mutate: createIncome, isPending: creatingIncome } =
@@ -161,14 +171,14 @@ export default function IncomeFormComponent({
   }, [quantity, setValue, unit_price]);
 
   useEffect(() => {
-    if (gotMembers) {
+    if (gotMembers && !reciever?.member?.id) {
       const currentMember = members.data.find(
         (member) => member.user.id === userId,
       );
 
       if (currentMember) setValue("reciever", currentMember);
     }
-  }, [gotMembers, members, setValue, userId]);
+  }, [gotMembers, members, reciever, setValue, userId]);
 
   return (
     <form
@@ -224,6 +234,16 @@ export default function IncomeFormComponent({
                 {...field}
                 loading={gettingMembers}
                 options={members?.data ?? []}
+                slotProps={{
+                  listbox: {
+                    onScroll: (event) =>
+                      loadNextPageOnScroll(event.currentTarget, {
+                        hasNextPage,
+                        isFetchingNextPage,
+                        fetchNextPage,
+                      }),
+                  },
+                }}
                 onChange={(_event, value) => field.onChange(value)}
                 filterOptions={(option, { inputValue }) =>
                   option.filter(({ user: { full_name } }) =>

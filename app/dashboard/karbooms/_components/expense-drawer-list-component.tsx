@@ -4,6 +4,7 @@ import { ExpenseDrawerCategoryListProps } from "../_types/expense-drawer-categor
 import CategoryTypeComponent from "./category-type-component";
 
 import ExpenseDrawerListItemComponent from "./expense-drawer-list-item-component";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function ExpenseDrawerCategoryListComponent({
   categoryType,
@@ -11,7 +12,8 @@ export default function ExpenseDrawerCategoryListComponent({
   onSelectCategoryType,
   onSelectCategory,
 }: ExpenseDrawerCategoryListProps) {
-  const { data } = useGetExpensesCategoriesEndpoint(categoryType);
+  const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useGetExpensesCategoriesEndpoint(categoryType);
 
   return (
     <div className="mb-8 flex w-full flex-col items-center gap-4 py-1">
@@ -37,6 +39,11 @@ export default function ExpenseDrawerCategoryListComponent({
           />
         ))}
       </div>
+      <InfiniteScrollTrigger
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        fetchNextPage={fetchNextPage}
+      />
     </div>
   );
 }

@@ -8,18 +8,23 @@ import { ExpenseCategoryTypes } from "../_types/expense-category-types";
 import { CreateExpenseBody } from "../_types/create-expense-body";
 import { CreateIncomeBody } from "../_types/create-income-body";
 import { Member } from "../_types/member";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const karboomService = {
-  getKarbooms: (signal?: AbortSignal) =>
-    http.get<Karboom[]>("karboom", { signal }),
+  getKarbooms: (signal?: AbortSignal, page: number = 1) =>
+    http.get<Karboom[]>(addPaginationQuery("karboom", page), { signal }),
   createKarboom: (body: KarboomFormType) =>
     http.post<Karboom>("karboom/store", { body }),
   getExpensesCategories: (
     categoryType: ExpenseCategoryTypes,
     signal?: AbortSignal,
+    page: number = 1,
   ) =>
     http.get<ExpenseCategory[]>(
-      `karboom/expense/categories?type=${categoryType}`,
+      addPaginationQuery(
+        `karboom/expense/categories?type=${categoryType}`,
+        page,
+      ),
       {
         signal,
       },
@@ -30,6 +35,9 @@ export const karboomService = {
     }),
   createIncome: ({ karboom_id, ...other }: CreateIncomeBody) =>
     http.post<undefined>(`karboom/income/store/${karboom_id}`, { body: other }),
-  getMembers: (karboom_id: number, signal?: AbortSignal) =>
-    http.get<Member[]>(`karboom/members/${karboom_id}`, { signal }),
+  getMembers: (karboom_id: number, signal?: AbortSignal, page: number = 1) =>
+    http.get<Member[]>(
+      addPaginationQuery(`karboom/members/${karboom_id}`, page),
+      { signal },
+    ),
 };

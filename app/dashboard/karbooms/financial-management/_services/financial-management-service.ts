@@ -2,12 +2,18 @@ import { http } from "@/app/_services/http";
 import { FinancialMonth } from "../_types/financial-month";
 import { FinancialMonthData } from "../_types/financial-month-data";
 import type { SettlementDataResponse } from "../_types/settlement-data";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const financialManagementService = {
-  getFinancialManagmentMonths: (karboomId: number, signal?: AbortSignal) =>
-    http.get<FinancialMonth[]>(`karboom/financials/months/${karboomId}`, {
-      signal,
-    }),
+  getFinancialManagmentMonths: (
+    karboomId: number,
+    signal?: AbortSignal,
+    page: number = 1,
+  ) =>
+    http.get<FinancialMonth[]>(
+      addPaginationQuery(`karboom/financials/months/${karboomId}`, page),
+      { signal },
+    ),
   validateClosingFinancialMonth: (financialMonthId: number) =>
     http.get<unknown>(`karboom/financials/validate/${financialMonthId}`),
   startProcessingFinancialMonth: (financialMonthId: number) =>

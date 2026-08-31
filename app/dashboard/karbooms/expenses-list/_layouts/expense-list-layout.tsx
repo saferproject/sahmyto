@@ -15,13 +15,23 @@ export default function ExpenseListLayout({
 }: ExpenseListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
-  const { data: expenses, isLoading, isError } = useGetExpenses(karboomId);
+  const {
+    data: expenses,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetExpenses(karboomId);
 
   return (
     <EntityListLayout
       items={expenses?.data}
       isLoading={isLoading}
       isError={isError}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
       onAdd={onOpenExpenseForm}
       renderItem={(expense, index) => (
         <ExpenseListItemComponent

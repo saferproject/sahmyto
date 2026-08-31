@@ -25,6 +25,7 @@ import { useConfirmationDialogStore } from "@/app/dashboard/_providers/confirmat
 import useCloseFinancialMonth from "../_hooks/use-close-financial-month-endpoint";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function DriversSalaryPage() {
   const router = useRouter();
@@ -41,6 +42,9 @@ export default function DriversSalaryPage() {
     data: DriversSalaries,
     isLoading: gettingDriversSalaries,
     isError: gettingDriversSalariesFailed,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetDriversSalaryEndpoint(financialMonthId);
 
   const { mutate: closeFinancialMonth } = useCloseFinancialMonth();
@@ -224,6 +228,11 @@ export default function DriversSalaryPage() {
             },
           )}
         </ul>
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
         <Button variant="contained" onClick={handleOpenConfirmationDialog}>
           تایید حقوق رانندگان
         </Button>

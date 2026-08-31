@@ -14,6 +14,7 @@ import Partner from "../_interfaces/partner";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function PartnerListDrawerComponent({
   isOpen,
@@ -35,6 +36,9 @@ export default function PartnerListDrawerComponent({
     data: partners,
     isLoading: gettingPartners,
     isError: gettingPartnersFailed,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetPartnersEndpoint({
     karboom_id: karboomId,
   });
@@ -78,6 +82,11 @@ export default function PartnerListDrawerComponent({
         <PartnersListComponent
           partners={partners?.data ?? []}
           onEdit={handleEditPartner}
+        />
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
         />
       </QueryState>
       <PartnerFormDrawerComponent

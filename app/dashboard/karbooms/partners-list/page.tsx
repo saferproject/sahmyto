@@ -17,6 +17,7 @@ import ListHeaderLayout from "../_layouts/list-header-layout";
 import { FormStates } from "../../_types/form-states";
 import Partner from "../_interfaces/partner";
 import { useShallow } from "zustand/react/shallow";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function PartnersListPage() {
   const router = useRouter();
@@ -39,9 +40,14 @@ export default function PartnersListPage() {
     }
   }, [karboomId, enqueueSnackbar, router]);
 
-  const { data, isLoading, isError } = useGetPartnersEndpoint({
-    karboom_id: karboomId,
-  });
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetPartnersEndpoint({ karboom_id: karboomId });
 
   const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] =
     useState<boolean>(false);
@@ -90,6 +96,11 @@ export default function PartnersListPage() {
         <PartnersListComponent
           partners={data?.data ?? []}
           onEdit={handleEditPartner}
+        />
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
         />
       </QueryState>
       <PartnerFormDrawerComponent

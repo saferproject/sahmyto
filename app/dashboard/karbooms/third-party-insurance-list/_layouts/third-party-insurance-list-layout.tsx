@@ -8,6 +8,7 @@ import ThirdPartyInsuranceListItemComponent from "../_components/third-party-ins
 import InsuranceBannerComponent from "../../_components/insurance-banner-component";
 import SelectedKarboomInfoComponent from "../../_components/selected-karboom-info-component";
 import ListFooterLayout from "../../_layouts/list-footer-layout";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function ThirdPartyInsuranceListLayout({
   onOpenThirdPartyInsuranceForm,
@@ -18,6 +19,9 @@ export default function ThirdPartyInsuranceListLayout({
     data: thirdPartyInsurances,
     isLoading,
     isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetThirdPartyInsurancesEndpoint(karboomId);
 
   return (
@@ -40,6 +44,11 @@ export default function ThirdPartyInsuranceListLayout({
             ))}
           </AnimatePresence>
         </ul>
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
       </QueryState>
       <ListFooterLayout onAdd={onOpenThirdPartyInsuranceForm} />
     </>

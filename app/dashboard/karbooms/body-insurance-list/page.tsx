@@ -12,6 +12,7 @@ import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-c
 import QueryState from "@/app/_components/query-state";
 import { AnimatePresence } from "motion/react";
 import BodyInsuranceListItemComponent from "./_components/body-insurance-list-item-component";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function BodyInsurancePage() {
   const [isBodyInsuranceFormDrawerOpen, setBodyInsuranceFormDrawerOpen] =
@@ -23,6 +24,9 @@ export default function BodyInsurancePage() {
     data: bodyInsurances,
     isLoading,
     isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetBodyInsurancesEndpoint(karboomId);
 
   const handleOpenBodyInsuranceForm = () => {
@@ -54,6 +58,11 @@ export default function BodyInsurancePage() {
             ))}
           </AnimatePresence>
         </ul>
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
       </QueryState>
       <ListFooterLayout onAdd={handleOpenBodyInsuranceForm} />
       <BodyInsuranceDrawerComponent

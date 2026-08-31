@@ -1,10 +1,14 @@
 import { http } from "@/app/_services/http";
 import { AddBonusPenaltyDriverBody } from "../_types/add-bonus-penalty-driver-body";
 import { DriverSalary } from "../_types/driver-salary";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const driversSalaryService = {
-  getDriversSalary: (monthId: number, signal?: AbortSignal) =>
-    http.get<DriverSalary[]>(`karboom/adjustments/${monthId}`, { signal }),
+  getDriversSalary: (monthId: number, signal?: AbortSignal, page: number = 1) =>
+    http.get<DriverSalary[]>(
+      addPaginationQuery(`karboom/adjustments/${monthId}`, page),
+      { signal },
+    ),
   addBonusOrPenaltyForDriver: ({
     financialMonthId,
     driverId,

@@ -12,6 +12,7 @@ import DriverFormDrawerComponent from "./driver-form-drawer-component";
 import ListFooterLayout from "../_layouts/list-footer-layout";
 import { Button } from "@mui/material";
 import FormDrawerComponent from "@/app/_components/form-drawer-component";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function DriverListDrawerComponent({
   isOpen,
@@ -28,7 +29,14 @@ export default function DriverListDrawerComponent({
   const [driverFormState, setDriverFormState] = useState<FormStates>("ADD");
   const [selectedDriver, setSelectedDriver] = useState<Driver | undefined>();
 
-  const { data, isLoading, isError } = useGetDriversEndpoint(karboomId);
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetDriversEndpoint(karboomId);
 
   const handleOpenDriverForm = () => {
     setDriverFormState("ADD");
@@ -69,6 +77,11 @@ export default function DriverListDrawerComponent({
         <DriversListComponent
           drivers={data?.data ?? []}
           onEdit={handleEditDriver}
+        />
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
         />
       </QueryState>
       <DriverFormDrawerComponent

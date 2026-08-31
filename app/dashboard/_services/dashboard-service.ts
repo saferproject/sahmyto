@@ -1,5 +1,6 @@
 import User from "@/app/_interfaces/user";
 import { http } from "@/app/_services/http";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 import { KarboomRequest } from "../_types/karboom-request";
 
 interface GetProfileInfoOptions {
@@ -14,8 +15,10 @@ export const dashboardService = {
   }: GetProfileInfoOptions = {}) =>
     http.get<User>("user/profile", { signal, redirectOnUnauthorized }),
   userLogout: () => http.post<undefined>("user/logout"),
-  getKarboomRequests: (signal?: AbortSignal) =>
-    http.get<KarboomRequest[]>("karboom/requests", { signal }),
+  getKarboomRequests: (signal?: AbortSignal, page: number = 1) =>
+    http.get<KarboomRequest[]>(addPaginationQuery("karboom/requests", page), {
+      signal,
+    }),
   acceptKarboomRequest: (requestId: number) =>
     http.post<undefined>(`karboom/requests/accept/${requestId}`),
   rejectKarboomRequest: (requestId: number) =>

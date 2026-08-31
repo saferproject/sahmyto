@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import DescriptionInput from "@/app/_components/description-input";
+import loadNextPageOnScroll from "@/app/_utilities/load-next-page-on-scroll";
 
 export default function SettlementDrawerComponent({
   isOpen,
@@ -32,7 +33,7 @@ export default function SettlementDrawerComponent({
     formState: { errors },
   } = useSettlementForm();
 
-  const { description } = useWatch({
+  const { description, member } = useWatch({
     control,
   });
 
@@ -40,6 +41,9 @@ export default function SettlementDrawerComponent({
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetMembersEndpoint(karboomId, isOpen);
 
   const submit = (data: SettlementFormType) => {
@@ -47,14 +51,14 @@ export default function SettlementDrawerComponent({
   };
 
   useEffect(() => {
-    if (gotMembers) {
+    if (gotMembers && !member?.member?.id) {
       const currentMember = members.data.find(
         (member) => member.user.id === userId,
       );
 
       if (currentMember) setValue("member", currentMember);
     }
-  }, [gotMembers, members, setValue, userId]);
+  }, [gotMembers, member, members, setValue, userId]);
 
   return (
     <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
@@ -71,6 +75,16 @@ export default function SettlementDrawerComponent({
               {...field}
               loading={gettingMembers}
               options={members?.data ?? []}
+              slotProps={{
+                listbox: {
+                  onScroll: (event) =>
+                    loadNextPageOnScroll(event.currentTarget, {
+                      hasNextPage,
+                      isFetchingNextPage,
+                      fetchNextPage,
+                    }),
+                },
+              }}
               onChange={(_event, value) => field.onChange(value)}
               filterOptions={(option, { inputValue }) =>
                 option.filter(({ user: { full_name } }) =>

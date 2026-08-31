@@ -20,6 +20,9 @@ export default function PaymentsListLayout({
     data: payments,
     isLoading: gettingPayments,
     isError: gettingPaymentsFailed,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetPaymentsEndpoint(karboomId);
 
   return (
@@ -27,6 +30,9 @@ export default function PaymentsListLayout({
       items={payments?.data}
       isLoading={gettingPayments}
       isError={gettingPaymentsFailed}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
       onAdd={onOpenForm}
       header={<ListHeaderLayout title="لیست دریافتی و پرداختی ها" />}
       renderItem={(payment, index) => (
