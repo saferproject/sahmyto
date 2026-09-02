@@ -97,8 +97,8 @@ export default function SessionsPage() {
             >
               <div className="flex items-center gap-4">
                 <div className="bg-secondary-light border-primary flex size-16 items-center justify-center rounded-full border p-1">
-                  {session.device.type ? (
-                    session.device.platform ? (
+                  {session.device.type === "mobile" ? (
+                    session.device.platform === "android" ? (
                       <Android size="32" className="text-primary" />
                     ) : (
                       <Apple size="32" className="text-primary" />
@@ -110,7 +110,12 @@ export default function SessionsPage() {
                 <div className="flex h-full flex-col justify-between">
                   <p>{session.device.name}</p>
                   <p>{session.device.platform}</p>
-                  <p className="text-secondary-dark">{`${"1405/06/10 - 14:26"}`}</p>
+                  <p className="text-secondary-dark">
+                    {formatDate(
+                      session?.logged_in_at ?? "",
+                      "YYYY/MM/DD - HH:mm",
+                    )}
+                  </p>
                 </div>
               </div>
               <div className="rounded-2xl bg-red-500">
