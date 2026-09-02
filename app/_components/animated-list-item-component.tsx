@@ -6,6 +6,7 @@ import type { KeyboardEventHandler, MouseEventHandler, ReactNode } from "react";
 interface AnimatedListItemProps {
   index: number;
   className?: string;
+  dir?: "ltr" | "rtl" | "auto";
   dimmed?: boolean;
   onClick?: MouseEventHandler<HTMLLIElement>;
   role?: string;
@@ -25,6 +26,7 @@ export default function AnimatedListItem({
   ariaPressed,
   onKeyDown,
   children,
+  ...other
 }: AnimatedListItemProps) {
   return (
     <motion.li
@@ -38,6 +40,7 @@ export default function AnimatedListItem({
       tabIndex={tabIndex}
       aria-pressed={ariaPressed}
       onKeyDown={onKeyDown}
+      {...other}
     >
       {children}
     </motion.li>
