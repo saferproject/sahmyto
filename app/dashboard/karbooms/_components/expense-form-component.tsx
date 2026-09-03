@@ -1,11 +1,14 @@
 "use client";
 
 import {
-  Autocomplete,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
-  TextField,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Controller, useWatch } from "react-hook-form";
@@ -14,7 +17,6 @@ import useExpenseForm from "../_hooks/use-expense-form";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 
 import { ExpenseDrawerFormProps } from "../_types/expense-drawer-form-props";
-import { Member } from "../_types/member";
 
 import DescriptionInput from "@/app/_components/description-input";
 
@@ -124,7 +126,7 @@ export default function ExpenseFormComponent({
 
   useEffect(() => {
     if (gotMembers && !payer?.member?.id) {
-      const currentMember = members.data.find(
+      const currentMember = members.data?.find(
         (member) => member.user.id === userId,
       );
 
@@ -184,33 +186,34 @@ export default function ExpenseFormComponent({
             name="payer"
             rules={{ required: true }}
             render={({ field }) => (
-              <Autocomplete<Member>
-                {...field}
-                loading={gettingMembers}
-                options={members?.data ?? []}
-                onChange={(_event, value) => field.onChange(value)}
-                filterOptions={(option, { inputValue }) =>
-                  option.filter(({ user: { full_name } }) =>
-                    full_name?.includes(inputValue),
-                  )
-                }
-                getOptionLabel={(option) => option.user.full_name ?? ""}
-                getOptionKey={(option) => option.member.id}
-                isOptionEqualToValue={(option, value) =>
-                  option.member.id === value?.member.id
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="پرداخت کننده"
-                    error={!!errors.payer}
-                    helperText={errors.payer?.message ?? ""}
-                    fullWidth
-                    required
-                  />
-                )}
-                fullWidth
-              />
+              <FormControl error={!!errors.payer} fullWidth required>
+                <InputLabel id="expense-payer-label">پرداخت کننده</InputLabel>
+                <Select
+                  name={field.name}
+                  labelId="expense-payer-label"
+                  id="expense-payer"
+                  label="پرداخت کننده"
+                  value={field.value?.member.id || ""}
+                  onChange={(event) =>
+                    field.onChange(
+                      members?.data?.find(
+                        ({ member }) =>
+                          member.id === Number(event.target.value),
+                      ),
+                    )
+                  }
+                  onBlur={field.onBlur}
+                  inputRef={field.ref}
+                  disabled={gettingMembers}
+                >
+                  {members?.data?.map(({ member, user }) => (
+                    <MenuItem key={member.id} value={member.id}>
+                      {user.full_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.payer?.message ?? ""}</FormHelperText>
+              </FormControl>
             )}
           />
         </>

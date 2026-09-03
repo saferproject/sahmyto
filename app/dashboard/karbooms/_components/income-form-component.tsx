@@ -4,10 +4,14 @@ import { Controller, useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { InfoCircle } from "iconsax-reactjs";
 import {
-  Autocomplete,
   Button,
   Checkbox,
+  FormControl,
   FormControlLabel,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 
@@ -18,7 +22,6 @@ import useIncomeForm from "../_hooks/use-income-form";
 import { IncomeDrawerFormProps } from "../_types/income-drawer-form-props";
 import { IncomeTypes } from "../_types/income-categories";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
-import { Member } from "../_types/member";
 import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
@@ -168,7 +171,7 @@ export default function IncomeFormComponent({
 
   useEffect(() => {
     if (gotMembers && !reciever?.member?.id) {
-      const currentMember = members.data.find(
+      const currentMember = members.data?.find(
         (member) => member.user.id === userId,
       );
 
@@ -226,33 +229,36 @@ export default function IncomeFormComponent({
             control={control}
             name="reciever"
             render={({ field }) => (
-              <Autocomplete<Member>
-                {...field}
-                loading={gettingMembers}
-                options={members?.data ?? []}
-                onChange={(_event, value) => field.onChange(value)}
-                filterOptions={(option, { inputValue }) =>
-                  option.filter(({ user: { full_name } }) =>
-                    full_name?.includes(inputValue),
-                  )
-                }
-                getOptionLabel={(option) => option.user.full_name ?? ""}
-                getOptionKey={(option) => option.member.id}
-                isOptionEqualToValue={(option, value) =>
-                  option.member.id === value?.member.id
-                }
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="دریافت کننده"
-                    error={!!errors.reciever}
-                    helperText={errors.reciever?.message ?? ""}
-                    fullWidth
-                    required
-                  />
-                )}
-                fullWidth
-              />
+              <FormControl error={!!errors.reciever} fullWidth required>
+                <InputLabel id="income-receiver-label">دریافت کننده</InputLabel>
+                <Select
+                  name={field.name}
+                  labelId="income-receiver-label"
+                  id="income-receiver"
+                  label="دریافت کننده"
+                  value={field.value?.member.id || ""}
+                  onChange={(event) =>
+                    field.onChange(
+                      members?.data?.find(
+                        ({ member }) =>
+                          member.id === Number(event.target.value),
+                      ),
+                    )
+                  }
+                  onBlur={field.onBlur}
+                  inputRef={field.ref}
+                  disabled={gettingMembers}
+                >
+                  {members?.data?.map(({ member, user }) => (
+                    <MenuItem key={member.id} value={member.id}>
+                      {user.full_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>
+                  {errors.reciever?.message ?? ""}
+                </FormHelperText>
+              </FormControl>
             )}
           />
         </>
