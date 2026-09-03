@@ -133,7 +133,7 @@ export default function SettlementDetailsDrawerLayout({
             </div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <p className="text-body">{formatNumber(income_held)}</p>
-              <Add size="16" className="text-green-500" />
+              <Minus size="16" className="text-red-500" />
               <Image
                 src="/images/toman-secondary.webp"
                 alt="Toman"
@@ -203,7 +203,7 @@ export default function SettlementDetailsDrawerLayout({
             </div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <p className="text-body">{formatNumber(expense_credit)}</p>
-              <Minus size="16" className="text-red-500" />
+              <Add size="16" className="text-green-500" />
               <Image
                 src="/images/toman-secondary.webp"
                 alt="Toman"
@@ -273,7 +273,7 @@ export default function SettlementDetailsDrawerLayout({
             </div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <p className="text-body">{formatNumber(payments_in)}</p>
-              <Add size="16" className="text-green-500" />
+              <Minus size="16" className="text-red-500" />
               <Image
                 src="/images/toman-secondary.webp"
                 alt="Toman"
@@ -346,7 +346,7 @@ export default function SettlementDetailsDrawerLayout({
             </div>
             <div className="z-10 flex items-center gap-1 bg-white px-1">
               <p className="text-body">{formatNumber(payments_out)}</p>
-              <Minus size="16" className="text-red-500" />
+              <Add size="16" className="text-green-500" />
               <Image
                 src="/images/toman-secondary.webp"
                 alt="Toman"

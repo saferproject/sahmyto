@@ -14,7 +14,7 @@ import {
 import { Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
@@ -56,7 +56,7 @@ export default function DriverFormComponent({
     formState: { errors },
   } = useDriverForm();
 
-  const { description, fixed_amount, service_amount, phone } = useWatch({
+  const { description, fixed_amount, service_amount } = useWatch({
     control,
   });
 
@@ -112,6 +112,27 @@ export default function DriverFormComponent({
     handleCloseContactsDrawer();
   };
 
+  const phoneRegistration = register("phone");
+
+  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
+    void phoneRegistration.onChange(event);
+
+    const phone = event.target.value;
+
+    if (gettingContacts || phone.length !== 11 || !gotContacts) return;
+
+    const existingContact = contacts.data.find(
+      (contact) => contact.phone === phone,
+    );
+
+    if (existingContact)
+      setValues((currentValues) => ({
+        ...currentValues,
+        ...existingContact,
+      }));
+    else handleOpenContactsDrawer();
+  };
+
   const handleMutationSuccess = () => {
     setValues(getDriverFormInitial());
     onSuccess();
@@ -162,21 +183,6 @@ export default function DriverFormComponent({
     );
   };
 
-  useEffect(() => {
-    if (!gettingContacts && phone?.length === 11 && gotContacts) {
-      const existingContact = contacts.data.find(
-        (contact) => contact.phone === phone,
-      );
-
-      if (existingContact)
-        setValues((currentValues) => ({
-          ...currentValues,
-          ...existingContact,
-        }));
-      else handleOpenContactsDrawer();
-    }
-  }, [phone, gettingContacts, gotContacts, contacts]);
-
   return (
     <>
       <ContactListDrawerComponent
@@ -190,7 +196,8 @@ export default function DriverFormComponent({
         onSubmit={handleSubmit(submit)}
       >
         <TextField
-          {...register("phone")}
+          {...phoneRegistration}
+          onChange={handlePhoneChange}
           type="tel"
           inputMode="tel"
           label="شماره تماس"
