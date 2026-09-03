@@ -25,9 +25,11 @@ export default function useInvalidatingMutation<
   return useMutation<TData, ApiError, TVariables>({
     mutationKey,
     mutationFn,
-    onSuccess: () => {
-      invalidateQueries.forEach((queryKey) =>
-        queryClient.invalidateQueries({ queryKey }),
+    onSuccess: async () => {
+      await Promise.all(
+        invalidateQueries.map((queryKey) =>
+          queryClient.invalidateQueries({ queryKey }),
+        ),
       );
     },
   });

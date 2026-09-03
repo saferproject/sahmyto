@@ -28,11 +28,26 @@ export default function MonthListLayout({
   } = useGetFinancialMonthsEndpoint(karboomId);
 
   useEffect(() => {
+    if (!gotFinancialMonths) return;
+
     const currentMonth = financialMonths?.data.at(-1);
 
-    if (gotFinancialMonths && !selectedMonth?.id && currentMonth) {
+    if (!selectedMonth?.id && currentMonth) {
       onSelectMonth(currentMonth);
+      return;
     }
+
+    const refreshedSelectedMonth = financialMonths?.data.find(
+      ({ id }) => id === selectedMonth?.id,
+    );
+
+    if (
+      refreshedSelectedMonth &&
+      (refreshedSelectedMonth.status !== selectedMonth.status ||
+        refreshedSelectedMonth.closed_at !== selectedMonth.closed_at ||
+        refreshedSelectedMonth.updated_at !== selectedMonth.updated_at)
+    )
+      onSelectMonth(refreshedSelectedMonth);
   }, [gotFinancialMonths, financialMonths, onSelectMonth, selectedMonth]);
 
   return (

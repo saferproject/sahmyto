@@ -134,8 +134,9 @@ describe("useInfiniteListQuery", () => {
 });
 
 describe("useInvalidatingMutation", () => {
-  it("forwards mutation configuration and invalidates every related query", () => {
+  it("forwards mutation configuration and awaits every related invalidation", async () => {
     const mutationFn = vi.fn();
+    invalidateQueriesMock.mockResolvedValue(undefined);
     useInvalidatingMutation({
       mutationKey: ["create-item"],
       mutationFn,
@@ -146,7 +147,7 @@ describe("useInvalidatingMutation", () => {
     expect(options).toEqual(
       expect.objectContaining({ mutationKey: ["create-item"], mutationFn }),
     );
-    options.onSuccess();
+    await options.onSuccess();
     expect(invalidateQueriesMock).toHaveBeenNthCalledWith(1, {
       queryKey: ["items"],
     });
