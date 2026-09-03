@@ -3,16 +3,15 @@
 import Image from "next/image";
 
 import { Badge, Button } from "@mui/material";
-import { motion } from "motion/react";
 import { NotificationBing, ArrowLeft } from "iconsax-reactjs";
 
 import KarboomListItemProps from "../_types/karboom-list-item-props";
 
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
 import Plate from "@/app/_components/plate";
 
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
-import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
 import { useRouter } from "next/navigation";
 
 export default function KarboomListItemComponent(
@@ -46,19 +45,14 @@ export default function KarboomListItemComponent(
     router.push("/dashboard/karbooms/payments-list");
   };
 
+  const handleNavigateToActivitiesList = () => {
+    setActiveKarboom(karboom);
+    router.push("/dashboard/karbooms/activities-list");
+  };
+
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{
-        scale: 1,
-        opacity: 1,
-      }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{
-        delay: index * 0.1,
-        duration: 0.2,
-        ease: "easeIn",
-      }}
+    <AnimatedListItem
+      index={index}
       className="relative flex w-full snap-start flex-col rounded-3xl bg-transparent drop-shadow-lg"
     >
       <div className="relative -bottom-5 flex h-24 w-full items-center justify-center overflow-hidden rounded-t-3xl object-cover">
@@ -75,7 +69,7 @@ export default function KarboomListItemComponent(
           plate.second_character &&
           plate.third_number &&
           plate.fourth_number && (
-            <div className="absolute left-4 top-3">
+            <div className="absolute top-3 left-4">
               <Plate {...plate} />
             </div>
           )}
@@ -118,9 +112,9 @@ export default function KarboomListItemComponent(
             variant="outlined"
             color="secondary"
             className="text-body!"
-            // onClick={onCreateMaintenance}
+            onClick={handleNavigateToActivitiesList}
           >
-            تعمیرات
+            فعالیت ها
           </Button>
           <Button
             variant="outlined"
@@ -147,6 +141,6 @@ export default function KarboomListItemComponent(
           عملیات
         </Button>
       </div>
-    </motion.li>
+    </AnimatedListItem>
   );
 }

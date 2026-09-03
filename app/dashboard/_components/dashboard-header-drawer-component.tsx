@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 
 import { Button, SwipeableDrawer } from "@mui/material";
@@ -8,17 +9,21 @@ import { AnimatePresence, motion } from "motion/react";
 
 import DashboardHeaderDrawerProps from "../_interfaces/dashboard-header-drawer-props";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { clearAuthSession } from "@/app/_utilities/auth-session";
 
 import { DRAWER_MENU_ITEMS } from "../_constants/drawer-menu-items";
 import useUserLogout from "../_hooks/use-user-logout-endpoint";
 import { useConfirmationDialogStore } from "../_providers/confirmation-dialog-provider";
 import { User, ArrowLeft2, Logout, Add } from "iconsax-reactjs";
-import KarboomFormDrawerComponent from "../karbooms/_components/karboom-form-drawer-component";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
-import PartnerFormDrawerComponent from "../karbooms/_components/partner-form-drawer-component";
-import DriverFormDrawerComponent from "../karbooms/_components/driver-form-drawer-component";
+import PartnerListDrawerComponent from "../karbooms/_components/partner-list-drawer-component";
+import DriverListDrawerComponent from "../karbooms/_components/driver-list-drawer-component";
 
+const KarboomFormDrawerComponent = dynamic(
+  () => import("../karbooms/_components/karboom-form-drawer-component"),
+  { ssr: false },
+);
 export default function DashboardHeaderDrawerComponent({
   isOpen,
   onOpen,
@@ -28,16 +33,28 @@ export default function DashboardHeaderDrawerComponent({
   const { enqueueSnackbar } = useSnackbar();
 
   const [isKarboomFormDrawerOpen, setkarboomFormDrawerOpen] = useState(false);
-  const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] = useState(false);
-  const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] = useState(false);
+  const [isPartnerListDrawerOpen, setPartnerListDrawerOpen] = useState(false);
+  const [isDriverListDrawerOpen, setDriverListDrawerOpen] = useState(false);
+  const [loadedDrawers, setLoadedDrawers] = useState({
+    karboom: false,
+    partnerList: false,
+    driverList: false,
+  });
 
-  const { avatar, full_name } = useUserInfoStore((state) => state);
-  const {
-    startPending: startPendingConfirmation,
-    stopPending: stopPendingConfirmation,
-    setDialog: setConfirmationDialog,
-    closeDialog: closeConfirmationDialog,
-  } = useConfirmationDialogStore((state) => state);
+  const avatar = useUserInfoStore((state) => state.avatar);
+  const fullName = useUserInfoStore((state) => state.full_name);
+  const startPendingConfirmation = useConfirmationDialogStore(
+    (state) => state.startPending,
+  );
+  const stopPendingConfirmation = useConfirmationDialogStore(
+    (state) => state.stopPending,
+  );
+  const setConfirmationDialog = useConfirmationDialogStore(
+    (state) => state.setDialog,
+  );
+  const closeConfirmationDialog = useConfirmationDialogStore(
+    (state) => state.closeDialog,
+  );
 
   const { mutate: logout } = useUserLogout();
 
@@ -61,6 +78,7 @@ export default function DashboardHeaderDrawerComponent({
         stopPendingConfirmation();
         localStorage.removeItem("user");
         localStorage.removeItem("token");
+        clearAuthSession();
         router.push("/login");
       },
     });
@@ -79,6 +97,7 @@ export default function DashboardHeaderDrawerComponent({
   };
 
   const handleOpenKarboomFormDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, karboom: true }));
     setkarboomFormDrawerOpen(true);
   };
 
@@ -86,35 +105,32 @@ export default function DashboardHeaderDrawerComponent({
     setkarboomFormDrawerOpen(false);
   };
 
-  const handleOpenPartnerFormDrawer = () => {
-    setPartnerFormDrawerOpen(true);
+  const handleOpenPartnerListDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, partnerList: true }));
+    setPartnerListDrawerOpen(true);
   };
 
-  const handleClosePartnerFormDrawer = () => {
-    setPartnerFormDrawerOpen(false);
+  const handleClosePartnerListDrawer = () => {
+    setPartnerListDrawerOpen(false);
   };
 
-  const handleOpenDriverFormDrawer = () => {
-    setDriverFormDrawerOpen(true);
+  const handleSkipPartnerListDrawer = () => {
+    setPartnerListDrawerOpen(false);
+    handleOpenDriverListDrawer();
   };
 
-  const handleCloseDriverFormDrawer = () => {
-    setDriverFormDrawerOpen(false);
+  const handleOpenDriverListDrawer = () => {
+    setLoadedDrawers((current) => ({ ...current, driverList: true }));
+    setDriverListDrawerOpen(true);
+  };
+
+  const handleCloseDriverListDrawer = () => {
+    setDriverListDrawerOpen(false);
   };
 
   const handleKarboomFormSuccess = () => {
     handleCloseKarboomFormDrawer();
-    handleOpenPartnerFormDrawer();
-  };
-
-  const handlePartnerFormSuccess = () => {
-    handleClosePartnerFormDrawer();
-    handleOpenDriverFormDrawer();
-  };
-
-  const handleDriverFormSuccess = () => {
-    handleCloseDriverFormDrawer();
-    handleNavigation("/dashboard/karbooms", false);
+    handleOpenPartnerListDrawer();
   };
 
   return (
@@ -137,26 +153,29 @@ export default function DashboardHeaderDrawerComponent({
         },
       }}
     >
-      <KarboomFormDrawerComponent
-        isOpen={isKarboomFormDrawerOpen}
-        onOpen={handleOpenKarboomFormDrawer}
-        onClose={handleCloseKarboomFormDrawer}
-        onSuccess={handleKarboomFormSuccess}
-      />
-      <PartnerFormDrawerComponent
-        formState="ADD"
-        isOpen={isPartnerFormDrawerOpen}
-        onOpen={handleOpenPartnerFormDrawer}
-        onClose={handleClosePartnerFormDrawer}
-        onSuccess={handlePartnerFormSuccess}
-      />
-      <DriverFormDrawerComponent
-        formState="ADD"
-        isOpen={isDriverFormDrawerOpen}
-        onOpen={handleOpenDriverFormDrawer}
-        onClose={handleCloseDriverFormDrawer}
-        onSuccess={handleDriverFormSuccess}
-      />
+      {loadedDrawers.karboom && (
+        <KarboomFormDrawerComponent
+          isOpen={isKarboomFormDrawerOpen}
+          onOpen={handleOpenKarboomFormDrawer}
+          onClose={handleCloseKarboomFormDrawer}
+          onSuccess={handleKarboomFormSuccess}
+        />
+      )}
+      {loadedDrawers.partnerList && (
+        <PartnerListDrawerComponent
+          isOpen={isPartnerListDrawerOpen}
+          onOpen={handleOpenPartnerListDrawer}
+          onClose={handleClosePartnerListDrawer}
+          onSkip={handleSkipPartnerListDrawer}
+        />
+      )}
+      {loadedDrawers.driverList && (
+        <DriverListDrawerComponent
+          isOpen={isDriverListDrawerOpen}
+          onOpen={handleOpenDriverListDrawer}
+          onClose={handleCloseDriverListDrawer}
+        />
+      )}
       <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden rounded-l-[50px] bg-white p-8 shadow-lg">
         <div className="flex w-full items-center justify-between">
           <Image
@@ -199,7 +218,7 @@ export default function DashboardHeaderDrawerComponent({
                 <User size={48} className="text-secondary" />
               )}
             </div>
-            <h3 className="text-body font-semibold">{full_name}</h3>
+            <h3 className="text-body font-semibold">{fullName}</h3>
           </motion.button>
         )}
         <nav className="mt-6 min-h-0 flex-1 overflow-y-auto pl-2">

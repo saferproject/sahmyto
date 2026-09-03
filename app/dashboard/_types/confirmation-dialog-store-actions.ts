@@ -6,6 +6,6 @@ type ConfirmationDialogStoreActions = {
   startPending: () => void;
   stopPending: () => void;
   setDialog: (props: ConfirmationDialogProps) => void;
-}
+};
 
 export default ConfirmationDialogStoreActions;

@@ -8,7 +8,7 @@ import { Calendar, User } from "iconsax-reactjs";
 
 import QueryState from "@/app/_components/query-state";
 import DriverTipDrawerComponent from "./_components/driver-tip-drawer-component";
-import DetailItemComponent from "../../incomes-list/_components/income-detail-item-component";
+import DetailItemComponent from "@/app/_components/detail-item-component";
 
 import formatNumber from "@/app/_utilities/format-numbers";
 
@@ -24,32 +24,43 @@ import { JALALI_CALENDAR_MONTHS_FA } from "@/app/_constants/jalali-calendar-mont
 import { useConfirmationDialogStore } from "@/app/dashboard/_providers/confirmation-dialog-provider";
 import useCloseFinancialMonth from "../_hooks/use-close-financial-month-endpoint";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function DriversSalaryPage() {
+  const router = useRouter();
+
   const [isDriverTipDrawerOpen, setDriverTipDrawerOpen] = useState(false);
   const [selectedDriver, setSelectedDriver] = useState<number | null>(null);
   const [bonusPenaltyType, setBonusPenaltyType] =
     useState<BonusPenaltyType>("bonus");
 
-  const { id: financialMonthId, ...selectedMonth } = useFinancialMonthStore(
-    (state) => state,
-  );
+  const financialMonthId = useFinancialMonthStore((state) => state.id);
+  const selectedMonthDate = useFinancialMonthStore((state) => state.date);
 
   const {
     data: DriversSalaries,
     isLoading: gettingDriversSalaries,
     isError: gettingDriversSalariesFailed,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetDriversSalaryEndpoint(financialMonthId);
 
-  const { mutate: closeFinancialMonth, isPending: closingFinancialMonth } =
-    useCloseFinancialMonth();
+  const { mutate: closeFinancialMonth } = useCloseFinancialMonth();
 
-  const {
-    startPending: startPendingConfirmation,
-    stopPending: stopPendingConfirmation,
-    setDialog: setConfirmationDialog,
-    closeDialog: closeConfirmationDialog,
-  } = useConfirmationDialogStore((state) => state);
+  const startPendingConfirmation = useConfirmationDialogStore(
+    (state) => state.startPending,
+  );
+  const stopPendingConfirmation = useConfirmationDialogStore(
+    (state) => state.stopPending,
+  );
+  const setConfirmationDialog = useConfirmationDialogStore(
+    (state) => state.setDialog,
+  );
+  const closeConfirmationDialog = useConfirmationDialogStore(
+    (state) => state.closeDialog,
+  );
 
   const handleOpenDriverTip = () => {
     setDriverTipDrawerOpen(true);
@@ -81,6 +92,7 @@ export default function DriversSalaryPage() {
     closeFinancialMonth(financialMonthId, {
       onSuccess: () => {
         closeConfirmationDialog();
+        router.push("/dashboard/karbooms/financial-management");
       },
       onSettled: () => {
         stopPendingConfirmation();
@@ -94,13 +106,13 @@ export default function DriversSalaryPage() {
       isOpen: true,
       isPending: false,
       title: "بستن ماه مالی",
-      mainDiscription: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
+      mainDiscription: `بستن ماه مالی ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonthDate).month()]}`,
       extraDescription:
         "درحین بستن و پس از بستن ماه مالی امکان تغییر درآمد و هزینه های این ماه وجود ندارد. از وارد کردن تمام درآمد ها و هزینه های این ماه اطمینان حاصل کنید و فرآیند را شروع کنید.",
       icon: <Calendar size={24} className="text-primary" />,
       onConfirm: handleCloseFinancialMonth,
       onClose: closeConfirmationDialog,
-      confirmButtonTitle: `بستن ماه ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonth?.date).month()]}`,
+      confirmButtonTitle: `بستن ماه ${JALALI_CALENDAR_MONTHS_FA[dayjs(selectedMonthDate).month()]}`,
     });
   };
 
@@ -216,6 +228,11 @@ export default function DriversSalaryPage() {
             },
           )}
         </ul>
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
         <Button variant="contained" onClick={handleOpenConfirmationDialog}>
           تایید حقوق رانندگان
         </Button>

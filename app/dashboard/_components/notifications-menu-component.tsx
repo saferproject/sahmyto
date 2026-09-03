@@ -6,6 +6,7 @@ import QueryState from "@/app/_components/query-state";
 
 import requestsMenuProps from "../_interfaces/notifications-menu-props";
 import RequestComponent from "./request-component";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function requestsMenuComponent({
   anchorEl,
@@ -19,6 +20,9 @@ export default function requestsMenuComponent({
   mutatingRequest,
   requestIsAccepting,
   requestIsRejecting,
+  hasNextPage,
+  isFetchingNextPage,
+  fetchNextPage,
 }: requestsMenuProps) {
   return (
     <Menu
@@ -80,6 +84,11 @@ export default function requestsMenuComponent({
             />
           ))}
         </ul>
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
       </QueryState>
     </Menu>
   );

@@ -1,16 +1,18 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { AddPaymentBody } from "../_types/add-payment-body";
 import { Payment } from "../_types/payment";
-import { RejectPaymentBody } from "../_types/rehect-payment-body";
+import { RejectPaymentBody } from "../_types/reject-payment-body";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const paymentsListService = {
-  getPayments: async (karboomId: number) => {
-    const response = await fetchWithAuth<Payment[]>(
-      `karboom/payment/${karboomId}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      },
+  getPayments: async (
+    karboomId: number,
+    signal?: AbortSignal,
+    page: number = 1,
+  ) => {
+    const response = await http.get<Payment[]>(
+      addPaginationQuery(`karboom/payment/${karboomId}`, page),
+      { signal },
     );
 
     return {
@@ -22,20 +24,9 @@ export const paymentsListService = {
     };
   },
   addPayment: ({ karboomId, ...body }: AddPaymentBody) =>
-    fetchWithAuth<Payment>(`karboom/payment/store/${karboomId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
+    http.post<Payment>(`karboom/payment/store/${karboomId}`, { body }),
   approvePayment: (paymentId: number) =>
-    fetchWithAuth<undefined>(`karboom/payment/accept/${paymentId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/payment/accept/${paymentId}`),
   rejectPayment: ({ paymentId, ...body }: RejectPaymentBody) =>
-    fetchWithAuth<undefined>(`karboom/payment/reject/${paymentId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
+    http.post<undefined>(`karboom/payment/reject/${paymentId}`, { body }),
 };

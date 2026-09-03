@@ -1,16 +1,12 @@
-import BaseResponse from "@/app/_interfaces/base-response";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
-import { ExpensesListService } from "../_services/expenses-list-service";
+import { expensesListService } from "../_services/expenses-list-service";
 
 export default function useApproveExpense() {
-  const queryClient = useQueryClient();
-
-  return useMutation<BaseResponse<undefined>, BaseResponse<undefined>, number>({
+  return useInvalidatingMutation({
     mutationKey: ["approve-expense"],
-    mutationFn: (expenseId) => ExpensesListService.approveExpense(expenseId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["expenses"] });
-    },
+    mutationFn: (expenseId: number) =>
+      expensesListService.approveExpense(expenseId),
+    invalidateQueries: [["expenses"]],
   });
 }

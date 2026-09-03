@@ -20,6 +20,4 @@ export const KARBOOMS_STORE_DEFAULTS: Karboom & KarboomStoreTriggers = {
   smart_number: 0,
   image: "",
   isActionsDrawerOpen: false,
-  isIncomeDrawerOpen: false,
-  isExpenseDrawerOpen: false,
 };

@@ -11,8 +11,8 @@ export default function DataListComponent({ indent, items }: DataListProps) {
       {items.map((item) => {
         const isIncome = "quantity" in item;
         const title = isIncome
-          ? (item.receiver.full_name ?? "")
-          : (item.payer.full_name ?? "");
+          ? (item.receiver?.full_name ?? "")
+          : (item.payer?.full_name ?? "");
         const value = isIncome
           ? item.unit_price * item.quantity
           : item.unit_price + item.wage_cost;

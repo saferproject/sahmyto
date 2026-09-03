@@ -1,18 +1,16 @@
 import usePaymentForm from "../_hooks/use-payment-form";
 import { Controller, useWatch } from "react-hook-form";
 import PriceInputComponent from "@/app/_components/price-input-component";
-import { DatePicker } from "@mui/x-date-pickers";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 import DescriptionInput from "@/app/_components/description-input";
 import {
-  Autocomplete,
   Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from "@mui/material";
-import { Member } from "../_types/member";
 import { useEffect } from "react";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
@@ -22,7 +20,8 @@ import useAddPaymentEndpoint from "../_hooks/use-add-payment-endpoint";
 import { PaymentFormType } from "../_schemas/payment-form-schema";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { PAYMENT_FORM_INITIAL } from "../_constants/payment-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
 import { PAYMENT_TYPES_FA } from "../payments-list/_constants/payment-types-fa";
 
 export default function PaymentFormComponent({
@@ -39,7 +38,7 @@ export default function PaymentFormComponent({
     formState: { errors },
   } = usePaymentForm();
 
-  const { description, total_price } = useWatch({ control });
+  const { description, total_price, payer } = useWatch({ control });
 
   const userId = useUserInfoStore((state) => state.id);
   const karboomId = useKarboomsStore((state) => state.id);
@@ -50,12 +49,18 @@ export default function PaymentFormComponent({
     isSuccess: gotMembers,
   } = useGetMembersEndpoint(karboomId, isOpen && !!karboomId);
 
-  const {
-    mutate: createExpense,
-    isPending: creatingExpense,
-    isSuccess: createdExpense,
-    isError: creatingExpenseFailed,
-  } = useAddPaymentEndpoint();
+  const { mutate: createExpense, isPending: creatingExpense } =
+    useAddPaymentEndpoint();
+
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof PaymentFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
 
   const submit = ({
     payer,
@@ -71,37 +76,27 @@ export default function PaymentFormComponent({
         payer_id: payer.member.id,
         receiver_id: reciever.member.id,
         karboomId: karboomId,
-        date: date.toISOString().split("T")[0],
+        date: formatGregorianDate(date),
       },
       {
         onSuccess() {
           onSuccess();
           setValues(PAYMENT_FORM_INITIAL);
         },
-        onError(error) {
-          const err = error as unknown as BaseResponse;
-
-          if (err.errors)
-            Object.entries(err.errors).forEach(([field, errors]) =>
-              setError(field as keyof PaymentFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
-        },
+        onError: handleMutationError,
       },
     );
   };
 
   useEffect(() => {
-    if (gotMembers) {
-      const currentMember = members.data.find(
+    if (gotMembers && !payer?.member?.id) {
+      const currentMember = members.data?.find(
         (member) => member.user.id === userId,
       );
 
       if (currentMember) setValue("payer", currentMember);
     }
-  }, [gotMembers, members]);
+  }, [gotMembers, members, payer, setValue, userId]);
 
   return (
     <form
@@ -113,33 +108,33 @@ export default function PaymentFormComponent({
         name="payer"
         rules={{ required: true }}
         render={({ field }) => (
-          <Autocomplete<Member>
-            {...field}
-            loading={gettingMembers}
-            options={members?.data ?? []}
-            onChange={(_event, value) => field.onChange(value)}
-            filterOptions={(option, { inputValue }) =>
-              option.filter(({ user: { full_name } }) =>
-                full_name?.includes(inputValue),
-              )
-            }
-            getOptionLabel={(option) => option.user.full_name ?? ""}
-            getOptionKey={(option) => option.member.id}
-            isOptionEqualToValue={(option, value) =>
-              option.member.id === value?.member.id
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="پرداخت کننده"
-                error={!!errors.payer}
-                helperText={errors.payer?.message ?? ""}
-                fullWidth
-                required
-              />
-            )}
-            fullWidth
-          />
+          <FormControl error={!!errors.payer} fullWidth required>
+            <InputLabel id="payment-payer-label">پرداخت کننده</InputLabel>
+            <Select
+              name={field.name}
+              labelId="payment-payer-label"
+              id="payment-payer"
+              label="پرداخت کننده"
+              value={field.value?.member.id || ""}
+              onChange={(event) =>
+                field.onChange(
+                  members?.data?.find(
+                    ({ member }) => member.id === Number(event.target.value),
+                  ),
+                )
+              }
+              onBlur={field.onBlur}
+              inputRef={field.ref}
+              disabled={gettingMembers}
+            >
+              {members?.data?.map(({ member, user }) => (
+                <MenuItem key={member.id} value={member.id}>
+                  {user.full_name}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>{errors.payer?.message ?? ""}</FormHelperText>
+          </FormControl>
         )}
       />
       <Controller
@@ -147,33 +142,33 @@ export default function PaymentFormComponent({
         name="reciever"
         rules={{ required: true }}
         render={({ field }) => (
-          <Autocomplete<Member>
-            {...field}
-            loading={gettingMembers}
-            options={members?.data ?? []}
-            onChange={(_event, value) => field.onChange(value)}
-            filterOptions={(option, { inputValue }) =>
-              option.filter(({ user: { full_name } }) =>
-                full_name?.includes(inputValue),
-              )
-            }
-            getOptionLabel={(option) => option.user.full_name ?? ""}
-            getOptionKey={(option) => option.member.id}
-            isOptionEqualToValue={(option, value) =>
-              option.member.id === value?.member.id
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="دریافت کننده"
-                error={!!errors.reciever}
-                helperText={errors.reciever?.message ?? ""}
-                fullWidth
-                required
-              />
-            )}
-            fullWidth
-          />
+          <FormControl error={!!errors.reciever} fullWidth required>
+            <InputLabel id="payment-receiver-label">دریافت کننده</InputLabel>
+            <Select
+              name={field.name}
+              labelId="payment-receiver-label"
+              id="payment-receiver"
+              label="دریافت کننده"
+              value={field.value?.member.id || ""}
+              onChange={(event) =>
+                field.onChange(
+                  members?.data?.find(
+                    ({ member }) => member.id === Number(event.target.value),
+                  ),
+                )
+              }
+              onBlur={field.onBlur}
+              inputRef={field.ref}
+              disabled={gettingMembers}
+            >
+              {members?.data?.map(({ member, user }) => (
+                <MenuItem key={member.id} value={member.id}>
+                  {user.full_name}
+                </MenuItem>
+              ))}
+            </Select>
+            <FormHelperText>{errors.reciever?.message ?? ""}</FormHelperText>
+          </FormControl>
         )}
       />
       <Controller
@@ -212,20 +207,13 @@ export default function PaymentFormComponent({
         control={control}
         name="date"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.date,
-                helperText: errors.date?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.date}
+            helperText={errors.date?.message ?? ""}
+            required
             disableFuture
           />
         )}

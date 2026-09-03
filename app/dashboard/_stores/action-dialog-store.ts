@@ -5,7 +5,6 @@ import { ActionDialogProps } from "../_types/action-dialog-props";
 import ACTION_DIALOG_PROPS_DEFAULTS from "../_constants/action-dialog-props-defaults";
 import ActionDialogStore from "../_types/action-dialog-store";
 
-
 export const createActionDialogStore = (
   initState: ActionDialogProps = ACTION_DIALOG_PROPS_DEFAULTS,
 ) => {

@@ -1,3 +1,31 @@
-import { SettlementData } from "../_types/settlement-data";
+import type { SettlementStoreData } from "../_types/settlement-store-data";
 
-export const SETTLEMENT_STORE_DEFAULTS: SettlementData = {};
+export const SETTLEMENT_STORE_DEFAULTS: SettlementStoreData = {
+  id: 0,
+  karboom_member_id: 0,
+  name: "",
+  is_driver: false,
+  opening_balance: 0,
+  share: 0,
+  salary: 0,
+  service_fee: 0,
+  income_held: 0,
+  expense_credit: 0,
+  payments_in: 0,
+  payments_out: 0,
+  balance: 0,
+  total: 0,
+  status: "settled",
+  breakdown: {
+    previous_settlement: { total: 0, items: [] },
+    profit_loss: { total: 0, items: [] },
+    expenses_issued: { total: 0, items: [] },
+    expenses_paid: { total: 0, items: [] },
+    payments_received: { total: 0, items: [] },
+    payments_made: { total: 0, items: [] },
+    payments_registered: { total: 0, items: [] },
+    incomes_received: { total: 0, items: [] },
+    salary: { total: 0, items: [] },
+    service_fee: { total: 0, items: [] },
+  },
+};

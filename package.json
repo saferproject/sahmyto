@@ -7,7 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "audit:prod": "pnpm audit --prod --audit-level high",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -16,7 +19,6 @@
     "@mui/material": "^9.1.2",
     "@mui/stylis-plugin-rtl": "^9.1.1",
     "@mui/x-date-pickers": "^9.7.0",
-    "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.101.2",
     "@use-gesture/react": "^10.3.1",
     "browser-image-compression": "^2.0.2",
@@ -37,17 +39,22 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.1",
+    "@tanstack/react-query-devtools": "^5.101.4",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20.19.43",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@types/stylis": "^4.2.7",
+    "@vitest/coverage-v8": "4.1.11",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.2.11",
+    "jsdom": "^30.0.1",
     "prettier": "^3.9.1",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.3.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
   },
   "ignoreScripts": [
     "sharp",

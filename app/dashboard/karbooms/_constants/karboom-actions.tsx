@@ -2,6 +2,7 @@ import {
   Car,
   Health,
   Profile2User,
+  ProgrammingArrows,
   User,
   Wallet1,
   WalletAdd1,
@@ -35,6 +36,11 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
     label: "مدیریت هزینه ها",
     icon: <WalletMinus size="24" />,
     path: "/dashboard/karbooms/expenses-list",
+  },
+  {
+    label: "مدیریت دریافتی و پرداختی ها",
+    icon: <ProgrammingArrows size="24" />,
+    path: "/dashboard/karbooms/payments-list",
   },
   {
     label: "مدیریت بیمه شخص ثالث",

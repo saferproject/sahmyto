@@ -51,14 +51,14 @@ export default function NoKarboomsComponent({ onAddKarboom }: NoKarboomsProps) {
           </div>
         </div>
 
-        <p className="absolute top-[71px] right-[29px] left-[29px] text-[8px] leading-4 font-medium">
+        <p className="absolute top-[71px] right-[29px] left-[29px] text-[10px] leading-4 font-medium">
           برای استفاده از سهمیتو و مدیریت ناوگان خود میبایست در مرحله اول کاربوم
           مورد نظر را ایجاد کنید
         </p>
 
         <Link
           href="/dashboard/tutorial"
-          className="absolute bottom-[20px] left-[56px] border-b border-dashed border-[#162864] pb-1 text-[7px] leading-3 font-bold"
+          className="absolute bottom-[20px] left-[50px] border-b border-dashed border-[#162864] pb-1 text-[10px] leading-3 font-bold"
         >
           مشاهده ویدئوهای آموزشی
         </Link>
@@ -66,7 +66,7 @@ export default function NoKarboomsComponent({ onAddKarboom }: NoKarboomsProps) {
         <button
           type="button"
           onClick={onAddKarboom}
-          className="absolute right-[24px] bottom-[18px] flex h-[23px] w-[120px] cursor-pointer items-center justify-between overflow-hidden rounded-[7px] bg-[#fb6a02] pr-2 text-[7px] font-bold text-white"
+          className="absolute right-[24px] bottom-[18px] flex h-[23px] w-[120px] cursor-pointer items-center justify-between overflow-hidden rounded-[7px] bg-[#fb6a02] pr-2 text-[10px] font-bold text-white"
         >
           <span>ساخت اولین کاربوم</span>
           <span className="absolute top-0 left-0 flex h-full w-[32px] items-center justify-center rounded-full bg-[#e95f00]">

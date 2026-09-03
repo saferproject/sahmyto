@@ -1,32 +1,23 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { AddBonusPenaltyDriverBody } from "../_types/add-bonus-penalty-driver-body";
 import { DriverSalary } from "../_types/driver-salary";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const driversSalaryService = {
-  getDriversSalary: (monthId: number) =>
-    fetchWithAuth<DriverSalary[]>(`karboom/adjustments/${monthId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
+  getDriversSalary: (monthId: number, signal?: AbortSignal, page: number = 1) =>
+    http.get<DriverSalary[]>(
+      addPaginationQuery(`karboom/adjustments/${monthId}`, page),
+      { signal },
+    ),
   addBonusOrPenaltyForDriver: ({
     financialMonthId,
     driverId,
     ...body
   }: AddBonusPenaltyDriverBody) =>
-    fetchWithAuth<undefined>(
+    http.post<undefined>(
       `karboom/adjustments/month/${financialMonthId}/driver/${driverId}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      },
+      { body },
     ),
   deleteBonusOrPenaltyForDriver: (driverSalaryId: number) =>
-    fetchWithAuth<undefined>(
-      `karboom/adjustments/adjustments/${driverSalaryId}`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      },
-    ),
+    http.delete<undefined>(`karboom/adjustments/adjustments/${driverSalaryId}`),
 };

@@ -1,5 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import useZodForm from "@/app/_hooks/use-zod-form";
 
 import PartnerFormSchema, {
   type PartnerFormType,
@@ -8,8 +7,8 @@ import PartnerFormSchema, {
 import { getPartnerFormInitial } from "../_constants/partner-form-initial";
 
 export default function usePartnerForm() {
-  return useForm<PartnerFormType>({
-    resolver: zodResolver(PartnerFormSchema),
+  return useZodForm<PartnerFormType>({
+    schema: PartnerFormSchema,
     defaultValues: getPartnerFormInitial(),
     reValidateMode: "onSubmit",
   });

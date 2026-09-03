@@ -9,6 +9,7 @@ import { karboomService } from "../_services/karboom-service";
 import { useActionDialogStore } from "../../_providers/action-dialog-provider";
 
 import NO_MEMBER_ACTION_DIALOG_PROPS from "../_constants/no-member-action-dialog-props";
+import isValidQueryId from "@/app/_utilities/is-valid-query-id";
 
 /**
  * Income and expense both need a member to pay or receive, so before opening a
@@ -17,22 +18,27 @@ import NO_MEMBER_ACTION_DIALOG_PROPS from "../_constants/no-member-action-dialog
  * pages) instead of opening a form they cannot submit.
  *
  * Returns a function that runs `onHasMembers` only when the karboom has at
- * least one member. Membership is fetched fresh (`staleTime: 0`) because adding
- * a partner/driver does not invalidate the members query.
+ * least one member. Membership is fetched fresh (`staleTime: 0`) so the guard
+ * never relies on an older cached member list.
  */
 export default function useRequireKarboomMembers() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { setDialog: setActionDialog, resetDialog: resetActionDialog } =
-    useActionDialogStore((state) => state);
+  const setActionDialog = useActionDialogStore((state) => state.setDialog);
+  const resetActionDialog = useActionDialogStore((state) => state.resetDialog);
 
-  return async (karboomId: number, onHasMembers: () => void) => {
+  return async (
+    karboomId: number | null | undefined,
+    onHasMembers: () => void,
+  ) => {
+    if (!isValidQueryId(karboomId)) return;
+
     try {
       const members = await queryClient.fetchQuery({
-        queryKey: ["expenses-categories", karboomId],
-        queryFn: () => karboomService.getMembers(karboomId),
+        queryKey: ["members", karboomId],
+        queryFn: ({ signal }) => karboomService.getMembers(karboomId, signal),
         staleTime: 0,
       });
 

@@ -42,13 +42,13 @@ export default function KarboomActionsDrawerComponent({
           <h4 className="text-body mb-6 text-lg font-semibold">
             عملیات های کاربوم
           </h4>
-          <menu className="mb-4 flex w-full min-h-0 flex-1 flex-col overflow-y-auto">
+          <menu className="mb-4 flex min-h-0 w-full flex-1 flex-col overflow-y-auto">
             {KARBOOM_ACTIONS.map(({ label, icon, path }) => (
               <li
                 key={label}
                 role="button"
                 tabIndex={0}
-                className="text-body border-secondary-light flex w-full items-center justify-between border-b py-4 px-1 last:border-0"
+                className="text-body border-secondary-light flex w-full items-center justify-between border-b px-1 py-4 last:border-0"
                 onClick={() => handleNavigation(path)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ")

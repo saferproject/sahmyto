@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import useInfiniteListQuery from "@/app/_hooks/use-infinite-list-query";
 import { dashboardService } from "../_services/dashboard-service";
 
 export default function useGetKarboomRequests() {
-  return useQuery({
+  return useInfiniteListQuery({
     queryKey: ["requests"],
-    queryFn: dashboardService.getKarboomRequests,
+    queryFn: (page, signal) =>
+      dashboardService.getKarboomRequests(signal, page),
   });
 }

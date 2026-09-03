@@ -1,8 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useSnackbar } from "notistack";
 
@@ -16,42 +14,57 @@ import SelectedKarboomInfoComponent from "../_components/selected-karboom-info-c
 import QueryState from "@/app/_components/query-state";
 import ListFooterLayout from "../_layouts/list-footer-layout";
 import ListHeaderLayout from "../_layouts/list-header-layout";
-import { FormStates } from "../../_types/form-states";
-import { Driver } from "./_types/driver";
+import type { FormStates } from "../../_types/form-states";
+import type { Driver } from "./_types/driver";
+import { useShallow } from "zustand/react/shallow";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function DriverListPage() {
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { id: karboom_id } = useKarboomsStore((state) => state);
-
-  useEffect(() => {
-    if (!karboom_id) {
-      enqueueSnackbar({
-        variant: "warning",
-        message: "کاربومی انتخاب نشده است",
-      });
-      router.replace("/dashboard/karbooms");
-    }
-  }, [karboom_id, enqueueSnackbar, router]);
+  const { karboomId, karboomRoles } = useKarboomsStore(
+    useShallow(({ id: karboomId, roles: karboomRoles }) => ({
+      karboomId,
+      karboomRoles,
+    })),
+  );
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
     useState<boolean>(false);
   const [driverFormState, setDriverFormState] = useState<FormStates>("ADD");
   const [selectedDriver, setSelectedDriver] = useState<Driver>();
 
-  const { data, isLoading, isError } = useGetDriversEndpoint(karboom_id);
+  const {
+    data,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useGetDriversEndpoint(karboomId);
 
   const handleOpenDriverForm = () => {
-    setDriverFormState("ADD");
-    setSelectedDriver(undefined);
-    setDriverFormDrawerOpen(true);
+    if (karboomRoles.includes("owner")) {
+      setDriverFormState("ADD");
+      setSelectedDriver(undefined);
+      setDriverFormDrawerOpen(true);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم می تواند راننده دعوت کند",
+      });
   };
 
   const handleEditDriver = (driver: Driver) => {
-    setDriverFormState("EDIT");
-    setSelectedDriver(driver);
-    setDriverFormDrawerOpen(true);
+    if (karboomRoles.includes("owner")) {
+      setDriverFormState("EDIT");
+      setSelectedDriver(driver);
+      setDriverFormDrawerOpen(true);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم می تواند راننده ویرایش کند",
+      });
   };
 
   const handleCloseDriverForm = () => {
@@ -72,6 +85,11 @@ export default function DriverListPage() {
         <DriversListComponent
           drivers={data?.data ?? []}
           onEdit={handleEditDriver}
+        />
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
         />
       </QueryState>
       <DriverFormDrawerComponent

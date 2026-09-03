@@ -1,12 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-import { financialManagmentService } from "../_services/financial-management-service";
+import useInfiniteListQuery from "@/app/_hooks/use-infinite-list-query";
+import isValidQueryId from "@/app/_utilities/is-valid-query-id";
 
-export default function useGetFinancialMonthsEndpoint(karboomId: number) {
-  return useQuery({
+import { financialManagementService } from "../_services/financial-management-service";
+
+export default function useGetFinancialMonthsEndpoint(
+  karboomId: number | null | undefined,
+) {
+  return useInfiniteListQuery({
     queryKey: ["financial-months", karboomId],
-    queryFn: ({ queryKey }) =>
-      financialManagmentService.getFinancialManagmentMonths(
+    queryFn: (page, signal, queryKey) =>
+      financialManagementService.getFinancialManagmentMonths(
         queryKey[1] as number,
+        signal,
+        page,
       ),
+    enabled: isValidQueryId(karboomId),
   });
 }

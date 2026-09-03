@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
 import { paymentsListService } from "../_services/payments-list-service";
 
 export default function useRejectPaymentEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["reject-payment"],
     mutationFn: paymentsListService.rejectPayment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["payments"] });
-    },
+    invalidateQueries: [["payments"]],
   });
 }

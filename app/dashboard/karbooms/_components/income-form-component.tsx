@@ -3,24 +3,34 @@
 import { Controller, useWatch } from "react-hook-form";
 import { useEffect } from "react";
 import { InfoCircle } from "iconsax-reactjs";
-import { DatePicker } from "@mui/x-date-pickers";
-import { Autocomplete, Button, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 
-import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { IncomeFormType } from "../_schemas/income-form-schema";
 import DescriptionInput from "@/app/_components/description-input";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 import useIncomeForm from "../_hooks/use-income-form";
 import { IncomeDrawerFormProps } from "../_types/income-drawer-form-props";
 import { IncomeTypes } from "../_types/income-categories";
 import useGetMembersEndpoint from "../_hooks/use-get-members-endpoint";
-import { Member } from "../_types/member";
 import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
-import BaseResponse from "@/app/_interfaces/base-response";
-import useCreateIncomeEndpoint from "../_hooks/create-income-endpoint";
+import ApiError from "@/app/_errors/api-error";
+import useCreateIncomeEndpoint from "../_hooks/use-create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import dayjs from "dayjs";
 
 export default function IncomeFormComponent({
   isOpen,
@@ -38,30 +48,40 @@ export default function IncomeFormComponent({
     formState: { errors },
   } = useIncomeForm();
 
-  const { description, quantity, unit_price, total_price } = useWatch({
+  const {
+    description,
+    quantity,
+    unit_price,
+    total_price,
+    is_settled,
+    reciever,
+  } = useWatch({
     control,
   });
 
   const userId = useUserInfoStore((state) => state.id);
-  const selectedKarboomId = useKarboomsStore((state) => state.id);
 
   const {
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
-  } = useGetMembersEndpoint(
-    karboomId,
-    isOpen && karboomId == selectedKarboomId,
-  );
+  } = useGetMembersEndpoint(karboomId, isOpen);
 
-  const {
-    mutate: createIncome,
-    isPending: creatingIncome,
-    isSuccess: createdIncome,
-    isError: creatingIncomeFailed,
-  } = useCreateIncomeEndpoint();
+  const { mutate: createIncome, isPending: creatingIncome } =
+    useCreateIncomeEndpoint();
+
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof IncomeFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
 
   const submit = ({
+    settlement_date,
     reciever,
     started_at,
     ended_at,
@@ -70,6 +90,8 @@ export default function IncomeFormComponent({
     total_price,
     ...other
   }: IncomeFormType) => {
+    void image;
+
     createIncome(
       {
         ...other,
@@ -78,25 +100,18 @@ export default function IncomeFormComponent({
         type: incomeType,
         receiver_id: reciever.member.id,
         karboom_id: karboomId,
-        started_at: started_at.toISOString().split("T")[0],
-        ended_at: ended_at.toISOString().split("T")[0],
+        settlement_date: settlement_date
+          ? formatGregorianDate(settlement_date)
+          : null,
+        started_at: formatGregorianDate(started_at),
+        ended_at: formatGregorianDate(ended_at),
       },
       {
         onSuccess() {
           onSuccess();
           setValues(INCOME_FORM_INITIAL);
         },
-        onError(error) {
-          const err = error as unknown as BaseResponse;
-
-          if (err.errors)
-            Object.entries(err.errors).forEach(([field, errors]) =>
-              setError(field as keyof IncomeFormType, {
-                message: errors[0],
-                type: "validate",
-              }),
-            );
-        },
+        onError: handleMutationError,
       },
     );
   };
@@ -142,22 +157,27 @@ export default function IncomeFormComponent({
   };
 
   useEffect(() => {
+    if (is_settled) setValue("settlement_date", dayjs());
+    else setValue("settlement_date", null);
+  }, [is_settled, setValue]);
+
+  useEffect(() => {
     if (quantity && unit_price)
       setValue(
         "total_price",
         formatNumber(quantity * (parseNumber(unit_price) || 0)),
       );
-  }, [quantity, unit_price]);
+  }, [quantity, setValue, unit_price]);
 
   useEffect(() => {
-    if (gotMembers) {
-      const currentMember = members.data.find(
+    if (gotMembers && !reciever?.member?.id) {
+      const currentMember = members.data?.find(
         (member) => member.user.id === userId,
       );
 
       if (currentMember) setValue("reciever", currentMember);
     }
-  }, [gotMembers, members]);
+  }, [gotMembers, members, reciever, setValue, userId]);
 
   return (
     <form
@@ -169,37 +189,80 @@ export default function IncomeFormComponent({
       </p>
       <Controller
         control={control}
-        name="reciever"
+        name="is_settled"
         render={({ field }) => (
-          <Autocomplete<Member>
-            {...field}
-            loading={gettingMembers}
-            options={members?.data ?? []}
-            onChange={(_event, value) => field.onChange(value)}
-            filterOptions={(option, { inputValue }) =>
-              option.filter(({ user: { full_name } }) =>
-                full_name?.includes(inputValue),
-              )
-            }
-            getOptionLabel={(option) => option.user.full_name ?? ""}
-            getOptionKey={(option) => option.member.id}
-            isOptionEqualToValue={(option, value) =>
-              option.member.id === value?.member.id
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="دریافت کننده"
-                error={!!errors.reciever}
-                helperText={errors.reciever?.message ?? ""}
-                fullWidth
-                required
+          <FormControlLabel
+            label="تسویه شده"
+            control={
+              <Checkbox
+                {...field}
+                checked={field.value}
+                slotProps={{
+                  input: { "aria-label": "controlled" },
+                }}
               />
-            )}
-            fullWidth
+            }
+            sx={{
+              width: "100%",
+              display: "flex",
+            }}
           />
         )}
       />
+      {is_settled && (
+        <>
+          <Controller
+            control={control}
+            name="settlement_date"
+            render={({ field }) => (
+              <DatePickerComponent
+                {...field}
+                onChange={(value) => field.onChange(value)}
+                label="تاریخ تسویه"
+                error={!!errors.settlement_date}
+                helperText={errors.settlement_date?.message ?? ""}
+                disableFuture
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="reciever"
+            render={({ field }) => (
+              <FormControl error={!!errors.reciever} fullWidth required>
+                <InputLabel id="income-receiver-label">دریافت کننده</InputLabel>
+                <Select
+                  name={field.name}
+                  labelId="income-receiver-label"
+                  id="income-receiver"
+                  label="دریافت کننده"
+                  value={field.value?.member.id || ""}
+                  onChange={(event) =>
+                    field.onChange(
+                      members?.data?.find(
+                        ({ member }) =>
+                          member.id === Number(event.target.value),
+                      ),
+                    )
+                  }
+                  onBlur={field.onBlur}
+                  inputRef={field.ref}
+                  disabled={gettingMembers}
+                >
+                  {members?.data?.map(({ member, user }) => (
+                    <MenuItem key={member.id} value={member.id}>
+                      {user.full_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>
+                  {errors.reciever?.message ?? ""}
+                </FormHelperText>
+              </FormControl>
+            )}
+          />
+        </>
+      )}
       <TextField
         {...register("quantity", { valueAsNumber: true })}
         label={quantityInputSettings[incomeType].label}
@@ -248,20 +311,13 @@ export default function IncomeFormComponent({
         control={control}
         name="started_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.started_at}
+            helperText={errors.started_at?.message ?? ""}
+            required
             disableFuture
           />
         )}
@@ -270,20 +326,13 @@ export default function IncomeFormComponent({
         control={control}
         name="ended_at"
         render={({ field }) => (
-          <DatePicker
+          <DatePickerComponent
             {...field}
             onChange={(value) => field.onChange(value)}
             label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
+            error={!!errors.ended_at}
+            helperText={errors.ended_at?.message ?? ""}
+            required
             disableFuture
           />
         )}

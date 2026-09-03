@@ -6,10 +6,31 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
+import ApiError from "./_errors/api-error";
 import BaseResponse from "./_interfaces/base-response";
+
+const DEFAULT_ERROR_MESSAGE = "عملیات با خطا مواجه شد";
+
+export function getErrorMessage(error: unknown) {
+  if (!(error instanceof ApiError)) return DEFAULT_ERROR_MESSAGE;
+
+  return error.errors?.error?.[0] || error.message || DEFAULT_ERROR_MESSAGE;
+}
+
+export function shouldRetryQuery(failureCount: number, error: unknown) {
+  if (failureCount >= 2 || !(error instanceof ApiError)) return false;
+
+  return (
+    error.status === 0 ||
+    error.status === 408 ||
+    error.status === 429 ||
+    error.status >= 500
+  );
+}
 
 export function ReactQueryProvider({
   children,
@@ -22,8 +43,8 @@ export function ReactQueryProvider({
     () =>
       new QueryClient({
         queryCache: new QueryCache({
-          onError({ message }) {
-            enqueueSnackbar(message ?? "عملیات با خطا مواجه شد", {
+          onError(error) {
+            enqueueSnackbar(getErrorMessage(error), {
               variant: "error",
             });
           },
@@ -33,15 +54,13 @@ export function ReactQueryProvider({
           onSuccess(response) {
             const res = response as BaseResponse;
 
-            enqueueSnackbar(res?.message ?? "عملیات با موفقیت انجام شد", {
+            enqueueSnackbar(res?.message || "عملیات با موفقیت انجام شد", {
               variant: "success",
             });
           },
 
-          onError(response) {
-            const res = response as unknown as BaseResponse;
-
-            enqueueSnackbar(res.errors?.["error"]?.[0] ?? "عملیات با خطا مواجه شد", {
+          onError(error) {
+            enqueueSnackbar(getErrorMessage(error), {
               variant: "error",
             });
           },
@@ -50,14 +69,24 @@ export function ReactQueryProvider({
         defaultOptions: {
           queries: {
             staleTime: 1000 * 60,
-            retry: 0,
+            retry: shouldRetryQuery,
+            retryDelay: (attemptIndex) =>
+              Math.min(1000 * 2 ** attemptIndex, 5000),
             refetchOnWindowFocus: false,
+          },
+          mutations: {
+            retry: false,
           },
         },
       }),
   );
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      {process.env.NODE_ENV === "development" && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
+    </QueryClientProvider>
   );
 }

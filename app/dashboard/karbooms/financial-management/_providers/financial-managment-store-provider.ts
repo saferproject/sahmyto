@@ -5,4 +5,7 @@ import { createFinancialMonthStore } from "../_stores/financial-management-store
 import { FinancialMonthStore } from "../_types/financial-month-store-type";
 
 export const [FinancialMonthStoreProvider, useFinancialMonthStore] =
-  createStoreContext<FinancialMonthStore>(createFinancialMonthStore, "useFinancialMonthStore");
+  createStoreContext<FinancialMonthStore>(
+    createFinancialMonthStore,
+    "useFinancialMonthStore",
+  );

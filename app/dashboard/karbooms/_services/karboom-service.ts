@@ -1,5 +1,5 @@
 import Karboom from "@/app/_interfaces/karboom";
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 
 import { KarboomFormType } from "../_schemas/karboom-form-schema";
 
@@ -8,38 +8,29 @@ import { ExpenseCategoryTypes } from "../_types/expense-category-types";
 import { CreateExpenseBody } from "../_types/create-expense-body";
 import { CreateIncomeBody } from "../_types/create-income-body";
 import { Member } from "../_types/member";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const karboomService = {
-  getKarbooms: () => fetchWithAuth<Karboom[]>("karboom"),
+  getKarbooms: (signal?: AbortSignal, page: number = 1) =>
+    http.get<Karboom[]>(addPaginationQuery("karboom", page), { signal }),
   createKarboom: (body: KarboomFormType) =>
-    fetchWithAuth<Karboom>("karboom/store", {
-      body: JSON.stringify(body),
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
-  getExpensesCategories: (categoryType: ExpenseCategoryTypes) =>
-    fetchWithAuth<ExpenseCategory[]>(
+    http.post<Karboom>("karboom/store", { body }),
+  getExpensesCategories: (
+    categoryType: ExpenseCategoryTypes,
+    signal?: AbortSignal,
+  ) =>
+    http.get<ExpenseCategory[]>(
       `karboom/expense/categories?type=${categoryType}`,
       {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
+        signal,
       },
     ),
   createExpense: ({ karboom_id, ...other }: CreateExpenseBody) =>
-    fetchWithAuth<undefined>(`karboom/expense/store/${karboom_id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(other),
+    http.post<undefined>(`karboom/expense/store/${karboom_id}`, {
+      body: other,
     }),
   createIncome: ({ karboom_id, ...other }: CreateIncomeBody) =>
-    fetchWithAuth<undefined>(`karboom/income/store/${karboom_id}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(other),
-    }),
-  getMembers: (karboom_id: number) =>
-    fetchWithAuth<Member[]>(`karboom/members/${karboom_id}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/income/store/${karboom_id}`, { body: other }),
+  getMembers: (karboom_id: number, signal?: AbortSignal) =>
+    http.get<Member[]>(`karboom/members/${karboom_id}`, { signal }),
 };

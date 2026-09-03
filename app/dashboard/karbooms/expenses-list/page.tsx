@@ -15,6 +15,10 @@ import ExpenseDrawerComponent from "../_components/expense-drawer-component";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../_hooks/use-require-karboom-members";
 import ListHeaderLayout from "../_layouts/list-header-layout";
+import SettlementDrawerComponent from "../_components/settlement-drawer-component";
+import { SettlementFormType } from "../_schemas/settlement-form-schema";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import useSettleExpense from "./_hooks/use-settle-expense";
 
 export default function ExpensesListPage() {
   const [isExpenseDetailsDrawerOpen, setExpenseDetailsDrawerOpen] =
@@ -23,11 +27,16 @@ export default function ExpensesListPage() {
   const [selectedExpense, setSelectedExpense] = useState<number | null>(null);
   const [isExpenseFormDrawerOpen, setExpenseFormDrawerOpen] =
     useState<boolean>(false);
+  const [isSettlementDrawerOpen, setSettlementDrawerOpen] =
+    useState<boolean>(false);
 
   const karboomId = useKarboomsStore((state) => state.id);
   const requireKarboomMembers = useRequireKarboomMembers();
 
-  const { mutate } = useRejectExpense();
+  const { mutate: settleIncome, isPending: settlingIncome } = useSettleExpense();
+
+  const { mutate: rejectExpense, isPending: rejectingExpense } =
+    useRejectExpense();
 
   const handleOpenExpenseDtailsDrawer = () => {
     setExpenseDetailsDrawerOpen(true);
@@ -35,6 +44,14 @@ export default function ExpensesListPage() {
 
   const handleCloseExpenseDtailsDrawer = () => {
     setExpenseDetailsDrawerOpen(false);
+  };
+
+  const handleOpenSettlementDrawer = () => {
+    setSettlementDrawerOpen(true);
+  };
+
+  const handleCloseSettlementDrawer = () => {
+    setSettlementDrawerOpen(false);
   };
 
   const handleOpenRejectDrawer = () => {
@@ -50,9 +67,38 @@ export default function ExpensesListPage() {
     handleOpenRejectDrawer();
   };
 
+  const handleSettleExpense = (expenseId: number) => {
+    setSelectedExpense(expenseId);
+    handleOpenSettlementDrawer();
+  };
+
+  const handleSubmitSettlement = ({
+    member,
+    settlement_date,
+    description,
+  }: SettlementFormType) => {
+    if (selectedExpense) {
+      settleIncome(
+        {
+          expenseId: selectedExpense,
+          payer_id: member.member.id,
+          settlement_date: formatGregorianDate(settlement_date),
+          description,
+        },
+        {
+          onSuccess: () => {
+            setSelectedExpense(null);
+            handleCloseSettlementDrawer();
+            handleCloseExpenseDtailsDrawer();
+          },
+        },
+      );
+    }
+  };
+
   const handleSubmitReject = (data: RejectFormType) => {
     if (selectedExpense)
-      mutate(
+      rejectExpense(
         { ...data, expenseId: selectedExpense },
         {
           onSuccess: () => {
@@ -61,7 +107,6 @@ export default function ExpensesListPage() {
           },
         },
       );
-    // TODO show a warning alert
   };
 
   const handleOpenExpenseForm = () => {
@@ -77,7 +122,8 @@ export default function ExpensesListPage() {
       <ListHeaderLayout title="لیست هزینه ها" />
       <ExpenseListLayout
         onShowDetails={handleOpenExpenseDtailsDrawer}
-        onRejectExpense={handleRejectExpense}
+        onSettle={handleSettleExpense}
+        onReject={handleRejectExpense}
         onOpenExpenseForm={handleOpenExpenseForm}
       />
       <ExpenseDetailsDrawerLayout
@@ -86,8 +132,18 @@ export default function ExpensesListPage() {
         onClose={handleCloseExpenseDtailsDrawer}
         onRejectExpense={handleRejectExpense}
       />
+      <SettlementDrawerComponent
+        memberTitle="پرداخت کننده"
+        title="ثبت تسویه هزینه"
+        isOpen={isSettlementDrawerOpen}
+        isLoading={settlingIncome}
+        onOpen={handleOpenSettlementDrawer}
+        onClose={handleCloseSettlementDrawer}
+        onSubmit={handleSubmitSettlement}
+      />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        isLoading={rejectingExpense}
         title="هزینه"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}

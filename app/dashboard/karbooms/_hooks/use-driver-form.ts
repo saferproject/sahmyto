@@ -1,5 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import useZodForm from "@/app/_hooks/use-zod-form";
 
 import DriverFormSchema, {
   DriverFormType,
@@ -8,8 +7,8 @@ import DriverFormSchema, {
 import { getDriverFormInitial } from "../_constants/driver-form-initial";
 
 export default function useDriverForm() {
-  return useForm<DriverFormType>({
-    resolver: zodResolver(DriverFormSchema),
+  return useZodForm<DriverFormType>({
+    schema: DriverFormSchema,
     defaultValues: getDriverFormInitial(),
   });
 }

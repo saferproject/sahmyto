@@ -29,7 +29,9 @@ export default function IntroMoto() {
         />
         <h2 className="text-primary mb-1 text-lg font-semibold">Sahmito</h2>
       </div>
-      <p className="text-body text-sm tracking-wide">Your share of the abacus</p>
+      <p className="text-body text-sm tracking-wide">
+        Your share of the abacus
+      </p>
     </motion.div>
   );
 }

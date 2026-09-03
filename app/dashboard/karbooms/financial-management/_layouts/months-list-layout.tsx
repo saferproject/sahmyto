@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 
@@ -9,6 +9,7 @@ import useGetFinancialMonthsEndpoint from "../_hooks/use-get-financial-managemen
 import QueryState from "@/app/_components/query-state";
 
 import { MonthListProps } from "../_types/month-list-props";
+import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function MonthListLayout({
   selectedMonth,
@@ -21,11 +22,33 @@ export default function MonthListLayout({
     isSuccess: gotFinancialMonths,
     isError: gettingFinancialMonthsFailed,
     isLoading: gettingFinancialMonths,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
   } = useGetFinancialMonthsEndpoint(karboomId);
 
   useEffect(() => {
-    if (gotFinancialMonths) onSelectMonth(financialMonths.data[0]);
-  }, [gotFinancialMonths, financialMonths]);
+    if (!gotFinancialMonths) return;
+
+    const currentMonth = financialMonths?.data.at(-1);
+
+    if (!selectedMonth?.id && currentMonth) {
+      onSelectMonth(currentMonth);
+      return;
+    }
+
+    const refreshedSelectedMonth = financialMonths?.data.find(
+      ({ id }) => id === selectedMonth?.id,
+    );
+
+    if (
+      refreshedSelectedMonth &&
+      (refreshedSelectedMonth.status !== selectedMonth.status ||
+        refreshedSelectedMonth.closed_at !== selectedMonth.closed_at ||
+        refreshedSelectedMonth.updated_at !== selectedMonth.updated_at)
+    )
+      onSelectMonth(refreshedSelectedMonth);
+  }, [gotFinancialMonths, financialMonths, onSelectMonth, selectedMonth]);
 
   return (
     <QueryState
@@ -35,7 +58,7 @@ export default function MonthListLayout({
     >
       <ul
         dir="ltr"
-        className="flex w-full min-h-23 snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5"
+        className="flex min-h-23 w-full snap-x snap-mandatory flex-nowrap items-center gap-4 overflow-x-auto pt-5"
       >
         {financialMonths?.data.map((financialMonth, index) => (
           <MonthListItemComponent
@@ -46,6 +69,13 @@ export default function MonthListLayout({
             index={index}
           />
         ))}
+        <li className="shrink-0">
+          <InfiniteScrollTrigger
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        </li>
       </ul>
     </QueryState>
   );

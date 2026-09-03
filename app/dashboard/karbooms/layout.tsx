@@ -1,9 +1,11 @@
 import { KarboomsLayoutProps } from "./_types/karbooms-layout-props";
+import { ExpenseListStoreProvider } from "./expenses-list/_providers/expense-list-store-provider";
+import { IncomeListStoreProvider } from "./incomes-list/_providers/income-list-store-provider";
 
 export default function KarboomsLayout({ children }: KarboomsLayoutProps) {
   return (
-    <div className="flex size-full min-h-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto pb-20 pt-26">
-      {children}
-    </div>
+    <ExpenseListStoreProvider>
+      <IncomeListStoreProvider>{children}</IncomeListStoreProvider>
+    </ExpenseListStoreProvider>
   );
 }

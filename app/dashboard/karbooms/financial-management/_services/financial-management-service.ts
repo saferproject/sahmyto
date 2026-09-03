@@ -1,42 +1,34 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { FinancialMonth } from "../_types/financial-month";
 import { FinancialMonthData } from "../_types/financial-month-data";
-import { SettlementData } from "../_types/settlement-data";
+import type { SettlementDataResponse } from "../_types/settlement-data";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
-export const financialManagmentService = {
-  getFinancialManagmentMonths: (karboomId: number) =>
-    fetchWithAuth<FinancialMonth[]>(`karboom/financials/months/${karboomId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
+export const financialManagementService = {
+  getFinancialManagmentMonths: (
+    karboomId: number,
+    signal?: AbortSignal,
+    page: number = 1,
+  ) =>
+    http.get<FinancialMonth[]>(
+      addPaginationQuery(`karboom/financials/months/${karboomId}`, page),
+      { signal },
+    ),
   validateClosingFinancialMonth: (financialMonthId: number) =>
-    fetchWithAuth<unknown>(`karboom/financials/validate/${financialMonthId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.get<unknown>(`karboom/financials/validate/${financialMonthId}`),
   startProcessingFinancialMonth: (financialMonthId: number) =>
-    fetchWithAuth<unknown>(
-      `karboom/financials/processing/${financialMonthId}`,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-      },
-    ),
+    http.put<unknown>(`karboom/financials/processing/${financialMonthId}`),
   closeFinancialMonth: (financialMonthId: number) =>
-    fetchWithAuth<unknown>(
-      `karboom/financials/closed/${financialMonthId}`,
+    http.put<unknown>(`karboom/financials/closed/${financialMonthId}`),
+  getFinancialMonthData: (monthId: number, signal?: AbortSignal) =>
+    http.get<FinancialMonthData>(`karboom/financials/show/${monthId}`, {
+      signal,
+    }),
+  getSettlementData: (monthId: number, signal?: AbortSignal) =>
+    http.get<SettlementDataResponse>(
+      `karboom/financials/settlement/${monthId}`,
       {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        signal,
       },
     ),
-  getFinancialMonthData: (monthId: number) =>
-    fetchWithAuth<FinancialMonthData>(`karboom/financials/show/${monthId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
-  getSettlementData: (monthId: number) => fetchWithAuth<SettlementData>(`karboom/financials/settlement/${monthId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
 };

@@ -11,6 +11,6 @@ export const PAYMENT_LIST_STORE_DEFAULTS: Payment = {
   status: "pending",
   payer: USER_DEFAULTS,
   receiver: USER_DEFAULTS,
-  sender: USER_DEFAULTS,
+  user: USER_DEFAULTS,
   approvals: [],
 };

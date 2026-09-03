@@ -1,1 +1,1 @@
-export type ExpenseCategoryTypes = 'daily' | 'repair';
+export type ExpenseCategoryTypes = "daily" | "repair";

@@ -1,0 +1,48 @@
+"use client";
+
+import { motion } from "motion/react";
+import type { KeyboardEventHandler, MouseEventHandler, ReactNode } from "react";
+
+interface AnimatedListItemProps {
+  index: number;
+  className?: string;
+  dir?: "ltr" | "rtl" | "auto";
+  dimmed?: boolean;
+  onClick?: MouseEventHandler<HTMLLIElement>;
+  role?: string;
+  tabIndex?: number;
+  ariaPressed?: boolean;
+  onKeyDown?: KeyboardEventHandler<HTMLLIElement>;
+  children?: ReactNode;
+}
+
+export default function AnimatedListItem({
+  index,
+  className,
+  dimmed = false,
+  onClick,
+  role,
+  tabIndex,
+  ariaPressed,
+  onKeyDown,
+  children,
+  ...other
+}: AnimatedListItemProps) {
+  return (
+    <motion.li
+      initial={{ scale: 0.7, opacity: 0 }}
+      animate={{ scale: 1, opacity: dimmed ? 0.6 : 1 }}
+      exit={{ scale: 0.7, opacity: 0 }}
+      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+      className={className}
+      onClick={onClick}
+      role={role}
+      tabIndex={tabIndex}
+      aria-pressed={ariaPressed}
+      onKeyDown={onKeyDown}
+      {...other}
+    >
+      {children}
+    </motion.li>
+  );
+}

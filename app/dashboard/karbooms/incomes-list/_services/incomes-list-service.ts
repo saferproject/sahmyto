@@ -1,22 +1,19 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { Income } from "../../_types/income";
 import { RejectIncomeBody } from "../_types/reject-income-body";
+import { SettleIncomeBody } from "../_types/settle-income-body";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
-export const IncomeListService = {
-  getIncomes: (karboomId: number) =>
-    fetchWithAuth<Income[]>(`karboom/income/karboom/${karboomId}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    }),
+export const incomeListService = {
+  getIncomes: (karboomId: number, signal?: AbortSignal, page: number = 1) =>
+    http.get<Income[]>(
+      addPaginationQuery(`karboom/income/karboom/${karboomId}`, page),
+      { signal },
+    ),                    
+  settleIncome: ({ incomeId, ...body }: SettleIncomeBody) =>
+    http.post<undefined>(`karboom/income/settle/${incomeId}`, { body }),
   approveIncome: (incomeId: number) =>
-    fetchWithAuth<undefined>(`karboom/income/accept/${incomeId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.post<undefined>(`karboom/income/accept/${incomeId}`),
   rejectIncome: (incomeId: number, body: RejectIncomeBody) =>
-    fetchWithAuth<undefined>(`karboom/income/reject/${incomeId}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
+    http.post<undefined>(`karboom/income/reject/${incomeId}`, { body }),
 };

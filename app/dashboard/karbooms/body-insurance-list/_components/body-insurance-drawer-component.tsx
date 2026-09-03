@@ -1,4 +1,4 @@
-import FormDrawerComponent from "@/app/_components/form-drawer-component";
+import FormDrawerWithTitleComponent from "@/app/_components/form-drawer-with-title-component";
 
 import { BodyInsuranceDrawerProps } from "../_types/body-insurance-drawer-props";
 
@@ -10,11 +10,14 @@ export default function BodyInsuranceDrawerComponent({
   onClose,
 }: BodyInsuranceDrawerProps) {
   return (
-    <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <h2 className="text-body mb-6 w-full text-center font-bold">
-        افزودن بیمه بدنه
-      </h2>
+    <FormDrawerWithTitleComponent
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      title="افزودن بیمه بدنه"
+      titleClassName="text-body mb-6 w-full text-center font-bold"
+    >
       <BodyInsuranceFormComponent isOpen={isOpen} onSuccess={onClose} />
-    </FormDrawerComponent>
+    </FormDrawerWithTitleComponent>
   );
 }

@@ -1,3 +1,3 @@
 export type KarboomsLayoutProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};

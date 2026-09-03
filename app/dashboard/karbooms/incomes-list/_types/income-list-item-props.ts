@@ -4,5 +4,6 @@ export type IncomeListItemProps = {
   income: Income;
   index: number;
   onShowDetails: () => void;
-  onRejectIncome: (incomeId: number) => void;
+  onSettle: (incomeId: number) => void;
+  onReject: (incomeId: number) => void;
 };

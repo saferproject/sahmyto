@@ -1,17 +1,22 @@
+import { http } from "@/app/_services/http";
 import createQueryParams from "@/app/_utilities/create-query-params";
-import { fetchWithAuth } from "@/app/proxy";
 import GetPartnersQueryParams from "../_interfaces/get-partners-query-params";
 import Partner from "../../_interfaces/partner";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
-export const PartnersListService = {
-  getPartners: ({ karboom_id, ...other }: GetPartnersQueryParams) =>
-    fetchWithAuth<Partner[]>(
-      `karboom/partners/${karboom_id}${createQueryParams<Omit<GetPartnersQueryParams, "karboom_id">>(other)}`,
-      { method: "GET", headers: { "Content-Type": "application/json" } },
+export const partnersListService = {
+  getPartners: (
+    { karboom_id, ...other }: GetPartnersQueryParams,
+    signal?: AbortSignal,
+    page: number = 1,
+  ) =>
+    http.get<Partner[]>(
+      addPaginationQuery(
+        `karboom/partners/${karboom_id}${createQueryParams<Omit<GetPartnersQueryParams, "karboom_id">>(other)}`,
+        page,
+      ),
+      { signal },
     ),
   deletePartner: (partnerId: number) =>
-    fetchWithAuth<void>(`karboom/partners/delete/${partnerId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.delete<void>(`karboom/partners/delete/${partnerId}`),
 };

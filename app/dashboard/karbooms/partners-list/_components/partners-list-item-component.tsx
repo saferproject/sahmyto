@@ -1,16 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "motion/react";
 import { Badge, Button, Menu, MenuItem } from "@mui/material";
 import { useState, type MouseEvent } from "react";
 import { ProfileCircle } from "iconsax-reactjs";
 
+import AnimatedListItem from "@/app/_components/animated-list-item-component";
 import PartnersListItemProps from "../_interfaces/partners-list-item-props";
 import useDeletePartnerEndpoint from "../_hooks/use-delete-partner-endpoint";
 
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import { ACTIVITY_STATUS_COLORS } from "../../_constants/activity-status-colors";
+import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
+import { useSnackbar } from "notistack";
 
 export default function PartnersListItemComponent({
   item,
@@ -18,9 +20,14 @@ export default function PartnersListItemComponent({
   onEdit,
 }: PartnersListItemProps) {
   const { full_name, phone, avatar, share, status } = item;
-  const { mutate: deletePartner } = useDeletePartnerEndpoint();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+
+  const karboomRoles = useKarboomsStore((state) => state.roles);
+
+  const { mutate: deletePartner } = useDeletePartnerEndpoint();
 
   const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => {
     setMenuAnchor(event.currentTarget);
@@ -36,16 +43,20 @@ export default function PartnersListItemComponent({
   };
 
   const handleDelete = () => {
-    handleCloseMenu();
-    deletePartner(item.id);
+    if (karboomRoles.includes("owner")) {
+      handleCloseMenu();
+      deletePartner(item.id);
+    } else
+      enqueueSnackbar({
+        variant: "warning",
+        message: "فقط سازنده کاربوم میتواند مالک حذف کند",
+      });
   };
 
   return (
-    <motion.li
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={{ scale: 1, opacity: status === "pending" ? 0.6 : 1 }}
-      exit={{ scale: 0.7, opacity: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.2, ease: "easeIn" }}
+    <AnimatedListItem
+      index={index}
+      dimmed={status === "pending"}
       className="border-secondary-light w-full overflow-visible rounded-2xl border p-2"
     >
       <Badge
@@ -96,6 +107,6 @@ export default function PartnersListItemComponent({
           </Menu>
         </div>
       </Badge>
-    </motion.li>
+    </AnimatedListItem>
   );
 }

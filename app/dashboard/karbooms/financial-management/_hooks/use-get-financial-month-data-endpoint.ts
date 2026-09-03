@@ -1,11 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { financialManagmentService } from "../_services/financial-management-service";
+import useListQuery from "@/app/_hooks/use-list-query";
 
-export default function useGetFinancialMonthDataEndpoint(monthId: number, enabled: boolean) {
-  return useQuery({
-    queryKey: ["financial-month-data", monthId],
-    queryFn: ({ queryKey }) =>
-      financialManagmentService.getFinancialMonthData(queryKey[1] as number),
+import { financialManagementService } from "../_services/financial-management-service";
+
+export default function useGetFinancialMonthDataEndpoint(
+  monthId: number | null | undefined,
+  enabled: boolean,
+) {
+  return useListQuery(
+    ["financial-month-data", monthId],
+    financialManagementService.getFinancialMonthData,
+    monthId,
     enabled,
-  });
+  );
 }

@@ -8,11 +8,14 @@ export type Payment = {
   id: number;
   receiver: User;
   payer: User;
-  sender: User;
+  user: User;
   approvals: Approval[];
   total_price: number;
   type: PaymentTypes;
   date: Dayjs;
   description: null | string;
   status: ActivityStatus;
+  reject_reason: null | string;
+  rejected_at: null | Dayjs;
+  created_at: Dayjs;
 };

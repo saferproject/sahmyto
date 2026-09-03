@@ -10,6 +10,7 @@ import {
   AccordionDetails,
   Button,
   FormControl,
+  FormHelperText,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -17,13 +18,15 @@ import {
 import { ArrowDown2 } from "iconsax-reactjs";
 import { Controller } from "react-hook-form";
 
-import useProfileForm from "../_hooks/profile-form";
-import useCompleteProfile from "../_hooks/complete-profile-endpoint";
+import useProfileForm from "../_hooks/use-profile-form";
+import useCompleteProfileEndpoint from "../_hooks/use-complete-profile-endpoint";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 import { ProfileFormType } from "../_schemas/profile-schema";
-import { DatePicker } from "@mui/x-date-pickers";
+import DatePickerComponent from "@/app/_components/date-picker-component";
+import { useShallow } from "zustand/react/shallow";
+import ApiError from "@/app/_errors/api-error";
 
 export default function ProfileFormComponent() {
   const [isOptionalFieldsVisible, setOptionalFieldsVisibility] =
@@ -31,14 +34,25 @@ export default function ProfileFormComponent() {
 
   const router = useRouter();
 
-  const userInfoStore = useUserInfoStore((state) => state);
-
-  const { setUser, ...user } = userInfoStore;
+  const user = useUserInfoStore(
+    useShallow(
+      ({ phone, first_name, last_name, father_name, gender, email }) => ({
+        phone,
+        first_name,
+        last_name,
+        father_name,
+        gender,
+        email,
+      }),
+    ),
+  );
+  const setUser = useUserInfoStore((state) => state.setUser);
 
   const {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors },
   } = useProfileForm({
     phone: user.phone,
@@ -50,7 +64,17 @@ export default function ProfileFormComponent() {
     birthday: null,
   });
 
-  const { mutate } = useCompleteProfile();
+  const { mutate } = useCompleteProfileEndpoint();
+
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof ProfileFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
 
   const submit = (data: ProfileFormType) => {
     mutate(data, {
@@ -58,6 +82,7 @@ export default function ProfileFormComponent() {
         setUser(response.data);
         router.push("/dashboard");
       },
+      onError: handleMutationError,
     });
   };
 
@@ -77,6 +102,8 @@ export default function ProfileFormComponent() {
           inputLabel: { shrink: true },
         }}
         disabled
+        error={!!errors.phone}
+        helperText={errors.phone?.message ?? ""}
         required
         fullWidth
       />
@@ -88,6 +115,8 @@ export default function ProfileFormComponent() {
             inputLabel: { shrink: true },
           }}
           required
+          error={!!errors.first_name}
+          helperText={errors.first_name?.message ?? ""}
           fullWidth
         />
         <TextField
@@ -97,6 +126,8 @@ export default function ProfileFormComponent() {
             inputLabel: { shrink: true },
           }}
           required
+          error={!!errors.last_name}
+          helperText={errors.last_name?.message ?? ""}
           fullWidth
         />
       </div>
@@ -104,7 +135,7 @@ export default function ProfileFormComponent() {
         name="gender"
         control={control}
         render={({ field }) => (
-          <FormControl required>
+          <FormControl error={!!errors.gender} required>
             <RadioGroup
               {...field}
               onChange={(event) => field.onChange(event.target.value)}
@@ -122,6 +153,7 @@ export default function ProfileFormComponent() {
                 />
               </div>
             </RadioGroup>
+            <FormHelperText>{errors.gender?.message ?? ""}</FormHelperText>
           </FormControl>
         )}
       />
@@ -138,25 +170,29 @@ export default function ProfileFormComponent() {
               control={control}
               name="birthday"
               render={({ field }) => (
-                <DatePicker
+                <DatePickerComponent
                   {...field}
                   onChange={(value) => field.onChange(value)}
                   label="تاریخ تولد"
-                  format="YYYY/MM/DD"
-                  views={["year", "month", "day"]}
-                  slotProps={{
-                    textField: {
-                      error: !!errors.birthday,
-                      helperText: errors.birthday?.message ?? "",
-                      fullWidth: true,
-                    },
-                  }}
+                  error={!!errors.birthday}
+                  helperText={errors.birthday?.message ?? ""}
                   disableFuture
                 />
               )}
             />
-            <TextField {...register("father_name")} label="نام پدر" />
-            <TextField {...register("email")} label="ایمیل" type="email" />
+            <TextField
+              {...register("father_name")}
+              label="نام پدر"
+              error={!!errors.father_name}
+              helperText={errors.father_name?.message ?? ""}
+            />
+            <TextField
+              {...register("email")}
+              label="ایمیل"
+              type="email"
+              error={!!errors.email}
+              helperText={errors.email?.message ?? ""}
+            />
           </div>
         </AccordionDetails>
       </Accordion>

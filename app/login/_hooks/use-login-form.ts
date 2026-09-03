@@ -1,10 +1,9 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import useZodForm from "@/app/_hooks/use-zod-form";
 
 import LoginFormSchema, { LoginFormType } from "../_schemas/login-schema";
 
 export default function useLoginForm() {
-  return useForm<LoginFormType>({ resolver: zodResolver(LoginFormSchema) });
+  return useZodForm<LoginFormType>({ schema: LoginFormSchema });
 }

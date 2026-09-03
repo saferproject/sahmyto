@@ -5,10 +5,11 @@ export type CreateIncomeBody = {
   karboom_id: number;
   receiver_id: number;
   started_at: string;
-  type: IncomeTypes;
   ended_at: string;
+  type: IncomeTypes;
   unit_price: number;
   total_price: number;
+  settlement_date: string | null;
 } & Omit<
   IncomeFormType,
   | "reciever"
@@ -17,4 +18,5 @@ export type CreateIncomeBody = {
   | "ended_at"
   | "unit_price"
   | "total_price"
+  | "settlement_date"
 >;

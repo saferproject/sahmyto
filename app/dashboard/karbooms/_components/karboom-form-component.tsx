@@ -7,7 +7,7 @@ import DescriptionInput from "@/app/_components/description-input";
 import PlateInput from "@/app/_components/plate-input";
 
 import useKarboomForm from "../_hooks/use-karboom-form";
-import useCreateKarboom from "../_hooks/create-karboom-endpoint";
+import useCreateKarboomEndpoint from "../_hooks/use-create-karboom-endpoint";
 
 import { KarboomFormType } from "../_schemas/karboom-form-schema";
 
@@ -15,7 +15,7 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 import { KarboomFormProps } from "../_types/karboom-form-props";
 import { KARBOOM_FORM_INITIAL } from "../_constants/karboom-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
 
 export default function KarboomFormComponent({
   onCancel,
@@ -33,9 +33,20 @@ export default function KarboomFormComponent({
 
   const { description } = useWatch({ control });
 
-  const { setActiveKarboom } = useKarboomsStore((state) => state);
+  const setActiveKarboom = useKarboomsStore((state) => state.setActiveKarboom);
 
-  const { mutate: createKarboom, isPending: creatingKarboom } = useCreateKarboom();
+  const { mutate: createKarboom, isPending: creatingKarboom } =
+    useCreateKarboomEndpoint();
+
+  const handleMutationError = (error: Error) => {
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
+        setError(field as keyof KarboomFormType, {
+          message: errors[0],
+          type: "validate",
+        }),
+      );
+  };
 
   const submit = (data: KarboomFormType) => {
     createKarboom(data, {
@@ -44,17 +55,7 @@ export default function KarboomFormComponent({
         setValues(KARBOOM_FORM_INITIAL);
         onSuccess();
       },
-      onError: (error) => {
-        const err = error as unknown as BaseResponse;
-
-        if (err.errors)
-          Object.entries(err.errors).forEach(([field, errors]) =>
-            setError(field as keyof KarboomFormType, {
-              message: errors[0],
-              type: "validate",
-            }),
-          );
-      },
+      onError: handleMutationError,
     });
   };
 

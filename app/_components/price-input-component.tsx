@@ -30,7 +30,13 @@ export default function PriceInputComponent({
       type="text"
       inputMode="numeric"
       helperText={
-        value && (error ? helperText : <span>{transformNumber(amount)} تومان</span>)
+        error ? (
+          helperText
+        ) : value ? (
+          <span>{transformNumber(amount)} تومان</span>
+        ) : (
+          ""
+        )
       }
       slotProps={{
         input: {

@@ -1,6 +1,5 @@
 import Karboom from "@/app/_interfaces/karboom";
 import User from "@/app/_interfaces/user";
-import { MemberTypes } from "./member-types";
 import { ActivityStatus } from "../karbooms/_types/activity-status";
 import { DriverPaymentTypes } from "../karbooms/drivers-list/_types/driver-payment-types";
 
@@ -22,7 +21,7 @@ export type KarboomRequest =
       karboom: Karboom;
       sender: User;
       reciever: User;
-      role_type: 'driver';
+      role_type: "driver";
       status: ActivityStatus;
       time_ago: string;
       info: {

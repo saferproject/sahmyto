@@ -1,18 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import useListQuery from "@/app/_hooks/use-list-query";
 
 import { karboomService } from "../_services/karboom-service";
 
-import BaseResponse from "@/app/_interfaces/base-response";
-
-import { Member } from "../_types/member";
-
 export default function useGetMembersEndpoint(
-  karboomId: number,
+  karboomId: number | null | undefined,
   enabled: boolean,
 ) {
-  return useQuery<BaseResponse<Member[]>>({
-    queryKey: ["expenses-categories", karboomId],
-    queryFn: ({ queryKey }) => karboomService.getMembers(queryKey[1] as number),
+  return useListQuery(
+    ["members", karboomId],
+    karboomService.getMembers,
+    karboomId,
     enabled,
-  });
+  );
 }

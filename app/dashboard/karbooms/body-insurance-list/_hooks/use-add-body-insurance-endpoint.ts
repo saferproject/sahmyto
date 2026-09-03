@@ -1,14 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
+
 import { bodyInsuranceService } from "../_services/body-insurance-service";
 
 export default function useAddBodyInsuranceEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["add-body-insurance"],
     mutationFn: bodyInsuranceService.addBodyInsurance,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["body-insurances"] });
-    },
+    invalidateQueries: [["body-insurances"]],
   });
 }

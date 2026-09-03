@@ -16,7 +16,9 @@ export default function SelectedKarboomInfoComponent() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { id, name, plate } = useKarboomsStore((state) => state);
+  const id = useKarboomsStore((state) => state.id);
+  const name = useKarboomsStore((state) => state.name);
+  const plate = useKarboomsStore((state) => state.plate);
 
   useEffect(() => {
     if (!id) {
@@ -26,10 +28,10 @@ export default function SelectedKarboomInfoComponent() {
       });
       router.push("/dashboard/karbooms");
     }
-  }, [id]);
+  }, [enqueueSnackbar, id, router]);
 
   return (
-    <div className="relative drop-shadow-lg mb-4">
+    <div className="relative mb-4 drop-shadow-lg">
       <Image
         src={yellowRectangle}
         alt=""

@@ -3,14 +3,14 @@
 import { Button, IconButton, TextField } from "@mui/material";
 import { InfoCircle, Book1 } from "iconsax-reactjs";
 import { Controller, useWatch } from "react-hook-form";
-import { DatePicker } from "@mui/x-date-pickers";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import usePartnerForm from "../_hooks/use-partner-form";
 import useAddPartner from "../_hooks/use-add-partner-endpoint";
 import useEditPartner from "../_hooks/use-edit-partner-endpoint";
 
 import DescriptionInput from "@/app/_components/description-input";
+import DatePickerComponent from "@/app/_components/date-picker-component";
 
 import { PartnerFormType } from "../_schemas/partner-form-schema";
 
@@ -19,7 +19,10 @@ import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 import { PartnerFormProps } from "../_types/partner-form-props";
 
 import { getPartnerFormInitial } from "../_constants/partner-form-initial";
-import BaseResponse from "@/app/_interfaces/base-response";
+import ApiError from "@/app/_errors/api-error";
+import { formatGregorianDate } from "@/app/_utilities/format-dates";
+import ContactListDrawerComponent from "./contact-list-drawer-component";
+import { Contact } from "../../contacts/_types/contact";
 
 export default function PartnerFormComponent({
   formState,
@@ -27,6 +30,11 @@ export default function PartnerFormComponent({
   onCancel,
   onSuccess,
 }: PartnerFormProps) {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [isContactListDrawerOpen, setContactListDrawerOpen] = useState(false);
+
   const {
     register,
     control,
@@ -34,12 +42,13 @@ export default function PartnerFormComponent({
     handleSubmit,
     setError,
     setValues,
+    watch,
     formState: { errors },
   } = usePartnerForm();
 
   const { share_capital, share_decimal, description } = useWatch({ control });
 
-  const { id: karboom_id } = useKarboomsStore((state) => state);
+  const karboom_id = useKarboomsStore((state) => state.id);
 
   const { mutate: addPartner } = useAddPartner();
   const { mutate: editPartner } = useEditPartner();
@@ -65,12 +74,13 @@ export default function PartnerFormComponent({
   }, [formState, partner, setValues]);
 
   const handleIncrementCapital = () => {
-    if (share_capital !== undefined) {
-      if (share_capital < 5) setValue("share_capital", share_capital + 1);
-      else if (share_capital == 5) {
+    if (watch("share_capital") !== undefined) {
+      if (watch("share_capital") < 5)
+        setValue("share_capital", watch("share_capital") + 1);
+      else if (watch("share_capital") === 5) {
         setValue("share_capital", 6);
         setValue("share_decimal", 0);
-      } else if (share_capital == 6) {
+      } else if (watch("share_capital") === 6) {
         setValue("share_capital", 1);
         setValue("share_decimal", 0);
       }
@@ -78,9 +88,10 @@ export default function PartnerFormComponent({
   };
 
   const handleDecrementCapital = () => {
-    if (share_capital !== undefined) {
-      if (share_capital >= 1) setValue("share_capital", share_capital - 1);
-      else if (share_capital == 0) {
+    if (watch("share_capital") !== undefined) {
+      if (watch("share_capital") >= 1)
+        setValue("share_capital", watch("share_capital") - 1);
+      else if (watch("share_capital") === 0) {
         setValue("share_capital", 6);
         setValue("share_decimal", 0);
       }
@@ -89,29 +100,81 @@ export default function PartnerFormComponent({
 
   const handleIncrementDecimal = () => {
     if (
-      share_decimal !== undefined &&
-      share_capital !== undefined &&
-      share_capital < 6
+      watch("share_decimal") !== undefined &&
+      watch("share_capital") !== undefined &&
+      watch("share_capital") < 6
     ) {
-      if (share_decimal < 99) setValue("share_decimal", share_decimal + 1);
-      else if (share_capital !== undefined && share_capital <= 5) {
+      if (watch("share_decimal") < 99)
+        setValue("share_decimal", watch("share_decimal") + 1);
+      else if (
+        watch("share_capital") !== undefined &&
+        watch("share_capital") <= 5
+      ) {
         setValue("share_decimal", 0);
-        setValue("share_capital", share_capital + 1);
+        setValue("share_capital", watch("share_capital") + 1);
       }
+    }
+  };
+
+  const handleRapidIncrementDecimal = () => {
+    if (!timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        if (!intervalRef.current)
+          intervalRef.current = setInterval(() => {
+            handleIncrementDecimal();
+          }, 50);
+      }, 200);
+  };
+
+  const handleStopRapidIncrementDecimal = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
   };
 
   const handleDecrementDecimal = () => {
     if (
-      share_decimal !== undefined &&
-      share_capital !== undefined &&
-      share_capital >= 0
+      watch("share_decimal") !== undefined &&
+      watch("share_capital") !== undefined &&
+      watch("share_capital") >= 0
     ) {
-      if (share_decimal > 1) setValue("share_decimal", share_decimal - 1);
-      else if (share_capital !== undefined && share_capital >= 1) {
+      if (watch("share_decimal") > 1)
+        setValue("share_decimal", watch("share_decimal") - 1);
+      else if (
+        watch("share_capital") !== undefined &&
+        watch("share_capital") >= 1
+      ) {
         setValue("share_decimal", 99);
-        setValue("share_capital", share_capital - 1);
+        setValue("share_capital", watch("share_capital") - 1);
       }
+    }
+  };
+
+  const handleRapidDecrementDecimal = () => {
+    if (!timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        if (!intervalRef.current)
+          intervalRef.current = setInterval(() => {
+            handleDecrementDecimal();
+          }, 50);
+      }, 200);
+  };
+
+  const handleStopRapidDecrementDecimal = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
   };
 
@@ -120,16 +183,30 @@ export default function PartnerFormComponent({
     onCancel();
   };
 
+  const handleOpenContactsDrawer = () => {
+    setContactListDrawerOpen(true);
+  };
+
+  const handleCloseContactsDrawer = () => {
+    setContactListDrawerOpen(false);
+  };
+
+  const handleContactSelect = (contact: Contact) => {
+    setValues((currentValues) => ({
+      ...currentValues,
+      ...contact,
+    }));
+    handleCloseContactsDrawer();
+  };
+
   const handleMutationSuccess = () => {
     setValues(getPartnerFormInitial());
     onSuccess();
   };
 
   const handleMutationError = (error: Error) => {
-    const err = error as unknown as BaseResponse;
-
-    if (err.errors)
-      Object.entries(err.errors).forEach(([field, errors]) =>
+    if (error instanceof ApiError && error.errors)
+      Object.entries(error.errors).forEach(([field, errors]) =>
         setError(field as keyof PartnerFormType, {
           message: errors[0],
           type: "validate",
@@ -149,8 +226,8 @@ export default function PartnerFormComponent({
     const payload = {
       ...other,
       share,
-      started_at: started_at.toISOString().split("T")[0],
-      ended_at: ended_at?.toISOString().split("T")[0] ?? "",
+      started_at: formatGregorianDate(started_at),
+      ended_at: ended_at ? formatGregorianDate(ended_at) : "",
     };
 
     if (formState === "EDIT" && partner) {
@@ -173,172 +250,182 @@ export default function PartnerFormComponent({
     );
   };
 
+  const handlePreventContextMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+  };
+
   return (
-    <form
-      className="flex w-full flex-col gap-4"
-      onSubmit={handleSubmit(submit)}
-    >
-      <TextField
-        {...register("phone")}
-        type="tel"
-        label="شماره تماس"
-        error={!!errors.phone}
-        helperText={errors.phone?.message ?? ""}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <IconButton>
-                <Book1 size={24} className="text-primary rotate-y-180" />
-              </IconButton>
-            ),
-          },
-        }}
-        required
+    <>
+      <ContactListDrawerComponent
+        isOpen={isContactListDrawerOpen}
+        onOpen={handleOpenContactsDrawer}
+        onClose={handleCloseContactsDrawer}
+        onSelect={handleContactSelect}
       />
-      <div className="flex items-center gap-4">
+      <form
+        className="flex w-full flex-col gap-4"
+        onSubmit={handleSubmit(submit)}
+      >
         <TextField
-          {...register("first_name")}
-          label="نام"
-          error={!!errors.first_name}
-          helperText={errors.first_name?.message ?? ""}
-          fullWidth
+          {...register("phone")}
+          type="tel"
+          label="شماره تماس"
+          error={!!errors.phone}
+          helperText={errors.phone?.message ?? ""}
+          slotProps={{
+            input: {
+              endAdornment: (
+                <IconButton>
+                  <Book1
+                    size={24}
+                    className="text-primary rotate-y-180"
+                    onClick={handleOpenContactsDrawer}
+                  />
+                </IconButton>
+              ),
+            },
+          }}
           required
         />
-        <TextField
-          {...register("last_name")}
-          label="نام خانوادگی"
-          error={!!errors.last_name}
-          helperText={errors.last_name?.message ?? ""}
-          fullWidth
-          required
+        <div className="flex items-center gap-4">
+          <TextField
+            {...register("first_name")}
+            label="نام"
+            error={!!errors.first_name}
+            helperText={errors.first_name?.message ?? ""}
+            fullWidth
+            required
+            disabled
+          />
+          <TextField
+            {...register("last_name")}
+            label="نام خانوادگی"
+            error={!!errors.last_name}
+            helperText={errors.last_name?.message ?? ""}
+            fullWidth
+            required
+            disabled
+          />
+        </div>
+        <div className="border-secondary-light flex w-full items-center justify-between rounded-2xl border p-4">
+          <span className="text-body">مقدار سهم</span>
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
+              onClick={handleIncrementDecimal}
+              onTouchStart={handleRapidIncrementDecimal}
+              onTouchEnd={handleStopRapidIncrementDecimal}
+              onMouseDown={handleRapidIncrementDecimal}
+              onMouseUp={handleStopRapidIncrementDecimal}
+              onContextMenu={handlePreventContextMenu}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded select-none"
+              onClick={handleDecrementDecimal}
+              onTouchStart={handleRapidDecrementDecimal}
+              onTouchEnd={handleStopRapidDecrementDecimal}
+              onMouseDown={handleRapidDecrementDecimal}
+              onMouseUp={handleStopRapidDecrementDecimal}
+              onContextMenu={handlePreventContextMenu}
+            >
+              -
+            </button>
+          </div>
+          <div className="relative">
+            <p
+              id="share-decimal"
+              className="text-body absolute -right-4 bottom-0 w-8 text-center"
+            >
+              {share_decimal}
+            </p>
+            <span className="text-body text-5xl font-extralight">/</span>
+            <p
+              id="share-capital"
+              className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
+            >
+              {share_capital}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <button
+              type="button"
+              className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
+              onClick={handleIncrementCapital}
+              onContextMenu={handlePreventContextMenu}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
+              onClick={handleDecrementCapital}
+              onContextMenu={handlePreventContextMenu}
+            >
+              -
+            </button>
+          </div>
+          <span className="text-body-light text-sm">دانگ</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <InfoCircle variant="Broken" size={20} className="text-body-light" />
+          <p className="text-body-light text-xs">
+            مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
+          </p>
+        </div>
+        <Controller
+          control={control}
+          name="started_at"
+          render={({ field }) => (
+            <DatePickerComponent
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ شروع"
+              error={!!errors.started_at}
+              helperText={errors.started_at?.message ?? ""}
+              required
+              disableFuture
+            />
+          )}
         />
-      </div>
-      <div className="border-secondary-light flex w-full items-center justify-between rounded-2xl border p-4">
-        <span className="text-body">مقدار سهم</span>
-        <div className="flex flex-col gap-2">
-          <button
+        <Controller
+          control={control}
+          name="ended_at"
+          render={({ field }) => (
+            <DatePickerComponent
+              {...field}
+              onChange={(value) => field.onChange(value)}
+              label="تاریخ پایان"
+              error={!!errors.ended_at}
+              helperText={errors.ended_at?.message ?? ""}
+              disablePast
+            />
+          )}
+        />
+        <DescriptionInput
+          register={register("description")}
+          currentlength={description?.length ?? 0}
+          error={!!errors.description}
+          helperText={errors.description?.message ?? ""}
+        />
+        <div className="flex items-center gap-4">
+          <Button
+            variant="outlined"
+            color="primary"
             type="button"
-            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded"
-            onClick={handleIncrementDecimal}
+            onClick={handleCancel}
+            fullWidth
           >
-            +
-          </button>
-          <button
-            type="button"
-            className="bg-secondary text-body flex h-5 w-8 items-center justify-center rounded"
-            onClick={handleDecrementDecimal}
-          >
-            -
-          </button>
+            انصراف
+          </Button>
+          <Button variant="contained" type="submit" fullWidth>
+            ثبت
+          </Button>
         </div>
-        <div className="relative">
-          <input
-            {...register("share_decimal")}
-            type="number"
-            id="share-decimal"
-            className="text-body absolute -right-4 bottom-0 w-8 text-center"
-            placeholder="__"
-            min={0}
-            max={100}
-          />
-          <span className="text-body text-5xl font-extralight">/</span>
-          <input
-            {...register("share_capital")}
-            type="number"
-            id="share-capital"
-            className="text-primary absolute -top-2 -left-4 w-8 text-center text-2xl"
-            placeholder="_"
-            min={0}
-            max={6}
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <button
-            type="button"
-            className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
-            onClick={handleIncrementCapital}
-          >
-            +
-          </button>
-          <button
-            type="button"
-            className="bg-primary flex h-5 w-8 items-center justify-center rounded text-white"
-            onClick={handleDecrementCapital}
-          >
-            -
-          </button>
-        </div>
-        <span className="text-body-light text-sm">دانگ</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <InfoCircle variant="Broken" size={20} className="text-body-light" />
-        <p className="text-body-light text-xs">
-          مقدار سهم همان دانگ است که می‌تواند عددی اعشار باشد
-        </p>
-      </div>
-      <Controller
-        control={control}
-        name="started_at"
-        render={({ field }) => (
-          <DatePicker
-            {...field}
-            onChange={(value) => field.onChange(value)}
-            label="تاریخ شروع"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.started_at,
-                helperText: errors.started_at?.message ?? "",
-                fullWidth: true,
-                required: true,
-              },
-            }}
-            disableFuture
-          />
-        )}
-      />
-      <Controller
-        control={control}
-        name="ended_at"
-        render={({ field }) => (
-          <DatePicker
-            {...field}
-            onChange={(value) => field.onChange(value)}
-            label="تاریخ پایان"
-            format="YYYY/MM/DD"
-            views={["year", "month", "day"]}
-            slotProps={{
-              textField: {
-                error: !!errors.ended_at,
-                helperText: errors.ended_at?.message ?? "",
-                fullWidth: true,
-              },
-            }}
-            disablePast
-          />
-        )}
-      />
-      <DescriptionInput
-        register={register("description")}
-        currentlength={description?.length ?? 0}
-        error={!!errors.description}
-        helperText={errors.description?.message ?? ""}
-      />
-      <div className="flex items-center gap-4">
-        <Button
-          variant="outlined"
-          color="primary"
-          type="button"
-          onClick={handleCancel}
-          fullWidth
-        >
-          انصراف
-        </Button>
-        <Button variant="contained" type="submit" fullWidth>
-          ثبت
-        </Button>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }

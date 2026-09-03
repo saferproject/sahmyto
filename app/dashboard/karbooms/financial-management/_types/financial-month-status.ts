@@ -1,1 +1,2 @@
-export type FinancialMonthStatus = "closed" | "open" | "processing" | "approval";
+export type FinancialMonthStatus =
+  "closed" | "open" | "processing" | "approval";

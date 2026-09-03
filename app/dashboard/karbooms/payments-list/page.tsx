@@ -17,7 +17,8 @@ export default function PaymentsListPage() {
 
   const selectedPaymentId = usePaymentListStore((state) => state.id);
 
-  const { mutate: rejectPayment } = useRejectPaymentEndpoint();
+  const { mutate: rejectPayment, isPending: rejectingPayment } =
+    useRejectPaymentEndpoint();
 
   const handleOpenPaymentFormDrawer = () => {
     setPaymentFormDrawerOpen(true);
@@ -44,7 +45,12 @@ export default function PaymentsListPage() {
   };
 
   const handleSubmitReject = (data: RejectFormType) => {
-    rejectPayment({ paymentId: selectedPaymentId, ...data });
+    rejectPayment(
+      { paymentId: selectedPaymentId, ...data },
+      {
+        onSuccess: handleCloseRejectDrawer,
+      },
+    );
   };
 
   return (
@@ -62,6 +68,7 @@ export default function PaymentsListPage() {
       />
       <RejectDrawerComponent
         isOpen={isRejectDrawerOpen}
+        isLoading={rejectingPayment}
         title="دریافتی"
         onOpen={handleOpenRejectDrawer}
         onClose={handleCloseRejectDrawer}

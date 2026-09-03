@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useInvalidatingMutation from "@/app/_hooks/use-invalidating-mutation";
 
 import { profileImageService } from "../_services/profile-image-service";
 
 export default function useUploadProfileImageEndpoint() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
+  return useInvalidatingMutation({
     mutationKey: ["upload-profile-image"],
     mutationFn: profileImageService.uploadProfileImage,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["profile"] });
-    },
+    invalidateQueries: [["profile"]],
   });
 }

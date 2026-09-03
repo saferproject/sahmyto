@@ -1,14 +1,13 @@
-import { fetchWithAuth } from "@/app/proxy";
+import { http } from "@/app/_services/http";
 import { Driver } from "../_types/driver";
+import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
-export const DriversListService = {
-  getDrivers: (karboomId: number) =>
-    fetchWithAuth<Driver[]>(`karboom/drivers/${karboomId}?`, {
-      method: "GET",
-    }),
+export const driversListService = {
+  getDrivers: (karboomId: number, signal?: AbortSignal, page: number = 1) =>
+    http.get<Driver[]>(
+      addPaginationQuery(`karboom/drivers/${karboomId}`, page),
+      { signal },
+    ),
   deleteDriver: (driverId: number) =>
-    fetchWithAuth<void>(`karboom/drivers/delete/${driverId}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    }),
+    http.delete<void>(`karboom/drivers/delete/${driverId}`),
 };
