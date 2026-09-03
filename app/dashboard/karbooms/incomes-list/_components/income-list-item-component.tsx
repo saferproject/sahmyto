@@ -12,9 +12,9 @@ import StatusChipComponent from "../../_components/status-chip-component";
 import { IncomeListItemProps } from "../_types/income-list-item-props";
 
 import useApproveIncome from "../_hooks/use-approve-income";
-import useCanApprove from "../../_hooks/use-can-approve";
 
 import { useIncomeListStore } from "../_providers/income-list-store-provider";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function IncomeListItemComponent({
   income,
@@ -34,12 +34,13 @@ export default function IncomeListItemComponent({
     status,
     receiver,
     sender: { full_name: submitterName },
-    approvals,
   } = income;
+
+  const loggedInUserId = useUserInfoStore((state) => state.id);
 
   const setActiveIncome = useIncomeListStore((state) => state.setActiveIncome);
 
-  const canApprove = useCanApprove(approvals, status);
+  const canApprove = status === "pending" && receiver?.id === loggedInUserId;
 
   const { mutate: approveIncome } = useApproveIncome();
 
@@ -85,20 +86,6 @@ export default function IncomeListItemComponent({
           <p className="text-body-light text-xs">دریافت کننده</p>
           <p className="text-body text-sm font-semibold">
             {receiver ? receiver.full_name : "ندارد"}
-          </p>
-        </div>
-        <div className="flex basis-1/2 flex-col gap-1">
-          <p className="text-body-light text-xs">تایید مالکین</p>
-          <p className="text-body flex items-center gap-1 text-sm">
-            <span className="font-bold underline">
-              {
-                approvals.filter((approval) => approval.status === "approved")
-                  .length
-              }
-            </span>
-            تاییدیه از
-            <span className="font-bold underline">{approvals.length}</span>
-            مالک
           </p>
         </div>
         <div className="flex flex-col gap-1">

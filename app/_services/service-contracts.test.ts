@@ -240,10 +240,7 @@ describe("karboom read and lookup service contracts", () => {
       name: "loads expense categories by type",
       invoke: () => karboomService.getExpensesCategories("repair", signal),
       method: "get",
-      args: [
-        "karboom/expense/categories?type=repair&paginate=1&page=1",
-        { signal },
-      ],
+      args: ["karboom/expense/categories?type=repair", { signal }],
     },
     {
       name: "loads members",

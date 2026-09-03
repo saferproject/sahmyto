@@ -10,8 +10,8 @@ import { ACTIVITY_STATUS_TEXT_COLORS } from "../_constants/income-status-colors"
 import { ACTIVITY_STATUS_FA } from "../../_constants/activity-status-fa";
 import DetailItemComponent from "@/app/_components/detail-item-component";
 import useApproveIncome from "../_hooks/use-approve-income";
-import useCanApprove from "../../_hooks/use-can-approve";
 import EntityDetailsDrawerComponent from "../../_components/entity-details-drawer-component";
+import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 
 export default function IncomeDetailsDrawerLayout({
   isOpen,
@@ -32,11 +32,13 @@ export default function IncomeDetailsDrawerLayout({
     description,
     receiver,
     sender: { full_name: submitterName },
-    approvals,
+    reject_reason,
     clearActiveIncome,
   } = useIncomeListStore((state) => state);
 
-  const canApprove = useCanApprove(approvals, status);
+  const loggedInUserId = useUserInfoStore((state) => state.id);
+
+  const canApprove = status === "pending" && receiver?.id === loggedInUserId;
 
   const { mutate: approveIncome } = useApproveIncome();
 
@@ -61,7 +63,6 @@ export default function IncomeDetailsDrawerLayout({
       onClose={handleClose}
       isSettled={is_settled}
       description={description}
-      approvals={approvals}
       approveConfig={{
         canApprove,
         onApprove: handleApprove,
@@ -95,8 +96,13 @@ export default function IncomeDetailsDrawerLayout({
         <DetailItemComponent
           label="وضعیت"
           value={is_settled ? ACTIVITY_STATUS_FA[status] : "تسویه نشده"}
-          valueColor={is_settled ? ACTIVITY_STATUS_TEXT_COLORS[status] : 'text-yellow-500'}
+          valueColor={
+            is_settled ? ACTIVITY_STATUS_TEXT_COLORS[status] : "text-yellow-500"
+          }
         />
+        {status === "rejected" && (
+          <DetailItemComponent label="علت رد" value={reject_reason} />
+        )}
       </ul>
     </EntityDetailsDrawerComponent>
   );

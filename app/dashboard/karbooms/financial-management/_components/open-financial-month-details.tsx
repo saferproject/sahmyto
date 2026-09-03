@@ -179,22 +179,15 @@ export default function OpenFinancialMonthDetails({
                     hasBackground={type === "monthly"}
                   />
                   <ul className="mt-4 flex flex-col gap-2 pr-4">
-                    {incomes.map(
-                      ({
-                        id,
-                        receiver: { full_name },
-                        unit_price,
-                        quantity,
-                      }) => (
-                        <li
-                          key={id}
-                          className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2"
-                        >
-                          <p>{full_name}</p>
-                          <Amount value={unit_price * quantity} />
-                        </li>
-                      ),
-                    )}
+                    {incomes.map(({ id, receiver, unit_price, quantity }) => (
+                      <li
+                        key={id}
+                        className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2"
+                      >
+                        <p>{receiver?.full_name ?? "ندارد"}</p>
+                        <Amount value={unit_price * quantity} />
+                      </li>
+                    ))}
                   </ul>
                 </li>
               );

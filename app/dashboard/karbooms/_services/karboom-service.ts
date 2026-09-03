@@ -18,13 +18,9 @@ export const karboomService = {
   getExpensesCategories: (
     categoryType: ExpenseCategoryTypes,
     signal?: AbortSignal,
-    page: number = 1,
   ) =>
     http.get<ExpenseCategory[]>(
-      addPaginationQuery(
-        `karboom/expense/categories?type=${categoryType}`,
-        page,
-      ),
+      `karboom/expense/categories?type=${categoryType}`,
       {
         signal,
       },

@@ -663,17 +663,20 @@ describe("direct React Query endpoint hooks", () => {
     },
   );
 
-  it("loads expense categories from the query key", async () => {
+  it("loads expense categories without pagination", async () => {
     const serviceMock = vi
       .spyOn(karboomService, "getExpensesCategories")
       .mockResolvedValue({} as never);
     useGetExpensesCategoriesEndpoint("repair");
-    const options = useInfiniteListQueryMock.mock.calls[0][0];
+    const [queryKey, queryFn] = useListQueryMock.mock.calls[0] as [
+      readonly unknown[],
+      (signal: AbortSignal) => Promise<unknown>,
+    ];
     const signal = new AbortController().signal;
 
-    expect(options.queryKey).toEqual(["expenses-categories", "repair"]);
-    await options.queryFn(2, signal, options.queryKey);
-    expect(serviceMock).toHaveBeenCalledWith("repair", signal, 2);
+    expect(queryKey).toEqual(["expenses-categories", "unpaginated", "repair"]);
+    await queryFn(signal);
+    expect(serviceMock).toHaveBeenCalledWith("repair", signal);
   });
 
   it.each([
