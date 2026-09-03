@@ -23,7 +23,6 @@ import { INCOME_FORM_INITIAL } from "../_constants/income-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import PriceInputComponent from "@/app/_components/price-input-component";
 import parseNumber from "@/app/_utilities/parse-numbers";
-import loadNextPageOnScroll from "@/app/_utilities/load-next-page-on-scroll";
 import ApiError from "@/app/_errors/api-error";
 import useCreateIncomeEndpoint from "../_hooks/use-create-income-endpoint";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
@@ -63,9 +62,6 @@ export default function IncomeFormComponent({
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
   } = useGetMembersEndpoint(karboomId, isOpen);
 
   const { mutate: createIncome, isPending: creatingIncome } =
@@ -234,16 +230,6 @@ export default function IncomeFormComponent({
                 {...field}
                 loading={gettingMembers}
                 options={members?.data ?? []}
-                slotProps={{
-                  listbox: {
-                    onScroll: (event) =>
-                      loadNextPageOnScroll(event.currentTarget, {
-                        hasNextPage,
-                        isFetchingNextPage,
-                        fetchNextPage,
-                      }),
-                  },
-                }}
                 onChange={(_event, value) => field.onChange(value)}
                 filterOptions={(option, { inputValue }) =>
                   option.filter(({ user: { full_name } }) =>

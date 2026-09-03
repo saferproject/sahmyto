@@ -677,23 +677,20 @@ describe("direct React Query endpoint hooks", () => {
   });
 
   it.each([
-    [12, true, true],
-    [0, true, false],
-    [12, false, false],
+    [12, true],
+    [0, true],
+    [12, false],
   ] as const)(
-    "guards members query id=%s enabled=%s",
-    async (karboomId, enabled, expectedEnabled) => {
-      const serviceMock = vi
-        .spyOn(karboomService, "getMembers")
-        .mockResolvedValue({} as never);
+    "configures members query id=%s enabled=%s",
+    (karboomId, enabled) => {
       useGetMembersEndpoint(karboomId, enabled);
-      const options = useInfiniteListQueryMock.mock.calls[0][0];
-      const signal = new AbortController().signal;
 
-      expect(options.queryKey).toEqual(["members", karboomId]);
-      expect(options.enabled).toBe(expectedEnabled);
-      await options.queryFn(2, signal, options.queryKey);
-      expect(serviceMock).toHaveBeenCalledWith(karboomId, signal, 2);
+      expect(useListQueryMock).toHaveBeenCalledWith(
+        ["members", karboomId],
+        karboomService.getMembers,
+        karboomId,
+        enabled,
+      );
       vi.clearAllMocks();
     },
   );

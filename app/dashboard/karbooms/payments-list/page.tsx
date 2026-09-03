@@ -45,7 +45,12 @@ export default function PaymentsListPage() {
   };
 
   const handleSubmitReject = (data: RejectFormType) => {
-    rejectPayment({ paymentId: selectedPaymentId, ...data });
+    rejectPayment(
+      { paymentId: selectedPaymentId, ...data },
+      {
+        onSuccess: handleCloseRejectDrawer,
+      },
+    );
   };
 
   return (

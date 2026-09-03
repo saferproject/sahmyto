@@ -26,7 +26,6 @@ import useCreateExpenseEndpoint from "../_hooks/use-create-expense-endpoint";
 import parseNumber from "@/app/_utilities/parse-numbers";
 import { EXPENSE_FORM_INITIAL } from "../_constants/expense-form-initial";
 import ApiError from "@/app/_errors/api-error";
-import loadNextPageOnScroll from "@/app/_utilities/load-next-page-on-scroll";
 import { useEffect } from "react";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
@@ -62,9 +61,6 @@ export default function ExpenseFormComponent({
     data: members,
     isLoading: gettingMembers,
     isSuccess: gotMembers,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
   } = useGetMembersEndpoint(karboomId, isOpen);
 
   const { mutate: createExpense, isPending: creatingExpense } =
@@ -192,16 +188,6 @@ export default function ExpenseFormComponent({
                 {...field}
                 loading={gettingMembers}
                 options={members?.data ?? []}
-                slotProps={{
-                  listbox: {
-                    onScroll: (event) =>
-                      loadNextPageOnScroll(event.currentTarget, {
-                        hasNextPage,
-                        isFetchingNextPage,
-                        fetchNextPage,
-                      }),
-                  },
-                }}
                 onChange={(_event, value) => field.onChange(value)}
                 filterOptions={(option, { inputValue }) =>
                   option.filter(({ user: { full_name } }) =>

@@ -10,6 +10,7 @@ import { useState } from "react";
 import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 import { AnimatePresence } from "motion/react";
 import AnimatedListItem from "@/app/_components/animated-list-item-component";
+import QueryState from "@/app/_components/query-state";
 
 export default function SessionsPage() {
   const [invalidatingSessionId, setInvalidatingSessionId] = useState<
@@ -18,6 +19,8 @@ export default function SessionsPage() {
 
   const {
     data: sessions,
+    isPending: gettingSessions,
+    isError: gettingSessionsFailed,
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
@@ -86,64 +89,72 @@ export default function SessionsPage() {
       </Button>
       {/* NOTE Active Sessions List */}
       <h3 className="text-body mt-4 font-bold">نشست های فعال</h3>
-      <ul className="flex flex-col gap-4">
-        <AnimatePresence>
-          {sessions?.data.map((session, index) => (
-            <AnimatedListItem
-              key={session.id}
-              index={index}
-              dir="ltr"
-              className="border-secondary-lighter bg-secondary-lightest flex items-center justify-between rounded-2xl border p-2"
-            >
-              <div className="flex items-center gap-4">
-                <div className="bg-secondary-light border-primary flex size-16 items-center justify-center rounded-full border p-1">
-                  {session.device.type === "mobile" ? (
-                    session.device.platform === "android" ? (
-                      <Android size="32" className="text-primary" />
-                    ) : (
-                      <Apple size="32" className="text-primary" />
-                    )
-                  ) : (
-                    <Monitor size="32" className="text-primary" />
-                  )}
-                </div>
-                <div className="flex h-full flex-col justify-between">
-                  <p>{session.device.name}</p>
-                  <p>{session.device.platform}</p>
-                  <p className="text-secondary-dark">
-                    {formatDate(
-                      session?.logged_in_at ?? "",
-                      "YYYY/MM/DD - HH:mm",
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className="rounded-2xl bg-red-500">
-                <IconButton
-                  loading={
-                    isInvalidatingSession &&
-                    invalidatingSessionId === session.id
-                  }
-                  disabled={
-                    (isInvalidatingSession &&
-                      invalidatingSessionId !== session.id) ||
-                    isInvalidatingAllSessions
-                  }
-                  size="large"
-                  onClick={() => handleInvalidateSession(session.id)}
+      <QueryState
+        isLoading={gettingSessions}
+        isError={gettingSessionsFailed}
+        isEmpty={sessions?.data.length && sessions.data.length > 1 ? false : true}
+      >
+        <ul className="flex flex-col gap-4">
+          <AnimatePresence>
+            {sessions?.data
+              .filter((s) => !s.is_current)
+              .map((session, index) => (
+                <AnimatedListItem
+                  key={session.id}
+                  index={index}
+                  dir="ltr"
+                  className="border-secondary-lighter bg-secondary-lightest flex items-center justify-between rounded-2xl border p-2"
                 >
-                  <Trash size="32" className="text-white" variant="Bold" />
-                </IconButton>
-              </div>
-            </AnimatedListItem>
-          ))}
-        </AnimatePresence>
-      </ul>
-      <InfiniteScrollTrigger
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        fetchNextPage={fetchNextPage}
-      />
+                  <div className="flex items-center gap-4">
+                    <div className="bg-secondary-light border-primary flex size-16 items-center justify-center rounded-full border p-1">
+                      {session.device.type === "mobile" ? (
+                        session.device.platform === "android" ? (
+                          <Android size="32" className="text-primary" />
+                        ) : (
+                          <Apple size="32" className="text-primary" />
+                        )
+                      ) : (
+                        <Monitor size="32" className="text-primary" />
+                      )}
+                    </div>
+                    <div className="flex h-full flex-col justify-between">
+                      <p>{session.device.name}</p>
+                      <p>{session.device.platform}</p>
+                      <p className="text-secondary-dark">
+                        {formatDate(
+                          session?.logged_in_at ?? "",
+                          "YYYY/MM/DD - HH:mm",
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-2xl bg-red-500">
+                    <IconButton
+                      loading={
+                        isInvalidatingSession &&
+                        invalidatingSessionId === session.id
+                      }
+                      disabled={
+                        (isInvalidatingSession &&
+                          invalidatingSessionId !== session.id) ||
+                        isInvalidatingAllSessions
+                      }
+                      size="large"
+                      onClick={() => handleInvalidateSession(session.id)}
+                    >
+                      <Trash size="32" className="text-white" variant="Bold" />
+                    </IconButton>
+                  </div>
+                </AnimatedListItem>
+              ))}
+          </AnimatePresence>
+        </ul>
+        <InfiniteScrollTrigger
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+        />
+      </QueryState>
     </>
   );
 }

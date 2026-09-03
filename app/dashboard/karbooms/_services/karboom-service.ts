@@ -35,9 +35,6 @@ export const karboomService = {
     }),
   createIncome: ({ karboom_id, ...other }: CreateIncomeBody) =>
     http.post<undefined>(`karboom/income/store/${karboom_id}`, { body: other }),
-  getMembers: (karboom_id: number, signal?: AbortSignal, page: number = 1) =>
-    http.get<Member[]>(
-      addPaginationQuery(`karboom/members/${karboom_id}`, page),
-      { signal },
-    ),
+  getMembers: (karboom_id: number, signal?: AbortSignal) =>
+    http.get<Member[]>(`karboom/members/${karboom_id}`, { signal }),
 };

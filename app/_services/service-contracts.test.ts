@@ -249,7 +249,7 @@ describe("karboom read and lookup service contracts", () => {
       name: "loads members",
       invoke: () => karboomService.getMembers(12, signal),
       method: "get",
-      args: ["karboom/members/12?paginate=1&page=1", { signal }],
+      args: ["karboom/members/12", { signal }],
     },
     {
       name: "loads drivers",

@@ -24,10 +24,12 @@ export default function PaymentDetailsDrawerLayout({
     type,
     description,
     date,
+    created_at,
     status,
     receiver: { id: receiverId, full_name: receiverName },
     payer: { full_name: payerName },
     user: { full_name: submitterName },
+    reject_reason,
     clearActivePayment,
   } = usePaymentListStore((state) => state);
 
@@ -61,6 +63,7 @@ export default function PaymentDetailsDrawerLayout({
         <DetailItemComponent label="مبلغ" value={formatNumber(total_price)} />
         <DetailItemComponent label="نوع" value={PAYMENT_TYPES_FA[type]} />
         <DetailItemComponent label="تاریخ" value={formatDate(date)} />
+        <DetailItemComponent label="تاریخ ثبت" value={formatDate(created_at)} />
         <DetailItemComponent label="ثبت کننده" value={submitterName} />
         <DetailItemComponent label="پرداخت کننده" value={payerName} />
         <DetailItemComponent label="دریافت کننده" value={receiverName} />
@@ -69,6 +72,9 @@ export default function PaymentDetailsDrawerLayout({
           value={ACTIVITY_STATUS_FA[status]}
           valueColor={ACTIVITY_STATUS_TEXT_COLORS[status]}
         />
+        {status === "rejected" && (
+          <DetailItemComponent label="علت رد" value={reject_reason} />
+        )}
       </ul>
     </EntityDetailsDrawerComponent>
   );

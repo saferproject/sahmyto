@@ -15,4 +15,7 @@ export type Payment = {
   date: Dayjs;
   description: null | string;
   status: ActivityStatus;
+  reject_reason: null | string;
+  rejected_at: null | Dayjs;
+  created_at: Dayjs;
 };
