@@ -28,10 +28,10 @@ export default function MonthListLayout({
   } = useGetFinancialMonthsEndpoint(karboomId);
 
   useEffect(() => {
-    const firstMonth = financialMonths?.data[0];
+    const currentMonth = financialMonths?.data.at(-1);
 
-    if (gotFinancialMonths && !selectedMonth && firstMonth) {
-      onSelectMonth(firstMonth);
+    if (gotFinancialMonths && !selectedMonth?.id && currentMonth) {
+      onSelectMonth(currentMonth);
     }
   }, [gotFinancialMonths, financialMonths, onSelectMonth, selectedMonth]);
 

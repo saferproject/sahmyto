@@ -1,7 +1,7 @@
 import User from "@/app/_interfaces/user";
 import { ActivityStatus } from "./activity-status";
 import { IncomeTypes } from "./income-categories";
-import { Approval } from "./approval";
+import { Dayjs } from "dayjs";
 
 export type Income = {
   id: number;
@@ -16,5 +16,6 @@ export type Income = {
   status: ActivityStatus;
   receiver: User | null;
   sender: User;
-  approvals: Approval[];
+  reject_reason: null | string;
+  rejected_at: null | Dayjs;
 };
