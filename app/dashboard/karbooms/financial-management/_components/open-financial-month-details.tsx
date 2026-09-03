@@ -184,7 +184,7 @@ export default function OpenFinancialMonthDetails({
                         key={id}
                         className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2"
                       >
-                        <p>{receiver?.full_name ?? "ندارد"}</p>
+                        <p>{receiver?.full_name ?? "تسویه نشده"}</p>
                         <Amount value={unit_price * quantity} />
                       </li>
                     ))}
@@ -242,17 +242,12 @@ export default function OpenFinancialMonthDetails({
                             />
                             <ul className="mt-4 flex flex-col gap-2 pr-4">
                               {categoryExpenses.map(
-                                ({
-                                  id,
-                                  payer: { full_name },
-                                  unit_price,
-                                  wage_cost,
-                                }) => (
+                                ({ id, payer, unit_price, wage_cost }) => (
                                   <li
                                     key={id}
                                     className="text-body border-primary-light flex items-center justify-between rounded-2xl border px-4 py-2"
                                   >
-                                    <p>{full_name}</p>
+                                    <p>{payer?.full_name ?? "تسویه نشده"}</p>
                                     <Amount
                                       value={
                                         type === "daily"
