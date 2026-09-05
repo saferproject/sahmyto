@@ -36,8 +36,11 @@ import { getDriverFormInitial } from "../_constants/driver-form-initial";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
 import ContactListDrawerComponent from "./contact-list-drawer-component";
-import { Contact } from "../../contacts/_types/contact";
-import useGetContacts from "../../contacts/_hooks/use-get-contacts";
+
+import ContactFormDrawerComponent from "../../contacts/_components/contact-drawer-component";
+import useContactPhoneLookup, {
+  type ContactIdentity,
+} from "../_hooks/use-contact-phone-lookup";
 
 export default function DriverFormComponent({
   formState,
@@ -46,13 +49,17 @@ export default function DriverFormComponent({
   onSuccess,
 }: DriverFormProps) {
   const [isContactListDrawerOpen, setContactListDrawerOpen] = useState(false);
+  const [contactFormPhone, setContactFormPhone] = useState<string | null>(null);
+  const lookupContact = useContactPhoneLookup();
 
   const {
     register,
     control,
     handleSubmit,
-    setValues,
+    reset: setValues,
+    getValues,
     setError,
+    setValue,
     formState: { errors },
   } = useDriverForm();
 
@@ -61,12 +68,6 @@ export default function DriverFormComponent({
   });
 
   const karboomId = useKarboomsStore((state) => state.id);
-
-  const {
-    data: contacts,
-    isLoading: gettingContacts,
-    isSuccess: gotContacts,
-  } = useGetContacts();
 
   const { mutate: addDriver, isPending: addingDriver } = useAddDriver();
   const { mutate: editDriver, isPending: editingDriver } = useEditDriver();
@@ -104,33 +105,44 @@ export default function DriverFormComponent({
     setContactListDrawerOpen(false);
   };
 
-  const handleContactSelect = (contact: Contact) => {
-    setValues((currentValues) => ({
-      ...currentValues,
-      ...contact,
-    }));
+  const handleContactSelect = (contact: ContactIdentity) => {
+    setValue("phone", contact.phone, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    setValue("first_name", contact.first_name, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
+    setValue("last_name", contact.last_name, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
     handleCloseContactsDrawer();
   };
 
-  const phoneRegistration = register("phone");
+  const handleCloseContactForm = () => {
+    setContactFormPhone(null);
+  };
 
-  const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
-    void phoneRegistration.onChange(event);
+  const handleContactCreated = (contact: ContactIdentity) => {
+    handleContactSelect(contact);
+    handleCloseContactForm();
+  };
 
+  const handlePhoneChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const phone = event.target.value;
+    setValue("phone", phone, { shouldDirty: true });
+    setValue("first_name", "");
+    setValue("last_name", "");
 
-    if (gettingContacts || phone.length !== 11 || !gotContacts) return;
+    if (phone.length !== 11) return;
 
-    const existingContact = contacts.data.find(
-      (contact) => contact.phone === phone,
-    );
+    const contact = await lookupContact(phone);
+    if (getValues("phone") !== phone) return;
 
-    if (existingContact)
-      setValues((currentValues) => ({
-        ...currentValues,
-        ...existingContact,
-      }));
-    else handleOpenContactsDrawer();
+    if (contact) handleContactSelect(contact);
+    else if (contact === null) setContactFormPhone(phone);
   };
 
   const handleMutationSuccess = () => {
@@ -185,6 +197,16 @@ export default function DriverFormComponent({
 
   return (
     <>
+      {contactFormPhone !== null && (
+        <ContactFormDrawerComponent
+          formState="ADD"
+          initialPhone={contactFormPhone}
+          isOpen
+          onOpen={() => setContactFormPhone(contactFormPhone)}
+          onClose={handleCloseContactForm}
+          onSuccess={handleContactCreated}
+        />
+      )}
       <ContactListDrawerComponent
         isOpen={isContactListDrawerOpen}
         onOpen={handleOpenContactsDrawer}
@@ -195,47 +217,71 @@ export default function DriverFormComponent({
         className="flex w-full flex-col gap-4"
         onSubmit={handleSubmit(submit)}
       >
-        <TextField
-          {...phoneRegistration}
-          onChange={handlePhoneChange}
-          type="tel"
-          inputMode="tel"
-          label="شماره تماس"
-          error={!!errors.phone}
-          helperText={errors.phone?.message ?? ""}
-          slotProps={{
-            input: {
-              endAdornment: (
-                <IconButton>
-                  <Book1
-                    size={24}
-                    className="text-primary rotate-y-180"
-                    onClick={handleOpenContactsDrawer}
-                  />
-                </IconButton>
-              ),
-            },
-          }}
-          required
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field: { ref, ...field } }) => (
+            <TextField
+              {...field}
+              inputRef={ref}
+              onChange={handlePhoneChange}
+              type="tel"
+              inputMode="tel"
+              label="شماره تماس"
+              error={!!errors.phone}
+              helperText={errors.phone?.message ?? ""}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <IconButton>
+                      <Book1
+                        size={24}
+                        className="text-primary rotate-y-180"
+                        onClick={handleOpenContactsDrawer}
+                      />
+                    </IconButton>
+                  ),
+                },
+                htmlInput: {
+                  maxLength: 11,
+                },
+              }}
+              required
+            />
+          )}
         />
         <div className="flex items-center gap-4">
-          <TextField
-            {...register("first_name")}
-            label="نام"
-            error={!!errors.first_name}
-            helperText={errors.first_name?.message ?? ""}
-            fullWidth
-            required
-            disabled
+          <Controller
+            name="first_name"
+            control={control}
+            render={({ field: { ref, ...field } }) => (
+              <TextField
+                {...field}
+                inputRef={ref}
+                label="نام"
+                error={!!errors.first_name}
+                helperText={errors.first_name?.message ?? ""}
+                fullWidth
+                required
+                disabled
+              />
+            )}
           />
-          <TextField
-            {...register("last_name")}
-            label="نام خانوادگی"
-            error={!!errors.last_name}
-            helperText={errors.last_name?.message ?? ""}
-            fullWidth
-            required
-            disabled
+          <Controller
+            name="last_name"
+            control={control}
+            render={({ field: { ref, ...field } }) => (
+              <TextField
+                {...field}
+                inputRef={ref}
+                label="نام خانوادگی"
+                error={!!errors.last_name}
+                helperText={errors.last_name?.message ?? ""}
+                fullWidth
+                required
+                disabled
+              />
+            )}
           />
         </div>
         <Controller

@@ -10,6 +10,7 @@
     "lint": "eslint",
     "audit:prod": "pnpm audit --prod --audit-level high",
     "test": "vitest run",
+    "test:react-compiler": "vitest run --config vitest.react-compiler.config.mts",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {

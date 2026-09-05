@@ -69,6 +69,13 @@ vi.mock("@/app/_components/date-picker-component", () => ({
 }));
 vi.mock("@/app/_components/description-input", () => ({ default: "textarea" }));
 vi.mock("@/app/_components/form-drawer-component", () => ({ default: "div" }));
+vi.mock("./contact-list-drawer-component", () => ({ default: () => null }));
+vi.mock("../../contacts/_components/contact-drawer-component", () => ({
+  default: () => null,
+}));
+vi.mock("../_hooks/use-contact-phone-lookup", () => ({
+  default: () => vi.fn(),
+}));
 vi.mock("@/app/_components/insurance-company-input", () => ({
   default: "select",
 }));

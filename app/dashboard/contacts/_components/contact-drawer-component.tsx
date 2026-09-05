@@ -7,6 +7,7 @@ import ContactFormComponent from "./contact-form-component";
 export default function ContactFormDrawerComponent({
   formState,
   contact,
+  initialPhone,
   isOpen,
   onOpen,
   onClose,
@@ -22,6 +23,7 @@ export default function ContactFormDrawerComponent({
       <ContactFormComponent
         formState={formState}
         contact={contact}
+        initialPhone={initialPhone}
         onSuccess={onSuccess}
       />
     </FormDrawerWithTitleComponent>
