@@ -2,8 +2,7 @@
 .gitignore
 .next
 node_modules
-npm-debug.log
-pnpm-debug.log
+*.log
 Dockerfile*
 docker-compose*.yml
 docker-compose*.yaml

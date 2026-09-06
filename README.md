@@ -6,23 +6,19 @@ The frontend uses Next.js 16 with the App Router, React 19, TypeScript, Material
 
 ## Requirements
 
-- Node.js 22
-- pnpm 11.1.3, as pinned by `packageManager` in `package.json`
+- Bun 1.3.14, as pinned by `packageManager` in `package.json`
 - Access to a compatible Sahmito API
 
-Enable Corepack if pnpm is not already installed:
+Install the pinned version using the [Bun installation guide](https://bun.com/docs/installation).
 
-```bash
-corepack enable
-corepack prepare pnpm@11.1.3 --activate
-```
+Bun manages dependencies and runs project scripts, including the Next.js development and production servers. Next.js 16 handles bundling with Turbopack; `bun run build` invokes that framework build. Bun's native bundler is not a replacement for the Next.js App Router build pipeline.
 
 ## Local setup
 
 1. Install the locked dependencies:
 
    ```bash
-   pnpm install --frozen-lockfile
+   bun install --frozen-lockfile
    ```
 
 2. Copy `.env.example` to `.env.local` and replace the example URLs.
@@ -30,7 +26,7 @@ corepack prepare pnpm@11.1.3 --activate
 3. Start the development server:
 
    ```bash
-   pnpm dev
+   bun run dev
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000). The root route redirects to `/login`.
@@ -94,15 +90,16 @@ Feature-specific folders follow the same underscore-prefixed convention beside t
 ## Validation commands
 
 ```bash
-pnpm lint
-pnpm exec tsc --noEmit
-pnpm build
-pnpm audit:prod
+bun run lint
+bun run tsc --noEmit
+bun run test
+bun run build
+bun run audit:prod
 ```
 
-CI runs all four checks for pull requests and pushes to `development` or `main`. The production audit fails on high or critical findings.
+CI runs these checks for pull requests and pushes to `development` or `main`. The production audit fails on high or critical findings.
 
-No automated test framework is currently configured. Manually exercise affected authenticated routes, form sequences, drawer transitions, and responsive states before release.
+Unit tests use Vitest. Use `bun run test` to execute the configured suite, and `bun run test:coverage` for coverage. Manually exercise affected authenticated routes, form sequences, drawer transitions, and responsive states before release.
 
 ## Error reporting and performance monitoring
 
@@ -112,7 +109,7 @@ When `NEXT_PUBLIC_TELEMETRY_ENDPOINT` is configured, the browser sends JSON `app
 
 ## Production deployment
 
-The application builds as a standalone Next.js image. The Docker setup uses Node.js 22, pnpm's frozen lockfile, nginx, health checks, and blue/green application containers.
+The application builds as a standalone Next.js image. The Docker setup uses Bun 1.3.14 for installation, builds, and runtime, with `bun.lock`, nginx, health checks, and blue/green application containers.
 
 Initial deployment:
 
@@ -126,4 +123,4 @@ Zero-downtime deployment from PowerShell:
 ./deploy/zero-downtime-deploy.ps1
 ```
 
-Production `NEXT_PUBLIC_*` variables must be present during `pnpm build`; changing them requires rebuilding the image. See `deploy/README.md` for the container switching process.
+Production `NEXT_PUBLIC_*` variables must be present during `bun run build`; changing them requires rebuilding the image. See `deploy/README.md` for the container switching process.

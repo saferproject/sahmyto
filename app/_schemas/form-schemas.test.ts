@@ -4,10 +4,9 @@ import { describe, expect, it } from "vitest";
 import LoginFormSchema from "@/app/login/_schemas/login-schema";
 import VerifyFormSchema from "@/app/login/verify/_schemas/verify-schema";
 import ProfileFormSchema from "@/app/dashboard/profile/_schemas/profile-schema";
-import ActivityFormSchema from "@/app/dashboard/karbooms/activities-list/_schemas/activity-form-schema";
-import BodyInsuranceFormSchema from "@/app/dashboard/karbooms/body-insurance-list/_schemas/body-insurance-form-schema";
-import ThirdPartyInsuranceFormSchema from "@/app/dashboard/karbooms/third-party-insurance-list/_schemas/third-party-insurance-form-schema";
-import DriverTipFormSchema from "@/app/dashboard/karbooms/financial-management/drivers-salary/_schemas/driver-tip-form-schema";
+import BodyInsuranceFormSchema from "@/app/dashboard/karbooms/[karboomId]/body-insurance-list/_schemas/body-insurance-form-schema";
+import ThirdPartyInsuranceFormSchema from "@/app/dashboard/karbooms/[karboomId]/third-party-insurance-list/_schemas/third-party-insurance-form-schema";
+import DriverTipFormSchema from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_schemas/driver-tip-form-schema";
 import DriverFormSchema from "@/app/dashboard/karbooms/_schemas/driver-form-schema";
 import ExpenseFormSchema from "@/app/dashboard/karbooms/_schemas/expense-form-schema";
 import IncomeFormSchema from "@/app/dashboard/karbooms/_schemas/income-form-schema";
@@ -305,7 +304,7 @@ describe("financial form schemas", () => {
   });
 });
 
-describe("insurance and activity form schemas", () => {
+describe("insurance and driver adjustment form schemas", () => {
   const insurance = {
     insurance_company_id: 3,
     insurance_number: "INS-10",
@@ -324,18 +323,6 @@ describe("insurance and activity form schemas", () => {
         ...insurance,
         insurance_company_id: "3",
       }).success,
-    ).toBe(false);
-  });
-
-  it("requires an activity description", () => {
-    expect(
-      ActivityFormSchema.safeParse({
-        date: dayjs(),
-        description: "Oil change",
-      }).success,
-    ).toBe(true);
-    expect(
-      ActivityFormSchema.safeParse({ date: dayjs(), description: "" }).success,
     ).toBe(false);
   });
 

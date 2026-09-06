@@ -8,16 +8,16 @@ import { createConfirmationDialogStore } from "@/app/dashboard/_stores/confirmat
 import { CONFIRMATION_DIALOG_PROPS_DEFAULTS } from "@/app/dashboard/_constants/confirmation-dialog-props-defaults";
 import { createKarboomsStore } from "@/app/dashboard/karbooms/_stores/karbooms-store";
 import { KARBOOMS_STORE_DEFAULTS } from "@/app/dashboard/karbooms/_constants/karbooms-store-defaults";
-import { createExpenseListStore } from "@/app/dashboard/karbooms/expenses-list/_stores/expense-list-store";
-import { EXPENSE_LIST_STORE_DEFAULTS } from "@/app/dashboard/karbooms/expenses-list/_constants/expense-list-store-defaults";
-import { createIncomeListStore } from "@/app/dashboard/karbooms/incomes-list/_stores/income-list-store";
-import { INCOME_LIST_STORE_DEFAULTS } from "@/app/dashboard/karbooms/incomes-list/_constants/income-list-store-defaults";
-import { createPaymentListStore } from "@/app/dashboard/karbooms/payments-list/_stores/payment-list-store";
-import { PAYMENT_LIST_STORE_DEFAULTS } from "@/app/dashboard/karbooms/payments-list/_constants/payment-list-store-defaults";
-import { createFinancialMonthStore } from "@/app/dashboard/karbooms/financial-management/_stores/financial-management-store";
-import { FINANCIAL_MONTH_STORE_DEFAULTS } from "@/app/dashboard/karbooms/financial-management/_constants/financial-month-store-defaults";
-import { createSettlementStore } from "@/app/dashboard/karbooms/financial-management/_stores/settlement-store";
-import { SETTLEMENT_STORE_DEFAULTS } from "@/app/dashboard/karbooms/financial-management/_constants/settlement-store-defaults";
+import { createExpenseListStore } from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_stores/expense-list-store";
+import { EXPENSE_LIST_STORE_DEFAULTS } from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_constants/expense-list-store-defaults";
+import { createIncomeListStore } from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_stores/income-list-store";
+import { INCOME_LIST_STORE_DEFAULTS } from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_constants/income-list-store-defaults";
+import { createPaymentListStore } from "@/app/dashboard/karbooms/[karboomId]/payments-list/_stores/payment-list-store";
+import { PAYMENT_LIST_STORE_DEFAULTS } from "@/app/dashboard/karbooms/[karboomId]/payments-list/_constants/payment-list-store-defaults";
+import { createFinancialMonthStore } from "@/app/dashboard/karbooms/[karboomId]/financial-management/_stores/financial-management-store";
+import { FINANCIAL_MONTH_STORE_DEFAULTS } from "@/app/dashboard/karbooms/[karboomId]/financial-management/_constants/financial-month-store-defaults";
+import { createSettlementStore } from "@/app/dashboard/karbooms/[karboomId]/financial-management/_stores/settlement-store";
+import { SETTLEMENT_STORE_DEFAULTS } from "@/app/dashboard/karbooms/[karboomId]/financial-management/_constants/settlement-store-defaults";
 
 afterEach(() => {
   vi.unstubAllGlobals();

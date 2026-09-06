@@ -22,7 +22,7 @@ import parseNumber from "@/app/_utilities/parse-numbers";
 import { PAYMENT_FORM_INITIAL } from "../_constants/payment-form-initial";
 import ApiError from "@/app/_errors/api-error";
 import { formatGregorianDate } from "@/app/_utilities/format-dates";
-import { PAYMENT_TYPES_FA } from "../payments-list/_constants/payment-types-fa";
+import { PAYMENT_TYPES_FA } from "../[karboomId]/payments-list/_constants/payment-types-fa";
 
 export default function PaymentFormComponent({
   isOpen,

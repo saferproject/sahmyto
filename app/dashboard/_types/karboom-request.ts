@@ -1,7 +1,7 @@
 import Karboom from "@/app/_interfaces/karboom";
 import User from "@/app/_interfaces/user";
 import { ActivityStatus } from "../karbooms/_types/activity-status";
-import { DriverPaymentTypes } from "../karbooms/drivers-list/_types/driver-payment-types";
+import { DriverPaymentTypes } from "../karbooms/[karboomId]/drivers-list/_types/driver-payment-types";
 
 export type KarboomRequest =
   | {
