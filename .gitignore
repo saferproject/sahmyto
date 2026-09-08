@@ -30,3 +30,7 @@
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated deployment state
+/deploy/.active-color
+/deploy/nginx/active.conf

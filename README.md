@@ -6,7 +6,7 @@ The frontend uses Next.js 16 with the App Router, React 19, TypeScript, Material
 
 ## Requirements
 
-- Bun 1.3.14, as pinned by `packageManager` in `package.json`
+- Bun 1.4.2, as pinned by `packageManager` in `package.json`
 - Access to a compatible Sahmito API
 
 Install the pinned version using the [Bun installation guide](https://bun.com/docs/installation).
@@ -97,7 +97,7 @@ bun run build
 bun run audit:prod
 ```
 
-CI runs these checks for pull requests and pushes to `development` or `main`. The production audit fails on high or critical findings.
+CI runs these checks for pull requests and pushes to `development` or `master`. The production audit fails on high or critical findings.
 
 Unit tests use Vitest. Use `bun run test` to execute the configured suite, and `bun run test:coverage` for coverage. Manually exercise affected authenticated routes, form sequences, drawer transitions, and responsive states before release.
 
@@ -109,7 +109,7 @@ When `NEXT_PUBLIC_TELEMETRY_ENDPOINT` is configured, the browser sends JSON `app
 
 ## Production deployment
 
-The application builds as a standalone Next.js image. The Docker setup uses Bun 1.3.14 for installation, builds, and runtime, with `bun.lock`, nginx, health checks, and blue/green application containers.
+The application builds as a standalone Next.js image. The Docker setup uses the pinned Bun version for installation, builds, and runtime, with `bun.lock`, nginx, health checks, and blue/green application containers.
 
 Initial deployment:
 
@@ -123,4 +123,4 @@ Zero-downtime deployment from PowerShell:
 ./deploy/zero-downtime-deploy.ps1
 ```
 
-Production `NEXT_PUBLIC_*` variables must be present during `bun run build`; changing them requires rebuilding the image. See `deploy/README.md` for the container switching process.
+Production `NEXT_PUBLIC_*` variables must be present during `bun run build`; changing them requires rebuilding the image. Pushes to `master` can build an immutable image in GitHub Container Registry and deploy it to a VPS over SSH. See `deploy/README.md` for setup, required GitHub configuration, deployment, and rollback details.

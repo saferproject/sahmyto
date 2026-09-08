@@ -1,6 +1,6 @@
 services:
   proxy:
-    image: nginx:1.27-alpine
+    image: nginx:1.30.4-alpine
     container_name: sahmito-proxy
     depends_on:
       - app-blue
@@ -16,6 +16,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args: &app-build-args
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:?Set NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_IMAGE_ASSETS_URL: ${NEXT_PUBLIC_IMAGE_ASSETS_URL:?Set NEXT_PUBLIC_IMAGE_ASSETS_URL}
+        NEXT_PUBLIC_TELEMETRY_ENDPOINT: ${NEXT_PUBLIC_TELEMETRY_ENDPOINT:-}
+        NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-local}
     image: sahmito-app:${APP_IMAGE_TAG:-latest}
     container_name: sahmito-app-blue
     env_file:
@@ -42,6 +47,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args: *app-build-args
     image: sahmito-app:${APP_IMAGE_TAG:-latest}
     container_name: sahmito-app-green
     env_file:

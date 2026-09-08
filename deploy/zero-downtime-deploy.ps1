@@ -33,7 +33,7 @@ function Wait-ForHealthyContainer {
 
 function Ensure-Proxy {
     if (-not (docker ps -aq -f "name=^${proxyName}$")) {
-        docker compose up -d proxy
+        docker compose --env-file .env.production up -d proxy
     }
 }
 
@@ -44,13 +44,13 @@ $currentContainer = if ($currentColor -eq "blue") { $blueName } elseif ($current
 $nextConfig = if ($nextColor -eq "blue") { $blueConfig } else { $greenConfig }
 
 Write-Host "Building fresh image..."
-docker compose build --pull
+docker compose --env-file .env.production build --pull
 
 Write-Host "Starting $nextColor environment..."
 if ($nextColor -eq "green") {
-    docker compose --profile standby up -d app-green
+    docker compose --env-file .env.production --profile standby up -d app-green
 } else {
-    docker compose up -d app-blue
+    docker compose --env-file .env.production up -d app-blue
 }
 
 Wait-ForHealthyContainer -ContainerName $nextContainer

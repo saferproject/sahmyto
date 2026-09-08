@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM oven/bun:1.3.14-slim AS base
+FROM oven/bun:1.4.2 AS base
 
 FROM base AS deps
 
@@ -13,12 +13,20 @@ FROM base AS builder
 
 WORKDIR /app
 
+ARG NEXT_PUBLIC_API_URL
+ARG NEXT_PUBLIC_IMAGE_ASSETS_URL
+ARG NEXT_PUBLIC_TELEMETRY_ENDPOINT=""
+ARG NEXT_PUBLIC_APP_VERSION=""
+
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_IMAGE_ASSETS_URL=$NEXT_PUBLIC_IMAGE_ASSETS_URL
+ENV NEXT_PUBLIC_TELEMETRY_ENDPOINT=$NEXT_PUBLIC_TELEMETRY_ENDPOINT
+ENV NEXT_PUBLIC_APP_VERSION=$NEXT_PUBLIC_APP_VERSION
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json bun.lock bunfig.toml ./
 COPY . .
-COPY .env.production .env.production
-
-ENV NODE_ENV=production
 
 RUN bun run build
 
@@ -30,9 +38,11 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+COPY --chown=bun:bun --from=builder /app/public ./public
+COPY --chown=bun:bun --from=builder /app/.next/standalone ./
+COPY --chown=bun:bun --from=builder /app/.next/static ./.next/static
+
+USER bun
 
 EXPOSE 3000
 

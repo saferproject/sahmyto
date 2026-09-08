@@ -108,8 +108,12 @@ export default function KarboomListItemComponent(
             color="secondary"
             className="text-body!"
             onClick={handleNavigateToPaymentList}
+            sx={{
+              gridColumnStart: 1,
+              gridColumnEnd: 3,
+            }}
           >
-            پرداختی ها
+            دریافتی و پرداختی ها
           </Button>
         </div>
         <Button

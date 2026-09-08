@@ -4,6 +4,7 @@ import { Expense } from "../../../_types/expense";
 
 export const EXPENSE_LIST_STORE_DEFAULTS: Expense = {
   id: 0,
+  is_settled: false,
   type: "daily",
   category: "",
   status: "pending",
@@ -11,6 +12,7 @@ export const EXPENSE_LIST_STORE_DEFAULTS: Expense = {
   wage_cost: 0,
   created_at: "",
   deleted_at: "",
+  settlement_date: "",
   date: "",
   description: null,
   sender: USER_DEFAULTS,

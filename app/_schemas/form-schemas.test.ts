@@ -210,6 +210,8 @@ describe("member form schemas", () => {
 describe("financial form schemas", () => {
   it("requires at least one expense amount and rejects future dates", () => {
     const expense = {
+      is_settled: true,
+      settlement_date: dayjs().subtract(1, "day"),
       payer: member,
       unit_price: "1000",
       wage_cost: null,
@@ -236,6 +238,8 @@ describe("financial form schemas", () => {
 
   it("accepts supported receipt images and rejects other MIME types", () => {
     const expense = {
+      is_settled: true,
+      settlement_date: dayjs(),
       payer: member,
       unit_price: "1000",
       wage_cost: null,
@@ -259,6 +263,8 @@ describe("financial form schemas", () => {
 
   it("validates income quantity, date order, and optional proof image", () => {
     const income = {
+      is_settled: true,
+      settlement_date: dayjs("2026-01-02"),
       reciever: member,
       quantity: 2,
       unit_price: "500",
@@ -284,7 +290,7 @@ describe("financial form schemas", () => {
   it("validates payment type and prevents future payment dates", () => {
     const payment = {
       payer: member,
-      reciever: member,
+      reciever: { ...member, member: { id: 8 } },
       total_price: "1000",
       date: dayjs().subtract(1, "day"),
       type: "cash" as const,

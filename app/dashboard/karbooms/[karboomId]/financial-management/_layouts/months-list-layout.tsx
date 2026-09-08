@@ -42,6 +42,7 @@ export default function MonthListLayout({
     );
 
     if (
+      selectedMonth &&
       refreshedSelectedMonth &&
       (refreshedSelectedMonth.status !== selectedMonth.status ||
         refreshedSelectedMonth.closed_at !== selectedMonth.closed_at ||
