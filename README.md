@@ -6,7 +6,7 @@ The frontend uses Next.js 16 with the App Router, React 19, TypeScript, Material
 
 ## Requirements
 
-- Bun 1.4.2, as pinned by `packageManager` in `package.json`
+- Bun 1.3.14, as pinned by `packageManager` in `package.json`
 - Access to a compatible Sahmito API
 
 Install the pinned version using the [Bun installation guide](https://bun.com/docs/installation).
