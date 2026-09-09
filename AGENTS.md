@@ -6,7 +6,7 @@ This repository is a TypeScript/React application built with Next.js 16 and the 
 
 ## Build, Test, and Development Commands
 
-Use Bun 1.3.14 exclusively for dependency management and script execution (the version is pinned in `package.json` and the Docker image). Commit `bun.lock` whenever dependencies change. Keep package manager configuration in `package.json` and `bunfig.toml`, and use only the Bun lockfile.
+Use Bun 1.4.1 exclusively for dependency management and script execution (the version is pinned in `package.json` and the Docker image). Commit `bun.lock` whenever dependencies change. Keep package manager configuration in `package.json` and `bunfig.toml`, and use only the Bun lockfile.
 
 Bun runs the development server, production build, and production server. Next.js 16 uses its built-in Turbopack bundler; Bun's native bundler cannot replace it for this App Router application. Use `bun run build` to invoke the framework build.
 
