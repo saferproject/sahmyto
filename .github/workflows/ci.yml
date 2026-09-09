@@ -31,7 +31,9 @@ jobs:
         run: bun run audit:prod
 
       - name: Type-check
-        run: bun run tsc --noEmit
+        run: |
+          bun --bun next typegen
+          bun run tsc --noEmit
 
       - name: Test
         run: bun run test
