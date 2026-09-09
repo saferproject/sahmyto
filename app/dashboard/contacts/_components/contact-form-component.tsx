@@ -1,4 +1,4 @@
-import { useWatch } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import useAddContact from "../_hooks/use-add-contact";
 import useEditContact from "../_hooks/use-edit-contact";
 import { ContactFormProps } from "../_types/contact-form-props";
@@ -13,13 +13,14 @@ import DescriptionInput from "@/app/_components/description-input";
 export default function ContactFormComponent({
   formState,
   contact,
+  initialPhone,
   onSuccess,
 }: ContactFormProps) {
   const {
     register,
     control,
     handleSubmit,
-    setValues,
+    reset: setValues,
     setError,
     formState: { errors },
   } = useContactForm();
@@ -30,7 +31,10 @@ export default function ContactFormComponent({
   const { mutate: editContact, isPending: editingContact } = useEditContact();
 
   useEffect(() => {
-    const initialValues = getContactFormInitial();
+    const initialValues = {
+      ...getContactFormInitial(),
+      phone: initialPhone ?? "",
+    };
 
     if (formState === "EDIT" && contact) {
       setValues({
@@ -40,11 +44,11 @@ export default function ContactFormComponent({
         last_name: contact.last_name,
       });
     } else setValues(initialValues);
-  }, [formState, contact, setValues]);
+  }, [formState, contact, initialPhone, setValues]);
 
-  const handleMutationSuccess = () => {
+  const handleMutationSuccess = (contact: ContactFormType) => {
     setValues(getContactFormInitial());
-    onSuccess();
+    onSuccess(contact);
   };
 
   const handleMutationError = (error: Error) => {
@@ -62,7 +66,7 @@ export default function ContactFormComponent({
       editContact(
         { ...data, contactId: contact.id },
         {
-          onSuccess: handleMutationSuccess,
+          onSuccess: () => handleMutationSuccess(data),
           onError: handleMutationError,
         },
       );
@@ -70,7 +74,7 @@ export default function ContactFormComponent({
     }
 
     addContact(data, {
-      onSuccess: handleMutationSuccess,
+      onSuccess: () => handleMutationSuccess(data),
       onError: handleMutationError,
     });
   };
@@ -80,31 +84,52 @@ export default function ContactFormComponent({
       className="flex w-full flex-col gap-4"
       onSubmit={handleSubmit(submit)}
     >
-      <TextField
-        {...register("phone")}
-        type="tel"
-        inputMode="tel"
-        label="شماره تماس"
-        error={!!errors.phone}
-        helperText={errors.phone?.message ?? ""}
-        required
+      <Controller
+        name="phone"
+        control={control}
+        render={({ field: { ref, ...field } }) => (
+          <TextField
+            {...field}
+            inputRef={ref}
+            type="tel"
+            inputMode="tel"
+            label="شماره تماس"
+            error={!!errors.phone}
+            helperText={errors.phone?.message ?? ""}
+            required
+          />
+        )}
       />
       <div className="flex items-center gap-4">
-        <TextField
-          {...register("first_name")}
-          label="نام"
-          error={!!errors.first_name}
-          helperText={errors.first_name?.message ?? ""}
-          fullWidth
-          required
+        <Controller
+          name="first_name"
+          control={control}
+          render={({ field: { ref, ...field } }) => (
+            <TextField
+              {...field}
+              inputRef={ref}
+              label="نام"
+              error={!!errors.first_name}
+              helperText={errors.first_name?.message ?? ""}
+              fullWidth
+              required
+            />
+          )}
         />
-        <TextField
-          {...register("last_name")}
-          label="نام خانوادگی"
-          error={!!errors.last_name}
-          helperText={errors.last_name?.message ?? ""}
-          fullWidth
-          required
+        <Controller
+          name="last_name"
+          control={control}
+          render={({ field: { ref, ...field } }) => (
+            <TextField
+              {...field}
+              inputRef={ref}
+              label="نام خانوادگی"
+              error={!!errors.last_name}
+              helperText={errors.last_name?.message ?? ""}
+              fullWidth
+              required
+            />
+          )}
         />
       </div>
       <DescriptionInput

@@ -47,11 +47,11 @@ export default function useRequireKarboomMembers() {
           NO_MEMBER_ACTION_DIALOG_PROPS(
             () => {
               resetActionDialog();
-              router.push("/dashboard/karbooms/partners-list");
+              router.push(`/dashboard/karbooms/${karboomId}/partners-list`);
             },
             () => {
               resetActionDialog();
-              router.push("/dashboard/karbooms/drivers-list");
+              router.push(`/dashboard/karbooms/${karboomId}/drivers-list`);
             },
             resetActionDialog,
           ),

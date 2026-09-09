@@ -138,12 +138,12 @@ describe("useRequireKarboomMembers", () => {
     buttons[0].props.onClick();
     expect(resetDialogMock).toHaveBeenCalledOnce();
     expect(routerPushMock).toHaveBeenCalledWith(
-      "/dashboard/karbooms/partners-list",
+      "/dashboard/karbooms/12/partners-list",
     );
 
     buttons[1].props.onClick();
     expect(routerPushMock).toHaveBeenCalledWith(
-      "/dashboard/karbooms/drivers-list",
+      "/dashboard/karbooms/12/drivers-list",
     );
 
     dialog.onClose();

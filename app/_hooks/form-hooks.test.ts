@@ -18,11 +18,9 @@ import VerifyFormSchema from "@/app/login/verify/_schemas/verify-schema";
 import useProfileForm from "@/app/dashboard/profile/_hooks/use-profile-form";
 import ProfileFormSchema from "@/app/dashboard/profile/_schemas/profile-schema";
 import { PROFILE_FORM_DEFAULTS } from "@/app/dashboard/profile/_constants/profile-form-defaults";
-import useActivityForm from "@/app/dashboard/karbooms/activities-list/_hooks/use-activity-form";
-import ActivityFormSchema from "@/app/dashboard/karbooms/activities-list/_schemas/activity-form-schema";
-import useDriverTipForm from "@/app/dashboard/karbooms/financial-management/drivers-salary/_hooks/use-driver-tip-form";
-import DriverTipFormSchema from "@/app/dashboard/karbooms/financial-management/drivers-salary/_schemas/driver-tip-form-schema";
-import { DRIVER_TIP_FORM_DEFAULTS } from "@/app/dashboard/karbooms/financial-management/drivers-salary/_constants/driver-tip-form-defaults";
+import useDriverTipForm from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_hooks/use-driver-tip-form";
+import DriverTipFormSchema from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_schemas/driver-tip-form-schema";
+import { DRIVER_TIP_FORM_DEFAULTS } from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_constants/driver-tip-form-defaults";
 import useDriverForm from "@/app/dashboard/karbooms/_hooks/use-driver-form";
 import DriverFormSchema from "@/app/dashboard/karbooms/_schemas/driver-form-schema";
 import useExpenseForm from "@/app/dashboard/karbooms/_hooks/use-expense-form";
@@ -58,15 +56,6 @@ describe("form hook configuration", () => {
     useVerifyForm();
 
     expect(useZodFormMock).toHaveBeenCalledWith({ schema: VerifyFormSchema });
-  });
-
-  it("connects activity validation with a fresh initial date", () => {
-    useActivityForm();
-
-    expect(useZodFormMock).toHaveBeenCalledWith({
-      schema: ActivityFormSchema,
-      defaultValues: expect.objectContaining({ description: "" }),
-    });
   });
 
   it("connects driver validation with fresh defaults", () => {

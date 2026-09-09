@@ -112,7 +112,8 @@ describe("profile image conversion", () => {
     );
 
     expect(file.name).toBe("hello.txt");
-    expect(file.type).toBe("text/plain");
+    // Bun may append a charset to text MIME types.
+    expect(file.type.split(";")[0]).toBe("text/plain");
     expect(file.lastModified).toBe(Date.now());
     await expect(file.text()).resolves.toBe("Hello");
   });

@@ -6,7 +6,7 @@ import { User } from "iconsax-reactjs";
 
 import { ApprovalItemProps } from "../_types/approval-item-props";
 
-import { ACTIVITY_STATUS_TEXT_COLORS } from "../incomes-list/_constants/income-status-colors";
+import { ACTIVITY_STATUS_TEXT_COLORS } from "../[karboomId]/incomes-list/_constants/income-status-colors";
 import { ACTIVITY_STATUS_FA } from "../_constants/activity-status-fa";
 
 export default function ApprovalItemComponent({

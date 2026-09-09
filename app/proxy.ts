@@ -130,6 +130,8 @@ export async function fetchWithAuth<ResponseType>(
     if (response.status === 401) {
       clearAuthStorage();
 
+      // This framework-agnostic request utility cannot use the React router hook.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       if (redirectOnUnauthorized) window.location.assign("/login");
     }
 

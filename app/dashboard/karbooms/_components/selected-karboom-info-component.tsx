@@ -1,7 +1,4 @@
-import { useEffect } from "react";
-import { useSnackbar } from "notistack";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import yellowRectangle from "../_assets/_vectors/yellow-rectangle.svg";
 import darkBlueRectangle from "../_assets/_vectors/dark-blue-rectangle.svg";
@@ -12,23 +9,8 @@ import Plate from "@/app/_components/plate";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 export default function SelectedKarboomInfoComponent() {
-  const router = useRouter();
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const id = useKarboomsStore((state) => state.id);
   const name = useKarboomsStore((state) => state.name);
   const plate = useKarboomsStore((state) => state.plate);
-
-  useEffect(() => {
-    if (!id) {
-      enqueueSnackbar({
-        variant: "warning",
-        message: "کاربومی برای نمایش اطلاعات انتخاب نشده است.",
-      });
-      router.push("/dashboard/karbooms");
-    }
-  }, [enqueueSnackbar, id, router]);
 
   return (
     <div className="relative mb-4 drop-shadow-lg">

@@ -7,8 +7,8 @@ export const getDriverFormInitial = (): DriverFormType => ({
   last_name: "",
   started_at: dayjs(),
   ended_at: null,
-  fixed_amount: null,
-  service_amount: null,
+  fixed_amount: "", // NOTE: This is a string to allow for empty values
+  service_amount: "", // NOTE: This is a string to allow for empty values
   percentage_amount: null,
   description: null,
   payment_type: "monthly",

@@ -25,8 +25,6 @@ const formMocks = vi.hoisted(() => ({
 }));
 
 const mutations = vi.hoisted(() => ({
-  addActivity: vi.fn(),
-  editActivity: vi.fn(),
   addDriver: vi.fn(),
   editDriver: vi.fn(),
   addPartner: vi.fn(),
@@ -69,6 +67,13 @@ vi.mock("@/app/_components/date-picker-component", () => ({
 }));
 vi.mock("@/app/_components/description-input", () => ({ default: "textarea" }));
 vi.mock("@/app/_components/form-drawer-component", () => ({ default: "div" }));
+vi.mock("./contact-list-drawer-component", () => ({ default: () => null }));
+vi.mock("../../contacts/_components/contact-drawer-component", () => ({
+  default: () => null,
+}));
+vi.mock("../_hooks/use-contact-phone-lookup", () => ({
+  default: () => vi.fn(),
+}));
 vi.mock("@/app/_components/insurance-company-input", () => ({
   default: "select",
 }));
@@ -84,12 +89,9 @@ vi.mock("../_hooks/use-payment-form", () => ({ default: () => formMocks }));
 vi.mock("../_hooks/use-reject-form", () => ({ default: () => formMocks }));
 vi.mock("../_hooks/use-expense-form", () => ({ default: () => formMocks }));
 vi.mock("../_hooks/use-income-form", () => ({ default: () => formMocks }));
-vi.mock("../../karbooms/activities-list/_hooks/use-activity-form", () => ({
-  default: () => formMocks,
-}));
 vi.mock("@/app/_hooks/use-zod-form", () => ({ default: () => formMocks }));
 vi.mock(
-  "../financial-management/drivers-salary/_hooks/use-driver-tip-form",
+  "../[karboomId]/financial-management/drivers-salary/_hooks/use-driver-tip-form",
   () => ({ default: () => formMocks }),
 );
 
@@ -109,19 +111,7 @@ vi.mock("../_hooks/use-create-karboom-endpoint", () => ({
   default: () => ({ mutate: mutations.createKarboom, isPending: false }),
 }));
 vi.mock(
-  "../../karbooms/activities-list/_hooks/use-add-activity-endpoint",
-  () => ({
-    default: () => ({ mutate: mutations.addActivity, isPending: false }),
-  }),
-);
-vi.mock(
-  "../../karbooms/activities-list/_hooks/use-edit-activity-endpoint",
-  () => ({
-    default: () => ({ mutate: mutations.editActivity, isPending: false }),
-  }),
-);
-vi.mock(
-  "../financial-management/drivers-salary/_hooks/use-add-bonus-penalty-driver-endpoint",
+  "../[karboomId]/financial-management/drivers-salary/_hooks/use-add-bonus-penalty-driver-endpoint",
   () => ({
     default: () => ({ mutate: mutations.addBonusPenalty, isPending: false }),
   }),
@@ -132,7 +122,7 @@ vi.mock("../_providers/karbooms-store-provider", () => ({
     selector({ id: 12, setActiveKarboom: storeMocks.setActiveKarboom }),
 }));
 vi.mock(
-  "../financial-management/_providers/financial-managment-store-provider",
+  "../[karboomId]/financial-management/_providers/financial-managment-store-provider",
   () => ({
     useFinancialMonthStore: (selector: (state: unknown) => unknown) =>
       selector({ id: 41 }),
@@ -140,9 +130,8 @@ vi.mock(
 );
 
 import ApiError from "@/app/_errors/api-error";
-import ActivityFormComponent from "../../karbooms/activities-list/_components/activity-form-component";
 import DriverFormComponent from "./driver-form-component";
-import DriverTipFormComponent from "../financial-management/drivers-salary/_components/driver-tip-form-component";
+import DriverTipFormComponent from "../[karboomId]/financial-management/drivers-salary/_components/driver-tip-form-component";
 import InsuranceFormComponent from "./insurance-form-component";
 import KarboomFormComponent from "./karboom-form-component";
 import PartnerFormComponent from "./partner-form-component";
@@ -160,64 +149,6 @@ beforeEach(() => {
 });
 
 afterEach(cleanup);
-
-describe("activity form submission", () => {
-  it("adds an activity to the selected karboom", () => {
-    const date = dayjs("2026-01-02");
-    formMocks.values = { date, description: "Oil change" };
-    const onSuccess = vi.fn();
-    const { container } = render(
-      <ActivityFormComponent
-        formState="ADD"
-        onCancel={vi.fn()}
-        onSuccess={onSuccess}
-      />,
-    );
-
-    submitForm(container);
-
-    expect(mutations.addActivity).toHaveBeenCalledWith(
-      { date: "2026-01-02", description: "Oil change", karboomId: 12 },
-      expect.objectContaining({
-        onSuccess: expect.any(Function),
-        onError: expect.any(Function),
-      }),
-    );
-    mutations.addActivity.mock.calls[0][1].onSuccess();
-    expect(onSuccess).toHaveBeenCalledOnce();
-    expect(formMocks.setValues).toHaveBeenCalled();
-  });
-
-  it("edits the selected activity and maps API field errors", () => {
-    formMocks.values = { date: dayjs("2026-01-02"), description: "Service" };
-    const { container } = render(
-      <ActivityFormComponent
-        formState="EDIT"
-        activity={{ id: 61, date: "2026-01-01", description: "Old" }}
-        onCancel={vi.fn()}
-        onSuccess={vi.fn()}
-      />,
-    );
-
-    submitForm(container);
-
-    expect(mutations.editActivity).toHaveBeenCalledWith(
-      expect.objectContaining({ activityId: 61, description: "Service" }),
-      expect.any(Object),
-    );
-    mutations.editActivity.mock.calls[0][1].onError(
-      new ApiError({
-        status: 422,
-        message: "Invalid",
-        errors: { description: ["Description is invalid"] },
-      }),
-    );
-    expect(formMocks.setError).toHaveBeenCalledWith("description", {
-      message: "Description is invalid",
-      type: "validate",
-    });
-  });
-});
 
 describe("driver form submission", () => {
   const driverValues = {

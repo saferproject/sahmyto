@@ -25,6 +25,7 @@ export default function ProfilePicturePage() {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1.1);
   const [image, setImage] = useState<string | undefined>();
+  const [imageError, setImageError] = useState("");
   const [croppedImage, setCroppedImage] = useState<string>("");
 
   const router = useRouter();
@@ -37,8 +38,19 @@ export default function ProfilePicturePage() {
   };
 
   const handleImageInput = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0])
-      setImage(convertFileToDataURL(event.target.files[0]));
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== "image/png" && file.type !== "image/jpeg") {
+      setImageError(
+        "فرمت تصویر نامعتبر است. لطفاً یک تصویر PNG یا JPG انتخاب کنید.",
+      );
+      event.target.value = "";
+      return;
+    }
+
+    setImageError("");
+    setImage(convertFileToDataURL(file));
   };
 
   const handleUploadImage = async () => {
@@ -56,7 +68,7 @@ export default function ProfilePicturePage() {
 
     formData.set("avatar", imageFile);
 
-    mutate(formData, { onSuccess: () => handleReturn() });
+    mutate(formData, { onSuccess: handleReturn });
   };
 
   const handleReturn = () => {
@@ -95,6 +107,11 @@ export default function ProfilePicturePage() {
           onZoomChange={setZoom}
         />
       </div>
+      {imageError && (
+        <p role="alert" className="mt-2 text-sm text-red-500">
+          {imageError}
+        </p>
+      )}
       <div className="flex flex-1 flex-col justify-between gap-4 pt-6">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
@@ -102,8 +119,7 @@ export default function ProfilePicturePage() {
             <UserSquare size="32" className="text-body" />
           </div>
           <p className="text-body-light mt-4 text-sm">
-            سایز عکس میبایست کمتر از 512 کیلوبایت باشد فرمت تصاویر میبایست با
-            فرمت png و یا jpg باشد
+            فرمت تصاویر میبایست با فرمت png و یا jpg باشد
           </p>
         </div>
         <div className="flex w-full flex-col gap-4">

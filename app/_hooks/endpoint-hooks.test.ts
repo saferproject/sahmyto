@@ -107,46 +107,40 @@ import useGetMembersEndpoint from "@/app/dashboard/karbooms/_hooks/use-get-membe
 import { driverFormService } from "@/app/dashboard/karbooms/_services/driver-form-service";
 import { karboomService } from "@/app/dashboard/karbooms/_services/karboom-service";
 import { partnerFormService } from "@/app/dashboard/karbooms/_services/partner-form-service";
-import useAddActivityEndpoint from "@/app/dashboard/karbooms/activities-list/_hooks/use-add-activity-endpoint";
-import useDeleteActivityEndpoint from "@/app/dashboard/karbooms/activities-list/_hooks/use-delete-activity-endpoint";
-import useEditActivityEndpoint from "@/app/dashboard/karbooms/activities-list/_hooks/use-edit-activity-endpoint";
-import useGetActivitiesEndpoint from "@/app/dashboard/karbooms/activities-list/_hooks/use-get-activities-endpoint";
-import { activitiesListService } from "@/app/dashboard/karbooms/activities-list/_services/activities-list-service";
-import { activityFormService } from "@/app/dashboard/karbooms/_services/activity-form-service";
-import useAddBodyInsuranceEndpoint from "@/app/dashboard/karbooms/body-insurance-list/_hooks/use-add-body-insurance-endpoint";
-import useGetBodyInsurancesEndpoint from "@/app/dashboard/karbooms/body-insurance-list/_hooks/use-get-body-insurances-endpoint";
-import { bodyInsuranceService } from "@/app/dashboard/karbooms/body-insurance-list/_services/body-insurance-service";
-import useDeleteDriverEndpoint from "@/app/dashboard/karbooms/drivers-list/_hooks/use-delete-driver-endpoint";
-import useGetDriversEndpoint from "@/app/dashboard/karbooms/drivers-list/_hooks/use-get-karboom-drivers-endpoint";
-import { driversListService } from "@/app/dashboard/karbooms/drivers-list/_services/drivers-list-service";
-import useApproveExpense from "@/app/dashboard/karbooms/expenses-list/_hooks/use-approve-expense";
-import useGetExpenses from "@/app/dashboard/karbooms/expenses-list/_hooks/use-get-expenses";
-import useRejectExpense from "@/app/dashboard/karbooms/expenses-list/_hooks/use-reject-expense";
-import { expensesListService } from "@/app/dashboard/karbooms/expenses-list/_services/expenses-list-service";
-import useCloseFinancialMonth from "@/app/dashboard/karbooms/financial-management/_hooks/use-close-financial-month-endpoint";
-import useGetFinancialMonthsEndpoint from "@/app/dashboard/karbooms/financial-management/_hooks/use-get-financial-management-months-endpoint";
-import useGetFinancialMonthDataEndpoint from "@/app/dashboard/karbooms/financial-management/_hooks/use-get-financial-month-data-endpoint";
-import useGetSettlementData from "@/app/dashboard/karbooms/financial-management/_hooks/use-get-settlement-data-endpoint";
-import useStartProcessingFinancialMonthEndpoint from "@/app/dashboard/karbooms/financial-management/_hooks/use-start-processing-financial-month-endpoint";
-import useValidateClosingFinancialMonthEndpoint from "@/app/dashboard/karbooms/financial-management/_hooks/use-validate-closing-financial-month-endpoint";
-import { financialManagementService } from "@/app/dashboard/karbooms/financial-management/_services/financial-management-service";
-import useAddBonusPenaltyDriverEndpoint from "@/app/dashboard/karbooms/financial-management/drivers-salary/_hooks/use-add-bonus-penalty-driver-endpoint";
-import useGetDriversSalaryEndpoint from "@/app/dashboard/karbooms/financial-management/drivers-salary/_hooks/use-get-drivers-salaries-endpoint";
-import { driversSalaryService } from "@/app/dashboard/karbooms/financial-management/drivers-salary/_services/drivers-salary-service";
-import useApproveIncome from "@/app/dashboard/karbooms/incomes-list/_hooks/use-approve-income";
-import useGetIncomes from "@/app/dashboard/karbooms/incomes-list/_hooks/use-get-incomes";
-import useRejectIncome from "@/app/dashboard/karbooms/incomes-list/_hooks/use-reject-income";
-import { incomeListService } from "@/app/dashboard/karbooms/incomes-list/_services/incomes-list-service";
-import useDeletePartnerEndpoint from "@/app/dashboard/karbooms/partners-list/_hooks/use-delete-partner-endpoint";
-import useGetPartnersEndpoint from "@/app/dashboard/karbooms/partners-list/_hooks/use-get-partners-endpoint";
-import { partnersListService } from "@/app/dashboard/karbooms/partners-list/_services/partners-list-service";
-import useApprovePaymentEndpoint from "@/app/dashboard/karbooms/payments-list/_hooks/use-approve-payment-endpoint";
-import useGetPaymentsEndpoint from "@/app/dashboard/karbooms/payments-list/_hooks/use-get-payments-endpoint";
-import useRejectPaymentEndpoint from "@/app/dashboard/karbooms/payments-list/_hooks/use-reject-payment-endpoint";
-import { paymentsListService } from "@/app/dashboard/karbooms/payments-list/_services/payments-list-service";
-import useAddThirdPartyInsurance from "@/app/dashboard/karbooms/third-party-insurance-list/_hooks/use-add-third-party-insurance-endpoint";
-import useGetThirdPartyInsurancesEndpoint from "@/app/dashboard/karbooms/third-party-insurance-list/_hooks/use-get-third-party-insurances-endpoint";
-import { thirdPartyInsuranceService } from "@/app/dashboard/karbooms/third-party-insurance-list/_services/third-party-insurance-service";
+import useAddBodyInsuranceEndpoint from "@/app/dashboard/karbooms/[karboomId]/body-insurance-list/_hooks/use-add-body-insurance-endpoint";
+import useGetBodyInsurancesEndpoint from "@/app/dashboard/karbooms/[karboomId]/body-insurance-list/_hooks/use-get-body-insurances-endpoint";
+import { bodyInsuranceService } from "@/app/dashboard/karbooms/[karboomId]/body-insurance-list/_services/body-insurance-service";
+import useDeleteDriverEndpoint from "@/app/dashboard/karbooms/[karboomId]/drivers-list/_hooks/use-delete-driver-endpoint";
+import useGetDriversEndpoint from "@/app/dashboard/karbooms/[karboomId]/drivers-list/_hooks/use-get-karboom-drivers-endpoint";
+import { driversListService } from "@/app/dashboard/karbooms/[karboomId]/drivers-list/_services/drivers-list-service";
+import useApproveExpense from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_hooks/use-approve-expense";
+import useGetExpenses from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_hooks/use-get-expenses";
+import useRejectExpense from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_hooks/use-reject-expense";
+import { expensesListService } from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_services/expenses-list-service";
+import useCloseFinancialMonth from "@/app/dashboard/karbooms/[karboomId]/financial-management/_hooks/use-close-financial-month-endpoint";
+import useGetFinancialMonthsEndpoint from "@/app/dashboard/karbooms/[karboomId]/financial-management/_hooks/use-get-financial-management-months-endpoint";
+import useGetFinancialMonthDataEndpoint from "@/app/dashboard/karbooms/[karboomId]/financial-management/_hooks/use-get-financial-month-data-endpoint";
+import useGetSettlementData from "@/app/dashboard/karbooms/[karboomId]/financial-management/_hooks/use-get-settlement-data-endpoint";
+import useStartProcessingFinancialMonthEndpoint from "@/app/dashboard/karbooms/[karboomId]/financial-management/_hooks/use-start-processing-financial-month-endpoint";
+import useValidateClosingFinancialMonthEndpoint from "@/app/dashboard/karbooms/[karboomId]/financial-management/_hooks/use-validate-closing-financial-month-endpoint";
+import { financialManagementService } from "@/app/dashboard/karbooms/[karboomId]/financial-management/_services/financial-management-service";
+import useAddBonusPenaltyDriverEndpoint from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_hooks/use-add-bonus-penalty-driver-endpoint";
+import useGetDriversSalaryEndpoint from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_hooks/use-get-drivers-salaries-endpoint";
+import { driversSalaryService } from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_services/drivers-salary-service";
+import useApproveIncome from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_hooks/use-approve-income";
+import useGetIncomes from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_hooks/use-get-incomes";
+import useRejectIncome from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_hooks/use-reject-income";
+import { incomeListService } from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_services/incomes-list-service";
+import useDeletePartnerEndpoint from "@/app/dashboard/karbooms/[karboomId]/partners-list/_hooks/use-delete-partner-endpoint";
+import useGetPartnersEndpoint from "@/app/dashboard/karbooms/[karboomId]/partners-list/_hooks/use-get-partners-endpoint";
+import { partnersListService } from "@/app/dashboard/karbooms/[karboomId]/partners-list/_services/partners-list-service";
+import useApprovePaymentEndpoint from "@/app/dashboard/karbooms/[karboomId]/payments-list/_hooks/use-approve-payment-endpoint";
+import useGetPaymentsEndpoint from "@/app/dashboard/karbooms/[karboomId]/payments-list/_hooks/use-get-payments-endpoint";
+import useRejectPaymentEndpoint from "@/app/dashboard/karbooms/[karboomId]/payments-list/_hooks/use-reject-payment-endpoint";
+import { paymentsListService } from "@/app/dashboard/karbooms/[karboomId]/payments-list/_services/payments-list-service";
+import useAddThirdPartyInsurance from "@/app/dashboard/karbooms/[karboomId]/third-party-insurance-list/_hooks/use-add-third-party-insurance-endpoint";
+import useGetThirdPartyInsurancesEndpoint from "@/app/dashboard/karbooms/[karboomId]/third-party-insurance-list/_hooks/use-get-third-party-insurances-endpoint";
+import { thirdPartyInsuranceService } from "@/app/dashboard/karbooms/[karboomId]/third-party-insurance-list/_services/third-party-insurance-service";
 
 interface AdapterCase {
   name: string;
@@ -160,11 +154,6 @@ beforeEach(() => {
 
 describe("list endpoint hook adapters", () => {
   it.each<AdapterCase>([
-    {
-      name: "activities",
-      invoke: () => useGetActivitiesEndpoint(12),
-      args: [["activities", 12], activitiesListService.getActivities, 12],
-    },
     {
       name: "financial month data with caller enablement",
       invoke: () => useGetFinancialMonthDataEndpoint(41, false),
@@ -355,39 +344,6 @@ describe("invalidating mutation endpoint hook adapters", () => {
           mutationKey: ["create-income"],
           mutationFn: karboomService.createIncome,
           invalidateQueries: [["incomes"], ["financial-month-data"]],
-        },
-      ],
-    },
-    {
-      name: "add activity",
-      invoke: useAddActivityEndpoint,
-      args: [
-        {
-          mutationKey: ["add-activity"],
-          mutationFn: activityFormService.addActivity,
-          invalidateQueries: [["activities"]],
-        },
-      ],
-    },
-    {
-      name: "edit activity",
-      invoke: useEditActivityEndpoint,
-      args: [
-        {
-          mutationKey: ["edit-activity"],
-          mutationFn: activityFormService.editActivity,
-          invalidateQueries: [["activities"]],
-        },
-      ],
-    },
-    {
-      name: "delete activity",
-      invoke: useDeleteActivityEndpoint,
-      args: [
-        {
-          mutationKey: ["delete-activity"],
-          mutationFn: activitiesListService.deleteActivity,
-          invalidateQueries: [["activities"]],
         },
       ],
     },

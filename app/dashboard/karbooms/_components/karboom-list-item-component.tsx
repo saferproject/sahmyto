@@ -32,22 +32,17 @@ export default function KarboomListItemComponent(
 
   const handleNavigateToIncomeList = () => {
     setActiveKarboom(karboom);
-    router.push("/dashboard/karbooms/incomes-list");
+    router.push(`/dashboard/karbooms/${karboom.id}/incomes-list`);
   };
 
   const handleNavigateToExpenseList = () => {
     setActiveKarboom(karboom);
-    router.push("/dashboard/karbooms/expenses-list");
+    router.push(`/dashboard/karbooms/${karboom.id}/expenses-list`);
   };
 
   const handleNavigateToPaymentList = () => {
     setActiveKarboom(karboom);
-    router.push("/dashboard/karbooms/payments-list");
-  };
-
-  const handleNavigateToActivitiesList = () => {
-    setActiveKarboom(karboom);
-    router.push("/dashboard/karbooms/activities-list");
+    router.push(`/dashboard/karbooms/${karboom.id}/payments-list`);
   };
 
   return (
@@ -112,17 +107,13 @@ export default function KarboomListItemComponent(
             variant="outlined"
             color="secondary"
             className="text-body!"
-            onClick={handleNavigateToActivitiesList}
-          >
-            فعالیت ها
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className="text-body!"
             onClick={handleNavigateToPaymentList}
+            sx={{
+              gridColumnStart: 1,
+              gridColumnEnd: 3,
+            }}
           >
-            پرداختی ها
+            دریافتی و پرداختی ها
           </Button>
         </div>
         <Button

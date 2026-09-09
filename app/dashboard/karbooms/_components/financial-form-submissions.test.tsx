@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import dayjs from "dayjs";
+import type { ReactNode } from "react";
 import { cleanup, fireEvent, render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -30,7 +31,10 @@ const enqueueSnackbarMock = vi.hoisted(() => vi.fn());
 vi.mock("@mui/material", () => ({
   Autocomplete: "div",
   Button: "button",
+  Checkbox: "input",
   FormControl: "div",
+  FormControlLabel: ({ control }: { control: ReactNode }) => control,
+  FormHelperText: "span",
   InputLabel: "label",
   MenuItem: "option",
   Select: "select",
@@ -38,8 +42,22 @@ vi.mock("@mui/material", () => ({
 }));
 vi.mock("iconsax-reactjs", () => ({ InfoCircle: "span" }));
 vi.mock("react-hook-form", () => ({
-  Controller: ({ render }: { render: (props: unknown) => unknown }) =>
-    render({ field: { value: "", onChange: vi.fn() } }),
+  Controller: ({
+    name,
+    render,
+  }: {
+    name: string;
+    render: (props: unknown) => unknown;
+  }) =>
+    render({
+      field: {
+        name,
+        value: formMocks.values[name],
+        onBlur: vi.fn(),
+        onChange: vi.fn(),
+        ref: vi.fn(),
+      },
+    }),
   useWatch: vi.fn(() => ({})),
 }));
 vi.mock("notistack", () => ({
@@ -113,6 +131,8 @@ afterEach(cleanup);
 describe("expense submission", () => {
   it("converts amounts and the local calendar date into the API payload", () => {
     formMocks.values = {
+      is_settled: true,
+      settlement_date: dayjs("2026-01-02"),
       payer: member,
       date: dayjs("2026-01-02"),
       image: new File(["ignored"], "proof.png"),
@@ -137,6 +157,8 @@ describe("expense submission", () => {
     expect(mutations.expense).toHaveBeenCalledWith(
       {
         description: "Repair",
+        is_settled: true,
+        settlement_date: "2026-01-02",
         unit_price: 1200,
         wage_cost: 300,
         payer_id: 7,
@@ -184,6 +206,8 @@ describe("expense submission", () => {
 describe("income submission", () => {
   it("converts prices, member id, type, and local dates", () => {
     formMocks.values = {
+      is_settled: true,
+      settlement_date: dayjs("2026-01-02"),
       reciever: member,
       started_at: dayjs("2026-01-02"),
       ended_at: dayjs("2026-01-03"),
@@ -209,6 +233,8 @@ describe("income submission", () => {
       {
         quantity: 2,
         description: null,
+        is_settled: true,
+        settlement_date: "2026-01-02",
         unit_price: 500,
         total_price: 1000,
         type: "daily",

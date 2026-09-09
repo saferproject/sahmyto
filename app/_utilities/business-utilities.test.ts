@@ -6,10 +6,10 @@ import createFinancialMonthSummary, {
   getDailyExpenseTotal,
   getExpenseTotal,
   getIncomeTotal,
-} from "@/app/dashboard/karbooms/financial-management/_utilities/create-financial-month-summary";
-import groupSalariesByType from "@/app/dashboard/karbooms/financial-management/drivers-salary/_utilities/group-salaries-by-type";
-import organizeDriverSalary from "@/app/dashboard/karbooms/financial-management/drivers-salary/_utilities/organize-driver-salary";
-import sumSalaryAmounts from "@/app/dashboard/karbooms/financial-management/drivers-salary/_utilities/sum-salary-amounts";
+} from "@/app/dashboard/karbooms/[karboomId]/financial-management/_utilities/create-financial-month-summary";
+import groupSalariesByType from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_utilities/group-salaries-by-type";
+import organizeDriverSalary from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_utilities/organize-driver-salary";
+import sumSalaryAmounts from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_utilities/sum-salary-amounts";
 
 describe("transformNumber", () => {
   it.each([

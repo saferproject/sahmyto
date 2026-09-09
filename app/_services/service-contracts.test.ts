@@ -17,20 +17,18 @@ import { verifyService } from "@/app/login/verify/_services/verify-service";
 import { dashboardService } from "@/app/dashboard/_services/dashboard-service";
 import { profileService } from "@/app/dashboard/profile/_services/profile-service";
 import { profileImageService } from "@/app/dashboard/profile/profile-picture/_services/profile-image-service";
-import { activityFormService } from "@/app/dashboard/karbooms/_services/activity-form-service";
 import { driverFormService } from "@/app/dashboard/karbooms/_services/driver-form-service";
 import { karboomService } from "@/app/dashboard/karbooms/_services/karboom-service";
 import { partnerFormService } from "@/app/dashboard/karbooms/_services/partner-form-service";
-import { activitiesListService } from "@/app/dashboard/karbooms/activities-list/_services/activities-list-service";
-import { bodyInsuranceService } from "@/app/dashboard/karbooms/body-insurance-list/_services/body-insurance-service";
-import { driversListService } from "@/app/dashboard/karbooms/drivers-list/_services/drivers-list-service";
-import { expensesListService } from "@/app/dashboard/karbooms/expenses-list/_services/expenses-list-service";
-import { financialManagementService } from "@/app/dashboard/karbooms/financial-management/_services/financial-management-service";
-import { driversSalaryService } from "@/app/dashboard/karbooms/financial-management/drivers-salary/_services/drivers-salary-service";
-import { incomeListService } from "@/app/dashboard/karbooms/incomes-list/_services/incomes-list-service";
-import { partnersListService } from "@/app/dashboard/karbooms/partners-list/_services/partners-list-service";
-import { paymentsListService } from "@/app/dashboard/karbooms/payments-list/_services/payments-list-service";
-import { thirdPartyInsuranceService } from "@/app/dashboard/karbooms/third-party-insurance-list/_services/third-party-insurance-service";
+import { bodyInsuranceService } from "@/app/dashboard/karbooms/[karboomId]/body-insurance-list/_services/body-insurance-service";
+import { driversListService } from "@/app/dashboard/karbooms/[karboomId]/drivers-list/_services/drivers-list-service";
+import { expensesListService } from "@/app/dashboard/karbooms/[karboomId]/expenses-list/_services/expenses-list-service";
+import { financialManagementService } from "@/app/dashboard/karbooms/[karboomId]/financial-management/_services/financial-management-service";
+import { driversSalaryService } from "@/app/dashboard/karbooms/[karboomId]/financial-management/drivers-salary/_services/drivers-salary-service";
+import { incomeListService } from "@/app/dashboard/karbooms/[karboomId]/incomes-list/_services/incomes-list-service";
+import { partnersListService } from "@/app/dashboard/karbooms/[karboomId]/partners-list/_services/partners-list-service";
+import { paymentsListService } from "@/app/dashboard/karbooms/[karboomId]/payments-list/_services/payments-list-service";
+import { thirdPartyInsuranceService } from "@/app/dashboard/karbooms/[karboomId]/third-party-insurance-list/_services/third-party-insurance-service";
 
 type HttpMethod = keyof typeof httpMocks;
 
@@ -230,6 +228,12 @@ describe("karboom write service contracts", () => {
 
 describe("karboom read and lookup service contracts", () => {
   it.each<ContractCase>([
+    {
+      name: "loads a karboom by its URL id without a request body",
+      invoke: () => karboomService.getKarboom(12, signal),
+      method: "get",
+      args: ["karboom/show/12", { signal }],
+    },
     {
       name: "loads karbooms",
       invoke: () => karboomService.getKarbooms(signal),
@@ -502,31 +506,5 @@ describe("financial-management service contracts", () => {
     await invoke();
 
     expect(httpMocks[method]).toHaveBeenCalledWith(...args);
-  });
-});
-
-describe("activity service wiring", () => {
-  it("forwards activity list ids, mutation ids, payloads, and abort signals", async () => {
-    await activitiesListService.getActivities(12, signal);
-    expect(httpMocks.get).toHaveBeenCalledWith(expect.any(String), { signal });
-
-    await activitiesListService.deleteActivity(61);
-    expect(httpMocks.delete).toHaveBeenCalledWith(expect.any(String));
-
-    await activityFormService.addActivity({
-      karboomId: 12,
-      description: "Oil change",
-    } as never);
-    expect(httpMocks.post).toHaveBeenCalledWith(expect.any(String), {
-      body: { description: "Oil change" },
-    });
-
-    await activityFormService.editActivity({
-      activityId: 61,
-      description: "Filter change",
-    } as never);
-    expect(httpMocks.put).toHaveBeenCalledWith(expect.any(String), {
-      body: { description: "Filter change" },
-    });
   });
 });

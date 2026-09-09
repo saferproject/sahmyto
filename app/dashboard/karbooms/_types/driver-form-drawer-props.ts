@@ -1,5 +1,5 @@
 import { FormStates } from "@/app/dashboard/_types/form-states";
-import { Driver } from "../drivers-list/_types/driver";
+import { Driver } from "../[karboomId]/drivers-list/_types/driver";
 
 export type DriverFormDrawerProps = {
   formState: FormStates;

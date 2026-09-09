@@ -5,6 +5,7 @@ import { SwipeableDrawer } from "@mui/material";
 import { KarboomActionsDrawerProps } from "../_types/karboom-actions-drawer-props";
 
 import { KARBOOM_ACTIONS } from "../_constants/karboom-actions";
+import { useKarboomsStore } from "../_providers/karbooms-store-provider";
 
 export default function KarboomActionsDrawerComponent({
   isOpen,
@@ -12,10 +13,11 @@ export default function KarboomActionsDrawerComponent({
   onClose,
 }: KarboomActionsDrawerProps) {
   const router = useRouter();
+  const karboomId = useKarboomsStore((state) => state.id);
 
   const handleNavigation = (path: string) => {
     onClose();
-    router.push(path);
+    router.push(`/dashboard/karbooms/${karboomId}/${path}`);
   };
 
   return (

@@ -6,7 +6,7 @@ import User from "./user";
 export default interface Karboom {
   id: number;
   name: string;
-  smart_number: number;
+  smart_number: number | null;
   description: string | null;
   image: string | null;
   expense: number;

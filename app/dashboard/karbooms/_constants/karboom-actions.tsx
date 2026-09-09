@@ -15,41 +15,41 @@ export const KARBOOM_ACTIONS: KarboomAction[] = [
   {
     label: "مدیریت ماه مالی",
     icon: <Wallet1 size="24" />,
-    path: "/dashboard/karbooms/financial-management",
+    path: "financial-management",
   },
   {
     label: "مدیریت مالکین",
     icon: <Profile2User size="24" />,
-    path: "/dashboard/karbooms/partners-list",
+    path: "partners-list",
   },
   {
     label: "مدیریت رانندگان",
     icon: <User size="24" />,
-    path: "/dashboard/karbooms/drivers-list",
+    path: "drivers-list",
   },
   {
     label: "مدیریت درآمد ها",
     icon: <WalletAdd1 size="24" />,
-    path: "/dashboard/karbooms/incomes-list",
+    path: "incomes-list",
   },
   {
     label: "مدیریت هزینه ها",
     icon: <WalletMinus size="24" />,
-    path: "/dashboard/karbooms/expenses-list",
+    path: "expenses-list",
   },
   {
     label: "مدیریت دریافتی و پرداختی ها",
     icon: <ProgrammingArrows size="24" />,
-    path: "/dashboard/karbooms/payments-list",
+    path: "payments-list",
   },
   {
     label: "مدیریت بیمه شخص ثالث",
     icon: <Health size="24" />,
-    path: "/dashboard/karbooms/third-party-insurance-list",
+    path: "third-party-insurance-list",
   },
   {
     label: "مدیریت بیمه بدنه",
     icon: <Car size="24" />,
-    path: "/dashboard/karbooms/body-insurance-list",
+    path: "body-insurance-list",
   },
 ];
