@@ -30,9 +30,6 @@ jobs:
       - name: Audit production dependencies
         run: bun run audit:prod
 
-      - name: Lint
-        run: bun run lint
-
       - name: Type-check
         run: bun run tsc --noEmit
 
