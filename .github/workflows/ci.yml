@@ -1,11 +1,13 @@
-name: CI
+name: CI and deploy
 
 on:
   pull_request:
   push:
     branches:
       - development
+      - main
       - master
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -36,8 +38,8 @@ jobs:
   publish-and-deploy:
     name: Publish image and deploy to VPS
     if: >-
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/master'
+      github.event_name != 'pull_request' &&
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -55,11 +57,10 @@ jobs:
       SERVER_PORT: ${{ secrets.SERVER_PORT }}
       SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
       SERVER_USER: ${{ secrets.SERVER_USER }}
-      APP_PORT: ${{ vars.APP_PORT || '80' }}
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Validate deployment configuration
         env:
@@ -67,16 +68,7 @@ jobs:
           NEXT_PUBLIC_IMAGE_ASSETS_URL: ${{ vars.NEXT_PUBLIC_IMAGE_ASSETS_URL }}
         run: |
           set -Eeuo pipefail
-          required=(
-            NEXT_PUBLIC_API_URL
-            NEXT_PUBLIC_IMAGE_ASSETS_URL
-            SERVER_FINGERPRINT
-            SERVER_HOST
-            SERVER_PATH
-            SERVER_PORT
-            SERVER_SSH_KEY
-            SERVER_USER
-          )
+          required=(NEXT_PUBLIC_API_URL NEXT_PUBLIC_IMAGE_ASSETS_URL SERVER_FINGERPRINT SERVER_HOST SERVER_PATH SERVER_PORT SERVER_SSH_KEY SERVER_USER)
           for name in "${required[@]}"; do
             if [[ -z "${!name}" ]]; then
               echo "Missing required GitHub configuration: $name" >&2
@@ -91,7 +83,6 @@ jobs:
           (( 10#$SERVER_PORT >= 1 && 10#$SERVER_PORT <= 65535 )) || { echo "SERVER_PORT must be between 1 and 65535." >&2; exit 1; }
           [[ "$SERVER_PATH" =~ ^/[a-zA-Z0-9._/-]+$ ]] || { echo "SERVER_PATH must be an absolute path containing no spaces." >&2; exit 1; }
           [[ "$SERVER_USER" =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]] || { echo "SERVER_USER is invalid." >&2; exit 1; }
-          [[ "$APP_PORT" =~ ^[0-9]+$ ]] || { echo "APP_PORT must be numeric." >&2; exit 1; }
 
       - name: Set image name
         id: image
@@ -106,7 +97,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ github.token }}
 
       - name: Build and publish image
         uses: docker/build-push-action@v6
@@ -148,37 +139,66 @@ jobs:
             "$SERVER_HOST" "$SERVER_PORT" "$SERVER_USER" "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts" >"$HOME/.ssh/config"
           chmod 600 "$HOME/.ssh/config"
 
-      - name: Upload deployment configuration
-        run: |
-          set -Eeuo pipefail
-          archive="$RUNNER_TEMP/sahmito-deploy.tar.gz"
-          tar -czf "$archive" deploy/docker-compose.production.yml deploy/deploy.sh deploy/nginx/default.blue.conf deploy/nginx/default.green.conf
-          ssh deployment "mkdir -p '$SERVER_PATH'"
-          scp "$archive" "deployment:$SERVER_PATH/deployment.tar.gz"
-          ssh deployment "cd '$SERVER_PATH' && tar -xzf deployment.tar.gz && chmod 700 deploy/deploy.sh && rm deployment.tar.gz"
-
       - name: Log in to registry on VPS
         id: vps-registry-login
         env:
-          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_TOKEN: ${{ github.token }}
         run: |
           set -Eeuo pipefail
           printf '%s' "$GHCR_TOKEN" | ssh deployment "docker login ghcr.io --username '$GITHUB_ACTOR' --password-stdin"
 
-      - name: Deploy image
+      - name: Update frontend and containers
         env:
           APP_IMAGE: ${{ steps.image.outputs.name }}
+          DEPLOY_BRANCH: ${{ github.ref_name }}
         run: |
           set -Eeuo pipefail
-          ssh deployment "cd '$SERVER_PATH' && ./deploy/deploy.sh '$APP_IMAGE' '$GITHUB_SHA' '$APP_PORT'"
+          ssh deployment bash -s -- "$SERVER_PATH" "$APP_IMAGE" "$GITHUB_SHA" "$DEPLOY_BRANCH" <<'REMOTE'
+          set -Eeuo pipefail
+
+          FRONTEND_PATH=$1
+          APP_IMAGE=$2
+          APP_IMAGE_TAG=$3
+          DEPLOY_BRANCH=$4
+          DEPLOY_ROOT=$(dirname -- "$FRONTEND_PATH")
+
+          if [[ ! -d "$FRONTEND_PATH/.git" ]]; then
+            echo "Deployment aborted: $FRONTEND_PATH is not a Git repository" >&2
+            exit 1
+          fi
+          if [[ ! -f "$DEPLOY_ROOT/docker-compose.yml" ]]; then
+            echo "Deployment aborted: $DEPLOY_ROOT/docker-compose.yml does not exist" >&2
+            exit 1
+          fi
+
+          cd "$FRONTEND_PATH"
+          if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+            echo "Deployment aborted: the frontend repository has uncommitted tracked changes" >&2
+            git status --short --untracked-files=no
+            exit 1
+          fi
+
+          git fetch origin "$DEPLOY_BRANCH"
+          git switch "$DEPLOY_BRANCH"
+          git pull --ff-only origin "$DEPLOY_BRANCH"
+
+          cd "$DEPLOY_ROOT"
+          docker compose config --quiet
+          docker pull "$APP_IMAGE:$APP_IMAGE_TAG"
+          docker tag "$APP_IMAGE:$APP_IMAGE_TAG" sahmito-front:latest
+
+          docker compose up -d --no-deps --no-build --force-recreate --wait front-blue front-green
+          docker compose exec -T proxy nginx -t
+          docker compose exec -T proxy nginx -s reload
+          docker compose ps front-blue front-green proxy
+          REMOTE
 
       - name: Log out from registry on VPS
         if: always() && steps.vps-registry-login.outcome == 'success'
-        run: |
-          ssh deployment 'docker logout ghcr.io' || true
+        run: ssh deployment 'docker logout ghcr.io' || true
 
       - name: Verify public URL
         if: vars.APP_URL != ''
         env:
           APP_URL: ${{ vars.APP_URL }}
-        run: curl --fail --show-error --silent --retry 8 --retry-all-errors --retry-delay 5 "$APP_URL/api/health"
+        run: curl --fail --show-error --silent --retry 8 --retry-all-errors --retry-delay 5 "$APP_URL/"
