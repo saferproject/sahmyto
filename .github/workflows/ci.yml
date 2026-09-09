@@ -49,8 +49,7 @@ jobs:
     name: Publish image and deploy to VPS
     if: >-
       github.event_name == 'push' &&
-      github.ref == 'refs/heads/master' &&
-      vars.DEPLOY_ENABLED == 'true'
+      github.ref == 'refs/heads/master'
     needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -61,6 +60,14 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      SERVER_FINGERPRINT: ${{ secrets.SERVER_FINGERPRINT }}
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      SERVER_PATH: ${{ secrets.SERVER_PATH }}
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
+      SERVER_SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+      SERVER_USER: ${{ secrets.SERVER_USER }}
+      APP_PORT: ${{ vars.APP_PORT || '80' }}
 
     steps:
       - name: Check out repository
@@ -70,21 +77,17 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_IMAGE_ASSETS_URL: ${{ vars.NEXT_PUBLIC_IMAGE_ASSETS_URL }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
-          VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
-          APP_PORT: ${{ vars.APP_PORT || '80' }}
         run: |
           set -Eeuo pipefail
           required=(
             NEXT_PUBLIC_API_URL
             NEXT_PUBLIC_IMAGE_ASSETS_URL
-            VPS_HOST
-            VPS_USER
-            VPS_SSH_PRIVATE_KEY
-            VPS_KNOWN_HOSTS
+            SERVER_FINGERPRINT
+            SERVER_HOST
+            SERVER_PATH
+            SERVER_PORT
+            SERVER_SSH_KEY
+            SERVER_USER
           )
           for name in "${required[@]}"; do
             if [[ -z "${!name}" ]]; then
@@ -94,7 +97,12 @@ jobs:
           done
           [[ "$NEXT_PUBLIC_API_URL" =~ ^https?:// ]] || { echo "NEXT_PUBLIC_API_URL must be an absolute HTTP(S) URL." >&2; exit 1; }
           [[ "$NEXT_PUBLIC_IMAGE_ASSETS_URL" =~ ^https?:// ]] || { echo "NEXT_PUBLIC_IMAGE_ASSETS_URL must be an absolute HTTP(S) URL." >&2; exit 1; }
-          [[ "$VPS_SSH_PORT" =~ ^[0-9]+$ ]] || { echo "VPS_SSH_PORT must be numeric." >&2; exit 1; }
+          [[ "$SERVER_FINGERPRINT" =~ ^SHA256: ]] || { echo "SERVER_FINGERPRINT must be an SHA256 SSH fingerprint." >&2; exit 1; }
+          [[ "$SERVER_HOST" =~ ^[a-zA-Z0-9.-]+$ ]] || { echo "SERVER_HOST must be a hostname or IPv4 address." >&2; exit 1; }
+          [[ "$SERVER_PORT" =~ ^[0-9]+$ ]] || { echo "SERVER_PORT must be numeric." >&2; exit 1; }
+          (( 10#$SERVER_PORT >= 1 && 10#$SERVER_PORT <= 65535 )) || { echo "SERVER_PORT must be between 1 and 65535." >&2; exit 1; }
+          [[ "$SERVER_PATH" =~ ^/[a-zA-Z0-9._/-]+$ ]] || { echo "SERVER_PATH must be an absolute path containing no spaces." >&2; exit 1; }
+          [[ "$SERVER_USER" =~ ^[a-zA-Z_][a-zA-Z0-9_-]*$ ]] || { echo "SERVER_USER is invalid." >&2; exit 1; }
           [[ "$APP_PORT" =~ ^[0-9]+$ ]] || { echo "APP_PORT must be numeric." >&2; exit 1; }
 
       - name: Set image name
@@ -130,66 +138,56 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Configure SSH
-        env:
-          VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
         run: |
           set -Eeuo pipefail
           install -d -m 700 "$HOME/.ssh"
-          printf '%s\n' "$VPS_SSH_PRIVATE_KEY" | tr -d '\r' >"$HOME/.ssh/deploy_key"
-          printf '%s\n' "$VPS_KNOWN_HOSTS" >"$HOME/.ssh/known_hosts"
-          chmod 600 "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts"
+          printf '%s\n' "$SERVER_SSH_KEY" | tr -d '\r' >"$HOME/.ssh/deploy_key"
+          chmod 600 "$HOME/.ssh/deploy_key"
+          ssh-keygen -y -f "$HOME/.ssh/deploy_key" >/dev/null
+
+          scanned_keys="$RUNNER_TEMP/scanned-host-keys"
+          ssh-keyscan -p "$SERVER_PORT" "$SERVER_HOST" >"$scanned_keys"
+          : >"$HOME/.ssh/known_hosts"
+          while IFS= read -r host_key; do
+            fingerprint=$(printf '%s\n' "$host_key" | ssh-keygen -lf - | awk '{print $2}')
+            if [[ "$fingerprint" == "$SERVER_FINGERPRINT" ]]; then
+              printf '%s\n' "$host_key" >>"$HOME/.ssh/known_hosts"
+            fi
+          done <"$scanned_keys"
+          [[ -s "$HOME/.ssh/known_hosts" ]] || { echo "The scanned SSH host key does not match SERVER_FINGERPRINT." >&2; exit 1; }
+          chmod 600 "$HOME/.ssh/known_hosts"
+          printf 'Host deployment\n  HostName %s\n  Port %s\n  User %s\n  IdentityFile %s\n  UserKnownHostsFile %s\n  BatchMode yes\n  StrictHostKeyChecking yes\n' \
+            "$SERVER_HOST" "$SERVER_PORT" "$SERVER_USER" "$HOME/.ssh/deploy_key" "$HOME/.ssh/known_hosts" >"$HOME/.ssh/config"
+          chmod 600 "$HOME/.ssh/config"
 
       - name: Upload deployment configuration
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
         run: |
           set -Eeuo pipefail
-          target="$VPS_USER@$VPS_HOST"
-          ssh_options=(-i "$HOME/.ssh/deploy_key" -p "$VPS_SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes)
           archive="$RUNNER_TEMP/sahmito-deploy.tar.gz"
           tar -czf "$archive" deploy/docker-compose.production.yml deploy/deploy.sh deploy/nginx/default.blue.conf deploy/nginx/default.green.conf
-          ssh "${ssh_options[@]}" "$target" 'mkdir -p "$HOME/sahmito"'
-          scp -i "$HOME/.ssh/deploy_key" -P "$VPS_SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$archive" "$target:sahmito/deployment.tar.gz"
-          ssh "${ssh_options[@]}" "$target" 'cd "$HOME/sahmito" && tar -xzf deployment.tar.gz && chmod 700 deploy/deploy.sh && rm deployment.tar.gz'
+          ssh deployment "mkdir -p '$SERVER_PATH'"
+          scp "$archive" "deployment:$SERVER_PATH/deployment.tar.gz"
+          ssh deployment "cd '$SERVER_PATH' && tar -xzf deployment.tar.gz && chmod 700 deploy/deploy.sh && rm deployment.tar.gz"
 
       - name: Log in to registry on VPS
         id: vps-registry-login
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
         run: |
           set -Eeuo pipefail
-          target="$VPS_USER@$VPS_HOST"
-          ssh_options=(-i "$HOME/.ssh/deploy_key" -p "$VPS_SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes)
-          printf '%s' "$GHCR_TOKEN" | ssh "${ssh_options[@]}" "$target" "docker login ghcr.io --username '$GITHUB_ACTOR' --password-stdin"
+          printf '%s' "$GHCR_TOKEN" | ssh deployment "docker login ghcr.io --username '$GITHUB_ACTOR' --password-stdin"
 
       - name: Deploy image
         env:
           APP_IMAGE: ${{ steps.image.outputs.name }}
-          APP_PORT: ${{ vars.APP_PORT || '80' }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
         run: |
           set -Eeuo pipefail
-          target="$VPS_USER@$VPS_HOST"
-          ssh_options=(-i "$HOME/.ssh/deploy_key" -p "$VPS_SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes)
-          ssh "${ssh_options[@]}" "$target" "cd \"\$HOME/sahmito\" && ./deploy/deploy.sh '$APP_IMAGE' '$GITHUB_SHA' '$APP_PORT'"
+          ssh deployment "cd '$SERVER_PATH' && ./deploy/deploy.sh '$APP_IMAGE' '$GITHUB_SHA' '$APP_PORT'"
 
       - name: Log out from registry on VPS
         if: always() && steps.vps-registry-login.outcome == 'success'
-        env:
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USER: ${{ secrets.VPS_USER }}
-          VPS_SSH_PORT: ${{ vars.VPS_SSH_PORT || '22' }}
         run: |
-          target="$VPS_USER@$VPS_HOST"
-          ssh -i "$HOME/.ssh/deploy_key" -p "$VPS_SSH_PORT" -o BatchMode=yes -o StrictHostKeyChecking=yes "$target" 'docker logout ghcr.io' || true
+          ssh deployment 'docker logout ghcr.io' || true
 
       - name: Verify public URL
         if: vars.APP_URL != ''
