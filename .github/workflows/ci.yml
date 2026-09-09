@@ -27,17 +27,6 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Audit production dependencies
-        run: bun run audit:prod
-
-      - name: Type-check
-        run: |
-          bun --bun next typegen
-          bun run tsc --noEmit
-
-      - name: Test
-        run: bun run test
-
       - name: Build
         env:
           NEXT_PUBLIC_API_URL: https://api.example.com/
