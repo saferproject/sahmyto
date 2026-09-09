@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 
+import ErrorContainer from "./_components/error-container";
 import { reportApplicationError } from "./_utilities/telemetry";
 
 export default function ErrorPage({
@@ -16,20 +17,10 @@ export default function ErrorPage({
   }, [error]);
 
   return (
-    <main className="flex min-h-dvh items-center justify-center px-6 text-center">
-      <div className="flex max-w-md flex-col items-center gap-4">
-        <h1 className="text-body text-xl font-semibold">مشکلی پیش آمد</h1>
-        <p className="text-body text-sm">
-          خطای غیرمنتظره‌ای رخ داده است. دوباره تلاش کنید.
-        </p>
-        <button
-          type="button"
-          className="bg-primary rounded-xl px-6 py-3 text-sm text-white"
-          onClick={reset}
-        >
-          تلاش دوباره
-        </button>
-      </div>
-    </main>
+    <ErrorContainer
+      message="خطای غیرمنتظره‌ای رخ داده است. دوباره تلاش کنید."
+      actionLabel="تلاش دوباره"
+      onAction={reset}
+    />
   );
 }

@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 import { YekanBakhFont } from "./_assets/fonts/fonts";
+import ProductionErrorBoundary from "./_components/production-error-boundary";
 import WebVitalsReporter from "./_components/web-vitals-reporter";
 
 export const metadata: Metadata = {
@@ -28,8 +29,10 @@ export default function RootLayout({
   return (
     <html lang="fa" className={YekanBakhFont.variable} dir="rtl">
       <body className="caret-body antialiased">
-        <WebVitalsReporter />
-        {children}
+        <ProductionErrorBoundary>
+          <WebVitalsReporter />
+          {children}
+        </ProductionErrorBoundary>
       </body>
     </html>
   );
