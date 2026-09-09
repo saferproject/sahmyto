@@ -35,6 +35,25 @@ export APP_PORT="$app_port"
 
 compose=(docker compose --project-name sahmito --file "$compose_file")
 
+remove_legacy_container() {
+  local container_name=$1
+  local expected_service=$2
+  local container_id
+  local compose_project
+  local compose_service
+
+  container_id=$(docker container ls --all --quiet --filter "name=^/${container_name}$")
+  [[ -n $container_id ]] || return 0
+
+  compose_project=$(docker inspect --format '{{ index .Config.Labels "com.docker.compose.project" }}' "$container_id" 2>/dev/null || true)
+  compose_service=$(docker inspect --format '{{ index .Config.Labels "com.docker.compose.service" }}' "$container_id" 2>/dev/null || true)
+
+  if [[ $compose_project != "sahmito" || $compose_service != "$expected_service" ]]; then
+    echo "Removing legacy container $container_name from a previous deployment..."
+    docker rm --force "$container_id"
+  fi
+}
+
 container_is_running() {
   local container_name=$1
   [[ $(docker inspect --format '{{.State.Running}}' "$container_name" 2>/dev/null || true) == "true" ]]
@@ -89,6 +108,10 @@ next_service="app-$next_color"
 next_container="sahmito-app-$next_color"
 deployment_complete=false
 
+# Fixed container names may already exist from the old root Compose project.
+# Only remove the inactive app slot here; keep the currently serving app alive.
+remove_legacy_container "$next_container" "$next_service"
+
 cleanup_failed_deployment() {
   if [[ $deployment_complete == "false" ]]; then
     echo "Deployment failed; removing the unhealthy standby container." >&2
@@ -108,6 +131,7 @@ wait_for_healthy "$next_container"
 cp "$script_dir/nginx/default.$next_color.conf" "$script_dir/nginx/active.conf"
 
 echo "Starting or updating the reverse proxy..."
+remove_legacy_container "sahmito-proxy" "proxy"
 "${compose[@]}" up --detach --no-deps proxy
 wait_for_healthy "sahmito-proxy"
 
