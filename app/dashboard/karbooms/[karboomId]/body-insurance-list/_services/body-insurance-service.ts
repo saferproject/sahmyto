@@ -1,3 +1,4 @@
+import type { QueryParams } from "@/app/_types/query-params";
 import { http } from "@/app/_services/http";
 import { BodyInsurance } from "../_types/body-insurance";
 import { AddBodyInsuranceBody } from "../_types/add-body-insurance-body";
@@ -8,10 +9,11 @@ export const bodyInsuranceService = {
     karboomId: number,
     signal?: AbortSignal,
     page: number = 1,
+    queryParams?: QueryParams,
   ) =>
     http.get<BodyInsurance[]>(
       addPaginationQuery(`insurance/body/${karboomId}`, page),
-      { signal },
+      { signal, ...(queryParams ? { queryParams } : {}) },
     ),
   addBodyInsurance: ({ karboomId, ...other }: AddBodyInsuranceBody) =>
     http.post<undefined>(`insurance/body-add/${karboomId}`, { body: other }),

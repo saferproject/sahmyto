@@ -1,3 +1,4 @@
+import type { QueryParams } from "@/app/_types/query-params";
 import Karboom from "@/app/_interfaces/karboom";
 import { http } from "@/app/_services/http";
 
@@ -14,8 +15,15 @@ import { KarboomDetails } from "../_types/karboom-details";
 export const karboomService = {
   getKarboom: (karboomId: number, signal?: AbortSignal) =>
     http.get<KarboomDetails>(`karboom/show/${karboomId}`, { signal }),
-  getKarbooms: (signal?: AbortSignal, page: number = 1) =>
-    http.get<Karboom[]>(addPaginationQuery("karboom", page), { signal }),
+  getKarbooms: (
+    signal?: AbortSignal,
+    page: number = 1,
+    queryParams?: QueryParams,
+  ) =>
+    http.get<Karboom[]>(addPaginationQuery("karboom", page), {
+      signal,
+      ...(queryParams ? { queryParams } : {}),
+    }),
   createKarboom: (body: KarboomFormType) =>
     http.post<Karboom>("karboom/store", { body }),
   getExpensesCategories: (

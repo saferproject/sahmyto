@@ -1,5 +1,8 @@
 "use client";
 
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { PARTNER_FILTERS } from "./_constants/partner-filters";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
@@ -40,6 +43,8 @@ export default function PartnersListPage() {
     }
   }, [karboomId, enqueueSnackbar, router]);
 
+  const { queryParams } = useListFilters(PARTNER_FILTERS);
+
   const {
     data,
     isLoading,
@@ -47,7 +52,7 @@ export default function PartnersListPage() {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetPartnersEndpoint({ karboom_id: karboomId });
+  } = useGetPartnersEndpoint({ ...queryParams, karboom_id: karboomId });
 
   const [isPartnerFormDrawerOpen, setPartnerFormDrawerOpen] =
     useState<boolean>(false);
@@ -86,7 +91,7 @@ export default function PartnersListPage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست مالکین" />
+      <ListHeaderLayout filters={PARTNER_FILTERS} title="لیست مالکین" />
       <SelectedKarboomInfoComponent />
       <QueryState
         isLoading={isLoading}

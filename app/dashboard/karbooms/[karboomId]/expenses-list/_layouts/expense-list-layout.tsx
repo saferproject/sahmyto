@@ -1,5 +1,8 @@
 "use client";
 
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { EXPENSE_FILTERS } from "../_constants/expense-filters";
+
 import { useKarboomsStore } from "../../../_providers/karbooms-store-provider";
 
 import ExpenseListItemComponent from "../_components/expense-list-item-component";
@@ -15,6 +18,8 @@ export default function ExpenseListLayout({
 }: ExpenseListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
+  const { queryParams } = useListFilters(EXPENSE_FILTERS);
+
   const {
     data: expenses,
     isLoading,
@@ -22,7 +27,7 @@ export default function ExpenseListLayout({
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetExpenses(karboomId);
+  } = useGetExpenses(karboomId, queryParams);
 
   return (
     <EntityListLayout

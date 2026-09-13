@@ -1,5 +1,7 @@
 "use client";
 
+import { THIRD_PARTY_INSURANCE_FILTERS } from "./_constants/third-party-insurance-filters";
+
 import { useState } from "react";
 
 import ThirdPartyInsuranceFormDrawerComponent from "./_components/third-party-insurance-form-drawer-component";
@@ -23,7 +25,10 @@ export default function ThirdPartyInsurancePage() {
 
   return (
     <>
-      <ListHeaderLayout title="بیمه شخص ثالث" />
+      <ListHeaderLayout
+        filters={THIRD_PARTY_INSURANCE_FILTERS}
+        title="بیمه شخص ثالث"
+      />
       <ThirdPartyInsuranceListLayout
         onOpenThirdPartyInsuranceForm={handleOpenThirdPartyInsuranceForm}
       />

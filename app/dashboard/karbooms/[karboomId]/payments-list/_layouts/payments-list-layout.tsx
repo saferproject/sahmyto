@@ -1,5 +1,8 @@
 "use client";
 
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { PAYMENT_FILTERS } from "../_constants/payment-filters";
+
 import useGetPaymentsEndpoint from "../_hooks/use-get-payments-endpoint";
 
 import { useKarboomsStore } from "../../../_providers/karbooms-store-provider";
@@ -16,6 +19,8 @@ export default function PaymentsListLayout({
 }: PaymentsListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
+  const { queryParams } = useListFilters(PAYMENT_FILTERS);
+
   const {
     data: payments,
     isLoading: gettingPayments,
@@ -23,7 +28,7 @@ export default function PaymentsListLayout({
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetPaymentsEndpoint(karboomId);
+  } = useGetPaymentsEndpoint(karboomId, queryParams);
 
   return (
     <EntityListLayout
@@ -34,7 +39,12 @@ export default function PaymentsListLayout({
       isFetchingNextPage={isFetchingNextPage}
       fetchNextPage={fetchNextPage}
       onAdd={onOpenForm}
-      header={<ListHeaderLayout title="لیست دریافتی و پرداختی ها" />}
+      header={
+        <ListHeaderLayout
+          filters={PAYMENT_FILTERS}
+          title="لیست دریافتی و پرداختی ها"
+        />
+      }
       renderItem={(payment, index) => (
         <PaymentListItemComponent
           key={payment.id}

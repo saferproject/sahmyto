@@ -1,5 +1,8 @@
 "use client";
 
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { DRIVER_FILTERS } from "./_constants/driver-filters";
+
 import { useState } from "react";
 
 import { useSnackbar } from "notistack";
@@ -34,6 +37,8 @@ export default function DriverListPage() {
   const [driverFormState, setDriverFormState] = useState<FormStates>("ADD");
   const [selectedDriver, setSelectedDriver] = useState<Driver>();
 
+  const { queryParams } = useListFilters(DRIVER_FILTERS);
+
   const {
     data,
     isLoading,
@@ -41,7 +46,7 @@ export default function DriverListPage() {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetDriversEndpoint(karboomId);
+  } = useGetDriversEndpoint(karboomId, true, queryParams);
 
   const handleOpenDriverForm = () => {
     if (karboomRoles.includes("owner")) {
@@ -75,7 +80,7 @@ export default function DriverListPage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست رانندگان" />
+      <ListHeaderLayout filters={DRIVER_FILTERS} title="لیست رانندگان" />
       <SelectedKarboomInfoComponent />
       <QueryState
         isLoading={isLoading}

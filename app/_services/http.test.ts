@@ -12,6 +12,37 @@ beforeEach(() => {
 });
 
 describe("http", () => {
+  it("encodes query parameters alongside pagination and preserves falsy values", async () => {
+    await http.get("resource?paginate=1&page=2#section", {
+      queryParams: {
+        "notEq-full_name": "رضا & علی",
+        owner__phone: "09934142558",
+        price: 0,
+        enabled: false,
+        missing: null,
+      },
+    });
+    const [path] = fetchWithAuthMock.mock.calls[0];
+    const url = new URL(path, "https://example.test/");
+    expect(Object.fromEntries(url.searchParams)).toEqual({
+      paginate: "1",
+      page: "2",
+      "notEq-full_name": "رضا & علی",
+      owner__phone: "09934142558",
+      price: "0",
+      enabled: "false",
+    });
+    expect(url.hash).toBe("#section");
+  });
+
+  it("adds a query to a bare path and leaves empty queries unchanged", async () => {
+    await http.get("resource", { queryParams: { price: 100 } });
+    expect(fetchWithAuthMock.mock.calls[0][0]).toBe("resource?price=100");
+    await http.get("resource?paginate=1", {
+      queryParams: { price: undefined },
+    });
+    expect(fetchWithAuthMock.mock.calls[1][0]).toBe("resource?paginate=1");
+  });
   it.each([
     ["get", "GET"],
     ["post", "POST"],

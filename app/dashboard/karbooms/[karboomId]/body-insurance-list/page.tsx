@@ -1,5 +1,8 @@
 "use client";
 
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { BODY_INSURANCE_FILTERS } from "./_constants/body-insurance-filters";
+
 import { useState } from "react";
 
 import BodyInsuranceDrawerComponent from "./_components/body-insurance-drawer-component";
@@ -20,6 +23,8 @@ export default function BodyInsurancePage() {
 
   const karboomId = useKarboomsStore((state) => state.id);
 
+  const { queryParams } = useListFilters(BODY_INSURANCE_FILTERS);
+
   const {
     data: bodyInsurances,
     isLoading,
@@ -27,7 +32,7 @@ export default function BodyInsurancePage() {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetBodyInsurancesEndpoint(karboomId);
+  } = useGetBodyInsurancesEndpoint(karboomId, queryParams);
 
   const handleOpenBodyInsuranceForm = () => {
     setBodyInsuranceFormDrawerOpen(true);
@@ -39,7 +44,10 @@ export default function BodyInsurancePage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست بیمه بدنه" />
+      <ListHeaderLayout
+        filters={BODY_INSURANCE_FILTERS}
+        title="لیست بیمه بدنه"
+      />
       <InsuranceBannerComponent />
       <SelectedKarboomInfoComponent />
       <QueryState

@@ -1,3 +1,4 @@
+import type { QueryParams } from "@/app/_types/query-params";
 import { http } from "@/app/_services/http";
 import { AddPaymentBody } from "../_types/add-payment-body";
 import { Payment } from "../_types/payment";
@@ -9,10 +10,11 @@ export const paymentsListService = {
     karboomId: number,
     signal?: AbortSignal,
     page: number = 1,
+    queryParams?: QueryParams,
   ) => {
     const response = await http.get<Payment[]>(
       addPaginationQuery(`karboom/payment/${karboomId}`, page),
-      { signal },
+      { signal, ...(queryParams ? { queryParams } : {}) },
     );
 
     return {

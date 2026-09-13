@@ -14,7 +14,6 @@ import IncomeDrawerComponent from "../../_components/income-drawer-component";
 
 import { useKarboomsStore } from "../../_providers/karbooms-store-provider";
 import useRequireKarboomMembers from "../../_hooks/use-require-karboom-members";
-import ListHeaderLayout from "../../_layouts/list-header-layout";
 import SettlementDrawerComponent from "../../_components/settlement-drawer-component";
 import { SettlementFormType } from "../../_schemas/settlement-form-schema";
 import useSettleIncome from "./_hooks/use-settle-income";
@@ -120,7 +119,6 @@ export default function IncomesListPage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست درآمد ها" />
       <IncomesListLayout
         onShowDetails={handleOpenIncomeDtailsDrawer}
         onSettle={handleSettleIncome}

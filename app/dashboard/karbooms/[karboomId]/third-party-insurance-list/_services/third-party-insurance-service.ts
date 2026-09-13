@@ -1,3 +1,4 @@
+import type { QueryParams } from "@/app/_types/query-params";
 import { http } from "@/app/_services/http";
 import ThirdPartyInsuranceBodyType from "../_types/add-third-party-insurance-body-type";
 import { ThirdPartyInsurance } from "../_types/third-party-insurance";
@@ -8,10 +9,11 @@ export const thirdPartyInsuranceService = {
     id: number,
     signal?: AbortSignal,
     page: number = 1,
+    queryParams?: QueryParams,
   ) =>
     http.get<ThirdPartyInsurance[]>(
       addPaginationQuery(`insurance/third-party/${id}`, page),
-      { signal },
+      { signal, ...(queryParams ? { queryParams } : {}) },
     ),
   addThirdPartyInsurance: ({
     karboom_id,

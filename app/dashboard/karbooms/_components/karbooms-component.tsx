@@ -1,5 +1,8 @@
 "use client";
 
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { KARBOOM_FILTERS } from "../_constants/karboom-filters";
+
 import useGetKarboomsEndpoint from "../_hooks/use-get-karbooms-endpoint";
 
 import QueryState from "@/app/_components/query-state";
@@ -10,6 +13,7 @@ import { KarboomsProps } from "../_types/karbooms-props";
 import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 
 export default function KarboomsComponent({ onAddKarboom }: KarboomsProps) {
+  const { queryParams, activeCount } = useListFilters(KARBOOM_FILTERS);
   const {
     data,
     isLoading,
@@ -17,7 +21,7 @@ export default function KarboomsComponent({ onAddKarboom }: KarboomsProps) {
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetKarboomsEndpoint();
+  } = useGetKarboomsEndpoint(queryParams);
 
   return (
     <QueryState
@@ -25,7 +29,11 @@ export default function KarboomsComponent({ onAddKarboom }: KarboomsProps) {
       isError={isError}
       isEmpty={!data?.data.length}
       loadingFallback={<KarboomListSkeleton />}
-      emptyFallback={<NoKarboomsComponent onAddKarboom={onAddKarboom} />}
+      emptyFallback={
+        activeCount > 0 ? undefined : (
+          <NoKarboomsComponent onAddKarboom={onAddKarboom} />
+        )
+      }
     >
       <KarboomListComponent karbooms={data?.data ?? []} />
       <InfiniteScrollTrigger

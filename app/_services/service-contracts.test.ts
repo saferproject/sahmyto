@@ -268,13 +268,13 @@ describe("karboom read and lookup service contracts", () => {
       name: "loads filtered partners with encoded query parameters",
       invoke: () =>
         partnersListService.getPartners(
-          { karboom_id: 12, name: "Ali Reza" } as never,
+          { karboom_id: 12, full_name: "Ali Reza" },
           signal,
         ),
       method: "get",
       args: [
-        "karboom/partners/12?name=Ali%20Reza&paginate=1&page=1",
-        { signal },
+        "karboom/partners/12?paginate=1&page=1",
+        { signal, queryParams: { full_name: "Ali Reza" } },
       ],
     },
     {
@@ -291,6 +291,19 @@ describe("karboom read and lookup service contracts", () => {
 });
 
 describe("income, expense, and payment service contracts", () => {
+  it("forwards income filters alongside pagination and cancellation", async () => {
+    const queryParams = {
+      price: 1400000,
+      "min-ended_at": "2026-01-01",
+      "max-ended_at": "2026-01-30",
+    };
+    await incomeListService.getIncomes(1, signal, 2, queryParams);
+    expect(httpMocks.get).toHaveBeenCalledWith(
+      "karboom/income/karboom/1?paginate=1&page=2",
+      { signal, queryParams },
+    );
+  });
+
   const rejection = { reject_reason: "Incorrect amount" };
 
   it.each<ContractCase>([

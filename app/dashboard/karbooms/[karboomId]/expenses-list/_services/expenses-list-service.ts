@@ -1,3 +1,4 @@
+import type { QueryParams } from "@/app/_types/query-params";
 import { http } from "@/app/_services/http";
 import { RejectExpenseBody } from "../_types/reject-expense-body";
 import { Expense } from "../../../_types/expense";
@@ -5,10 +6,15 @@ import { SettleExpenseBody } from "../_types/settle-expense-body";
 import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const expensesListService = {
-  getExpenses: (karboomId: number, signal?: AbortSignal, page: number = 1) =>
+  getExpenses: (
+    karboomId: number,
+    signal?: AbortSignal,
+    page: number = 1,
+    queryParams?: QueryParams,
+  ) =>
     http.get<Expense[]>(
       addPaginationQuery(`karboom/expense/karboom/${karboomId}`, page),
-      { signal },
+      { signal, ...(queryParams ? { queryParams } : {}) },
     ),
   settleExpense: ({ expenseId, ...body }: SettleExpenseBody) =>
     http.post<undefined>(`karboom/expense/settle/${expenseId}`, { body }),

@@ -1,5 +1,7 @@
 "use client";
 
+import { EXPENSE_FILTERS } from "./_constants/expense-filters";
+
 import { useState } from "react";
 
 import ExpenseListLayout from "./_layouts/expense-list-layout";
@@ -120,7 +122,7 @@ export default function ExpensesListPage() {
 
   return (
     <>
-      <ListHeaderLayout title="لیست هزینه ها" />
+      <ListHeaderLayout filters={EXPENSE_FILTERS} title="لیست هزینه ها" />
       <ExpenseListLayout
         onShowDetails={handleOpenExpenseDtailsDrawer}
         onSettle={handleSettleExpense}

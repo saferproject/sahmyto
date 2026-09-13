@@ -1,3 +1,7 @@
+"use client";
+
+import useListFilters from "@/app/dashboard/_hooks/use-list-filters";
+import { THIRD_PARTY_INSURANCE_FILTERS } from "../_constants/third-party-insurance-filters";
 import { AnimatePresence } from "motion/react";
 
 import QueryState from "@/app/_components/query-state";
@@ -15,6 +19,8 @@ export default function ThirdPartyInsuranceListLayout({
 }: ThirdPartyInsuranceListProps) {
   const karboomId = useKarboomsStore((state) => state.id);
 
+  const { queryParams } = useListFilters(THIRD_PARTY_INSURANCE_FILTERS);
+
   const {
     data: thirdPartyInsurances,
     isLoading,
@@ -22,7 +28,7 @@ export default function ThirdPartyInsuranceListLayout({
     hasNextPage,
     isFetchingNextPage,
     fetchNextPage,
-  } = useGetThirdPartyInsurancesEndpoint(karboomId);
+  } = useGetThirdPartyInsurancesEndpoint(karboomId, queryParams);
 
   return (
     <>

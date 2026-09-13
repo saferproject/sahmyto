@@ -174,11 +174,16 @@ describe("list endpoint hook adapters", () => {
     [
       "body insurance",
       () => useGetBodyInsurancesEndpoint(12),
-      ["body-insurances", 12],
+      ["body-insurances", 12, {}],
       true,
     ],
-    ["drivers", () => useGetDriversEndpoint(12, false), ["drivers", 12], false],
-    ["expenses", () => useGetExpenses(12), ["expenses", 12], true],
+    [
+      "drivers",
+      () => useGetDriversEndpoint(12, false),
+      ["drivers", 12, {}],
+      false,
+    ],
+    ["expenses", () => useGetExpenses(12), ["expenses", 12, {}], true],
     [
       "financial months",
       () => useGetFinancialMonthsEndpoint(12),
@@ -191,12 +196,12 @@ describe("list endpoint hook adapters", () => {
       ["drivers-salary", 41],
       true,
     ],
-    ["incomes", () => useGetIncomes(12), ["incomes", 12], true],
-    ["payments", () => useGetPaymentsEndpoint(12), ["payments", 12], true],
+    ["incomes", () => useGetIncomes(12), ["incomes", 12, {}], true],
+    ["payments", () => useGetPaymentsEndpoint(12), ["payments", 12, {}], true],
     [
       "third-party insurance",
       () => useGetThirdPartyInsurancesEndpoint(12),
-      ["third-party-insurances", 12],
+      ["third-party-insurances", 12, {}],
       true,
     ],
   ] as const)(
@@ -594,7 +599,7 @@ describe("direct React Query endpoint hooks", () => {
     [
       "karbooms",
       useGetKarboomsEndpoint,
-      ["karbooms"],
+      ["karbooms", {}],
       karboomService,
       "getKarbooms",
     ],
@@ -615,7 +620,9 @@ describe("direct React Query endpoint hooks", () => {
 
       expect(options.queryKey).toEqual(queryKey);
       await options.queryFn(2, signal, options.queryKey);
-      expect(serviceMock).toHaveBeenCalledWith(signal, 2);
+      expect(serviceMock).toHaveBeenCalledWith(
+        ...(method === "getKarbooms" ? [signal, 2, {}] : [signal, 2]),
+      );
     },
   );
 
