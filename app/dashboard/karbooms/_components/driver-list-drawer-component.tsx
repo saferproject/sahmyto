@@ -1,7 +1,5 @@
-import { useRouter } from "next/navigation";
-import { useSnackbar } from "notistack";
 import { useKarboomsStore } from "../_providers/karbooms-store-provider";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useGetDriversEndpoint from "../[karboomId]/drivers-list/_hooks/use-get-karboom-drivers-endpoint";
 import { FormStates } from "../../_types/form-states";
 import { Driver } from "../[karboomId]/drivers-list/_types/driver";
@@ -19,9 +17,6 @@ export default function DriverListDrawerComponent({
   onOpen,
   onClose,
 }: DriverListDrawerProps) {
-  const router = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-
   const karboomId = useKarboomsStore((state) => state.id);
 
   const [isDriverFormDrawerOpen, setDriverFormDrawerOpen] =
@@ -55,16 +50,6 @@ export default function DriverListDrawerComponent({
     setDriverFormState("ADD");
     setSelectedDriver(undefined);
   };
-
-  useEffect(() => {
-    if (!karboomId) {
-      enqueueSnackbar({
-        variant: "warning",
-        message: "کاربومی انتخاب نشده است",
-      });
-      router.replace("/dashboard/karbooms");
-    }
-  }, [karboomId, enqueueSnackbar, router]);
 
   return (
     <FormDrawerComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
