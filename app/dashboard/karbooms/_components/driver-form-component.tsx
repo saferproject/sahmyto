@@ -56,11 +56,10 @@ export default function DriverFormComponent({
     register,
     control,
     handleSubmit,
-    reset: setValues,
+    setValues,
     getValues,
     setError,
     setValue,
-    watch,
     formState: { errors },
   } = useDriverForm();
 
