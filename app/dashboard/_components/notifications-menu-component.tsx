@@ -7,8 +7,9 @@ import QueryState from "@/app/_components/query-state";
 import requestsMenuProps from "../_interfaces/notifications-menu-props";
 import RequestComponent from "./request-component";
 import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
+import { useReverbNotifications } from "@/app/_providers/reverb-provider";
 
-export default function requestsMenuComponent({
+export default function RequestsMenuComponent({
   anchorEl,
   isOpen,
   onClose,
@@ -24,6 +25,7 @@ export default function requestsMenuComponent({
   isFetchingNextPage,
   fetchNextPage,
 }: requestsMenuProps) {
+  const realtime = useReverbNotifications();
   return (
     <Menu
       anchorEl={anchorEl}
@@ -51,45 +53,82 @@ export default function requestsMenuComponent({
         },
       }}
     >
-      <QueryState
-        isLoading={isLoading}
-        isError={isError}
-        isEmpty={requests.length === 0}
-        loadingFallback={
-          <div className="flex items-center justify-center bg-white py-6">
-            <CircularProgress size={24} color="primary" />
-          </div>
-        }
-        errorFallback={
-          <p className="text-body bg-white py-6 text-center text-sm font-semibold">
-            خطا در دریافت درخواست‌ها
-          </p>
-        }
-        emptyFallback={
-          <p className="text-body bg-white py-6 text-center text-sm font-semibold">
-            درخواست جدیدی ندارید!
-          </p>
-        }
-      >
-        <ul className="flex flex-col gap-4">
-          {requests.map((request) => (
-            <RequestComponent
-              key={request.id}
-              request={request}
-              onAccept={onAccept}
-              onReject={onReject}
-              mutatingRequest={mutatingRequest}
-              requestIsAccepting={requestIsAccepting}
-              requestIsRejecting={requestIsRejecting}
+      <div className="flex flex-col gap-4">
+        <section
+          aria-label="اعلان‌های اخیر"
+          className="bg-secondary rounded-3xl p-4"
+        >
+          <h2 className="text-body mb-3 font-bold">اعلان‌های اخیر</h2>
+          {realtime.isLoading && <CircularProgress size={20} />}
+          {realtime.isError && (
+            <p role="status" className="text-sm">
+              همگام‌سازی اعلان‌ها انجام نشد.
+            </p>
+          )}
+          {!realtime.isLoading &&
+            !realtime.isError &&
+            realtime.notifications.length === 0 && (
+              <p className="text-sm">اعلانی ندارید.</p>
+            )}
+          <ul className="flex flex-col gap-3">
+            {realtime.notifications.map((notification) => (
+              <li
+                key={notification.id}
+                className="text-body rounded-2xl bg-white/80 p-3 text-sm leading-6"
+              >
+                <p className={notification.seen ? "" : "font-semibold"}>
+                  {notification.content}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section
+          aria-label="درخواست‌های همکاری"
+          className="rounded-3xl bg-white p-3"
+        >
+          <h2 className="text-body mb-3 px-1 font-bold">درخواست‌های همکاری</h2>
+          <QueryState
+            isLoading={isLoading}
+            isError={isError}
+            isEmpty={requests.length === 0}
+            loadingFallback={
+              <div className="flex items-center justify-center bg-white py-6">
+                <CircularProgress size={24} color="primary" />
+              </div>
+            }
+            errorFallback={
+              <p className="text-body bg-white py-6 text-center text-sm font-semibold">
+                خطا در دریافت درخواست‌ها
+              </p>
+            }
+            emptyFallback={
+              <p className="text-body bg-white py-6 text-center text-sm font-semibold">
+                درخواست جدیدی ندارید!
+              </p>
+            }
+          >
+            <ul className="flex flex-col gap-4">
+              {requests.map((request) => (
+                <RequestComponent
+                  key={request.id}
+                  request={request}
+                  onAccept={onAccept}
+                  onReject={onReject}
+                  mutatingRequest={mutatingRequest}
+                  requestIsAccepting={requestIsAccepting}
+                  requestIsRejecting={requestIsRejecting}
+                />
+              ))}
+            </ul>
+            <InfiniteScrollTrigger
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
             />
-          ))}
-        </ul>
-        <InfiniteScrollTrigger
-          hasNextPage={hasNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      </QueryState>
+          </QueryState>
+        </section>
+      </div>
     </Menu>
   );
 }

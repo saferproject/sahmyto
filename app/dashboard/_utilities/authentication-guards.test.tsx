@@ -79,24 +79,27 @@ describe("AuthenticationGuard", () => {
     expect(window.localStorage.getItem("user")).toBe(JSON.stringify({ id: 8 }));
   });
 
-  it("reacts when another tab clears the token", async () => {
-    window.localStorage.setItem("token", "token-1");
-    window.localStorage.setItem("user", "stored-user");
-    profileState.isSuccess = true;
-    render(
-      <AuthenticationGuard>
-        <span>protected</span>
-      </AuthenticationGuard>,
-    );
+  it.each([null, "token-2"])(
+    "revalidates when another tab changes the token to %s",
+    async (newValue) => {
+      window.localStorage.setItem("token", "token-1");
+      window.localStorage.setItem("user", "stored-user");
+      profileState.isSuccess = true;
+      render(
+        <AuthenticationGuard>
+          <span>protected</span>
+        </AuthenticationGuard>,
+      );
 
-    window.dispatchEvent(
-      new StorageEvent("storage", { key: "token", newValue: null }),
-    );
+      window.dispatchEvent(
+        new StorageEvent("storage", { key: "token", newValue }),
+      );
 
-    await waitFor(() =>
-      expect(routerReplaceMock).toHaveBeenCalledWith("/login"),
-    );
-  });
+      await waitFor(() =>
+        expect(routerReplaceMock).toHaveBeenCalledWith("/login"),
+      );
+    },
+  );
 });
 
 describe("LoginSessionGuard", () => {

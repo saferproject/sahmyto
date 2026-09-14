@@ -28,6 +28,7 @@ beforeEach(() => {
   const localStorage = createStorage();
   vi.stubGlobal("window", {
     localStorage,
+    dispatchEvent: vi.fn(),
     location: { assign: vi.fn(), href: "https://app.example.test/dashboard" },
   });
   vi.stubGlobal("document", { cookie: "" });

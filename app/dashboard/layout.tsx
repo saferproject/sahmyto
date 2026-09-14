@@ -11,6 +11,7 @@ import ThemeRegistry from "../theme-registry";
 import { ReactQueryProvider } from "../query-client";
 
 import { UserInfoStoreProvider } from "../_providers/user-info-provider";
+import { ReverbProvider } from "../_providers/reverb-provider";
 import { ConfirmationDialogStoreProvider } from "./_providers/confirmation-dialog-provider";
 import { KarboomsStoreProvider } from "./karbooms/_providers/karbooms-store-provider";
 
@@ -36,12 +37,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <ReactQueryProvider>
                 <AuthenticationGuard>
                   <KarboomsStoreProvider>
-                    <ConfirmationDialog />
-                    <ActionDialogComponent />
-                    <DashboardHeader />
-                    <main className="flex size-full h-dvh min-h-0 flex-1 flex-col gap-4 overflow-x-visible overflow-y-auto px-4 pt-26 pb-20">
-                      {children}
-                    </main>
+                    <ReverbProvider>
+                      <ConfirmationDialog />
+                      <ActionDialogComponent />
+                      <DashboardHeader />
+                      <main className="flex size-full h-dvh min-h-0 flex-1 flex-col gap-4 overflow-x-visible overflow-y-auto px-4 pt-26 pb-20">
+                        {children}
+                      </main>
+                    </ReverbProvider>
                   </KarboomsStoreProvider>
                 </AuthenticationGuard>
               </ReactQueryProvider>

@@ -11,6 +11,7 @@ import { User, Notification1, HamburgerMenu } from "iconsax-reactjs";
 import RequestsMenuComponent from "./notifications-menu-component";
 
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
+import { useReverbNotifications } from "@/app/_providers/reverb-provider";
 import useGetKarboomRequests from "../_hooks/use-get-karboom-requests-endpoint";
 import useAcceptKarboomRequest from "../_hooks/use-accept-karboom-request-endpoint";
 import useRejectKarboomRequest from "../_hooks/use-reject-karboom-request-endpoint";
@@ -24,6 +25,7 @@ export default function DashboardHeader() {
   const router = useRouter();
 
   const avatar = useUserInfoStore((state) => state.avatar);
+  const { notifications } = useReverbNotifications();
 
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [hasDrawerOpened, setHasDrawerOpened] = useState(false);
@@ -40,6 +42,9 @@ export default function DashboardHeader() {
     isFetchingNextPage: isFetchingNextRequestsPage,
     fetchNextPage: fetchNextRequestsPage,
   } = useGetKarboomRequests();
+  const notificationCount =
+    (requests?.data.length ?? 0) +
+    notifications.filter((item) => !item.seen).length;
 
   const { mutate: acceptRequest, isPending: requestIsAccepting } =
     useAcceptKarboomRequest();
@@ -122,9 +127,9 @@ export default function DashboardHeader() {
           <Badge
             className="relative -left-4 z-10 cursor-pointer"
             badgeContent={
-              requests?.data && requests.data.length > 0 ? (
+              notificationCount > 0 ? (
                 <div className="text-primary flex size-4 items-center justify-center rounded-full bg-white text-lg shadow-lg">
-                  {requests.data.length}
+                  {notificationCount}
                 </div>
               ) : null
             }

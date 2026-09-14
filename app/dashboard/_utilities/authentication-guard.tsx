@@ -32,10 +32,10 @@ export function AuthenticationGuard({
     }
   }, [router]);
 
-  // Log out this tab when the session is cleared in another tab.
+  // Revalidate the profile when another tab logs out or changes accounts.
   useEffect(() => {
     const handleStorage = (event: StorageEvent) => {
-      if (event.key === "token" && !event.newValue) router.replace("/login");
+      if (event.key === "token" || event.key === null) router.replace("/login");
     };
 
     window.addEventListener("storage", handleStorage);

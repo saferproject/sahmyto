@@ -28,6 +28,13 @@ function cspDirective() {
 
   if (isDev) connectSources.push("ws:");
 
+  const reverbHost = process.env.NEXT_PUBLIC_REVERB_HOST;
+  if (reverbHost) {
+    const secure = process.env.NEXT_PUBLIC_REVERB_SCHEME === "https";
+    const port = process.env.NEXT_PUBLIC_REVERB_PORT || (secure ? "443" : "80");
+    connectSources.push(`${secure ? "wss" : "ws"}://${reverbHost}:${port}`);
+  }
+
   for (const envUrl of [
     process.env.NEXT_PUBLIC_API_URL,
     process.env.NEXT_PUBLIC_IMAGE_ASSETS_URL,

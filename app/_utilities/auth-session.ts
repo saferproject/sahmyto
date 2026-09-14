@@ -7,8 +7,10 @@ const AUTH_SESSION_COOKIE = "sahmyto_auth";
  */
 export function markAuthSession() {
   document.cookie = `${AUTH_SESSION_COOKIE}=1; path=/; max-age=2592000; samesite=lax`;
+  window.dispatchEvent(new Event("auth-session-changed"));
 }
 
 export function clearAuthSession() {
   document.cookie = `${AUTH_SESSION_COOKIE}=; path=/; max-age=0; samesite=lax`;
+  window.dispatchEvent(new Event("auth-session-changed"));
 }

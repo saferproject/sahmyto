@@ -60,6 +60,7 @@ export default function DriverFormComponent({
     getValues,
     setError,
     setValue,
+    watch,
     formState: { errors },
   } = useDriverForm();
 
@@ -90,7 +91,7 @@ export default function DriverFormComponent({
         payment_type: driver.payment_type,
       });
     } else setValues(initialValues);
-  }, [formState, driver, setValues]);
+  }, [formState, driver]);
 
   const handleCancel = () => {
     setValues(getDriverFormInitial());

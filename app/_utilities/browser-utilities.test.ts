@@ -35,6 +35,8 @@ afterEach(() => {
 describe("authentication session cookie", () => {
   it("marks and clears the non-sensitive middleware session flag", () => {
     vi.stubGlobal("document", { cookie: "" });
+    const dispatchEvent = vi.fn();
+    vi.stubGlobal("window", { dispatchEvent });
 
     markAuthSession();
     expect(document.cookie).toContain("sahmyto_auth=1");
@@ -43,6 +45,8 @@ describe("authentication session cookie", () => {
     clearAuthSession();
     expect(document.cookie).toContain("sahmyto_auth=");
     expect(document.cookie).toContain("max-age=0");
+    expect(dispatchEvent).toHaveBeenCalledTimes(2);
+    expect(dispatchEvent.mock.calls[0][0].type).toBe("auth-session-changed");
   });
 });
 
