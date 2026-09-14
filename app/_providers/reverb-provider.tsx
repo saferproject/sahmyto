@@ -22,23 +22,30 @@ const ReverbContext = createContext({
 function subscribeToToken(onChange: () => void) {
   window.addEventListener("storage", onChange);
   window.addEventListener("auth-session-changed", onChange);
+
   return () => {
     window.removeEventListener("storage", onChange);
     window.removeEventListener("auth-session-changed", onChange);
   };
 }
+
 const getToken = () => localStorage.getItem("token");
+
 const getServerToken = () => null;
 
 export function ReverbProvider({ children }: { children: React.ReactNode }) {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const userId = useUserInfoStore((state) => state.id);
+
   const token = useSyncExternalStore(
     subscribeToToken,
     getToken,
     getServerToken,
   );
+
   const queryClient = useQueryClient();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
   const [snapshot, setSnapshot] = useState({
     token: null as string | null,
     userId: 0,
@@ -49,7 +56,9 @@ export function ReverbProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!token || !userId) return;
+
     const snackbars = new Set<string | number>();
+
     const stop = startReverbSession({
       token,
       userId,
@@ -79,6 +88,7 @@ export function ReverbProvider({ children }: { children: React.ReactNode }) {
         );
       },
     });
+
     return () => {
       stop();
       snackbars.forEach((key) => closeSnackbar(key));

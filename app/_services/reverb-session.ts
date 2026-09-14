@@ -40,6 +40,7 @@ export function startReverbSession({
   const invalidate = (queryKey: readonly unknown[]) => {
     void queryClient.invalidateQueries({ queryKey });
   };
+
   const refreshKarboom = (id: number) => {
     for (const name of ["karboom", "members", "drivers"])
       invalidate([name, id]);
@@ -47,9 +48,12 @@ export function startReverbSession({
     invalidate(["partners"]);
     invalidate(["karbooms"]);
   };
+
   const joinKarboom = (id: number) => {
     if (!echo || !id || joined.has(id) || signal.aborted) return;
+
     joined.add(id);
+
     echo
       .private(`karbooms.${id}`)
       .listen(".karboom.activity", (event: KarboomActivity) => {
@@ -66,6 +70,7 @@ export function startReverbSession({
 
   async function sync() {
     receivedDuringSync = [];
+
     const results = await Promise.allSettled([
       reverbRequest<{ data: RealtimeNotification[] }>(
         "user/notifications?per_page=20",
@@ -74,8 +79,11 @@ export function startReverbSession({
       ),
       reverbRequest<{ data: { id: number }[] }>("karboom/", token, signal),
     ]);
+
     if (signal.aborted) return;
+
     const [notificationResult, karboomResult] = results;
+
     if (notificationResult.status === "fulfilled") {
       const merged = new Map<string, RealtimeNotification>();
       for (const item of [
@@ -87,28 +95,33 @@ export function startReverbSession({
       notifications = [...merged.values()].slice(0, 20);
       onNotifications(notifications);
     }
+
     if (karboomResult.status === "fulfilled") {
       const allowed = new Set(
         karboomResult.value.data.map(({ id }) => Number(id)),
       );
-      for (const id of joined) {
+
+      for (const id of joined)
         if (!allowed.has(id)) {
           echo?.leave(`karbooms.${id}`);
           joined.delete(id);
         }
-      }
+
       allowed.forEach(joinKarboom);
     }
+
     onSyncError(results.some((result) => result.status === "rejected"));
     onLoading(false);
   }
 
   function resync() {
     if (signal.aborted) return;
+
     if (pendingSync) {
       syncAgain = true;
       return;
     }
+
     pendingSync = sync()
       .catch(() => {
         if (!signal.aborted) {
@@ -127,55 +140,72 @@ export function startReverbSession({
 
   const onConnected = () => {
     if (signal.aborted) return;
+
     if (process.env.NODE_ENV !== "production")
       console.info("[Reverb] Connected", { socketId: echo?.socketId() });
-    // Recover API-backed state after events missed while offline.
+    
     void queryClient.invalidateQueries();
+
     resync();
   };
+
   const onError = () => {
     if (!signal.aborted && process.env.NODE_ENV !== "production")
       console.error("[Reverb] Connection or subscription failed");
   };
+
   echo
     ?.channel("announcements")
     .listen(".announcement.published", (event: Announcement) => {
       if (!signal.aborted) onAnnouncement(event);
     });
+  
   echo
     ?.private(`users.${userId}`)
     .listen(
       ".notification.created",
       ({ notification }: { notification: RealtimeNotification }) => {
         if (signal.aborted) return;
+
         const duplicate = notifications.some(
           (item) => String(item.id) === String(notification.id),
         );
+
         notifications = [
           notification,
           ...notifications.filter(
             (item) => String(item.id) !== String(notification.id),
           ),
         ].slice(0, 20);
+
         if (pendingSync) receivedDuringSync.unshift(notification);
+
         onNotifications(notifications);
+
         if (!duplicate) onNotification(notification);
+
         const id = Number(notification.karboom_id);
+
         if (notification.type.startsWith("membership.")) {
           invalidate(["requests"]);
           invalidate(["karbooms"]);
+
           if (notification.type === "membership.approved") joinKarboom(id);
+
           resync();
         }
+
         const financialQuery = {
           "income.created": "incomes",
           "expense.created": "expenses",
           "payment.created": "payments",
         }[notification.type];
+
         if (financialQuery && id) {
           invalidate([financialQuery, id]);
           invalidate(["karboom", id]);
           invalidate(["financial-months", id]);
+
           for (const name of [
             "financial-month-data",
             "settlement-data",
@@ -186,9 +216,12 @@ export function startReverbSession({
       },
     )
     .error(onError);
+  
   const connection = echo?.connector.pusher.connection;
+
   connection?.bind("connected", onConnected);
   connection?.bind("error", onError);
+  
   onNotifications([]);
   onLoading(true);
   onSyncError(false);
