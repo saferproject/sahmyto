@@ -1,5 +1,5 @@
 import { FormStates } from "@/app/dashboard/_types/form-states";
-import Partner from "../_interfaces/partner";
+import Partner from "../_types/partner";
 
 export type PartnerFormProps = {
   formState: FormStates;

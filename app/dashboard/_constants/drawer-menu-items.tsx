@@ -1,6 +1,6 @@
 import { Book1, Mobile, Sms, Truck, VideoPlay, Wallet } from "iconsax-reactjs";
 
-import DrawerMenuItem from "../_interfaces/drawer-menu-item";
+import DrawerMenuItem from "../_types/drawer-menu-item";
 
 export const DRAWER_MENU_ITEMS: DrawerMenuItem[] = [
   {

@@ -1,7 +1,7 @@
 import IntroMoto from "./intro-moto";
 import IntroPageCounter from "./intro-page-counter";
 
-import IntroFooterProps from "../_interfaces/intro-footer-props";
+import IntroFooterProps from "../_types/intro-footer-props";
 
 export default function IntroFooter({
   length,

@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import DescriptionInputProps from "../_interfaces/description-input-props";
+import DescriptionInputProps from "../_types/description-input-props";
 
 export default function DescriptionInput({
   label = "توضیحات",

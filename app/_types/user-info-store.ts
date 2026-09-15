@@ -1,4 +1,4 @@
-import User from "../_interfaces/user";
+import User from "../_types/user";
 import UserInfoActions from "./user-info-actions";
 
 type UserInfoStore = User & UserInfoActions;

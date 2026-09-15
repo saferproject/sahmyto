@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button, SwipeableDrawer } from "@mui/material";
 import { AnimatePresence, motion } from "motion/react";
 
-import DashboardHeaderDrawerProps from "../_interfaces/dashboard-header-drawer-props";
+import DashboardHeaderDrawerProps from "../_types/dashboard-header-drawer-props";
 import { useUserInfoStore } from "@/app/_providers/user-info-provider";
 import { clearAuthSession } from "@/app/_utilities/auth-session";
 

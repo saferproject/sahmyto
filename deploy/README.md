@@ -123,3 +123,7 @@ The PowerShell helper uses the same file:
 ```
 
 Because `NEXT_PUBLIC_*` values are embedded in the browser bundle, changing them always requires building a new image.
+
+The public Reverb app key, host, port, and scheme are passed to the image by the deployment workflow. They are public browser configuration and currently target `ws://sahmyto.ir:8081` with app key `gr2hzlrzrubqxztbloqe`.
+
+The deployed site uses HTTPS, so its browser WebSocket endpoint must ultimately be available over WSS. The current production Reverb endpoint is configured as `ws://sahmyto.ir:8081`; browsers will block it as mixed content when the frontend is loaded from `https://sahmyto.ir`. Terminate TLS for Reverb at the public proxy, then change `NEXT_PUBLIC_REVERB_SCHEME` to `https` (and the port to the proxy's TLS port) before enabling it for HTTPS traffic.

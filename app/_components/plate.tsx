@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import PlateProps from "../_interfaces/plate-props";
+import PlateProps from "../_types/plate-props";
 
 import IranFlag from "../_assets/images/iran-flag.jpg";
 

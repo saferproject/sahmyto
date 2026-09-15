@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import useLoginUserEndpoint from "../../_hooks/use-login-user-endpoint";
 
 import { useUserInfoStore } from "../../../_providers/user-info-provider";
-import PendingOtp from "../_interfaces/pending-otp";
+import PendingOtp from "../_types/pending-otp";
 import { savePendingOtp } from "../_utilities/pending-otp-storage";
 
 interface VerifyRetryProps {

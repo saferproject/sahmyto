@@ -18,7 +18,7 @@ import useGetPartnersEndpoint from "./_hooks/use-get-partners-endpoint";
 import ListFooterLayout from "../../_layouts/list-footer-layout";
 import ListHeaderLayout from "../../_layouts/list-header-layout";
 import { FormStates } from "../../../_types/form-states";
-import Partner from "../../_interfaces/partner";
+import Partner from "../../_types/partner";
 import { useShallow } from "zustand/react/shallow";
 import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 

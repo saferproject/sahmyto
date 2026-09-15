@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from "motion/react";
 
-import PartnersListProps from "../_interfaces/partners-list-props";
+import PartnersListProps from "../_types/partners-list-props";
 import PartnersListItemComponent from "./partners-list-item-component";
 
 export default function PartnersListComponent({

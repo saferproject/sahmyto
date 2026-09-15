@@ -9,7 +9,7 @@ import IranFlag from "../_assets/images/iran-flag.jpg";
 
 import PlateInputProps, {
   type PlateFormFields,
-} from "../_interfaces/plate-input-props";
+} from "../_types/plate-input-props";
 
 export default function PlateInput<
   FormType extends FieldValues & PlateFormFields,

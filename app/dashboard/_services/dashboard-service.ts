@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 import { http } from "@/app/_services/http";
 import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 import { KarboomRequest } from "../_types/karboom-request";

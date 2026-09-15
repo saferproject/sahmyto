@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import IntroTitleProps from "../_interfaces/intro-title-props";
+import IntroTitleProps from "../_types/intro-title-props";
 
 export default function IntroTitle({ title, description }: IntroTitleProps) {
   return (

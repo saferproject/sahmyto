@@ -1,4 +1,4 @@
-import type { ApiFieldErrors } from "../_interfaces/base-response";
+import type { ApiFieldErrors } from "../_types/base-response";
 
 type ApiErrorOptions = {
   status: number;

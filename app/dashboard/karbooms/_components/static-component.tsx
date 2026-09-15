@@ -2,7 +2,7 @@
 
 import formatNumber from "@/app/_utilities/format-numbers";
 
-import StaticComponentProps from "../_interfaces/static-component-props";
+import StaticComponentProps from "../_types/static-component-props";
 
 export default function StaticComponent({
   title,

@@ -1,4 +1,4 @@
-import ConfirmationDialogProps from "../_interfaces/confirmation-dialog-props";
+import ConfirmationDialogProps from "../_types/confirmation-dialog-props";
 
 type ConfirmationDialogStoreActions = {
   openDialog: () => void;

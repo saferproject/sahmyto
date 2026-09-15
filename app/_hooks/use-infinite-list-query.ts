@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 
 import { DEFAULT_PAGE_SIZE } from "@/app/_constants/pagination";
-import BaseResponse from "@/app/_interfaces/base-response";
+import BaseResponse from "@/app/_types/base-response";
 
 interface UseInfiniteListQueryOptions<TItem> {
   queryKey: QueryKey;

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { motion } from "motion/react";
 
-import IntroImageProps from "../_interfaces/intro-image-props";
+import IntroImageProps from "../_types/intro-image-props";
 
 export default function IntroImage({ imageLink, title }: IntroImageProps) {
   return (

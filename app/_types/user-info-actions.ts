@@ -1,4 +1,4 @@
-import User from "../_interfaces/user";
+import User from "../_types/user";
 
 type UserInfoActions = {
   setPhone: (phone: string) => void;

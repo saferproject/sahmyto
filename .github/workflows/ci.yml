@@ -33,6 +33,10 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: https://api.example.com/
           NEXT_PUBLIC_IMAGE_ASSETS_URL: https://api.example.com/
+          NEXT_PUBLIC_REVERB_APP_KEY: gr2hzlrzrubqxztbloqe
+          NEXT_PUBLIC_REVERB_HOST: sahmyto.ir
+          NEXT_PUBLIC_REVERB_PORT: "8081"
+          NEXT_PUBLIC_REVERB_SCHEME: http
         run: bun run build
 
   publish-and-deploy:
@@ -66,9 +70,13 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_IMAGE_ASSETS_URL: ${{ vars.NEXT_PUBLIC_IMAGE_ASSETS_URL }}
+          NEXT_PUBLIC_REVERB_APP_KEY: gr2hzlrzrubqxztbloqe
+          NEXT_PUBLIC_REVERB_HOST: sahmyto.ir
+          NEXT_PUBLIC_REVERB_PORT: "8081"
+          NEXT_PUBLIC_REVERB_SCHEME: http
         run: |
           set -Eeuo pipefail
-          required=(NEXT_PUBLIC_API_URL NEXT_PUBLIC_IMAGE_ASSETS_URL SERVER_FINGERPRINT SERVER_HOST SERVER_PATH SERVER_PORT SERVER_SSH_KEY SERVER_USER)
+          required=(NEXT_PUBLIC_API_URL NEXT_PUBLIC_IMAGE_ASSETS_URL NEXT_PUBLIC_REVERB_APP_KEY NEXT_PUBLIC_REVERB_HOST NEXT_PUBLIC_REVERB_PORT NEXT_PUBLIC_REVERB_SCHEME SERVER_FINGERPRINT SERVER_HOST SERVER_PATH SERVER_PORT SERVER_SSH_KEY SERVER_USER)
           for name in "${required[@]}"; do
             if [[ -z "${!name}" ]]; then
               echo "Missing required GitHub configuration: $name" >&2
@@ -77,6 +85,10 @@ jobs:
           done
           [[ "$NEXT_PUBLIC_API_URL" =~ ^https?:// ]] || { echo "NEXT_PUBLIC_API_URL must be an absolute HTTP(S) URL." >&2; exit 1; }
           [[ "$NEXT_PUBLIC_IMAGE_ASSETS_URL" =~ ^https?:// ]] || { echo "NEXT_PUBLIC_IMAGE_ASSETS_URL must be an absolute HTTP(S) URL." >&2; exit 1; }
+          [[ "$NEXT_PUBLIC_REVERB_HOST" =~ ^[a-zA-Z0-9.-]+$ ]] || { echo "NEXT_PUBLIC_REVERB_HOST must be a hostname or IPv4 address." >&2; exit 1; }
+          [[ "$NEXT_PUBLIC_REVERB_PORT" =~ ^[0-9]+$ ]] || { echo "NEXT_PUBLIC_REVERB_PORT must be numeric." >&2; exit 1; }
+          (( 10#$NEXT_PUBLIC_REVERB_PORT >= 1 && 10#$NEXT_PUBLIC_REVERB_PORT <= 65535 )) || { echo "NEXT_PUBLIC_REVERB_PORT must be between 1 and 65535." >&2; exit 1; }
+          [[ "$NEXT_PUBLIC_REVERB_SCHEME" == "http" || "$NEXT_PUBLIC_REVERB_SCHEME" == "https" ]] || { echo "NEXT_PUBLIC_REVERB_SCHEME must be http or https." >&2; exit 1; }
           [[ "$SERVER_FINGERPRINT" =~ ^SHA256: ]] || { echo "SERVER_FINGERPRINT must be an SHA256 SSH fingerprint." >&2; exit 1; }
           [[ "$SERVER_HOST" =~ ^[a-zA-Z0-9.-]+$ ]] || { echo "SERVER_HOST must be a hostname or IPv4 address." >&2; exit 1; }
           [[ "$SERVER_PORT" =~ ^[0-9]+$ ]] || { echo "SERVER_PORT must be numeric." >&2; exit 1; }
@@ -111,6 +123,10 @@ jobs:
           build-args: |
             NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_IMAGE_ASSETS_URL=${{ vars.NEXT_PUBLIC_IMAGE_ASSETS_URL }}
+            NEXT_PUBLIC_REVERB_APP_KEY=gr2hzlrzrubqxztbloqe
+            NEXT_PUBLIC_REVERB_HOST=sahmyto.ir
+            NEXT_PUBLIC_REVERB_PORT=8081
+            NEXT_PUBLIC_REVERB_SCHEME=http
             NEXT_PUBLIC_TELEMETRY_ENDPOINT=${{ vars.NEXT_PUBLIC_TELEMETRY_ENDPOINT }}
             NEXT_PUBLIC_APP_VERSION=${{ github.sha }}
           cache-from: type=gha

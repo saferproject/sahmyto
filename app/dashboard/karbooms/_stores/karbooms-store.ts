@@ -1,6 +1,6 @@
 import { createStore } from "zustand/vanilla";
 
-import Karboom from "@/app/_interfaces/karboom";
+import Karboom from "@/app/_types/karboom";
 import { KARBOOMS_STORE_DEFAULTS } from "../_constants/karbooms-store-defaults";
 import KarboomsStore from "../_types/karbooms-store-type";
 import { KarboomStoreTriggers } from "../_types/karboom-store-triggers";

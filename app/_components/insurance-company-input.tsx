@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import type { UIEvent } from "react";
 
-import InsuranceCompanyInputProps from "../_interfaces/insurance-company-input-props";
+import InsuranceCompanyInputProps from "../_types/insurance-company-input-props";
 import useGetInsuranceCompaniesEndpoint from "../_hooks/use-get-insurance-companies-endpoint";
 import loadNextPageOnScroll from "../_utilities/load-next-page-on-scroll";
 

@@ -1,5 +1,5 @@
-import VerifyData from "../_interfaces/verify-data";
-import VerifyBody from "../_interfaces/verify-body";
+import VerifyData from "../_types/verify-data";
+import VerifyBody from "../_types/verify-body";
 
 import { http } from "@/app/_services/http";
 

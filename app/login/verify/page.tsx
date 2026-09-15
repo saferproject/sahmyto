@@ -9,7 +9,7 @@ import VerifyPhone from "./_components/verify-phone";
 import VerifyForm from "./_components/verify-form";
 import VerifyRetry from "./_components/verify-retry";
 import { PENDING_OTP_STORAGE_KEY } from "./_constants/pending-otp";
-import PendingOtp from "./_interfaces/pending-otp";
+import PendingOtp from "./_types/pending-otp";
 import { readPendingOtp } from "./_utilities/pending-otp-storage";
 
 export default function VerifyPage() {

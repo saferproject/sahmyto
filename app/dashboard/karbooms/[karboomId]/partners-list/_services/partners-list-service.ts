@@ -1,7 +1,7 @@
 import { http } from "@/app/_services/http";
 
-import GetPartnersQueryParams from "../_interfaces/get-partners-query-params";
-import Partner from "../../../_interfaces/partner";
+import GetPartnersQueryParams from "../_types/get-partners-query-params";
+import Partner from "../../../_types/partner";
 import addPaginationQuery from "@/app/_utilities/add-pagination-query";
 
 export const partnersListService = {

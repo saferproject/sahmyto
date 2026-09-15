@@ -1,4 +1,4 @@
-import NavigationItem from "../_interfaces/navigation-item";
+import NavigationItem from "../_types/navigation-item";
 
 type NavigationItemProps = Omit<NavigationItem, "id">;
 

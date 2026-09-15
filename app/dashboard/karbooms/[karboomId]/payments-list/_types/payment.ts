@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 import { PaymentTypes } from "./payment-types";
 import { Dayjs } from "dayjs";
 import { ActivityStatus } from "../../../_types/activity-status";

@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 import { ActivityStatus } from "./activity-status";
 import { IncomeTypes } from "./income-categories";
 import { Dayjs } from "dayjs";

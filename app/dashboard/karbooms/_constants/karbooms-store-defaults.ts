@@ -1,4 +1,4 @@
-import Karboom from "@/app/_interfaces/karboom";
+import Karboom from "@/app/_types/karboom";
 import { KarboomStoreTriggers } from "../_types/karboom-store-triggers";
 import { USER_DEFAULTS } from "../../_constants/user-defaults";
 

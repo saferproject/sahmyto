@@ -19,7 +19,7 @@ import {
 } from "../_providers/karbooms-store-provider";
 import { KARBOOMS_STORE_DEFAULTS } from "../_constants/karbooms-store-defaults";
 import type { KarboomDetails } from "../_types/karboom-details";
-import type BaseResponse from "@/app/_interfaces/base-response";
+import type BaseResponse from "@/app/_types/base-response";
 
 vi.mock("@/app/_services/http", () => ({ http: { get: vi.fn() } }));
 

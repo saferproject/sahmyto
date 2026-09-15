@@ -1,5 +1,5 @@
 import { ArrowLeft2 } from "iconsax-reactjs";
-import DashboardShortcutProps from "../_interfaces/dashboard-shortcut-props";
+import DashboardShortcutProps from "../_types/dashboard-shortcut-props";
 
 export default function DashboardShortcut({
   title,

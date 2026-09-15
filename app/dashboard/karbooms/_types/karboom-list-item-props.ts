@@ -1,4 +1,4 @@
-import Karboom from "@/app/_interfaces/karboom";
+import Karboom from "@/app/_types/karboom";
 
 type KarboomListItemProps = Karboom & {
   index: number;

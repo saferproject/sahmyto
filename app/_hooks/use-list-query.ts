@@ -1,6 +1,6 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 
-import BaseResponse from "@/app/_interfaces/base-response";
+import BaseResponse from "@/app/_types/base-response";
 import isValidQueryId from "@/app/_utilities/is-valid-query-id";
 
 export default function useListQuery<TData>(

@@ -6,7 +6,7 @@ import { useState, type MouseEvent } from "react";
 import { ProfileCircle } from "iconsax-reactjs";
 
 import AnimatedListItem from "@/app/_components/animated-list-item-component";
-import PartnersListItemProps from "../_interfaces/partners-list-item-props";
+import PartnersListItemProps from "../_types/partners-list-item-props";
 import useDeletePartnerEndpoint from "../_hooks/use-delete-partner-endpoint";
 
 import { ACTIVITY_STATUS_FA } from "../../../_constants/activity-status-fa";

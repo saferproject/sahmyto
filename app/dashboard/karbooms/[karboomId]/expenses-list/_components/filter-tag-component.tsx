@@ -1,6 +1,6 @@
 import SelectableTagComponent from "@/app/_components/selectable-tag-component";
 
-import FilterTagProps from "../_interfaces/filter-tag-props";
+import FilterTagProps from "../_types/filter-tag-props";
 
 export default function FilterTagComponent({
   tag,

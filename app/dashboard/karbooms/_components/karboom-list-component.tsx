@@ -2,7 +2,7 @@
 
 import { AnimatePresence } from "motion/react";
 
-import KarboomListProps from "../_interfaces/karboom-list-props";
+import KarboomListProps from "../_types/karboom-list-props";
 import KarboomListItemComponent from "./karboom-list-item-component";
 
 export default function KarboomListComponent({ karbooms }: KarboomListProps) {

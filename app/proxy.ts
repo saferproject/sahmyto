@@ -1,5 +1,5 @@
 import ApiError from "./_errors/api-error";
-import BaseResponse, { type ApiFieldErrors } from "./_interfaces/base-response";
+import BaseResponse, { type ApiFieldErrors } from "./_types/base-response";
 import { clearAuthSession } from "./_utilities/auth-session";
 
 const DEFAULT_REQUEST_TIMEOUT_MS = 15_000;

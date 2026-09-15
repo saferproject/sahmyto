@@ -2,7 +2,7 @@
 
 import { SnackbarProvider } from "notistack";
 
-import DashboardLayoutProps from "./_interfaces/dashboard-layout-props";
+import DashboardLayoutProps from "./_types/dashboard-layout-props";
 
 import DashboardHeader from "./_components/dashboard-header";
 

@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 import { fetchWithAuth } from "@/app/proxy";
 
 export const profileImageService = {

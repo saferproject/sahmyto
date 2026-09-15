@@ -1,5 +1,5 @@
 import type { ItemFilter } from "@/app/dashboard/_types/filter";
-import type Partner from "../../../_interfaces/partner";
+import type Partner from "../../../_types/partner";
 import { ACTIVITY_STATUS_FA } from "../../../_constants/activity-status-fa";
 
 export const PARTNER_FILTERS = [

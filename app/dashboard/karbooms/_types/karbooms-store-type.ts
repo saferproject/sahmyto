@@ -1,4 +1,4 @@
-import Karboom from "@/app/_interfaces/karboom";
+import Karboom from "@/app/_types/karboom";
 import KarboomsStoreActionsType from "./karbooms-store-actions-type";
 import { KarboomStoreTriggers } from "./karboom-store-triggers";
 

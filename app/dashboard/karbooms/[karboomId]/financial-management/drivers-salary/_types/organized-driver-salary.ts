@@ -1,4 +1,4 @@
-import type User from "@/app/_interfaces/user";
+import type User from "@/app/_types/user";
 import type { SalaryTypes } from "./salary-types";
 import type { Salary } from "./salary";
 

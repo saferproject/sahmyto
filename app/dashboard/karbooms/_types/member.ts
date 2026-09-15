@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 
 export type Member = {
   member: {

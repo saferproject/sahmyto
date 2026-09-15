@@ -5,7 +5,7 @@ import { Bus } from "iconsax-reactjs";
 
 import Plate from "@/app/_components/plate";
 
-import RequestProps from "../_interfaces/collaboration-request-notification-props";
+import RequestProps from "../_types/collaboration-request-notification-props";
 import { MemberRolesFa } from "@/app/_constants/member-roles-fa";
 import formatNumber from "@/app/_utilities/format-numbers";
 import { DRIVER_PAYMENT_TYPES_FA } from "../karbooms/[karboomId]/drivers-list/_constants/payment-types-fa";

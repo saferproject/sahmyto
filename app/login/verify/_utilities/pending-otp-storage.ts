@@ -2,7 +2,7 @@ import {
   OTP_RESEND_COOLDOWN_MS,
   PENDING_OTP_STORAGE_KEY,
 } from "../_constants/pending-otp";
-import PendingOtp from "../_interfaces/pending-otp";
+import PendingOtp from "../_types/pending-otp";
 
 const isPendingOtp = (value: unknown): value is PendingOtp => {
   if (!value || typeof value !== "object") return false;

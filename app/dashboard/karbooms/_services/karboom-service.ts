@@ -1,5 +1,5 @@
 import type { QueryParams } from "@/app/_types/query-params";
-import Karboom from "@/app/_interfaces/karboom";
+import Karboom from "@/app/_types/karboom";
 import { http } from "@/app/_services/http";
 
 import { KarboomFormType } from "../_schemas/karboom-form-schema";

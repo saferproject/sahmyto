@@ -1,4 +1,4 @@
-import ConfirmationDialogProps from "@/app/dashboard/_interfaces/confirmation-dialog-props";
+import ConfirmationDialogProps from "@/app/dashboard/_types/confirmation-dialog-props";
 
 export const CONFIRMATION_DIALOG_PROPS_DEFAULTS: ConfirmationDialogProps = {
   isOpen: false,

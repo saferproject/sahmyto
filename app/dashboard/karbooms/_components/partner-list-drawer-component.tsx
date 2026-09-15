@@ -10,7 +10,7 @@ import ListFooterLayout from "../_layouts/list-footer-layout";
 import PartnerFormDrawerComponent from "./partner-form-drawer-component";
 import { useEffect, useState } from "react";
 import { FormStates } from "../../_types/form-states";
-import Partner from "../_interfaces/partner";
+import Partner from "../_types/partner";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { Button } from "@mui/material";

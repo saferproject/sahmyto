@@ -1,4 +1,4 @@
-import IntroPageContent from "../_interfaces/intro-page-content";
+import IntroPageContent from "../_types/intro-page-content";
 
 const IMAGES_BASE_URL = process.env.NEXT_PUBLIC_IMAGE_ASSETS_URL;
 

@@ -1,5 +1,5 @@
 import type { ItemFilter } from "@/app/dashboard/_types/filter";
-import type Karboom from "@/app/_interfaces/karboom";
+import type Karboom from "@/app/_types/karboom";
 
 export const KARBOOM_FILTERS = [
   {

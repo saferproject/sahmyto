@@ -1,5 +1,5 @@
-import type Karboom from "@/app/_interfaces/karboom";
-import type User from "@/app/_interfaces/user";
+import type Karboom from "@/app/_types/karboom";
+import type User from "@/app/_types/user";
 import type { Expense } from "../../../_types/expense";
 import type { ExpenseCategory } from "../../../_types/expense-category";
 import type { Income } from "../../../_types/income";

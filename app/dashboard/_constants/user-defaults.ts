@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 
 export const USER_DEFAULTS: User = {
   id: 0,

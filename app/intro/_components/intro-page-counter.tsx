@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 
-import IntroPageCounterProps from "../_interfaces/intro-page-counter-props";
+import IntroPageCounterProps from "../_types/intro-page-counter-props";
 
 export default function IntroPageCounter({
   length,

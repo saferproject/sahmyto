@@ -1,4 +1,4 @@
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 import { http } from "@/app/_services/http";
 import { ProfileFormType } from "../_schemas/profile-schema";
 

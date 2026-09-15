@@ -1,5 +1,5 @@
 import { Card, Home2, Profile, MessageText1 } from "iconsax-reactjs";
-import NavigationItem from "../_interfaces/navigation-item";
+import NavigationItem from "../_types/navigation-item";
 
 export const NAVIGATION_ITEMS: NavigationItem[] = [
   {

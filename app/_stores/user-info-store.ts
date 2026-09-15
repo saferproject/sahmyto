@@ -1,6 +1,6 @@
 import { createStore } from "zustand/vanilla";
 
-import User from "@/app/_interfaces/user";
+import User from "@/app/_types/user";
 import UserInfoStore from "../_types/user-info-store";
 import { USER_INFO_STORE_DEFAULTS } from "../_constants/user-info-store-defaults";
 

@@ -1,6 +1,6 @@
 import { Bus, MoneyRecive, WalletMoney } from "iconsax-reactjs";
 
-import KarboomsShortcut from "../_interfaces/karbooms-shortcut";
+import KarboomsShortcut from "../_types/karbooms-shortcut";
 
 export const KARBOOMS_SHORTCUTS: KarboomsShortcut[] = [
   {

@@ -11,7 +11,7 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 
 import ApiError from "./_errors/api-error";
-import BaseResponse from "./_interfaces/base-response";
+import BaseResponse from "./_types/base-response";
 
 const DEFAULT_ERROR_MESSAGE = "عملیات با خطا مواجه شد";
 

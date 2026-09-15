@@ -4,7 +4,7 @@ import { CircularProgress, Menu } from "@mui/material";
 
 import QueryState from "@/app/_components/query-state";
 
-import requestsMenuProps from "../_interfaces/notifications-menu-props";
+import requestsMenuProps from "../_types/notifications-menu-props";
 import RequestComponent from "./request-component";
 import InfiniteScrollTrigger from "@/app/_components/infinite-scroll-trigger";
 import { useReverbNotifications } from "@/app/_providers/reverb-provider";
