@@ -15,9 +15,9 @@ export default function Plate({
   return (
     <div
       dir="ltr"
-      className="flex h-14 w-40 items-center justify-between overflow-hidden rounded-lg bg-yellow-400"
+      className="flex h-14 w-40 items-center justify-between border overflow-hidden rounded-lg bg-yellow-400"
     >
-      <div className="flex h-full w-8 flex-col justify-between bg-blue-700 p-2">
+      <div className="flex h-full w-8 flex-col justify-between bg-blue-700 p-2 border-r">
         <Image
           src={IranFlag}
           alt="پرچم ایران"
