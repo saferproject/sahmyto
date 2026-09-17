@@ -457,7 +457,7 @@ export default function PartnerFormComponent({
             <DatePickerComponent
               {...field}
               onChange={(value) => field.onChange(value)}
-              label="تاریخ شروع"
+              label="تاریخ شروع شراکت"
               error={!!errors.started_at}
               helperText={errors.started_at?.message ?? ""}
               required
@@ -472,7 +472,7 @@ export default function PartnerFormComponent({
             <DatePickerComponent
               {...field}
               onChange={(value) => field.onChange(value)}
-              label="تاریخ پایان"
+              label="تاریخ پایان شراکت"
               error={!!errors.ended_at}
               helperText={errors.ended_at?.message ?? ""}
               disablePast
