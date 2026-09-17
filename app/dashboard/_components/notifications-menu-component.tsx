@@ -87,7 +87,7 @@ export default function RequestsMenuComponent({
           aria-label="درخواست‌های همکاری"
           className="rounded-3xl bg-white p-3"
         >
-          <h2 className="text-body mb-3 px-1 font-bold">درخواست‌های همکاری</h2>
+          <h2 className="text-body mb-3 px-1 font-bold">درخواست‌های عضویت</h2>
           <QueryState
             isLoading={isLoading}
             isError={isError}
