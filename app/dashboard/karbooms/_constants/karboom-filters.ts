@@ -8,20 +8,4 @@ export const KARBOOM_FILTERS = [
     label: "نام کاربوم",
     queryKey: "name",
   },
-  {
-    type: "select",
-    name: "type",
-    label: "نوع کاربوم",
-    queryKey: "type",
-    options: [
-      {
-        value: "distance",
-        label: "مسافتی",
-      },
-      {
-        value: "time",
-        label: "زمانی",
-      },
-    ],
-  },
 ] as const satisfies readonly ItemFilter<Karboom>[];
