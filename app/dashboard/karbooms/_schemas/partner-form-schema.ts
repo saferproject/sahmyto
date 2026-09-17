@@ -7,7 +7,7 @@ const PartnerFormSchema = z
       .string()
       .check(
         z.length(11, "شماره تماس باید 11 رقم باشد"),
-        z.regex(/09\d{9}/g, "شماره تماس باید با 09 شروع شود"),
+        z.regex(/09\d{9}/g, "شماره باید با 09 شروع شود و 11 رقم باشد"),
       ),
     first_name: z.string(),
     last_name: z.string(),
